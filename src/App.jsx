@@ -1,0 +1,42 @@
+import React from 'react'
+import ProtectedRoute from './utils/PrivateRoutes'
+import Login from './Auth/Login';
+import Signup from './Auth/Signup';
+import DashBoard from './Pages/DashBoard';
+
+import Gifting from './Pages/Gifting';
+import Marketplace from './Pages/Marketplace';
+import Wishlists from './Pages/Wishlists';
+import Reminders from './Pages/Reminders';
+
+import { BrowserRouter, createBrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom'
+import CategoryPage from './Pages/Marketplace/MarketComponent/MarketProducts';
+
+
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashBoard />}></Route>
+          <Route path="/" element={<DashBoard />}></Route>
+
+          <Route path="/dashboard/gifting" element={<Gifting />}></Route>
+          <Route path="/dashboard/marketplace/:category" element={<Marketplace />}></Route>
+
+          <Route path="/dashboard/marketplace/:category/:productSlug" element={<Marketplace />}></Route>
+          
+          <Route path="/dashboard/wishlists" element={<Wishlists />}></Route>
+          <Route path="/dashboard/reminders" element={<Reminders />}></Route>
+        </Route>
+
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/signup" element={<Signup />}></Route>
+
+    </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App
