@@ -33,7 +33,7 @@ const DashBoard = () => {
 				if(data.status !== 'success') {
 					throw new Error(data.message);
 				}
-				setGiftings(data.data.giftings)
+				// setGiftings(data.data.giftings)
 			} catch (err) {
 				console.log(err.message)
 			} finally {
