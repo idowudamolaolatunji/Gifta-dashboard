@@ -10,8 +10,10 @@ function MarketPlace() {
 			<DashTabs />
             
             
-		    <section className="marketplace__section section__container section">
-				<MarketProducts />
+		    <section className="marketplace__section">
+				<div className="section__container">
+					<MarketProducts />
+				</div>
             </section>
 
 		</>

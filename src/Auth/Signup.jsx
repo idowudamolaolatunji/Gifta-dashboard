@@ -105,9 +105,9 @@ function Signup() {
 						<span className="form--content">
 							By creating an account, you agree to our{' '}
 							<Link to={`#`} className="">
-								terms and conditions{' '}
+								terms and conditions
 							</Link>
-							and{' '}
+							{' '}and{' '}
 							<Link to={`#`} className="">
 								privacy policy
 							</Link>

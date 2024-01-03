@@ -4,14 +4,31 @@ import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 import { IoSettingsOutline, IoSearchOutline, IoWalletOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { useEffect, useState } from "react";
 
 
 const DashHeader = ({ isDasboard }) => {
+	const [show, setShow] = useState(false);
 	const { user } = useAuthContext();
+
+	useEffect(function() {
+		function controlNavbar() {
+			if (window.scrollY > 150 ) {
+				setShow(true)
+			} else{
+				setShow(false)
+			}
+		}
+		window.addEventListener('scroll', controlNavbar)
+		controlNavbar()
+		return () => {
+			window.removeEventListener('scroll', controlNavbar)
+		}
+	}, [])
 
 	return (
 		<header className="dashboard__header">
-			<div className="main-header">
+			<div className={`main-header ${show ? 'sticky' : ''}`}>
 				<Link to='/'>
 					<img src={GiftLogo} alt="logo" className="dashboard__logo" />
 				</Link>

@@ -15,6 +15,7 @@ function CategoryPage() {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [mess, setMess] = useState('');
+	const [stay, setStay] = useState(false);
     
     const navigate = useNavigate();
     const { category } = useParams()
@@ -73,6 +74,23 @@ function CategoryPage() {
     }, [])
 
 
+    useEffect(function() {
+		function controlNavbar() {
+			if (window.scrollY > 200 ) {
+				setStay(true)
+			} else{
+				setStay(false)
+			}
+			console.log(window.scrollY)
+		}
+		window.addEventListener('scroll', controlNavbar)
+		controlNavbar()
+		return () => {
+			window.removeEventListener('scroll', controlNavbar)
+		}
+	}, [])
+
+
 
     // GET ALL THE PRODUCT IN THAT CATEGORY
     useEffect(function() {
@@ -110,16 +128,14 @@ function CategoryPage() {
 
         { isLoading ? <SkeletonLoader /> :
         <div className='category--page'>
-            <div className='page--sidebar'>
-                <ul>
+            <div className='page--sidebar' style={stay ? {borderRight: 'none' } : {}}>
+                <ul className={`${stay ? 'sidebar--stay' : ''}`}>
                     { categories.map((category) => 
-                    
                         <Link to={`/dashboard/marketplace/${category.categoryName}`}>
                             <li className={`sidebar-items ${currentCategory === category.categoryName ? 'active-sidebar' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
                                 {category.categoryName} {currentCategory === category.categoryName ? <RiArrowRightDoubleLine className='sidebar-icon' /> : ''}
                             </li>
                         </Link>
-                    
                     )}
                 </ul>
             </div>

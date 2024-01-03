@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BsBell } from "react-icons/bs";
 import { BsJournalBookmark } from "react-icons/bs";
@@ -9,14 +9,27 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 const DashTabs = () => {
+	const [stay, setStay] = useState(false);
 	let location = useLocation();
 	const { user } = useAuthContext();
 
-	console.log(location.pathname)
-	console.log(location.pathname.includes('/dashboard/marketplace'))
+	useEffect(function() {
+		function controlNavbar() {
+			if (window.scrollY > 195.3333282470703 ) {
+				setStay(true)
+			} else{
+				setStay(false)
+			}
+		}
+		window.addEventListener('scroll', controlNavbar)
+		controlNavbar()
+		return () => {
+			window.removeEventListener('scroll', controlNavbar)
+		}
+	}, [])
 
 	return (
-		<section>
+		<section className={`${stay ? 'section--stay' : ''}`}>
 			<div className="section__container">
 				<div className="dashboard__tabs">
 					<Link to="/dashboard" className={`tab ${location.pathname === '/dashboard' ? 'active-tab' : ''}`}>
