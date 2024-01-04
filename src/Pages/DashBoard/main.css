@@ -20,6 +20,7 @@
     right: 0;
 	z-index: 1100;
 	backface-visibility: hidden;
+	transition: all .35s;
 }
 .sticky {
     position: fixed;
@@ -67,6 +68,9 @@
 	gap: 1.6rem;
 	align-items: center;
 	color: #fff;
+	position: relative;
+	cursor: pointer;
+	padding: .4rem 0;
 }
 .profile__img {
 	height: 4.4rem;
@@ -90,6 +94,43 @@
 .dashboard__icon-box .dashboard__icon {
 	color: #fff;
 	font-size: 2.4rem;
+}
+/*  */
+.dropdown--figure {
+	padding: 1rem .4rem;
+	border-radius: .6rem;
+	background-color: #fff;
+	color: #bb0505;
+	transition: all .35s;
+	box-shadow: .4rem 1rem 4rem rgba(0, 0, 0, 0.1);
+
+	position: absolute;
+	top: 5rem;
+	left: 10%;
+	width: 18rem;
+}
+.dropdown--figure ul {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: .4rem;
+}
+.dropdown--figure ul li {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	font-size: 1.8rem;
+	color: inherit;
+	font-weight: 500;
+	cursor: pointer;
+	padding: .8rem 1.8rem;
+	border-radius: .6rem;
+}
+.dropdown--figure ul li:hover {
+	background-color: #eee;
+}
+.dropdown--figure ul li p {
+	font-size: 1.2rem;
 }
 
 /* ///////////////////////////////////////////////////// */
@@ -581,18 +622,19 @@ div.banner button:hover {
 .product__modal {
 	max-width: 75rem;
 	width: 75rem;
-	height: 56rem;
-	position: absolute;
+	height: 75rem;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -32%);
 	box-shadow: 0.2rem 0.2rem 2rem rgba(0, 0, 0, 0.5);
 	background-color: #fff;
 	border-radius: 1rem;
-	padding: 2.8rem;
+	padding: 3.2rem 2.8rem;
 	transition: all 0.35s;
     backface-visibility: hidden;
 	animation: slide-up 1s ease-in;
+	z-index: 1600;
 }
 @keyframes slide-up {
 	0% {
@@ -606,9 +648,17 @@ div.banner button:hover {
 }
 .product--close-icon {
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 1%;
+	right: 1%;
 	transform: translate(-50%, 50%);
+}
+.close--icon {
+	cursor: pointer;
+	transition: all .35s;
+	font-size: 2.4rem;
+}
+.close--icon:hover {
+	transform: rotate(360deg);
 }
 .product--container {
 	display: grid;
@@ -661,13 +711,13 @@ div.banner button:hover {
 	font-size: 2rem;
 	font-weight: 600;
 	color: #bb0505;
-	margin-bottom: 1.8rem;
+	margin-bottom: 2rem;
 }
 .product--text {
 	font-size: 1.4rem;
 	line-height: 1.6;
 	text-align: left;
-	margin-bottom: 1.4rem;
+	margin-bottom: 1.6rem;
 }
 
 .product--container .product--vendor {
@@ -719,6 +769,26 @@ div.banner button:hover {
 	color: #fff;
 	font-size: 1.6rem;
 	font-weight: 500;
+}
+.product--quantity {
+	display: flex;
+	gap: 1.4rem;
+	align-items: center;
+	margin-top: 1.6rem;
+}
+.product--quantity span {
+	font-size: 1.2rem;
+	width: 2.4rem;
+	height: 2.4rem;
+	border: 1px solid #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	border-radius: .2rem;
+}
+.product--quantity span:hover {
+	border-color: #bb0505;
 }
 
 /* ============================================= */

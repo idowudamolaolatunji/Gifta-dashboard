@@ -4,7 +4,7 @@ import { RiArrowRightDoubleLine } from "react-icons/ri";
 import { currencyConverter, dateConverter } from '../../../utils/helper'
 import SkeletonLoader from '../../../Components/SkeletonLoader';
 import SkeletonLoaderMini from '../../../Components/SkelentonLoaderMini';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import Product from './Product';
 
 function CategoryPage() {
@@ -13,18 +13,18 @@ function CategoryPage() {
     const [categories, setCategories] = useState([]);
     const [categoryProducts, setCategoryProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [showModal, setShowModal] = useState(false);
     const [mess, setMess] = useState('');
 	const [stay, setStay] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     
-    const navigate = useNavigate();
-    const { category } = useParams()
-    const [currentCategory, setCurrentCategory] = useState(category);
+    const navPath = useParams();
+    const [currentCategory, setCurrentCategory] = useState(navPath.category);
+   
     
     // THIS IS TO SHOW THE MODAL
     function handleShowModal(product) {
         setShowModal(true)
-        setSelectedProduct(product)
+        setSelectedProduct(product);
     }
 
     // THIS IS TO CLOSE MODAL
@@ -32,14 +32,6 @@ function CategoryPage() {
         setShowModal(false)
         setSelectedProduct(null)
     }
-
-    // RENAVIGE BACK
-    useEffect(() => {
-        if(!showModal) {
-            navigate(`/dashboard/marketplace/${currentCategory}`)
-        }
-    }, [showModal]);
-
 
     // GET ALL CATEGORY FROM THE DB
     useEffect(function() {
@@ -74,37 +66,19 @@ function CategoryPage() {
     }, [])
 
 
-    useEffect(function() {
-		function controlNavbar() {
-			if (window.scrollY > 200 ) {
-				setStay(true)
-			} else{
-				setStay(false)
-			}
-			console.log(window.scrollY)
-		}
-		window.addEventListener('scroll', controlNavbar)
-		controlNavbar()
-		return () => {
-			window.removeEventListener('scroll', controlNavbar)
-		}
-	}, [])
-
-
-
     // GET ALL THE PRODUCT IN THAT CATEGORY
     useEffect(function() {
-        async function handleFetch(category) {
+        async function handleFetch() {
             try {
                 setIsLoadingCat(true);
+                setMess('')
                 
-                const res = await fetch(`https://test.tajify.com/api/gift-products/products/category/${category}`, {
+                const res = await fetch(`https://test.tajify.com/api/gift-products/products/category/${currentCategory}`, {
                     method: 'GET',
                     headers: { "Content-Type": "application/json", },
                 });
 
                 if(!res.ok) {
-                    setMess('Something went wrong. Check Internet connection!');
                     throw new Error('Something went wrong. Check Internet connection!');
                 }
                 const data = await res.json();
@@ -115,18 +89,34 @@ function CategoryPage() {
                 setCategoryProducts(data.data.giftProducts)
 
             } catch(err) {
-                console.error(err.message)
+                setMess(err.message)
             } finally {
                 setIsLoadingCat(false);
             }
         }
-        handleFetch(category)
-    }, [category])
+        handleFetch()
+    }, [currentCategory]);
+
+
+    useEffect(function() {
+		function controlNavbar() {
+			if (window.scrollY > 200 ) {
+				setStay(true)
+			} else{
+				setStay(false)
+			}
+		}
+		window.addEventListener('scroll', controlNavbar)
+		controlNavbar()
+		return () => {
+			window.removeEventListener('scroll', controlNavbar)
+		}
+	}, [])
+
 
   return (
     <section className='category-page__section'>
-
-        { isLoading ? <SkeletonLoader /> :
+        {isLoading ? <SkeletonLoader /> :
         <div className='category--page'>
             <div className='page--sidebar' style={stay ? {borderRight: 'none' } : {}}>
                 <ul className={`${stay ? 'sidebar--stay' : ''}`}>
@@ -140,14 +130,12 @@ function CategoryPage() {
                 </ul>
             </div>
 
-
-            { isLoadingCat && <SkeletonLoaderMini />}
-            { categoryProducts && categoryProducts.length !== 0 ?
-            <div className='page--main page--grid'>
-                { categoryProducts.map((product) => {
-                    return (
-                        <Link to={`/dashboard/marketplace/${currentCategory}/${product.slug}`}>
-                        
+            
+            {isLoadingCat ? <SkeletonLoaderMini /> :
+            <div className={`page--main ${categoryProducts.length > 0 ? 'page--grid' : ''}`}>
+                {console.log(categoryProducts)}
+                {categoryProducts.length > 0 ? categoryProducts.map((product) => 
+                    // <Link to={`/dashboard/marketplace/${currentCategory}/${product.slug}`}>
                         <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
                             <img className='product--img' src={product.image} alt={product.name} />
                             <figcaption className='product--details'>
@@ -165,20 +153,17 @@ function CategoryPage() {
                                 </div>
                             </figcaption>
                         </figure>
-
-                        </Link>
-                    );
-                })}
-            </div> : (
-
-            <div className='note--box page--main' style={{marginTop: '4rem'}}>
-                <p>{mess || 'No product in this category'}</p>
-                <picture>
-                    <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.webp" type="image/webp" />
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.gif" alt="🍃" width="32" height="32" />
-                </picture>
-            </div> )} 
-
+                    // </Link>
+                ) : (
+                    <div className='note--box'>
+                        <p>{mess || 'No product in this category'}</p>
+                        <picture>
+                            <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.webp" type="image/webp" />
+                            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.gif" alt="🍃" width="32" height="32" />
+                        </picture>
+                    </div>
+                )}
+            </div>}
         </div>}
 
         {(selectedProduct && showModal) && <Product product={selectedProduct} handleCloseModal={handleCloseModal} />}

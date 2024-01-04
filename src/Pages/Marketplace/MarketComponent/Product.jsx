@@ -2,6 +2,7 @@ import React from 'react'
 
 import { numberConverter } from '../../../utils/helper';
 import { AiOutlineClose } from 'react-icons/ai';
+import { FaPlus, FaMinus } from "react-icons/fa6";
 import { useState } from 'react';
 import GiftingForm from '../../Gifting/GiftingComponents/GiftingForm';
 
@@ -10,7 +11,6 @@ import Cookies from 'js-cookie';
 
 
 function Product({ product, handleCloseModal }) {
-    // const [isLoading, setIsLoading] = useState(false)
     const [showGiftingForm, setShowGiftingForm] = useState('');
     const [currImage, setCurrImage] = useState(product.image);
     const [quantity, setQuantity] = useState(1);
@@ -34,16 +34,21 @@ function Product({ product, handleCloseModal }) {
         setShowGiftingForm(false);
     }
     function incQuantity() {
-        setQuantity(prev => prev + 1);
+        if(quantity < 5) {
+            setQuantity(prev => prev + 1);
+        }
     }
     function decQuantity() {
-        setQuantity(prev => prev - 1);
+        if(quantity > 1) {
+            setQuantity(prev => prev - 1);
+        }
     }
     
   return (
-    <div className="product__modal--overlay">
+    <>
+    <div className="product__modal--overlay" onClick={handleCloseModal} />
         <aside className='product__modal' key={product._id}>
-            <AiOutlineClose className="product--close-icon" onClick={handleCloseModal} />
+            <span className="product--close-icon" onClick={handleCloseModal}><AiOutlineClose className='close--icon' /></span>
             { showGiftingForm ? <GiftingForm handleHideForm={handleHideForm} handleCloseModal={handleCloseModal} /> : (
                 <div className="product--container">
                     <span className='product--image-box'>
@@ -77,13 +82,14 @@ function Product({ product, handleCloseModal }) {
                             <span className="product--total">
                                 <span className="product--price">
                                     <span>Price:</span>
-                                    <p>₦{numberConverter(product.price)}</p>
+                                    <p>₦{numberConverter(amount)}</p>
                                 </span>
 
                                 <span className="product--quantity">
-
+                                    <span onClick={decQuantity}><FaMinus /></span>
+                                    <p>{quantity}</p>
+                                    <span onClick={incQuantity}><FaPlus /></span>
                                 </span>
-
                             </span>
 
                             <button className="product--btn" onClick={handleShowForm}>Gift now</button>
@@ -92,7 +98,7 @@ function Product({ product, handleCloseModal }) {
                 </div>
             )}
         </aside>
-    </div>
+    </>
   )
 }
 

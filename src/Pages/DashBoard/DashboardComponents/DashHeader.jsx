@@ -5,10 +5,12 @@ import { useAuthContext } from "../../../Auth/context/AuthContext";
 import { IoSettingsOutline, IoSearchOutline, IoWalletOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useEffect, useState } from "react";
+import Dropdown from "../../../Components/Dropdown";
 
 
 const DashHeader = ({ isDasboard }) => {
 	const [show, setShow] = useState(false);
+	const [showDropdown, setShowDropdown] = useState(false);
 	const { user } = useAuthContext();
 
 	useEffect(function() {
@@ -48,7 +50,9 @@ const DashHeader = ({ isDasboard }) => {
 						</Link>
 					</div>
 
-					<div className="dashboard__user-profile">
+					<div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
+						{showDropdown && <Dropdown />}
+
 						<img
 							alt="Profile Picture"
 							src={user?.image}
