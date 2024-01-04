@@ -70,7 +70,7 @@ function Wishlists() {
 					customStyle={customStyle}
 					setShowDashboardModal={setShowDashboardModal}
 				>
-					<WishlistForm />
+					<WishlistForm setShowDashboardModal={setShowDashboardModal} />
 				</DashboardModal>
 			)}
 		</>

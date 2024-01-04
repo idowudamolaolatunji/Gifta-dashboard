@@ -46,7 +46,7 @@ function Product({ product, handleCloseModal }) {
     
   return (
     <>
-    <div className="product__modal--overlay" onClick={handleCloseModal} />
+    <div className="product__modal--overlay" />
         <aside className='product__modal' key={product._id}>
             <span className="product--close-icon" onClick={handleCloseModal}><AiOutlineClose className='close--icon' /></span>
             { showGiftingForm ? <GiftingForm handleHideForm={handleHideForm} handleCloseModal={handleCloseModal} /> : (

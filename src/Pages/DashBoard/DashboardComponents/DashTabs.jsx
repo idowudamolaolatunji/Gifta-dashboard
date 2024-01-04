@@ -9,32 +9,34 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 const DashTabs = () => {
-	const [stay, setStay] = useState(false);
+	const [stay, setStay] = useState(function() {
+		return JSON.parse(localStorage.getItem('scrollY'))
+	});
 	let location = useLocation();
 	const { user } = useAuthContext();
 
 	useEffect(function() {
 		function controlNavbar() {
-			if (window.scrollY > 195.3333282470703 ) {
+			if (window.scrollY > 170 ) {
 				setStay(true)
 			} else{
 				setStay(false)
 			}
 		}
+		JSON.stringify(localStorage.setItem('scrollY', stay))
 		window.addEventListener('scroll', controlNavbar)
 		controlNavbar()
 		return () => {
 			window.removeEventListener('scroll', controlNavbar)
 		}
-	}, [])
+	}, [stay])
 
 	return (
 		<section className={`${stay ? 'section--stay' : ''}`}>
 			<div className="section__container">
 				<div className="dashboard__tabs">
-					<Link to="/dashboard" className={`tab ${location.pathname === '/dashboard' ? 'active-tab' : ''}`}>
+					<Link to="/dashboard" className={`tab ${location.pathname === '/dashboard/' || location.pathname === '/' || location.pathname === '/dashboard' ? 'active-tab' : ''}`}>
 						<LuLayoutDashboard className="tab-icon" />
-						{/* <p>Dashboard</p> */}
 					</Link>
 
 					<Link to="/dashboard/gifting" className={`tab ${location.pathname.includes('/dashboard/gifting') ? 'active-tab' : ''}`}>

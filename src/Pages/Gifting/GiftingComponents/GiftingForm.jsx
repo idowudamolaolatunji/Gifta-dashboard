@@ -11,7 +11,7 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
 
 function GiftingForm({ handleHideForm, handleCloseModal }) {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
@@ -78,7 +78,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         setIsError(false);
         setMessage('')
         setIsSuccess(false);
-        setMessage();
     }
 
     // HANDLE ON FETCH FAILURE
@@ -99,7 +98,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             const imageUrl = URL.createObjectURL(file);
             setImagePreview(imageUrl);
         }
-        console.log(file);
     };
 
     // EFFECT FUNCTION THAT FETCHES THE USER WALLET
@@ -210,22 +208,28 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ image: imagePreview || '', productId: productInfo.id, celebrant, purpose: productInfo.purpose, description, amount: productInfo.totalPrice, country, state, cityRegion, address, date }),
+                body: JSON.stringify({ productId: productInfo.id, celebrant, purpose: productInfo.purpose, description, amount: productInfo.totalPrice, country, state, cityRegion, address, date }),
             });
             console.log(res)
             if(!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
             console.log(data)
 
+            if(data.status !== 'success') {
+                throw new Error(data.message);
+            }
+
             // IMAGE UPLOAD
             const formData = new FormData();
-            handleUploadImg(formData);
+            const id = data.data.gifting._id
+            console.log(id);
+            handleUploadImg(formData, id);
 
             setIsSuccess(true);
             setMessage(data.message)
             setTimeout(() => {
                 setIsSuccess(false);
-                setMessage();
+                setMessage('');
                 setIsLoading(false);
                 handleCloseModal();
             }, 2500);
@@ -236,16 +240,17 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     }
 
 
-    async function handleUploadImg(formData) {
+    async function handleUploadImg(formData, id) {
         try {
             formData.append('image', imageFile);
-            const res = await fetch(`http://localhost:3010/api/giftings/gifting-img/${data.data.gifting._id}`, {
+            const res = await fetch(`http://localhost:3010/api/giftings/gifting-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    // Authorization: `Bearer ${token}`
                 },
                 body: formData,
+                mode: "no-cors"
             });
             if(!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
@@ -272,8 +277,8 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         <form className='gifting--form form' onSubmit={handleForm}>
 
             {isLoading && 
-            <div style={{ position: 'fixed', top: '14%', left: '50%' }}>
-                <img src={GiftLoader} height={'100rem'} style={{ filter: 'drop-shadow(1rem 2rem 6rem rgba(0, 0, 0, .35))' }} alt='loader' />
+            <div className='gifting--loader'>
+                <img src={GiftLoader} alt='loader' />
             </div>}
 
             <MdKeyboardBackspace className='form--icon' onClick={handleHideForm} />
@@ -323,7 +328,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 <div className='form__item'>
                     <label htmlFor="state" className="form__label">State</label>
                     <select type="text" id="state" value={state} className="form__select" onChange={(e) => setState(e.target.value)}>
-                        <option value="" selected="selected">- Select a State -</option>
+                        <option selected="selected">- Select a State -</option>
                         <option value="Abuja">Abuja FCT</option>
                         <option value="Abia">Abia</option>
                         <option value="Adamawa">Adamawa</option>
@@ -417,7 +422,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         </form>
 
 
-        <Alert style={{top: '-16%'}} alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+        <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
             {isSuccess ? (
                 <AiFillCheckCircle className="alert--icon" />
             ) : isError ? (

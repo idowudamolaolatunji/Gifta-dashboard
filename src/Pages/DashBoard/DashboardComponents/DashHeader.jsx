@@ -1,16 +1,18 @@
+import { useEffect, useState } from "react";
 import GiftLogo from "../../../Assets/gifta-logo.png";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 import { IoSettingsOutline, IoSearchOutline, IoWalletOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { useEffect, useState } from "react";
 import Dropdown from "../../../Components/Dropdown";
+import { LuSun, LuMoon } from "react-icons/lu";
 
 
 const DashHeader = ({ isDasboard }) => {
 	const [show, setShow] = useState(false);
 	const [showDropdown, setShowDropdown] = useState(false);
+	const [mode, setMode] = useState('light');
 	const { user } = useAuthContext();
 
 	useEffect(function() {
@@ -37,6 +39,14 @@ const DashHeader = ({ isDasboard }) => {
 
 				<div className="dashboard__details">
 					<div className="dashboard__others">
+						<span className="dashboard--mode">
+							{mode === 'light' ? 
+								(<LuMoon onClick={() => setMode('dark')} />)
+							: 
+								(<LuSun onClick={() => setMode('light')} />)
+							}
+						</span>
+
 						<Link to="/settings">
 							<span className="dashboard__icon-box">
 								<IoSettingsOutline className="dashboard__icon" />

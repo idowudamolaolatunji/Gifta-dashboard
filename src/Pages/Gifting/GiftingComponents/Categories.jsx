@@ -39,10 +39,9 @@ function Categories() {
     
   return (
     <div className='gift__categories'>
-        {categories &&  
+        {categories ?
             categories.map(category => {
                 return (
-                    isLoading ? <SkeletonLoader /> :
                     <Link to={`/dashboard/marketplace/${category.categoryName}`}>
                         <figure className='category--figure' key={category._id}>
                             <img className='category--image' src={category.categoryImage} alt={category.categoryName} />
@@ -50,7 +49,8 @@ function Categories() {
                         </figure>
                     </Link>
                 );
-            })
+            }) : 
+            isLoading && <SkeletonLoader /> 
         }
     </div>
   )
