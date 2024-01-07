@@ -435,9 +435,9 @@
 	gap: 2.8rem;
 }
 .product--figure {
-	padding: 1.2rem;
-	background-color: #eee;
+	background-color: #f8f8f8;
 	border-radius: 1rem;
+	overflow: hidden;
 	width: 100%;
 	height: auto;
 
@@ -445,18 +445,24 @@
 	flex-direction: column;
 	gap: 0.6rem;
 	cursor: pointer;
+	transition: all .35s;
+}
+.product--figure:hover {
+	box-shadow: .6rem 1rem 2rem rgba(0, 0, 0, 0.15);
+	transform: translateY(-.2rem);
 }
 .product--figure .product--img {
 	width: 100%;
-	height: 12rem;
-	border-radius: 1rem;
+	height: 14rem;
 	margin-bottom: 1.2rem;
+	/* border-radius: 1rem; */
 }
 .product--details {
 	display: flex;
 	flex-direction: column;
 	text-align: center;
 	align-items: flex-start;
+	padding: 0 1.2rem 1.2rem;
 }
 .product--heading {
 	font-size: 1.5rem;
@@ -467,29 +473,39 @@
 .product--vendor .vendor--main {
 	display: flex;
 	align-items: center;
-	gap: 0.8rem;
+	gap: 1.2rem;
 
 	justify-content: center;
 	margin-bottom: 0.4rem;
 }
 .product--vendor img {
-	width: 3rem;
-	height: 3rem;
+	width: 3.4rem;
+	height: 3.4rem;
 	border-radius: 50%;
+	border: 1.6px solid #bb0505;
 }
-.product--vendor p {
-	font-size: 1.24rem;
+.product--vendor-info {
+	font-size: 1.16rem;
+	display: flex;
+	flex-direction: column;
+	gap: .4rem;
+	align-items: flex-start;
+}
+.product--vendor-info p {
+	font-weight: 600;
+}
+/*  */
+.product--infos {
+	display: flex;
+	align-items: center;
+	gap: 4.8rem;
+	margin-top: 1.2rem;
 }
 .product--price {
 	font-size: 1.2rem;
 	font-weight: 600;
 	margin-bottom: 0.8rem;
-}
-.product--infos {
-	display: flex;
-	align-items: center;
-	gap: 1.8rem;
-	font-size: 1rem;
+	color: #bb0505;
 }
 
 /*  */
@@ -549,10 +565,10 @@ div.banner button:hover {
 	transform: translateY(-0.24rem);
 }
 .gifting--loader {
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
-	width: 100vw;
+	width: 99vw;
 	height: 100vh;
 	transform: translate(-50%, -50%);
 	-webkit-backdrop-filter: blur(4px);
@@ -567,6 +583,7 @@ div.banner button:hover {
 }
 
 /* ======================================= */
+/* WISHLIAT FORM */
 /* ======================================= */
 .wishlist--form {
 	display: flex;
@@ -628,6 +645,7 @@ div.banner button:hover {
 	padding: 1.2rem;
 	border-radius: 0.8rem;
 	border: 1.4px solid #ddd;
+	background-color: transparent;
 }
 #form-name-label, #form-category-label,
 .image-text {
@@ -797,6 +815,11 @@ div.banner button:hover {
 	display: flex;
 	gap: 0.62rem;
 	align-items: center;
+	margin-bottom: 0;
+}
+.product--date {
+	font-size: 1rem;
+	color: #888;
 }
 .product--price span {
 	font-weight: 400;
@@ -983,4 +1006,424 @@ span.validity::after {
 	align-items: flex-start;
 	justify-content: flex-start;
 	gap: .26rem;
+}
+
+/* ========================================= */
+/* WISHLISTS CARD AND FIGURES  */
+/* ========================================= */
+.wishlist--grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 3.6rem;
+	margin-top: -2.6rem;
+	padding-top: 4rem;
+	position: relative;
+}
+.w-figure--btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: .8rem 1.2rem;
+	border-radius: .3rem;
+	background-color: #bb0505;
+	color: #fff;
+	font-weight: 600;
+	font-size: 1.2rem;
+	border: none;
+	cursor: pointer;
+}
+.wishlist--figure {
+	position: relative;
+	overflow: hidden;
+	display: grid;
+	grid-template-columns: 14rem 1fr;
+	gap: 2.8rem;
+	background-color: #f8f8f8;
+	padding: 1.4rem;
+	border-radius: .6rem;
+}
+.w-figure-category {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: .8rem 1.8rem;
+	background-color: #ffc6c6;
+	font-size: 1.4rem;
+	font-weight: 500;
+	text-transform: capitalize;
+}
+.w-figure--image {
+	width: 100%;
+	border-radius: .6rem;
+}
+.w-figure--details {
+	display: flex;
+	flex-direction: column;
+	gap: 1.8rem;
+	padding: 0 1.2rem;
+}
+.w-figure--head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.w-figure--title {
+	font-size: 2rem;
+	/* text-decoration: underline;
+	text-decoration-style: wavy;
+	text-decoration-color: #bb0505;
+	text-underline-offset: .6rem; */
+	color: #bb0505;
+	margin-bottom: .4rem;
+	font-weight: 500;
+}
+.wish--list {
+	display: flex;
+	flex-direction: column;
+	gap: .6rem;
+	list-style: decimal;
+}
+.no-wish-item {
+	font-size: 1.45rem;
+	margin-top: 1rem;
+	background-color: #ddd;
+	padding: .8rem;
+	border-radius: .4rem;
+	align-self: flex-start;
+}
+.wish--item {
+	font-size: 1.4rem;
+	padding: .4rem 0;
+	padding-left: .4rem;
+}
+.wish--item:not(:last-child) {
+	border-bottom: 1.2px solid #ddd;
+	padding-bottom: 1rem;
+}
+.w-figure--info {
+	margin-top: auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 1.2rem;
+}
+.w-figure--view-more {
+	cursor: pointer;
+	color: #bb0505;
+}
+.wish--date {
+	margin-left: auto;
+	color: #888;
+}
+
+/* ============= WISHLIST LISTS ============== */
+
+.wish--lists {
+	margin: 0 auto;
+	margin-top: 1.4rem;
+	max-width: 80rem;
+	display: flex;
+	flex-direction: column;
+}
+.lists--title {
+	padding-bottom: 2rem;
+	border-bottom: 1.4px solid #ddd;
+	font-size: 2rem;
+	font-weight: 500;
+}
+.lists--tabs {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	padding: 1rem 0;
+	border-bottom: 1.4px solid #ddd;
+	margin-bottom: 1.2rem;
+}
+.main--tabs, .sub--tabs {
+	display: flex;
+	align-items: center;
+	gap: 1.4rem;
+}
+.lists--tab {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+	cursor: pointer;
+	text-transform: capitalize;
+}
+.lists--tab span {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 1rem;
+	font-size: 1.2rem;
+	background-color: #eee;
+	color: #aaa;
+	font-weight: 600;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: all .35s;
+}
+.main--tabs .lists--tab {
+	padding: 1.4rem 1.2rem;
+	background-color: transparent;
+	transition: all .35s;
+	font-weight: 500;
+	font-size: 1.3rem;
+}
+.main--tabs .lists--tab:hover {
+	background-color: #eee;
+}
+.main--tabs .lists--tab:hover span {
+	background-color: #ccc;
+	color: #999;
+}
+.main--tabs .lists--tab.tab--active {
+	color: #bb0505;
+	position: relative;
+	transition: all 0.35s;
+}
+.main--tabs .lists--tab.tab--active span {
+	background-color: #ffe8e8;
+	color: #888;
+}
+.main--tabs .lists--tab.tab--active::after {
+	content: "";
+	display: inline-block;
+	height: 0.34rem;
+	width: 100%;
+	background-color: #bb0505;
+	position: absolute;
+	bottom: -24%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-radius: 2rem;
+	animation: fade-in 1s ease-in;
+}
+.sub--tabs .lists--tab {
+	padding: .6rem .8rem;
+	border-radius: .5rem;
+	display: flex;
+	gap: .5rem;
+	font-size: 1.3rem;
+	font-weight: 500;
+	box-shadow: inset 0 0 0 .14rem #ddd;
+	transition: all .35s;
+}
+.sub--tabs .lists--tab:hover, .sub--tabs .lists--tab.tab--active {
+	background-color: #bb0505;
+	color: #fff;
+	box-shadow: none;
+}
+
+.lists--figure {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+	list-style: none;
+	padding: 2rem 0;
+}
+.lists--item {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	padding: 1.6rem 1.8rem;
+	border-radius: 1rem;
+	border: 1.5px solid #ddd;
+}
+.lists--item-top, .lists--item-bottom {
+	display: grid;
+	grid-template-columns: 1fr 14rem;
+	gap: 6.4rem;
+	align-items: center;
+}
+.lists--content {
+	display: flex;
+	align-items: flex-start;
+	gap: 1rem;
+}
+.lists--content span {
+	width: 1.8rem;
+	height: 1.8rem;
+	border: 1.4px solid #eee;
+	border-radius: .4rem;
+	margin-top: .4rem;
+	cursor: pointer;
+}
+.lists--content p {
+	font-size: 1.6rem;
+	font-weight: 500;
+	color: #bb0505;
+	line-height: 1.4;
+}
+.lists--actions {
+	display: flex;
+	align-items: center;
+	gap: 1.4rem;
+	justify-content: space-between;
+}
+.lists--actions span {
+	box-shadow: inset 0 0 0 .14rem #eee;
+	padding: .4rem .6rem;
+	border-radius: .4rem;
+	font-size: 1.8rem;
+	color: #777;
+	transition: all .35s;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .45rem;
+}
+.lists--actions span p {
+	font-size: 1.2rem;
+	font-weight: 600;
+	color: #888;
+}
+.lists--insight {
+	display: flex;
+	align-items: center;
+	gap: 1.6rem;
+}
+.lists--insight span {
+	display: flex;
+	align-items: center;
+	gap: .6rem;
+	font-size: 1.4rem;
+	color: #777;
+	font-weight: 600;
+}
+.lists--insight p {
+	font-size: 1.2rem;
+	color: #999;
+}
+.lists--message {
+	font-size: 2rem;
+	display: flex;
+	align-items: center;
+	gap: 1.4rem;
+}
+.lists--completed {
+	position: relative;
+	overflow: hidden;
+}
+.lists--completed::after {
+	content: '';
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	background-color: #ffffff6c;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.lists--completed .lists--content p {
+	text-decoration: line-through;
+}
+
+
+/* ======================================= */
+/* WISH CREATION BOX */
+/* ======================================= */
+.wish--overlay {
+	background-color: transparent;
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 2000;
+}
+.wish--form {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+
+	width: 70%;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem .8rem;
+	border-radius: 1rem;
+	background-color: #fff;
+	box-shadow: .4rem 1rem 4rem rgba(0, 0, 0, 0.15);
+	z-index: 2100;
+	transition: all .35s;
+	animation: zoom-in 1s ease-in-out;
+}
+@keyframes zoom-in {
+	0% {
+		transform:  translateX(-50%) scale(0.35);
+        opacity: 0;
+    } 15% {
+		transform:  translateX(-50%) scale(1);
+        opacity: 1;
+    }
+}
+.wish--input, .wish--textarea {
+	border: 1.4px solid transparent;
+	padding: 1.2rem 1.6rem;
+	border-radius: .8rem;
+	font-family: inherit;
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: #888;
+	transition: all .35s;
+}
+.wish--input:focus, .wish--textarea:focus {
+	outline: none;
+	border-color: #bb0505 !important;
+}
+.wish--input::placeholder, .wish--textarea::placeholder {
+	color: #999;
+}
+.wish--input-flex {
+	position: relative;
+}
+.wish--input-icon {
+	position: absolute;
+	font-size: 1.8rem;
+	top: 50%;
+	right: 10%;
+	transform: translate(-50%, -50%);
+}
+.form--grid {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.form--grid span {
+	display: flex;
+	align-items: center;
+	gap: 2.8rem;
+}
+.wish--input.input--date {
+	border-color: #eee;
+}
+.wish--input.input--number {
+	border-color: #eee;
+}
+.form--grid span:nth-child(2) {
+	gap: 1.6rem;
+	padding-right: 1.8rem;
+}
+.wish--button {
+	padding: .6rem .8rem;
+	border: none;
+	border-radius: .6rem;
+	font-size: 1.4rem;
+	font-weight: 500;
+}
+.btn--cancel {
+	background-color: #eee;
+	color: #777;
+}
+.btn--submit {
+	background-color: #bb0505;
+	color: #fff;
 }

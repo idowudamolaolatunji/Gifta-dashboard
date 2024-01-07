@@ -142,14 +142,14 @@ function CategoryPage() {
                                 <h4 className='product--heading'>{product.name}</h4>
                                 <div className='product--vendor'>
                                     <img className='' src={product.vendor.image} alt={product.vendor.fullName} />
-                                    <p>{product.vendor.fullName}</p>
+                                    <span className='product--vendor-info'>
+                                        <p>{product.vendor.fullName}</p>
+                                        <span>{product.vendor.location || 'Lagos, Nigeria'}</span>
+                                    </span>
                                 </div>
-                                <span className='product--price'>
-                                    ₦{currencyConverter(product.price)}
-                                </span>
                                 <div className='product--infos'>
-                                    <span>{dateConverter(product.createdAt)}</span>
-                                    <span>{product.vendor.location || 'Nigeria'}</span>
+                                    <span className='product--price'>₦{currencyConverter(product.price)}</span>
+                                    <span className='product--date'>{dateConverter(product.createdAt)}</span>
                                 </div>
                             </figcaption>
                         </figure>

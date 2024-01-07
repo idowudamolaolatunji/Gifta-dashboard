@@ -187,3 +187,58 @@ a:visited, a:link {
 	flex-direction: column;
 	gap: 1.2rem;
 }
+.share--icons {
+	margin-left: auto;
+	display: flex;
+	gap: 1.4rem;
+	align-items: center;
+}
+.share--icon {
+	font-size: 2rem;
+	margin-left: auto;
+	cursor: pointer;
+	color: #888;
+	transition: all .35s;
+}
+.share--icon:hover {
+	color: #bb0505;
+}
+
+/*  */
+.progress--bar {
+	width: 100%;
+	background-color: whitesmoke;
+	display: flex;
+	flex-direction: column;
+	gap: .4rem;
+}
+.progress--bar, .progress {
+	height: 1rem;
+	transition: all .35s;
+	border-radius: 1.2rem;
+}
+.progress {
+	background-color: #bb0505;
+}
+.progress--text {
+	color: #fff;
+	font-size: .8rem;
+	display: flex;
+	align-items: center;
+	font-weight: 600;
+}
+.progress--figure {
+	color: #888;
+	font-size: 1rem;
+	display: flex;
+	align-items: center;
+	gap: .26rem;
+}
+.progress--figure p {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+textarea {
+	resize: none;
+}

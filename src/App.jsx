@@ -11,6 +11,9 @@ import Reminders from './Pages/Reminders';
 
 import { BrowserRouter, createBrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom'
 import CategoryPage from './Pages/Marketplace/MarketComponent/MarketProducts';
+import WishListUi from './Pages/Wishlists/WishlistsComponents/WishListUi';
+
+import './index.css'
 
 
 
@@ -24,10 +27,15 @@ const App = () => {
 
           <Route path="/dashboard/gifting" element={<Gifting />}></Route>
           <Route path="/dashboard/marketplace/:category" element={<Marketplace />}></Route>
-
           <Route path="/dashboard/marketplace/:category/:productSlug" element={<Marketplace />}></Route>
           
           <Route path="/dashboard/wishlists" element={<Wishlists />}></Route>
+          <Route path="/dashboard/wishlists/:wishListSlug" element={<WishListUi />}></Route>
+          <Route path="/dashboard/wishlists/:wishListSlug/wish" element={<WishListUi />}></Route>
+          <Route path="/dashboard/wishlists/:wishListSlug/wish/edit" element={<WishListUi />}></Route>
+          <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
+
+
           <Route path="/dashboard/reminders" element={<Reminders />}></Route>
         </Route>
 

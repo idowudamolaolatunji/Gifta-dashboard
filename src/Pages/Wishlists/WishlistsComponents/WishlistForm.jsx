@@ -6,7 +6,7 @@ import Alert from '../../../Components/Alert';
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
-function WishlistForm({ setShowDashboardModal }) {
+function WishlistForm({ setShowDashboardModal, setHelpReset }) {
     const [imagePreview, setImagePreview] = useState('');
     const [imageFile, setImageFile] = useState(null);
     const [title, setTitle] = useState('');
@@ -55,6 +55,7 @@ function WishlistForm({ setShowDashboardModal }) {
         try {
             e.preventDefault();
             handleReset();
+            setHelpReset(false)
             setIsLoading(true)
 
             const res = await fetch('http://localhost:3010/api/wishlists/create-wishlist', {
@@ -87,6 +88,7 @@ function WishlistForm({ setShowDashboardModal }) {
             setTimeout(() => {
                 setIsSuccess(false);
                 setMessage('');
+                setHelpReset(true);
                 handleModalClose();
             }, 2500);
 
@@ -105,18 +107,17 @@ function WishlistForm({ setShowDashboardModal }) {
             const res = await fetch(`http://localhost:3010/api/wishlists/wishlist-img/${id}`, {
                 method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": 'application/json',
                     Authorization: `Bearer ${token}`
                 },
                 body: formData,
                 mode: "no-cors"
             });
-            if(!res.ok) throw new Error('Something went wrong!');
-            const data = await res.json();
-            console.log(data)
-            
+            if(!res.ok) throw new Error('Something went wrong!');            
         } catch(err) {
-            handleFailure(err.message);
+            console(err.message);
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -149,11 +150,11 @@ function WishlistForm({ setShowDashboardModal }) {
             <div className='form--item'>
                 <label htmlFor='form-category-input' id='form-category-label'>Category (Required)</label>
                 <select type='text' id='form-category-input' value={category} required onChange={(e) => setCategory(e.target.value)} placeholder='Select a category'>
-                    <option selected hidden>- Select a Category -</option>
+                    <option hidden>- Select a Category -</option>
                     <option value='birthday'>Birthday</option>
                     <option value='anniversary'>Anniversary</option>
-                    <option value='wedding'>Weeding</option>
-                    <option value='events'>Events</option>
+                    <option value='wedding'>Wedding</option>
+                    <option value='events'>Other Events</option>
                 </select>
             </div>
 
@@ -163,7 +164,7 @@ function WishlistForm({ setShowDashboardModal }) {
         </form>
 
         {(isSuccess || isError) && 
-        <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+        <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`} others={true}>
             {isSuccess ? (
                 <AiFillCheckCircle className="alert--icon" />
             ) : isError ? (
