@@ -1,13 +1,11 @@
-import React from "react";
+import React,{ useEffect, useState } from "react";
 import DashHeader from "../DashBoard/DashboardComponents/DashHeader";
 import DashTabs from "../DashBoard/DashboardComponents/DashTabs";
 
 import WishlistImg from "../../Assets/images/3d-plastilina-adding-bookmark-symbol.png";
 import { BsBookmarkCheck } from "react-icons/bs";
-import { useState } from "react";
 import DashboardModal from "../../Components/Modal";
 import WishlistForm from "./WishlistsComponents/WishlistForm";
-import { useEffect } from "react";
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import { useAuthContext } from "../../Auth/context/AuthContext";
 import { dateConverter } from "../../utils/helper";
@@ -16,6 +14,8 @@ import { ShareSocial } from 'react-share-social';
 import { AiFillExclamationCircle } from "react-icons/ai";
 import Alert from "../../Components/Alert";
 import { Link } from "react-router-dom";
+import SkelentonTwo from "../../Components/SkelentonTwo";
+import SkelentonOne from "../../Components/SkelentonOne";
 
 
 const customStyle = {
@@ -106,14 +106,8 @@ function Wishlists() {
 			<DashTabs />
 			<section className="wishlist__section section">
 				<div className="section__container">
-
-					{isLoading && (
-						<div className='gifting--loader'>
-							<img src={GiftLoader} alt='loader' />
-						</div>
-					)}
-
-					{wishLists.length > 0 && (
+					{isLoading && (<SkelentonTwo />)}
+					{(wishLists && wishLists.length > 0) ? (
 						<div className='wishlist--grid'>
 							<button className="w-figure--btn" onClick={handleModal}>Add Wishlist</button>
 							{wishLists?.map(wishList => (
@@ -145,9 +139,9 @@ function Wishlists() {
 										)}
 										
 										<div className="w-figure--info">
-											{wishList.wishes.length > 5 && (
+											{wishList.wishes.length >= 1 && (
 												<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
-													<span className="w-figure--view-more">View All</span>
+													<span className="w-figure--view-more">View All ({wishList.wishes.length})</span>
 												</Link>
 											)}
 											<span className="wish--date">{dateConverter(wishList.updatedAt)}</span>
@@ -156,8 +150,7 @@ function Wishlists() {
 								</div>
 							))}
 						</div>
-					)}
-					{(wishLists.length === 0 && !isLoading) && (
+					) : (wishLists && wishLists.length === 0 && !isLoading) && (
 						<div className="wishlist--banner banner">
 							<h3 className="section__heading">
 								Make yourself a wishlist and

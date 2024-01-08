@@ -12,18 +12,18 @@ import { FaCheck } from 'react-icons/fa6';
 import WishInputUi from './WishInputUi';
 import DeleteModalUi from './DeleteModalUi';
 import paystackSvg from '../../../Assets/svgs/paystack.svg';
-import GiftLoader from '../../../Assets/images/gifta-loader.gif';
+import SkelentonOne from '../../../Components/SkelentonOne';
 
-const id = 123456;
 
 function WishListUi() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTab, setSelectedTab] = useState('all');
     const [wishList, setWishList] = useState({});
     const [wishes, setWishes] = useState([]);
-    const [checked, setChecked] = useState(false);
+    const [checkedIds, setCheckedIds] = useState([]);
+    const [selectedWishId, setSelectedWishId] = useState(null);
     const [selectedWish, setSelectedWish] = useState({});
-    const [errMessage, setErrMessage] = useState('')
+    const [errMessage, setErrMessage] = useState('');
 
     const allWishes = wishes;
     const completedWishes = wishes.filter(wish => wish.isPaidFor === true)
@@ -38,9 +38,34 @@ function WishListUi() {
         navigate(`/dashboard/wishlists/${wishListSlug}/wish/edit?id=${item._id}`)
         setSelectedWish(item);
     }
+    
+    function handleSelectDeleteWish(item) {
+        navigate(`/dashboard/wishlists/${wishListSlug}/wish/delete?id=${item._id}`);
+        setSelectedWish(item);
+        setSelectedWishId(item._id);
+    }
 
     function handleChangeTab(tab) {
         setSelectedTab(tab)
+    }
+
+    function handleCheck(id) {
+        setCheckedIds(prev => {
+            if(prev.find(prevId => prevId === id)) {
+                return [...prev.filter(prevId => prevId !== id)];
+            }
+            return [...prev, id];
+        });
+    }
+
+    async function handleDeleteWishItem() {
+        try {
+
+        } catch(err) {
+
+        } finally {
+
+        }
     }
 
     useEffect(function() {
@@ -74,11 +99,6 @@ function WishListUi() {
     <>
         <WishListDashHeader />
 
-        {isLoading && 
-            <div className='gifting--loader'>
-                <img src={GiftLoader} alt='loader' />
-        </div>}
-        
         <section className="section">
             <div className="section__container">
                 {/* <button className='button' onClick={navigate(-1)}>Back</button> */}
@@ -97,18 +117,19 @@ function WishListUi() {
                             <div className="lists--tab"><PiFunnelBold /> Filter</div>
                         </div>
                     </div>
+                    {isLoading && (<SkelentonOne />)}
                     <ul className='lists--figure'>
                         {(wishArr && wishArr.length > 0) ? wishArr.map(wishItem => (
                             <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
                                 <span className='lists--item-top'>
                                     <span className='lists--content'>
-                                        <span onClick={() => setChecked(!checked)} style={checked ? { backgroundColor: '#bb0505', boxShadow: 'none' } : {}}>{checked && <FaCheck style={{ color: '#fff' }} />}</span>
-                                        <p style={checked ? { textDecoration: 'line-through'} : {}}>{wishItem.wish}</p>
+                                        <span onClick={() => handleCheck(wishItem._id)} style={(checkedIds.find(id => id === wishItem._id)) ? { backgroundColor: '#bb0505', boxShadow: 'none' } : {}}>{(checkedIds.find(id => id === wishItem._id)) && <FaCheck style={{ color: '#fff' }} />}</span>
+                                        <p style={(checkedIds.find(id => id === wishItem._id)) ? { textDecoration: 'line-through'} : {}}>{wishItem.wish}</p>
                                     </span>
                                     <div className='lists--actions'>
                                         <span onClick={() => navigate(`/dashboard/wishlists/${wishListSlug}/wish/pay?id=${wishItem._id}`)}><img height={'17rem'} src={paystackSvg} /><p>Pay</p></span>
                                         <span onClick={() => handleSelectedWish(wishItem)}><RiEditLine /></span>
-                                        <span onClick={() => navigate(`/dashboard/wishlists/${wishListSlug}/wish/delete?id=${wishItem._id}`)}><RiDeleteBin6Line /></span>
+                                        <span onClick={() => handleSelectDeleteWish(wishItem)}><RiDeleteBin6Line /></span>
                                     </div>
                                 </span>
                                 <span className='lists--item-bottom'>
@@ -119,21 +140,22 @@ function WishListUi() {
                                     <ProgressBar progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
                                 </span>
                             </li>
-                        )): (
+                        )) : (!isLoading && !errMessage && wishArr && wishArr.length === 0) && (
                             <li className='lists--message'>
-                                {(!isLoading && errMessage) ? errMessage : 
-                                    selectedTab === 'completed' ? 'No Completed Wishes!' : 'You\'ve No Wishes Yet!'}
-                                    {(!isLoading && errMessage) ? (
-                                        <picture>
-                                            <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.webp" type="image/webp" />
-                                            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.gif" alt="🛸" width="32" height="32" />
-                                        </picture>
-                                    ) : (
-                                        <picture>
-                                            <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.webp" type="image/webp" />
-                                            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.gif" alt="😞" width="32" height="32" />
-                                        </picture>
-                                    )}
+                                {selectedTab === 'completed' ? 'No Completed Wishes!' : 'You\'ve No Wishes Yet!'}
+                                <picture>
+                                    <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.webp" type="image/webp" />
+                                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.gif" alt="😞" width="32" height="32" />
+                                </picture>
+                            </li>
+                        )}
+                        {(errMessage) && (
+                            <li className='lists--message'>
+                                {errMessage} 
+                                <picture>
+                                    <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.webp" type="image/webp" />
+                                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.gif" alt="🛸" width="32" height="32" />
+                                </picture>
                             </li>
                         )}
                     </ul>
@@ -142,9 +164,18 @@ function WishListUi() {
         </section>
 
 
-        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish` && <WishInputUi />}
-        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/edit` && <WishInputUi wishDetails={selectedWish} />}
-        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/delete` && <DeleteModalUi />}
+        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish` && <WishInputUi type={'new'} />}
+        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/edit` && <WishInputUi wishDetails={selectedWish} type={'edit'} />}
+        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/delete` && (
+            <DeleteModalUi title={`Delete Wish!`}>
+                <p className='modal--text'>Are you sure you want to delete this wish?</p>
+                <span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
+                <div className="modal--actions">
+                    <span type="submit" className='delete--cancel' onClick={() => navigate(-1)}>Cancel</span>
+                    <span type="button" className='delete--submit' onClick={handleDeleteWishItem}>Delete Wish</span>
+                </div>
+            </DeleteModalUi>
+        )}
     </>
   )
 }

@@ -110,7 +110,16 @@ a:visited, a:link {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 1rem;
 }
-
+.skeleton--grid-two {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 4.2rem;
+}
+.skeleton--flex{
+	display: flex;
+	flex-direction: column;
+	gap: 2.8rem;
+}
 
 
 .overlay {

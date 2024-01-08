@@ -4,7 +4,7 @@ import { TbMoneybag } from 'react-icons/tb';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { formatDate } from '../../../utils/helper';
 
-function WishInputUi({ wishDetails }) {
+function WishInputUi({ wishDetails, type }) {
     const [wish, setWish] = useState(wishDetails ? wishDetails.wish : '');
     const [description, setDescription] = useState(wishDetails ? wishDetails.description : '');
     const [date, setDate] = useState(wishDetails ? formatDate(wishDetails.deadLineDate) : '')
@@ -22,10 +22,33 @@ function WishInputUi({ wishDetails }) {
         }
     }
 
+    async function handleWishInput(e) {
+        let url, method;
+        try {
+            e.preventDefault();
+            setIsLoading(true);
+            if(type === 'new') {
+                method = 'POST';
+                url = ''
+            } else {
+                method = "PATCH";
+                url = ''
+            }
+            
+
+
+        } catch(err) {
+
+        } finally {
+
+        }
+    }
+
   return (
     <>
         <div className='wish--overlay' onClick={handleNavigation} />
-        <form className='wish--form wish--modal'>
+        {/* {isLoading && (< />)} */}
+        <form className='wish--form wish--modal' onSubmit={handleWishInput}>
             <input type="text" className='wish--input' placeholder='Write a wish here' value={wish} onChange={(e) => setWish(e.target.value)} />
             <textarea className='wish--textarea' placeholder='A bit of description' value={description} onChange={(e) => setDescription(e.target.value)} />
             <div className="form--grid">
