@@ -14,6 +14,7 @@ import CategoryPage from './Pages/Marketplace/MarketComponent/MarketProducts';
 import WishListUi from './Pages/Wishlists/WishlistsComponents/WishListUi';
 
 import './index.css'
+import SharedWishlist from './Pages/PublicPages/SharedWishlist';
 
 
 
@@ -41,6 +42,7 @@ const App = () => {
 
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
+        <Route path="/wishlist/shared/:url" element={<SharedWishlist />}></Route>
 
     </Routes>
     </BrowserRouter>

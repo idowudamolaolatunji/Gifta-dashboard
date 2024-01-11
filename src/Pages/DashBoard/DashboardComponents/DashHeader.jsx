@@ -85,7 +85,7 @@ const DashHeader = ({ isDasboard }) => {
 			<section className="hero__section">
 				<div className="section__container">
 					<div className="header__box">
-						<h1>Welcome Back, {user.fullName.split(" ")[0]}!</h1>
+						<h1>Welcome Back, {user.fullName?.split(" ")[0] || user.username}!</h1>
 
 						<p>What will you do on Gifta today?</p>
 					</div>

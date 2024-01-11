@@ -24,6 +24,7 @@ function WishListUi() {
     const [selectedWishId, setSelectedWishId] = useState(null);
     const [selectedWish, setSelectedWish] = useState({});
     const [errMessage, setErrMessage] = useState('');
+    const [helpReset, setHelpReset] = useState(false);
 
     const allWishes = wishes;
     const completedWishes = wishes.filter(wish => wish.isPaidFor === true)
@@ -93,7 +94,7 @@ function WishListUi() {
             }
         }
         handleFetchList()
-    }, []);
+    }, [helpReset]);
 
   return (
     <>
@@ -119,7 +120,7 @@ function WishListUi() {
                     </div>
                     {isLoading && (<SkelentonOne />)}
                     <ul className='lists--figure'>
-                        {(wishArr && wishArr.length > 0) ? wishArr.map(wishItem => (
+                        {(wishArr && wishArr.length > 0) ? wishArr?.map(wishItem => (
                             <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
                                 <span className='lists--item-top'>
                                     <span className='lists--content'>
@@ -127,7 +128,8 @@ function WishListUi() {
                                         <p style={(checkedIds.find(id => id === wishItem._id)) ? { textDecoration: 'line-through'} : {}}>{wishItem.wish}</p>
                                     </span>
                                     <div className='lists--actions'>
-                                        <span onClick={() => navigate(`/dashboard/wishlists/${wishListSlug}/wish/pay?id=${wishItem._id}`)}><img height={'17rem'} src={paystackSvg} /><p>Pay</p></span>
+                                        {/* <span onClick={() => navigate(`/dashboard/wishlists/${wishListSlug}/wish/pay?id=${wishItem._id}`)}><img height={'17rem'} src={paystackSvg} /><p>Pay</p></span> */}
+                                        <span><img height={'17rem'} src={paystackSvg} /><p>Pay</p></span>
                                         <span onClick={() => handleSelectedWish(wishItem)}><RiEditLine /></span>
                                         <span onClick={() => handleSelectDeleteWish(wishItem)}><RiDeleteBin6Line /></span>
                                     </div>
@@ -164,8 +166,8 @@ function WishListUi() {
         </section>
 
 
-        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish` && <WishInputUi type={'new'} />}
-        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/edit` && <WishInputUi wishDetails={selectedWish} type={'edit'} />}
+        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish` && <WishInputUi wishListId={wishList._id} type={'new'} setHelpReset={setHelpReset} />}
+        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/edit` && <WishInputUi wishDetails={selectedWish} wishListId={wishList._id} type={'edit'} setHelpReset={setHelpReset} />}
         {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/delete` && (
             <DeleteModalUi title={`Delete Wish!`}>
                 <p className='modal--text'>Are you sure you want to delete this wish?</p>

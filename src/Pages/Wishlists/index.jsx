@@ -100,6 +100,7 @@ function Wishlists() {
 		fetchWishlists();
 	}, [helpReset]);
 
+
 	return (
 		<>
 			<DashHeader />
@@ -110,7 +111,7 @@ function Wishlists() {
 					{(wishLists && wishLists.length > 0) ? (
 						<div className='wishlist--grid'>
 							<button className="w-figure--btn" onClick={handleModal}>Add Wishlist</button>
-							{wishLists?.map(wishList => (
+							{wishLists.map(wishList => (
 								<div className="wishlist--figure">
 									<span className="w-figure-category">{wishList.category}</span>
 									<a target='_blank' href={`http://localhost:3010/asset/others/${wishList.image}`}>
@@ -132,14 +133,13 @@ function Wishlists() {
 											<p className="no-wish-item">You've no wish yet!</p>
 										) : (
 											<ul className="wish--list">
-												{wishList?.wishes.map(wishItem => (
+												{wishList.wishes.slice(0, 5).map(wishItem => (
 													<li className="wish--item">{wishItem.wish}</li>
 												))}
 											</ul>
 										)}
-										
 										<div className="w-figure--info">
-											{wishList.wishes.length >= 1 && (
+											{wishList?.wishes.length >= 1 && (
 												<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
 													<span className="w-figure--view-more">View All ({wishList.wishes.length})</span>
 												</Link>
@@ -158,7 +158,6 @@ function Wishlists() {
 									{' '}share with friends <BsBookmarkCheck />
 								</span>
 							</h3>
-
 							<img src={WishlistImg} alt={WishlistImg} />
 							<button type="button" onClick={handleModal}>
 								Create Wishlist
@@ -167,7 +166,6 @@ function Wishlists() {
 					)}
 				</div>
 			</section>
-
 			{showDashboardModal && (
 				<DashboardModal
 					title={'Create your Wishlist'}
@@ -177,7 +175,6 @@ function Wishlists() {
 					<WishlistForm setShowDashboardModal={setShowDashboardModal} setHelpReset={setHelpReset} />
 				</DashboardModal>
 			)}
-
 			{share && (
 				<DashboardModal
 					title={'Make your wish come true! Share Link'}
@@ -192,8 +189,6 @@ function Wishlists() {
 					/>
 				</DashboardModal>
 			)}
-
-
 			{isError && (
 				<Alert alertType="error">
 					<AiFillExclamationCircle className="alert--icon" />

@@ -120,6 +120,20 @@ a:visited, a:link {
 	flex-direction: column;
 	gap: 2.8rem;
 }
+.skeleton--card {
+	display: grid;
+	grid-template-columns: 24rem 1fr;
+	gap: 4.8rem;
+}
+.skeleton--card div {
+	display: flex;
+	flex-direction: column;
+	gap: 1.8rem;
+}
+.skeleton--card div span {
+	display: flex;
+	flex-direction: column;
+}
 
 
 .overlay {
@@ -149,7 +163,6 @@ a:visited, a:link {
 	border-radius: 0.6rem;
 	box-shadow: 0.2rem 0.2rem 2rem rgba(0, 0, 0, 0.5);
 	z-index: 1500;
-	/* overflow: hidden; */
 	animation: zoom-in 1s ease-in-out;
 }
 @keyframes zoom-in {
@@ -172,6 +185,8 @@ a:visited, a:link {
 .modal--heading {
 	color: #bb0505;
 	font-weight: 600;
+	display: flex;
+	align-items: center;
 }
 .modal--icon {
 	margin-left: auto;
@@ -250,4 +265,23 @@ a:visited, a:link {
 
 textarea {
 	resize: none;
+}
+
+
+.gifting--loader {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 99vw;
+	height: 100vh;
+	transform: translate(-50%, -50%);
+	-webkit-backdrop-filter: blur(4px);
+	backdrop-filter: blur(4px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 2500;
+}
+.gifting--loader img {
+	height: 10rem;
 }
