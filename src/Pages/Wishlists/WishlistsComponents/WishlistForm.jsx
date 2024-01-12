@@ -122,7 +122,6 @@ function WishlistForm({ setShowDashboardModal, setHelpReset }) {
     }
 
 
-    // create-wish/:wishlistID
   return (
     <>
         {isLoading && 

@@ -85,7 +85,7 @@ function WishListUi() {
                 console.log(res, data)
                 if(data.status !== 'success') throw new Error(data.message)
                 setWishList(data.data.wishList);
-                setWishes(data.data.wishList.wishes)
+                setWishes(data.data.wishList?.wishes)
             } catch(err) {
                 console.log(err.message);
                 setErrMessage(err.message)
@@ -115,7 +115,7 @@ function WishListUi() {
                             <Link to={`/dashboard/wishlists/${wishListSlug}/wish?new=${true}`}>
                                 <div className="lists--tab"><PiPlusBold /> add wish</div>
                             </Link>
-                            <div className="lists--tab"><PiFunnelBold /> Filter</div>
+                            {/* <div className="lists--tab"><PiFunnelBold /> Filter</div> */}
                         </div>
                     </div>
                     {isLoading && (<SkelentonOne />)}
@@ -129,7 +129,7 @@ function WishListUi() {
                                     </span>
                                     <div className='lists--actions'>
                                         {/* <span onClick={() => navigate(`/dashboard/wishlists/${wishListSlug}/wish/pay?id=${wishItem._id}`)}><img height={'17rem'} src={paystackSvg} /><p>Pay</p></span> */}
-                                        <span><img height={'17rem'} src={paystackSvg} /><p>Pay</p></span>
+                                        {/* <span><img height={'17rem'} src={paystackSvg} /><p>Pay</p></span> */}
                                         <span onClick={() => handleSelectedWish(wishItem)}><RiEditLine /></span>
                                         <span onClick={() => handleSelectDeleteWish(wishItem)}><RiDeleteBin6Line /></span>
                                     </div>

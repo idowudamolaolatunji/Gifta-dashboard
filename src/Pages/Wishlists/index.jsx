@@ -121,7 +121,7 @@ function Wishlists() {
 										<div className="w-figure--head">
 											<span className="w-figure--title">{wishList.name}</span>
 											<div className="share--icons">
-												{(user.isPremium || (!user.isPremium && wishList.wishes.length < 10)) && (
+												{(user.isPremium || (!user.isPremium && wishList?.wishes.length < 10)) && (
 													<Link to={`/dashboard/wishlists/${wishList?.slug}/wish?new=true`}>
 														<PiPlusBold className='share--icon' />
 													</Link>
