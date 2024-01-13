@@ -16,7 +16,7 @@ import SkelentonOne from '../../../Components/SkelentonOne';
 
 
 function WishListUi() {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState('all');
     const [wishList, setWishList] = useState({});
     const [wishes, setWishes] = useState([]);

@@ -16,6 +16,7 @@ import Alert from "../../Components/Alert";
 import { Link } from "react-router-dom";
 import SkelentonTwo from "../../Components/SkelentonTwo";
 import SkelentonOne from "../../Components/SkelentonOne";
+import SkelentonCard from "../../Components/SkelentonCard";
 
 
 const customStyle = {
@@ -40,7 +41,7 @@ function Wishlists() {
 	const [share, setShare] = useState(false);
 	const [url, setUrl] = useState('')
 	const [showDashboardModal, setShowDashboardModal] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [wishLists, setWishLists] = useState([]);
 	const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
@@ -107,7 +108,15 @@ function Wishlists() {
 			<DashTabs />
 			<section className="wishlist__section section">
 				<div className="section__container">
-					{isLoading && (<SkelentonTwo />)}
+					{/* {isLoading && (<SkelentonTwo />)} */}
+					{isLoading &&  (
+						<div className='wishlist--grid' style={{ columnGap: '8rem' }}>
+							<SkelentonCard />
+							<SkelentonCard />
+							<SkelentonCard />
+						</div>
+					)}
+
 					{(wishLists && wishLists.length > 0) ? (
 						<div className='wishlist--grid'>
 							<button className="w-figure--btn" onClick={handleModal}>Add Wishlist</button>

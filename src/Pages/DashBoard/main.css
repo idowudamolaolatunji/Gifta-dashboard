@@ -274,24 +274,45 @@
 /* ======================================= */
 /* DASHBOARD */
 /* ======================================= */
+.dashboard--gifting {
+	background-color: #f8f8f8;
+	border-radius: 1.2rem;
+	padding: 1.2rem;
+}
+.dashboard--gifting div:nth-child(1) {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+.pagination--actions {
+	display: flex;
+	align-items: center;
+	gap: 1.4rem;
+}
+.pagination--actions span {
+	border: 1.6px solid #bb0505;
+	border-radius: .4rem;
+	color: #bb0505;
+	font-size: 2rem;
+	padding: .28rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all .35s;
+	backface-visibility: hidden;
+}
+.pagination--actions span:hover {
+	transform: scale(1.05);
+}
 .giftPackage__cards {
-	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
-	gap: 2.4rem;
 }
 .giftPackage--figure {
-	display: grid;
-	grid-template-columns: 6rem 1fr;
-	gap: 1.4rem;
-	padding: 1.2rem;
-	border-radius: .8rem;
-	border: 1.2px solid #bb0505;
-	position: relative;
-	overflow: hidden;
-}
-
-.giftPackage--figure img {
-	height: 4.8rem;
+	display: flex;
+	flex-direction: column;
+	background-color: #eee !important;
 }
 .giftPackage--details {
 	display: flex;
@@ -313,25 +334,17 @@
 	justify-content: space-between;
 	font-size: 1rem;
 }
-.package--category {
-	position: absolute;
-	bottom: 0%;
-	left: 8%;
-	transform: translate(-50%, -50%) rotate(45deg);
-	padding: .6rem;
-	background-color: #bb0505;
-	color: #fff;
-	font-weight: 600;
-	width: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
 .package--date {
 	margin-left: auto;
 }
 
-
+/* giftPackage--figure
+giftPackage--details
+package--celebrant
+package--description
+package--info
+package--category
+package--date */
 
 
 /* ======================================= */
@@ -997,11 +1010,13 @@ span.validity::after {
 /* WISHLISTS CARD AND FIGURES  */
 /* ========================================= */
 .wishlist--grid {
-	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 3.6rem;
-	margin-top: -2.6rem;
 	padding-top: 4rem;
+	margin-top: -2.8rem;
+}
+.wishlist--grid, .giftPackage__cards {
+	display: grid;
+	gap: 3.6rem;
 	position: relative;
 }
 .w-figure--btn {
@@ -1018,17 +1033,18 @@ span.validity::after {
 	cursor: pointer;
 }
 .wishlist--figure {
+	grid-template-columns: 14rem 1fr;
+	display: grid;
+}
+.wishlist--figure, .giftPackage--figure {
 	position: relative;
 	overflow: hidden;
-	display: grid;
-	grid-template-columns: 14rem 1fr;
 	gap: 2.8rem;
 	background-color: #f8f8f8;
 	padding: 1.4rem;
 	border-radius: .6rem;
-	/* align-self: self-start; */
 }
-.w-figure-category {
+.w-figure-category, .package--category {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -1038,7 +1054,7 @@ span.validity::after {
 	font-weight: 500;
 	text-transform: capitalize;
 }
-.w-figure--image {
+.w-figure--image, .giftPackage--figure img {
 	width: 100%;
 	border-radius: .6rem;
 }
@@ -1323,6 +1339,7 @@ span.validity::after {
 	left: 0;
 	right: 0;
 	z-index: 2000;
+	background-color: rgba(0, 0, 0, 0.1);
 }
 .wish--form {
 	position: fixed;
@@ -1338,10 +1355,10 @@ span.validity::after {
 	padding: 1rem .8rem;
 	border-radius: 1rem;
 	background-color: #fff;
-	box-shadow: .4rem 1rem 4rem rgba(0, 0, 0, 0.15);
+	box-shadow: .4rem 1rem 4rem rgba(0, 0, 0, 0.2);
 	z-index: 2100;
 	transition: all .35s;
-	animation: zoom-in 1s ease-in-out;
+	/* animation: zoom-in 1s ease-in-out; */
 }
 .form--focus .wish--input, .form--focus .wish--textarea {
 	border-color: #bb0505 !important;
@@ -1518,7 +1535,6 @@ span.validity::after {
 }
 
 
-
 /* ============================= */
 /* ============================= */
 
@@ -1604,4 +1620,23 @@ span.validity::after {
 .share--bottom {
 	margin: 0 auto;
 	width: 90%;
+}
+
+
+.reminder--form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.reminder--form .form--textarea {
+	height: 8rem;
+}
+.reminder--form .reminder--flex {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: .6rem;
+}
+.reminder--flex input {
+	width: 100%;
 }

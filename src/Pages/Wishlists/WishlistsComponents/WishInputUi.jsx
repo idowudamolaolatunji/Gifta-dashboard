@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { TbMoneybag } from 'react-icons/tb';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -18,10 +18,9 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
 	const [message, setMessage] = useState("");
     const [inValid, setInValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [focus, setFocus] = useState(false);
 
-    function formattedAmount(strAmount) {
-        return Number(strAmount.replace(/,/g, '').replace('₦', ''));
-    } 
+    const inputRef = useRef(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -105,6 +104,19 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
         }
     }
 
+    function handleInputFocus() {
+        setFocus(!focus)
+    }
+    
+    useEffect(function() {
+        if(focus) {
+            inputRef.current.focus();
+        }
+        if(!inputRef.current.focus()) {
+            setFocus(false)
+        }
+    }, [focus])
+
   return (
     <>
         <div className='wish--overlay' onClick={handleNavigation} />
@@ -118,20 +130,18 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
             <textarea className='wish--textarea' placeholder='A bit of description' value={description} onChange={(e) => setDescription(e.target.value)} />
             <div className="form--grid">
                 <span>
-                    <input type="date" className='wish--input input--date' value={date} onChange={(e) => setDate(e.target.value)}/>
+                    <input type="date" className='wish--input input--date' placeholder='Deadline Date...' value={date} onChange={(e) => setDate(e.target.value)}/>
                     <span className='wish--input-flex'>
                         <CurrencyInput 
                             className='wish--input input--number'
                             decimalsLimit={0}
-                            prefix='₦'
+                            prefix='₦ '
                             placeholder='Wish Amount'
                             defaultValue={amount}
-                            // value={amount}
-                            // onChange={(value, _) => setAmount(value)}
-                            onChange={(e) => setAmount(e.target.value)}
-
+                            onValueChange={(value, _) => setAmount(value)}
+                            ref={inputRef}
                         />
-                        <TbMoneybag className='wish--input-icon'/>
+                        <TbMoneybag className='wish--input-icon' onClick={handleInputFocus} />
                     </span>
                 </span>
                 <span>
@@ -145,10 +155,8 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
             <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
                 {isSuccess ? (
                     <AiFillCheckCircle className="alert--icon" />
-                ) : isError ? (
+                ) : isError && (
                     <AiFillExclamationCircle className="alert--icon" />
-                ) : (
-                    ""
                 )}
                 <p>{message}</p>
             </Alert>

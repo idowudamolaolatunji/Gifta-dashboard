@@ -115,7 +115,18 @@ a:visited, a:link {
 	grid-template-columns: 1fr 1fr;
 	gap: 4.2rem;
 }
-.skeleton--flex{
+.skeleton--grid-three {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 2.4rem;
+}
+.skeleton--grid-four {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 2.8rem;
+}
+
+.skeleton--flex {
 	display: flex;
 	flex-direction: column;
 	gap: 2.8rem;

@@ -124,10 +124,11 @@ function WishlistForm({ setShowDashboardModal, setHelpReset }) {
 
   return (
     <>
-        {isLoading && 
+        {isLoading && (
             <div className='gifting--loader'>
                 <img src={GiftLoader} alt='loader' />
-        </div>}
+            </div>
+        )}
 
         <form className='wishlist--form form' onSubmit={(e) => handleCreateWishList(e)}>
             <div className='form--item form-image-card'>

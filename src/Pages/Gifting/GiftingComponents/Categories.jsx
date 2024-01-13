@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import SkeletonLoader from '../../../Components/SkeletonLoader';
+import SkelentonThree from '../../../Components/SkelentonThree';
 
 function Categories() {
     const [isLoading, setIsLoading] = useState(false);
@@ -38,8 +38,15 @@ function Categories() {
     }, [])
     
   return (
+    <>
+    {isLoading && (
+        <>
+            <SkelentonThree />
+            <SkelentonThree />
+        </>
+    )}
     <div className='gift__categories'>
-        {categories ?
+        {categories &&
             categories.map(category => {
                 return (
                     <Link to={`/dashboard/marketplace/${category.categoryName}`}>
@@ -49,10 +56,10 @@ function Categories() {
                         </figure>
                     </Link>
                 );
-            }) : 
-            isLoading && <SkeletonLoader /> 
+            }) 
         }
     </div>
+    </>
   )
 }
 

@@ -8,11 +8,23 @@ import GiftImg from '../../Assets/images/casual-life-3d-pink-gift-box.png';
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../Auth/context/AuthContext";
 import SkeletonLoader from '../../Components/SkeletonLoader';
-import { dateConverter } from "../../utils/helper";
+import { dateConverter, expectedDateFormatter } from "../../utils/helper";
+import SkelentonFour from "../../Components/SkelentonFour";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 // import { PiDotsThreeVerticalBold } from "react-icons/pi";
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
+
+// import required modules
+import { FreeMode, Navigation } from 'swiper/modules';
+
 const DashBoard = () => {
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [giftings, setGiftings] = useState([]);
 	const { token } = useAuthContext();
 
@@ -33,7 +45,7 @@ const DashBoard = () => {
 				if(data.status !== 'success') {
 					throw new Error(data.message);
 				}
-				// setGiftings(data.data.giftings)
+				setGiftings(data.data.giftings)
 			} catch (err) {
 				console.log(err.message)
 			} finally {
@@ -50,28 +62,46 @@ const DashBoard = () => {
 
 			<section className="main__section section">
 				<div className="section__container">
-					
-					{giftings.length > 0 ?
-						<div className='giftPackage__cards'>
-							{giftings.map(gifting => {
-								return (
-									<figure className='giftPackage--figure' key={gifting._id}>
-										{/* <PiDotsThreeVerticalBold /> */}
-										<img src={gifting?.celebrantImage || GiftImg} alt={gifting?.celebrant} />
-										<figcaption className="giftPackage--details">
-											<p className="package--celebrant">{gifting.celebrant}</p>
-											<p className="package--description">{gifting.description}</p>
-											<span className="package--info">
-												<span className="package--category">{gifting.category || 'birthday'}</span>
-												<p className="package--date">
-													{dateConverter(gifting.date)}
-												</p>
-											</span>
-										</figcaption>
-									</figure>
-								)
-							})}
-						</div> : (
+					{isLoading && (<SkelentonFour />)}
+					{giftings.length > 0 ? (
+						<div className="dashboard--gifting">
+							<div>
+								<h3 className="section__heading" style={{ color: '#bb0505', margin: '0 0 3.2rem .8rem' }}>Gifts bought by you!</h3>
+								<div className="pagination--actions">
+									<span><FaAngleLeft /></span>
+									<span><FaAngleRight /></span>
+								</div>
+							</div>
+							{/* <div className='giftPackage__cards'> */}
+							<Swiper
+								slidesPerView={4}
+								spaceBetween={26}
+								freeMode={true}
+								navigation={true}
+								modules={[FreeMode, Navigation]}
+								className="giftPackage__cards mySwiper"
+							>
+								{giftings.map(gifting => {
+									return (
+										<SwiperSlide className='giftPackage--figure' key={gifting._id}>
+											{/* <PiDotsThreeVerticalBold /> */}
+											<img src={`http://localhost:3010/asset/others/${gifting?.celebrantImage}` || GiftImg} alt={gifting?.celebrant} />
+											<figcaption className="giftPackage--details">
+												<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
+												<p className="package--description">{gifting.description}</p>
+												<span className="package--info">
+													<span className="package--category">{gifting.purpose}</span>
+													<p className="package--date">
+														{expectedDateFormatter(gifting.date)}
+													</p>
+												</span>
+											</figcaption>
+										</SwiperSlide>
+									)
+								})}
+							</Swiper> 
+						</div>
+					) : (!isLoading && !giftings) && (
 						<div className="gifting--banner banner">
 							<h3 className="section__heading">Lift Someone's Spirit With a <span style={{ color: '#bb0505' }}>Gift <TfiGift /></span></h3>
 							<img src={GiftImg} alt={GiftImg}  />
@@ -87,3 +117,46 @@ const DashBoard = () => {
 };
 
 export default DashBoard;
+
+
+/*
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
+
+import './styles.css';
+
+// import required modules
+import { FreeMode, Pagination } from 'swiper/modules';
+
+export default function App() {
+  return (
+    <>
+      <Swiper
+        slidesPerView={3}
+        spaceBetween={30}
+        freeMode={true}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[FreeMode, Pagination]}
+        className="mySwiper"
+      >
+        <SwiperSlide>Slide 1</SwiperSlide>
+        <SwiperSlide>Slide 2</SwiperSlide>
+        <SwiperSlide>Slide 3</SwiperSlide>
+        <SwiperSlide>Slide 4</SwiperSlide>
+        <SwiperSlide>Slide 5</SwiperSlide>
+        <SwiperSlide>Slide 6</SwiperSlide>
+        <SwiperSlide>Slide 7</SwiperSlide>
+        <SwiperSlide>Slide 8</SwiperSlide>
+        <SwiperSlide>Slide 9</SwiperSlide>
+      </Swiper>
+    </>
+  );
+}
+
+*/

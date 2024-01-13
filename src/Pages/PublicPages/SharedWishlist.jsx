@@ -29,7 +29,7 @@ function SharedWishlist({}) {
 
     const [wishList, setWishList] = useState({});
     const [wishes, setWishes] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [isLoadingMini, setIsLoadingMini] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [index, setIndex] = useState(null);
