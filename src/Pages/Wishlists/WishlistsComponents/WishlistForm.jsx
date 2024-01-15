@@ -6,16 +6,19 @@ import Alert from '../../../Components/Alert';
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
-function WishlistForm({ setShowDashboardModal, setHelpReset }) {
-    const [imagePreview, setImagePreview] = useState('');
+function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
+    const [imagePreview, setImagePreview] = useState(data?.image ? `http://localhost:3010/asset/others/${data?.image}` : null);
     const [imageFile, setImageFile] = useState(null);
-    const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('');
+    const [title, setTitle] = useState(data?.name || '');
+    const [category, setCategory] = useState(data?.category || '');
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
     const timeout = 2000;
+
+    // console.log(data.image, imagePreview, imageFile)
+
 
     const { token } = useAuthContext();
 
@@ -52,14 +55,22 @@ function WishlistForm({ setShowDashboardModal, setHelpReset }) {
 
 
     async function handleCreateWishList(e) {
+        let method, url;
+        if(data) {
+            method = "PATCH";
+            url = `update-my-wishlist/${data._id}`
+        } else {
+            method = "POST";
+            url = 'create-wishlist'
+        }
         try {
             e.preventDefault();
             handleReset();
-            setHelpReset(false)
-            setIsLoading(true)
+            setHelpReset(false);
+            setIsLoading(true);
 
-            const res = await fetch('http://localhost:3010/api/wishlists/create-wishlist', {
-                method: 'POST',
+            const res = await fetch(`http://localhost:3010/api/wishlists/${url}`, {
+                method,
                 headers: {
                     "Content-Type": 'application/json',
                     Authorization: `Bearer ${token}`
@@ -76,12 +87,14 @@ function WishlistForm({ setShowDashboardModal, setHelpReset }) {
             if(data.status !== 'success') {
                 throw new Error(data.message);
             }
-            console.log(res, data)
+            // console.log(res, data);
 
             // UPLOAD IMAGE
             const formData = new FormData();
             const id = data.data.wishList._id
-            handleUploadImg(formData, id)
+            if(imageFile) {
+                handleUploadImg(formData, id)
+            }
 
             setIsSuccess(true);
             setMessage(data.message)

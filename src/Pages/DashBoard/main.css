@@ -15,20 +15,20 @@
 /* ========================== */
 .sticky,
 .section--stay {
-    background-color: rgba(255, 255, 255);
-    left: 0;
-    right: 0;
+	background-color: rgba(255, 255, 255);
+	left: 0;
+	right: 0;
 	z-index: 1100;
 	backface-visibility: hidden;
-	transition: all .15s;
+	transition: all 0.15s;
 }
 .sticky {
-    position: fixed;
+	position: fixed;
 	border-bottom: 1.2px solid #eee;
-    top: 0;
+	top: 0;
 }
 .section--stay {
-    position: sticky;
+	position: sticky;
 	top: 7.2rem;
 	z-index: 1000;
 }
@@ -80,7 +80,7 @@
 	color: #fff;
 	position: relative;
 	cursor: pointer;
-	padding: .4rem 0;
+	padding: 0.4rem 0;
 }
 .profile__img {
 	height: 4.4rem;
@@ -107,24 +107,24 @@
 }
 .dashboard--mode {
 	color: #fff;
-	padding: .6rem;
-	border-radius: .6rem;
+	padding: 0.6rem;
+	border-radius: 0.6rem;
 	border: 1px solid #fff;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-right: -.2rem;
+	margin-right: -0.2rem;
 	font-size: 1.8rem;
 	cursor: pointer;
 }
 /*  */
 .dropdown--figure {
-	padding: 1rem .4rem;
-	border-radius: .6rem;
+	padding: 1rem 0.4rem;
+	border-radius: 0.6rem;
 	background-color: #fff;
 	color: #bb0505;
-	transition: all .35s;
-	box-shadow: .4rem 1rem 4rem rgba(0, 0, 0, 0.1);
+	transition: all 0.35s;
+	box-shadow: 0.4rem 1rem 4rem rgba(0, 0, 0, 0.1);
 
 	position: absolute;
 	top: 5rem;
@@ -136,7 +136,7 @@
 	list-style: none;
 	display: flex;
 	flex-direction: column;
-	gap: .4rem;
+	gap: 0.4rem;
 }
 .dropdown--figure ul li {
 	display: flex;
@@ -146,8 +146,8 @@
 	color: inherit;
 	font-weight: 500;
 	cursor: pointer;
-	padding: .8rem 1.8rem;
-	border-radius: .6rem;
+	padding: 0.8rem 1.8rem;
+	border-radius: 0.6rem;
 }
 .dropdown--figure ul li:hover {
 	background-color: #f8f8f8;
@@ -291,16 +291,16 @@
 }
 .pagination--actions span {
 	border: 1.6px solid #bb0505;
-	border-radius: .4rem;
+	border-radius: 0.4rem;
 	color: #bb0505;
 	font-size: 2rem;
-	padding: .28rem;
+	padding: 0.28rem;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	transition: all .35s;
+	transition: all 0.35s;
 	backface-visibility: hidden;
 }
 .pagination--actions span:hover {
@@ -326,7 +326,7 @@
 .package--description {
 	font-size: 1.2rem;
 	line-height: 1.5rem;
-	margin-bottom: .8rem;
+	margin-bottom: 0.8rem;
 }
 .package--info {
 	display: flex;
@@ -345,7 +345,6 @@ package--description
 package--info
 package--category
 package--date */
-
 
 /* ======================================= */
 /* ======================================= */
@@ -458,11 +457,11 @@ package--date */
 	flex-direction: column;
 	gap: 0.6rem;
 	cursor: pointer;
-	transition: all .35s;
+	transition: all 0.35s;
 }
 .product--figure:hover {
-	box-shadow: .6rem 1rem 2rem rgba(0, 0, 0, 0.15);
-	transform: translateY(-.2rem);
+	box-shadow: 0.6rem 1rem 2rem rgba(0, 0, 0, 0.15);
+	transform: translateY(-0.2rem);
 }
 .product--figure .product--img {
 	width: 100%;
@@ -501,7 +500,7 @@ package--date */
 	font-size: 1.16rem;
 	display: flex;
 	flex-direction: column;
-	gap: .4rem;
+	gap: 0.4rem;
 	align-items: flex-start;
 }
 .product--vendor-info p {
@@ -578,7 +577,6 @@ div.banner button:hover {
 	transform: translateY(-0.24rem);
 }
 
-
 /* ======================================= */
 /* WISHLIAT FORM */
 /* ======================================= */
@@ -634,17 +632,20 @@ div.banner button:hover {
 	height: 100%;
 	object-fit: cover;
 }
-#form-name-input:focus, #form-category-input:focus {
+#form-name-input:focus,
+#form-category-input:focus {
 	outline: none;
 	border: 1.4px solid #bb0505;
 }
-#form-name-input, #form-category-input {
+#form-name-input,
+#form-category-input {
 	padding: 1.2rem;
 	border-radius: 0.8rem;
 	border: 1.4px solid #ddd;
 	background-color: transparent;
 }
-#form-name-label, #form-category-label,
+#form-name-label,
+#form-category-label,
 .image-text {
 	font-size: 1.24rem;
 	font-weight: 600;
@@ -690,7 +691,7 @@ div.banner button:hover {
 	border-radius: 1rem;
 	padding: 3.2rem 2.8rem;
 	transition: all 0.35s;
-    backface-visibility: hidden;
+	backface-visibility: hidden;
 	animation: slide-up 1s ease-in;
 	z-index: 1600;
 }
@@ -713,7 +714,7 @@ div.banner button:hover {
 }
 .close--icon {
 	cursor: pointer;
-	transition: all .35s;
+	transition: all 0.35s;
 	font-size: 2.4rem;
 }
 .close--icon:hover {
@@ -723,7 +724,7 @@ div.banner button:hover {
 	display: grid;
 	grid-template-columns: 2fr 4fr;
 	gap: 3.6rem;
-    margin-top: 1rem;
+	margin-top: 1rem;
 }
 .product--image-box {
 	width: 100%;
@@ -743,7 +744,7 @@ div.banner button:hover {
 .product--image-box .sub-images {
 	display: flex;
 	align-items: center;
-    gap: 1rem;
+	gap: 1rem;
 	justify-content: flex-start;
 }
 .sub-images img {
@@ -849,7 +850,7 @@ div.banner button:hover {
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	border-radius: .2rem;
+	border-radius: 0.2rem;
 }
 .product--quantity span:hover {
 	border-color: #bb0505;
@@ -865,7 +866,7 @@ div.banner button:hover {
 	gap: 1.2rem;
 	transform: translate(0);
 	transition: all 0.35s;
-    backface-visibility: hidden;
+	backface-visibility: hidden;
 	animation: swipe 1s ease-in;
 }
 @keyframes swipe {
@@ -956,25 +957,27 @@ div.banner button:hover {
 	margin-right: auto;
 	flex-direction: column;
 }
-.form__check, .form__submit, .product--btn {
-    transition: all .35s;
-    cursor: pointer;
+.form__check,
+.form__submit,
+.product--btn {
+	transition: all 0.35s;
+	cursor: pointer;
 }
 .form--heading {
 	font-size: 1.8rem;
 	color: #bb0505;
 	font-weight: 500;
 	margin-bottom: 1.2rem;
-    margin-left: 2.8rem;
+	margin-left: 2.8rem;
 }
 .form--icon {
-    font-size: 2.4rem;
-    color: #bb0505;
-    cursor: pointer;
-    position: absolute;
-    top: 2%;
-    left: 0;
-    transform: translate(-50%, -50%);
+	font-size: 2.4rem;
+	color: #bb0505;
+	cursor: pointer;
+	position: absolute;
+	top: 2%;
+	left: 0;
+	transform: translate(-50%, -50%);
 }
 .form__submit {
 	display: inline-block;
@@ -986,7 +989,7 @@ div.banner button:hover {
 	font-size: 1.4rem;
 	font-weight: 600;
 	align-self: flex-end;
-    margin-top: -3.4rem;
+	margin-top: -3.4rem;
 }
 /* =================== */
 span.validity::after {
@@ -1003,7 +1006,7 @@ span.validity::after {
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: flex-start;
-	gap: .26rem;
+	gap: 0.26rem;
 }
 
 /* ========================================= */
@@ -1014,7 +1017,8 @@ span.validity::after {
 	padding-top: 4rem;
 	margin-top: -2.8rem;
 }
-.wishlist--grid, .giftPackage__cards {
+.wishlist--grid,
+.giftPackage__cards {
 	display: grid;
 	gap: 3.6rem;
 	position: relative;
@@ -1023,8 +1027,8 @@ span.validity::after {
 	position: absolute;
 	right: 0;
 	top: 0;
-	padding: .8rem 1.2rem;
-	border-radius: .3rem;
+	padding: 0.8rem 1.2rem;
+	border-radius: 0.3rem;
 	background-color: #bb0505;
 	color: #fff;
 	font-weight: 600;
@@ -1036,33 +1040,36 @@ span.validity::after {
 	grid-template-columns: 14rem 1fr;
 	display: grid;
 }
-.wishlist--figure, .giftPackage--figure {
+.wishlist--figure,
+.giftPackage--figure {
 	position: relative;
 	overflow: hidden;
 	gap: 2.8rem;
 	background-color: #f8f8f8;
 	padding: 1.4rem;
-	border-radius: .6rem;
+	border-radius: 0.6rem;
 }
-.w-figure-category, .package--category {
+.w-figure-category,
+.package--category {
 	position: absolute;
 	top: 0;
 	left: 0;
-	padding: .8rem 1.8rem;
+	padding: 0.8rem 1.8rem;
 	background-color: #ffc6c6;
 	font-size: 1.4rem;
 	font-weight: 500;
 	text-transform: capitalize;
 }
-.w-figure--image, .giftPackage--figure img {
+.w-figure--image,
+.giftPackage--figure img {
 	width: 100%;
-	border-radius: .6rem;
+	border-radius: 0.6rem;
 }
 .w-figure--details {
 	display: flex;
 	flex-direction: column;
 	gap: 1.8rem;
-	padding: 0 1.2rem;
+	padding: 0 0 0 1.2rem;
 }
 .w-figure--head {
 	display: flex;
@@ -1071,32 +1078,33 @@ span.validity::after {
 }
 .w-figure--title {
 	font-size: 2rem;
+	line-height: 1.3;
+	color: #bb0505;
+	margin-bottom: 0.4rem;
+	font-weight: 500;
 	/* text-decoration: underline;
 	text-decoration-style: wavy;
 	text-decoration-color: #bb0505;
 	text-underline-offset: .6rem; */
-	color: #bb0505;
-	margin-bottom: .4rem;
-	font-weight: 500;
 }
 .wish--list {
 	display: flex;
 	flex-direction: column;
-	gap: .6rem;
+	gap: 0.6rem;
 	list-style: decimal;
 }
 .no-wish-item {
 	font-size: 1.45rem;
 	margin-top: 1rem;
 	background-color: #ddd;
-	padding: .8rem;
-	border-radius: .4rem;
+	padding: 0.8rem;
+	border-radius: 0.4rem;
 	align-self: flex-start;
 }
 .wish--item {
 	font-size: 1.4rem;
-	padding: .4rem 0;
-	padding-left: .4rem;
+	padding: 0.4rem 0;
+	padding-left: 0.4rem;
 }
 .wish--item:not(:last-child) {
 	border-bottom: 1.2px solid #ddd;
@@ -1117,6 +1125,52 @@ span.validity::after {
 	margin-left: auto;
 	color: #888;
 }
+.w-figure--icons {
+	margin-left: auto;
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+.figure--icon {
+	font-size: 2rem;
+	margin-left: auto;
+	cursor: pointer;
+	color: #888;
+	transition: all .35s;
+}
+.figure--icon:hover {
+	color: #bb0505;
+}
+.w-figure-action {
+	position: relative;
+}
+.w-figure--action-box {
+	position: absolute;
+	top: 4rem;
+	right: 2rem;
+	
+	padding: 1rem;
+	border-radius: .4rem;
+	background-color: #fff;
+	border: 1.2px solid #eee;
+	box-shadow: .2rem .6rem 1.4rem rgba(0, 0, 0, 0.1);
+}
+.w-figure--action-box ul {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: flex-start;
+	font-size: 1.2rem;
+}
+.w-figure--action-box ul li {
+	cursor: pointer;
+	transition: all .35s;
+	font-weight: 500;
+}
+.w-figure--action-box ul li:hover {
+	color: #bb0505;
+}
 
 /* ============= WISHLIST LISTS ============== */
 
@@ -1126,6 +1180,17 @@ span.validity::after {
 	max-width: 80rem;
 	display: flex;
 	flex-direction: column;
+}
+.wishlist--back-btn {
+	position: absolute;
+	padding: 1rem 2rem;
+	background-color: #bb0505;
+	border: none;
+	font-weight: 600;
+	color: #fff !important;
+	font-size: 1.4rem;
+	border-radius: .6rem;
+	cursor: pointer;
 }
 .lists--title {
 	padding-bottom: 2rem;
@@ -1142,7 +1207,8 @@ span.validity::after {
 	border-bottom: 1.4px solid #ddd;
 	margin-bottom: 1.2rem;
 }
-.main--tabs, .sub--tabs {
+.main--tabs,
+.sub--tabs {
 	display: flex;
 	align-items: center;
 	gap: 1.4rem;
@@ -1150,7 +1216,7 @@ span.validity::after {
 .lists--tab {
 	display: flex;
 	align-items: center;
-	gap: .5rem;
+	gap: 0.5rem;
 	cursor: pointer;
 	text-transform: capitalize;
 }
@@ -1165,12 +1231,12 @@ span.validity::after {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	transition: all .35s;
+	transition: all 0.35s;
 }
 .main--tabs .lists--tab {
 	padding: 1.4rem 1.2rem;
 	background-color: transparent;
-	transition: all .35s;
+	transition: all 0.35s;
 	font-weight: 500;
 	font-size: 1.3rem;
 }
@@ -1204,16 +1270,17 @@ span.validity::after {
 	animation: fade-in 1s ease-in;
 }
 .sub--tabs .lists--tab {
-	padding: .6rem .8rem;
-	border-radius: .5rem;
+	padding: 0.6rem 0.8rem;
+	border-radius: 0.5rem;
 	display: flex;
-	gap: .5rem;
+	gap: 0.5rem;
 	font-size: 1.3rem;
 	font-weight: 500;
-	box-shadow: inset 0 0 0 .14rem #ddd;
-	transition: all .35s;
+	box-shadow: inset 0 0 0 0.14rem #ddd;
+	transition: all 0.35s;
 }
-.sub--tabs .lists--tab:hover, .sub--tabs .lists--tab.tab--active {
+.sub--tabs .lists--tab:hover,
+.sub--tabs .lists--tab.tab--active {
 	background-color: #bb0505;
 	color: #fff;
 	box-shadow: none;
@@ -1234,7 +1301,8 @@ span.validity::after {
 	border-radius: 1rem;
 	border: 1.5px solid #ddd;
 }
-.lists--item-top, .lists--item-bottom {
+.lists--item-top,
+.lists--item-bottom {
 	display: grid;
 	grid-template-columns: 1fr 14rem;
 	gap: 6.4rem;
@@ -1249,8 +1317,8 @@ span.validity::after {
 	width: 1.8rem;
 	height: 1.8rem;
 	border: 1.4px solid #eee;
-	border-radius: .4rem;
-	margin-top: .4rem;
+	border-radius: 0.4rem;
+	margin-top: 0.4rem;
 	cursor: pointer;
 }
 .lists--content p {
@@ -1267,17 +1335,17 @@ span.validity::after {
 	justify-content: flex-end;
 }
 .lists--actions span {
-	box-shadow: inset 0 0 0 .14rem #eee;
-	padding: .4rem .6rem;
-	border-radius: .4rem;
+	box-shadow: inset 0 0 0 0.14rem #eee;
+	padding: 0.4rem 0.6rem;
+	border-radius: 0.4rem;
 	font-size: 1.8rem;
 	color: #777;
-	transition: all .35s;
+	transition: all 0.35s;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: .45rem;
+	gap: 0.45rem;
 }
 .lists--actions span p {
 	font-size: 1.2rem;
@@ -1292,7 +1360,7 @@ span.validity::after {
 .lists--insight span {
 	display: flex;
 	align-items: center;
-	gap: .6rem;
+	gap: 0.6rem;
 	font-size: 1.4rem;
 	color: #777;
 	font-weight: 600;
@@ -1312,7 +1380,7 @@ span.validity::after {
 	overflow: hidden;
 }
 .lists--completed::after {
-	content: '';
+	content: "";
 	display: inline-block;
 	width: 100%;
 	height: 100%;
@@ -1326,11 +1394,11 @@ span.validity::after {
 	text-decoration: line-through;
 }
 
-
 /* ======================================= */
 /* WISH CREATION BOX */
 /* ======================================= */
-.wish--overlay, .delete--overlay {
+.wish--overlay,
+.delete--overlay {
 	background-color: transparent;
 	width: 100%;
 	height: 100vh;
@@ -1352,41 +1420,46 @@ span.validity::after {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-	padding: 1rem .8rem;
+	padding: 1rem 0.8rem;
 	border-radius: 1rem;
 	background-color: #fff;
-	box-shadow: .4rem 1rem 4rem rgba(0, 0, 0, 0.2);
+	box-shadow: 0.4rem 1rem 4rem rgba(0, 0, 0, 0.2);
 	z-index: 2100;
-	transition: all .35s;
+	transition: all 0.35s;
 	/* animation: zoom-in 1s ease-in-out; */
 }
-.form--focus .wish--input, .form--focus .wish--textarea {
+.form--focus .wish--input,
+.form--focus .wish--textarea {
 	border-color: #bb0505 !important;
 }
 @keyframes zoom-in {
 	0% {
-		transform:  translateX(-50%) scale(0.35);
-        opacity: 0;
-    } 15% {
-		transform:  translateX(-50%) scale(1);
-        opacity: 1;
-    }
+		transform: translateX(-50%) scale(0.35);
+		opacity: 0;
+	}
+	15% {
+		transform: translateX(-50%) scale(1);
+		opacity: 1;
+	}
 }
-.wish--input, .wish--textarea {
+.wish--input,
+.wish--textarea {
 	border: 1.4px solid transparent;
 	padding: 1.2rem 1.6rem;
-	border-radius: .8rem;
+	border-radius: 0.8rem;
 	font-family: inherit;
 	font-size: 1.4rem;
 	font-weight: 500;
 	color: #888;
-	transition: all .35s;
+	transition: all 0.35s;
 }
-.wish--input:focus, .wish--textarea:focus {
+.wish--input:focus,
+.wish--textarea:focus {
 	outline: none;
 	border-color: #bb0505 !important;
 }
-.wish--input::placeholder, .wish--textarea::placeholder {
+.wish--input::placeholder,
+.wish--textarea::placeholder {
 	color: #999;
 }
 .wish--input-flex {
@@ -1420,9 +1493,9 @@ span.validity::after {
 	padding-right: 1.8rem;
 }
 .wish--button {
-	padding: .6rem .8rem;
+	padding: 0.6rem 0.8rem;
 	border: none;
-	border-radius: .6rem;
+	border-radius: 0.6rem;
 	font-size: 1.4rem;
 	font-weight: 500;
 	cursor: pointer;
@@ -1459,14 +1532,20 @@ span.validity::after {
 @keyframes zoom-in {
 	0% {
 		transform: translate(-50%, -50%) scale(0.35);
-        opacity: 0;
-    } 15% {
+		opacity: 0;
+	}
+	15% {
 		transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
+		opacity: 1;
+	}
 }
-.modal--text {
+.modal--text
+/* {
 	font-size: 1.8rem;
+	line-height: 1.2;
+} */,
+.modal--text-2 {
+	font-size: 1.5rem;
 	line-height: 1.2;
 }
 .modal--info {
@@ -1475,7 +1554,7 @@ span.validity::after {
 	line-height: 1.5;
 	color: #bb0505;
 	padding: 1.2rem;
-	border-radius: .6rem;
+	border-radius: 0.6rem;
 	background-color: #eee;
 }
 .modal--actions {
@@ -1486,29 +1565,27 @@ span.validity::after {
 	margin-top: 1.2rem;
 }
 .modal--actions span {
-	padding: .8rem 1.2rem;
-	border-radius: .6rem;
+	padding: 0.8rem 1.2rem;
+	border-radius: 0.6rem;
 	font-size: 1.4rem;
 	font-weight: 500;
 	cursor: pointer;
-	transition: all .35s;
+	transition: all 0.35s;
 }
 .delete--cancel {
 	background-color: #bb0505;
 	color: #fff;
 }
 .delete--cancel:hover {
-	opacity: .8;
+	opacity: 0.8;
 }
 .delete--submit {
-	box-shadow: inset 0 0 0 .14rem #eee;
+	box-shadow: inset 0 0 0 0.14rem #eee;
 }
 .delete--submit:hover {
 	background-color: #eee;
 	box-shadow: none;
 }
-
-
 
 /* =================================== */
 /* HEADER */
@@ -1520,20 +1597,19 @@ span.validity::after {
 	gap: 2rem;
 }
 .dashboard__auth-buttons span {
-	padding: .8rem 1.6rem;
-	border-radius: .8rem;
+	padding: 0.8rem 1.6rem;
+	border-radius: 0.8rem;
 	font-weight: 600;
 	font-size: 1.4rem;
 }
 .dashboard--login-btn {
-	box-shadow: inset 0 0 0 .14rem #bb0505;
+	box-shadow: inset 0 0 0 0.14rem #bb0505;
 	background-color: #fff;
 }
 .dashboard--signup-btn {
 	background-color: #bb0505;
 	color: #fff;
 }
-
 
 /* ============================= */
 /* ============================= */
@@ -1579,18 +1655,18 @@ span.validity::after {
 .top--details .top--info span {
 	display: flex;
 	align-items: center;
-	gap: .8rem;
+	gap: 0.8rem;
 }
 .top--progress {
 	width: 90%;
 }
 .lists--pay-btn {
-	padding: .8rem 1.6rem;
+	padding: 0.8rem 1.6rem;
 	display: flex;
 	align-items: center;
 	gap: 1rem;
-	border-radius: .6rem;
-	box-shadow: inset 0 0 0 .14rem #bb0505;
+	border-radius: 0.6rem;
+	box-shadow: inset 0 0 0 0.14rem #bb0505;
 	font-size: 1.4rem;
 	font-weight: 500;
 	justify-self: flex-end;
@@ -1605,16 +1681,16 @@ span.validity::after {
 	cursor: pointer;
 }
 .pay--form .form--item {
-	gap: .5rem;
+	gap: 0.5rem;
 }
 .pay--form .form--button {
 	padding: 1.2rem 1.8rem;
 	font-size: 1.4rem;
-	transition: all .35s;
+	transition: all 0.35s;
 	font-weight: 600;
 }
 .pay--form .form--button:hover {
-	opacity: .7;
+	opacity: 0.7;
 }
 
 .share--bottom {
@@ -1622,21 +1698,282 @@ span.validity::after {
 	width: 90%;
 }
 
-
 .reminder--form {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 }
+.reminder--form .form--item {
+	gap: .8rem;
+}
 .reminder--form .form--textarea {
 	height: 8rem;
 }
-.reminder--form .reminder--flex {
+.reminder--form .form--textarea, .reminder--form .form--input {
+	padding: 1.1rem;
+	font-size: 1.4rem;
+	color: #444;
+	font-weight: 500;
+}
+.reminder--form .form--input[type="date"],
+.reminder--form .form--textarea::placeholder, .reminder--form .form--input::placeholder {
+	font-size: 1.4rem;
+	color: #777;
+	font-weight: 400;
+}
+.reminder--form .reminder--flex-2-1 {
+	grid-template-columns: 1.6fr 1fr;
+	gap: 1rem;
+}
+.reminder--form .reminder--flex-2 {
+	grid-template-columns: 1fr 1fr;
+	gap: 0.6rem;
+}
+.reminder--form .reminder--flex-3 {
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 1.2rem;
+}
+.reminder--form .reminder--flex-3, .reminder--form .reminder--flex-2, .reminder--flex-2-1  {
 	width: 100%;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	align-items: end;
+}
+.reminder--flex-3 input {
+	width: 100%;
+}
+.form--toggle {
+	display: flex;
+	align-items: center;
+	/* justify-content: flex-start; */
+	justify-content: center;
+	gap: 0.2rem;
+	background-color: #eee;
+	border-radius: 0.4rem;
+	padding: 0.4rem 0.8rem;
+}
+.form--toggle span {
+	padding: 0.8rem 0.8rem;
+	border-radius: 0.4rem;
+	font-size: 1.24rem;
+	font-weight: 600;
+	color: #bb0505;
+	transition: all 0.35s;
+	cursor: pointer;
+}
+.form--toggle span.active {
+	background-color: #bb0505;
+	color: #eee;
+}
+.form--flexy {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 	gap: .6rem;
 }
-.reminder--flex input {
+.reminder--actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 1.2rem;
+}
+.reminder--actions button {
+	display: inline-block;
+	font-size: 1.34rem;
+	font-weight: 600;
+	border: none;
+	padding: 1rem 2rem;
+	border-radius: .6rem;
+	background-color: transparent;
+	cursor: pointer;
+}
+.reminder--actions .set--btn {
+	background-color: #bb0505;
+	color: #fff;
+}
+.reminder--actions .cancel--btn {
+	box-shadow: inset 0 0 0 .14rem #ddd;
+	color: #777;
+}
+.form--label-img {
 	width: 100%;
+	border-color: #ddd;
+	padding: 1.2rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+.form--input-img {
+	display: none;
+}
+.form--label-icon {
+	font-size: 1.8rem;
+}
+.reminder--form .form--input.width-90 {
+	width: 90% !important;
+}
+
+/* ========================================= */
+
+/* content: attr(data-custom-content) */
+.reminder__grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 2.8rem;
+	position: relative;
+}
+.reminder__grid .w-figure--btn {
+	top: -38%;
+}
+.reminder--figure {
+	height: 18rem;
+	width: 100%;
+	border-radius: .6rem;
+	border: .8px solid #ddd;
+	border-top: 2px solid #bb0505;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 1.4rem;
+	box-shadow: .2rem .6rem 3rem rgba(0, 0, 0, 0.1);
+	transition: all .35s;
+}
+.reminder--figure .reminder--text {
+	font-size: 1.8rem;
+	color: #555;
+	font-weight: 600;
+}
+.reminder--others {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+.reminder--figure .figure--bottom {
+	display: flex;
+	flex-direction: column;
+	gap: 2.4rem;
+}
+.reminder--figure .reminder--date {
+	display: flex;
+	flex-direction: column;
+	gap: .6rem;
+
+	font-size: 1.2rem;
+	color: #555;
+	font-weight: 600;
+}
+.reminder--figure .reminder--date p {
+	text-transform: uppercase;
+	font-size: 1.5rem;
+	color: #888;
+	font-weight: 500;
+}
+.reminder--delete {
+	transition: all .35s;
+	cursor: pointer;
+}
+.reminder--delete:hover {
+	color: #bb0505;
+}
+.reminder--tasks {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.reminder--tasks span {
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: #bb0505;
+	cursor: pointer;
+}
+
+
+/* ==================================================== */
+/* WALLET  */
+/* ==================================================== */
+
+.wallet--container {
+	display: flex;
+	flex-direction: column;
+	gap: 4.8rem;
+}
+.wallet--top {
+	align-self: center;
+}
+.wallet--user-info {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+	align-items: center;
+}
+.wallet--user-info img {
+	height: 10rem;
+	width: 10rem;
+	border-radius: 50%;
+}
+.wallet--user-info div {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	align-items: center;
+}
+.wallet--user-name {
+	font-weight: 500;
+}
+.wallet--user-balance {
+	font-size: 2.4rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+}
+/* span
+span */
+.wallet--buttons {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+}
+.wallet--button {
+	padding: 1.2rem 2rem;
+	border-radius: .6rem;
+	background-color: #bb0505;
+	color: #fff;
+	font-size: 1.45rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+.wallet--bottom {
+    background-color: #fff;
+    box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, .1);
+    padding: 2.4rem;
+    border-radius: 1rem;
+	border: 1.4px solid #ddd;
+}
+.wallet--bottom span {
+	margin-bottom: 2.8rem;
+}
+.wallet--heading {
+    font-size: 2rem;
+	margin-bottom: 2.8rem;
+}
+.wallet--tabs {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .4rem;
+    border-radius: .6rem;
+}
+.wallet--tab {
+    padding: 1rem 1.4rem;
+    background-color: #eee;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border-radius: .6rem;
+    transition: all .35s ease-in;
+    cursor: pointer;
+}
+.wallet--tab:hover,
+.wallet--tab.tab--active {
+    background-color: #bb0505;
+    color: #fff;
 }

@@ -17,6 +17,8 @@ import { Link } from "react-router-dom";
 import SkelentonTwo from "../../Components/SkelentonTwo";
 import SkelentonOne from "../../Components/SkelentonOne";
 import SkelentonCard from "../../Components/SkelentonCard";
+import { IoEllipsisVerticalSharp } from "react-icons/io5";
+import DeleteModalUi from './WishlistsComponents/DeleteModalUi'
 
 
 const customStyle = {
@@ -43,11 +45,32 @@ function Wishlists() {
 	const [showDashboardModal, setShowDashboardModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [wishLists, setWishLists] = useState([]);
+	const [selectedWishList, setSelectedWishList] = useState({});
+
 	const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
 	const [helpReset, setHelpReset] = useState(false);
+	const [showActionInfo, setShowActionInfo] = useState(false);
+	const [selectedId, setSelectedId] = useState();
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
 
 	const { user, token } = useAuthContext();
+
+	function handleActionInfo(id) {
+		setSelectedId(id);
+		setShowActionInfo(!showActionInfo);
+
+		// setShowActionInfo((prevShowActionInfo) => {
+		// 	const shouldToggle = prevShowActionInfo || selectedId !== id;
+		// 	setSelectedId(shouldToggle ? id : null);
+		// 	return !prevShowActionInfo;
+		// });
+	}
+
+	function handleSelectedWishList(data) {
+		setSelectedWishList(data);
+		setShowDashboardModal(!showDashboardModal)
+	}
 
 	function handleModal() {
 		setShowDashboardModal(true);
@@ -119,9 +142,9 @@ function Wishlists() {
 
 					{(wishLists && wishLists.length > 0) ? (
 						<div className='wishlist--grid'>
-							<button className="w-figure--btn" onClick={handleModal}>Add Wishlist</button>
+							<button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button>
 							{wishLists.map(wishList => (
-								<div className="wishlist--figure">
+								<figure key={wishList._id} className="wishlist--figure w-figure-action">
 									<span className="w-figure-category">{wishList.category}</span>
 									<a target='_blank' href={`http://localhost:3010/asset/others/${wishList.image}`}>
 										<img className="w-figure--image" src={`http://localhost:3010/asset/others/${wishList.image}`} alt={wishList.image} />
@@ -129,13 +152,22 @@ function Wishlists() {
 									<figcaption className="w-figure--details">
 										<div className="w-figure--head">
 											<span className="w-figure--title">{wishList.name}</span>
-											<div className="share--icons">
+											<div className="w-figure--icons">
 												{(user.isPremium || (!user.isPremium && wishList?.wishes.length < 10)) && (
 													<Link to={`/dashboard/wishlists/${wishList?.slug}/wish?new=true`}>
-														<PiPlusBold className='share--icon' />
+														<PiPlusBold className='figure--icon' />
 													</Link>
 												)}
-												<PiShareFatFill className='share--icon' onClick={() => handleShare(`https://gifta.com/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
+												<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://gifta.com/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
+												<IoEllipsisVerticalSharp className="figure--icon" onClick={() => handleActionInfo(wishList._id)} />
+												{(showActionInfo && selectedId === wishList._id) && (
+													<div className="w-figure--action-box">
+														<ul>
+															<li onClick={() => handleSelectedWishList(wishList)}>Edit</li>
+															<li onClick={() => setShowDeleteModal(true)}>Delete</li>
+														</ul>
+													</div>
+												)}
 											</div>
 										</div>
 										{wishList.wishes.length === 0 ? (
@@ -156,7 +188,7 @@ function Wishlists() {
 											<span className="wish--date">{dateConverter(wishList.updatedAt)}</span>
 										</div>
 									</figcaption>
-								</div>
+								</figure>
 							))}
 						</div>
 					) : (wishLists && wishLists.length === 0 && !isLoading) && (
@@ -181,7 +213,7 @@ function Wishlists() {
 					customStyle={customStyle}
 					setShowDashboardModal={setShowDashboardModal}
 				>
-					<WishlistForm setShowDashboardModal={setShowDashboardModal} setHelpReset={setHelpReset} />
+					<WishlistForm data={selectedWishList} setShowDashboardModal={setShowDashboardModal} setHelpReset={setHelpReset} />
 				</DashboardModal>
 			)}
 			{share && (
@@ -198,6 +230,17 @@ function Wishlists() {
 					/>
 				</DashboardModal>
 			)}
+			{(showDeleteModal) && (
+				<DeleteModalUi title={`Delete WishList!`}>
+					<p className='modal--text'>Are you sure you want to delete this WishList?</p>
+					<span className='modal--info'>Note that everything relating data to this WishList would also be deleted including transaction history!</span>
+					<div className="modal--actions">
+						<span type="submit" className='delete--cancel' onClick={() => setShowDeleteModal(false)}>Cancel</span>
+						<span type="button" className='delete--submit' onClick={''}>Delete WishList</span>
+					</div>
+				</DeleteModalUi>
+			)}
+
 			{isError && (
 				<Alert alertType="error">
 					<AiFillExclamationCircle className="alert--icon" />

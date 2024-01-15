@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { CiLogout, CiUser, CiViewList } from "react-icons/ci";
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '../Auth/context/AuthContext';
 
 
 function Dropdown() {
+    const [isLoading, setIsLoading] = useState(false);
+    const { logout } = useAuthContext();
+
+  function handleLogout () {
+        setIsLoading(true);
+		logout();
+
+		// logging out
+		setTimeout(() => {
+            setIsLoading(false);
+            window.location.href = '/'
+		}, 500)
+	}
+
   return (
     <div className='dropdown--figure'>
         <ul>
@@ -18,7 +33,7 @@ function Dropdown() {
             </li>
             <li>
                 <CiLogout />
-                <p>Logout</p>
+                <p onClick={handleLogout}>Logout</p>
             </li>
         </ul>
     </div>

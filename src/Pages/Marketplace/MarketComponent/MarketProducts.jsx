@@ -14,13 +14,13 @@ function CategoryPage() {
     const [categoryProducts, setCategoryProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [mess, setMess] = useState('');
-	const [stay, setStay] = useState(false);
+    const [stay, setStay] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    
+
     const navPath = useParams();
     const [currentCategory, setCurrentCategory] = useState(navPath.category);
-   
-    
+
+
     // THIS IS TO SHOW THE MODAL
     function handleShowModal(product) {
         setShowModal(true)
@@ -34,7 +34,7 @@ function CategoryPage() {
     }
 
     // GET ALL CATEGORY FROM THE DB
-    useEffect(function() {
+    useEffect(function () {
         async function handleFetchCategories() {
             try {
                 setIsLoading(true);
@@ -42,21 +42,21 @@ function CategoryPage() {
 
                 const res = await fetch('https://test.tajify.com/api/gift-products/all-category', {
                     method: 'GET',
-                    headers: { 
+                    headers: {
                         "Content-Type": "application/json",
                     }
                 });
 
-                if(!res.ok) throw new Error('Something went wrong!');
+                if (!res.ok) throw new Error('Something went wrong!');
 
                 const data = await res.json();
-                if(data.status !== 'success') {
+                if (data.status !== 'success') {
                     throw new Error(data.message);
                 }
 
                 setCategories(data.data.categories);
 
-            }catch(err) {
+            } catch (err) {
                 console.log(err.message)
             } finally {
                 setIsLoading(false)
@@ -67,28 +67,28 @@ function CategoryPage() {
 
 
     // GET ALL THE PRODUCT IN THAT CATEGORY
-    useEffect(function() {
+    useEffect(function () {
         async function handleFetch() {
             try {
                 setIsLoadingCat(true);
                 setMess('')
-                
+
                 const res = await fetch(`https://test.tajify.com/api/gift-products/products/category/${currentCategory}`, {
                     method: 'GET',
                     headers: { "Content-Type": "application/json", },
                 });
 
-                if(!res.ok) {
+                if (!res.ok) {
                     throw new Error('Something went wrong. Check Internet connection!');
                 }
                 const data = await res.json();
 
-                if(data.status !== 'success') {
+                if (data.status !== 'success') {
                     throw new Error(data.message);
                 }
                 setCategoryProducts(data.data.giftProducts)
 
-            } catch(err) {
+            } catch (err) {
                 setMess(err.message)
             } finally {
                 setIsLoadingCat(false);
@@ -98,77 +98,77 @@ function CategoryPage() {
     }, [currentCategory]);
 
 
-    useEffect(function() {
-		function controlNavbar() {
-			if (window.scrollY > 200 ) {
-				setStay(true)
-			} else{
-				setStay(false)
-			}
-		}
-		window.addEventListener('scroll', controlNavbar)
-		controlNavbar()
-		return () => {
-			window.removeEventListener('scroll', controlNavbar)
-		}
-	}, [])
+    useEffect(function () {
+        function controlNavbar() {
+            if (window.scrollY > 200) {
+                setStay(true)
+            } else {
+                setStay(false)
+            }
+        }
+        window.addEventListener('scroll', controlNavbar)
+        controlNavbar()
+        return () => {
+            window.removeEventListener('scroll', controlNavbar)
+        }
+    }, [])
 
 
-  return (
-    <section className='category-page__section'>
-        {isLoading ? <SkeletonLoader /> :
-        <div className='category--page'>
-            <div className='page--sidebar' style={stay ? {borderRight: 'none' } : {}}>
-                <ul className={`${stay ? 'sidebar--stay' : ''}`}>
-                    { categories.map((category) => 
-                        <Link to={`/dashboard/marketplace/${category.categoryName}`}>
-                            <li className={`sidebar-items ${currentCategory === category.categoryName ? 'active-sidebar' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
-                                {category.categoryName} {currentCategory === category.categoryName ? <RiArrowRightDoubleLine className='sidebar-icon' /> : ''}
-                            </li>
-                        </Link>
-                    )}
-                </ul>
-            </div>
-
-            
-            {isLoadingCat ? <SkeletonLoaderMini /> :
-            <div className={`page--main ${categoryProducts.length > 0 ? 'page--grid' : ''}`}>
-                {console.log(categoryProducts)}
-                {categoryProducts.length > 0 ? categoryProducts.map((product) => 
-                    // <Link to={`/dashboard/marketplace/${currentCategory}/${product.slug}`}>
-                        <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
-                            <img className='product--img' src={product.image} alt={product.name} />
-                            <figcaption className='product--details'>
-                                <h4 className='product--heading'>{product.name}</h4>
-                                <div className='product--vendor'>
-                                    <img className='' src={product.vendor.image} alt={product.vendor.fullName} />
-                                    <span className='product--vendor-info'>
-                                        <p>{product.vendor.fullName}</p>
-                                        <span>{product.vendor.location || 'Lagos, Nigeria'}</span>
-                                    </span>
-                                </div>
-                                <div className='product--infos'>
-                                    <span className='product--price'>₦{currencyConverter(product.price)}</span>
-                                    <span className='product--date'>{dateConverter(product.createdAt)}</span>
-                                </div>
-                            </figcaption>
-                        </figure>
-                    // </Link>
-                ) : (
-                    <div className='note--box'>
-                        <p>{mess || 'No product in this category'}</p>
-                        <picture>
-                            <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.webp" type="image/webp" />
-                            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.gif" alt="🍃" width="32" height="32" />
-                        </picture>
+    return (
+        <section className='category-page__section'>
+            {isLoading ? <SkeletonLoader /> :
+                <div className='category--page'>
+                    <div className='page--sidebar' style={stay ? { borderRight: 'none' } : {}}>
+                        <ul className={`${stay ? 'sidebar--stay' : ''}`}>
+                            {categories.map((category) =>
+                                <Link to={`/dashboard/marketplace/${category.categoryName}`}>
+                                    <li className={`sidebar-items ${currentCategory === category.categoryName ? 'active-sidebar' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
+                                        {category.categoryName} {currentCategory === category.categoryName ? <RiArrowRightDoubleLine className='sidebar-icon' /> : ''}
+                                    </li>
+                                </Link>
+                            )}
+                        </ul>
                     </div>
-                )}
-            </div>}
-        </div>}
 
-        {(selectedProduct && showModal) && <Product product={selectedProduct} handleCloseModal={handleCloseModal} />}
-    </section>
-  )
+
+                    {isLoadingCat ? <SkeletonLoaderMini /> :
+                        <div className={`page--main ${categoryProducts.length > 0 ? 'page--grid' : ''}`}>
+                            {console.log(categoryProducts)}
+                            {categoryProducts.length > 0 ? categoryProducts.map((product) =>
+                                // <Link to={`/dashboard/marketplace/${currentCategory}/${product.slug}`}>
+                                <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
+                                    <img className='product--img' src={product.image} alt={product.name} />
+                                    <figcaption className='product--details'>
+                                        <h4 className='product--heading'>{product.name}</h4>
+                                        <div className='product--vendor'>
+                                            <img className='' src={product.vendor.image} alt={product.vendor.fullName} />
+                                            <span className='product--vendor-info'>
+                                                <p>{product.vendor.fullName}</p>
+                                                <span>{product.vendor.location || 'Lagos, Nigeria'}</span>
+                                            </span>
+                                        </div>
+                                        <div className='product--infos'>
+                                            <span className='product--price'>₦{currencyConverter(product.price)}</span>
+                                            <span className='product--date'>{dateConverter(product.createdAt)}</span>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                                // </Link>
+                            ) : (
+                                <div className='note--box'>
+                                    <p>{mess || 'No product in this category'}</p>
+                                    <picture>
+                                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.webp" type="image/webp" />
+                                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.gif" alt="🍃" width="32" height="32" />
+                                    </picture>
+                                </div>
+                            )}
+                        </div>}
+                </div>}
+
+            {(selectedProduct && showModal) && <Product product={selectedProduct} handleCloseModal={handleCloseModal} />}
+        </section>
+    )
 }
 
 export default CategoryPage

@@ -36,6 +36,10 @@ function SharedWishlist({}) {
     const [email, setEmail] = useState(user?.email || '');
     const [amount, setAmount] = useState('');
 
+    const [isError, setIsError] = useState(false);
+    const [message, setMessage] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
+
     const { url } = useParams();
     const id  = '659bd9524ba2f9c1153de6af';
 
@@ -70,6 +74,7 @@ function SharedWishlist({}) {
         try {
             setIsLoadingMini(true);
             console.log(reference)
+            
 
         } catch(err) {
 
@@ -193,7 +198,12 @@ function SharedWishlist({}) {
                         />
                     </div>
                     <div className="form--item">
-                        <PaystackButton type='submit' className="form--button" {...componentProps} />
+                        {(email && amount) ? (
+                            <PaystackButton type='submit' className="form--button" {...componentProps} />
+                            
+                        ) : (
+                            <button type='submit' className="form--button">Pay!</button>
+                        )}
                     </div>
                 </form>
             </DashboardModal>

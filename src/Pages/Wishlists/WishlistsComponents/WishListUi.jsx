@@ -7,7 +7,7 @@ import { RiDeleteBin6Line, RiEditLine } from 'react-icons/ri';
 import { IoPricetagOutline } from 'react-icons/io5';
 import { SlCalender } from "react-icons/sl";
 import ProgressBar from '../../../Components/ProgressBar';
-import { calculatePercentage, dateConverter, numberConverter } from '../../../utils/helper';
+import { calculatePercentage, dateConverter, expectedDateFormatter, numberConverter } from '../../../utils/helper';
 import { FaCheck } from 'react-icons/fa6';
 import WishInputUi from './WishInputUi';
 import DeleteModalUi from './DeleteModalUi';
@@ -102,7 +102,7 @@ function WishListUi() {
 
         <section className="section">
             <div className="section__container">
-                {/* <button className='button' onClick={navigate(-1)}>Back</button> */}
+                <Link to={'/dashboard/wishlists'} className='wishlist--back-btn'>Back</Link>
 
                 <div className="wish--lists">
                     <span className='lists--title'>{wishList.name}</span>
@@ -113,7 +113,7 @@ function WishListUi() {
                         </div>
                         <div className="sub--tabs">
                             <Link to={`/dashboard/wishlists/${wishListSlug}/wish?new=${true}`}>
-                                <div className="lists--tab"><PiPlusBold /> add wish</div>
+                                <div className="lists--tab"><PiPlusBold /> add{wishes.length > 0 ? ' more' : ' '} wish</div>
                             </Link>
                             {/* <div className="lists--tab"><PiFunnelBold /> Filter</div> */}
                         </div>
@@ -137,7 +137,7 @@ function WishListUi() {
                                 <span className='lists--item-bottom'>
                                     <div className='lists--insight'>
                                         <span><IoPricetagOutline /><p>₦{numberConverter(wishItem.amount)}</p></span>
-                                        <span><SlCalender /><p>{dateConverter(wishItem.deadLineDate)}</p></span>
+                                        <span><SlCalender /><p>{expectedDateFormatter(wishItem.deadLineDate)}</p></span>
                                     </div>
                                     <ProgressBar progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
                                 </span>

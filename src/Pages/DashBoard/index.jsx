@@ -11,34 +11,36 @@ import SkeletonLoader from '../../Components/SkeletonLoader';
 import { dateConverter, expectedDateFormatter } from "../../utils/helper";
 import SkelentonFour from "../../Components/SkelentonFour";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-// import { PiDotsThreeVerticalBold } from "react-icons/pi";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
+// import required modules
+import { FreeMode, Navigation } from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 
-// import required modules
-import { FreeMode, Navigation } from 'swiper/modules';
 
 const DashBoard = () => {
-	const [isLoading, setIsLoading] = useState(true);
+	// const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [giftings, setGiftings] = useState([]);
-	const { token } = useAuthContext();
+	const { user, token } = useAuthContext();
+
+	console.log(user._id)
 
 	
 	useEffect(() => {
 		async function fetchGiftings() {
 			try {
 				setIsLoading(true);
-				const res = await fetch('https://test.tajify.com/api/giftings/my-giftings', {
+				const res = await fetch('http://localhost:3010/api/giftings/my-giftings/bought', {
 					method: 'GET',
-					header: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`
-					}
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
 				});
 				if(!res.ok) throw new Error('SOmething went wrong!');
 				const data = await res.json();
@@ -46,6 +48,7 @@ const DashBoard = () => {
 					throw new Error(data.message);
 				}
 				setGiftings(data.data.giftings)
+				console.log(data.data.giftings)
 			} catch (err) {
 				console.log(err.message)
 			} finally {
@@ -62,7 +65,7 @@ const DashBoard = () => {
 
 			<section className="main__section section">
 				<div className="section__container">
-					{isLoading && (<SkelentonFour />)}
+					{/* {isLoading && (<SkelentonFour />)}
 					{giftings.length > 0 ? (
 						<div className="dashboard--gifting">
 							<div>
@@ -72,7 +75,6 @@ const DashBoard = () => {
 									<span><FaAngleRight /></span>
 								</div>
 							</div>
-							{/* <div className='giftPackage__cards'> */}
 							<Swiper
 								slidesPerView={4}
 								spaceBetween={26}
@@ -82,9 +84,9 @@ const DashBoard = () => {
 								className="giftPackage__cards mySwiper"
 							>
 								{giftings.map(gifting => {
+									{console.log(gifting.gifter._id)}
 									return (
 										<SwiperSlide className='giftPackage--figure' key={gifting._id}>
-											{/* <PiDotsThreeVerticalBold /> */}
 											<img src={`http://localhost:3010/asset/others/${gifting?.celebrantImage}` || GiftImg} alt={gifting?.celebrant} />
 											<figcaption className="giftPackage--details">
 												<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
@@ -101,7 +103,7 @@ const DashBoard = () => {
 								})}
 							</Swiper> 
 						</div>
-					) : (!isLoading && !giftings) && (
+					) : (!isLoading && giftings.length === 0) && (
 						<div className="gifting--banner banner">
 							<h3 className="section__heading">Lift Someone's Spirit With a <span style={{ color: '#bb0505' }}>Gift <TfiGift /></span></h3>
 							<img src={GiftImg} alt={GiftImg}  />
@@ -109,7 +111,14 @@ const DashBoard = () => {
 								<button type="button">Create Gifting</button>
 							</Link>
 						</div>
-					)}
+					)} */}
+					<div className="gifting--banner banner">
+						<h3 className="section__heading">Lift Someone's Spirit With a <span style={{ color: '#bb0505' }}>Gift <TfiGift /></span></h3>
+						<img src={GiftImg} alt={GiftImg}  />
+						<Link to={'/dashboard/gifting'}>
+							<button type="button">Create Gifting</button>
+						</Link>
+					</div>
 				</div>
 			</section>
 		</div>

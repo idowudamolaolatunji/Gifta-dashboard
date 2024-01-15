@@ -56,6 +56,13 @@ a:visited, a:link {
 	background: #aaa;
 }
 
+/* arrow in num input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 /* ALERTS */
 .alert--overlay {
 	height: 100vh;
@@ -216,28 +223,12 @@ a:visited, a:link {
 	transform: rotate(360deg);
 	color: #bb0505;
 }
-
 .modal__content {
 	display: flex;
 	flex-direction: column;
 	gap: 1.2rem;
 }
-.share--icons {
-	margin-left: auto;
-	display: flex;
-	gap: 1.4rem;
-	align-items: center;
-}
-.share--icon {
-	font-size: 2rem;
-	margin-left: auto;
-	cursor: pointer;
-	color: #888;
-	transition: all .35s;
-}
-.share--icon:hover {
-	color: #bb0505;
-}
+
 
 /*  */
 .progress--bar {

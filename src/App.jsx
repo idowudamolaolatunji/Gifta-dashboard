@@ -15,6 +15,7 @@ import WishListUi from './Pages/Wishlists/WishlistsComponents/WishListUi';
 
 import './index.css'
 import SharedWishlist from './Pages/PublicPages/SharedWishlist';
+import Wallet from './Pages/PublicPages/Wallet';
 
 
 
@@ -36,8 +37,9 @@ const App = () => {
           <Route path="/dashboard/wishlists/:wishListSlug/wish/edit" element={<WishListUi />}></Route>
           <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
 
-
           <Route path="/dashboard/reminders" element={<Reminders />}></Route>
+
+          <Route path="/wallet" element={<Wallet />}></Route>
         </Route>
 
         <Route path="/login" element={<Login />}></Route>
