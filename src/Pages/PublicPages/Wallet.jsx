@@ -10,6 +10,10 @@ import { PaystackButton } from 'react-paystack';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import Spinner from '../../Components/Spinner';
+import { useNavigate } from 'react-router-dom';
+import GiftLoader from '../../Assets/images/gifta-loader.gif';
+import { FiMinus, FiPlus } from "react-icons/fi";
+
 
 
 function Message({ type }) {
@@ -25,9 +29,14 @@ const customStyles = {
 }
 
 const customModalStyle = {
-	minHeight: "auto",
-	maxWidth: "45rem",
-	width: "45rem",
+    minHeight: "auto",
+    maxWidth: "45rem",
+    width: "45rem",
+};
+const customWithdrawalModalStyle = {
+    minHeight: "auto",
+    maxWidth: "50rem",
+    width: "50rem",
 };
 
 
@@ -62,6 +71,10 @@ function Wallet() {
     const [activeTab, setActiveTab] = useState('deposit');
     const [isLoading, setIsLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showDepositModal, setShowDepositModal] = useState(false);
+    const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
+    const [helpReset, setHelpReset] = useState(false);
+
 
     const [email, setEmail] = useState(user.email);
     const [amount, setAmount] = useState();
@@ -76,10 +89,11 @@ function Wallet() {
     const subscription = transactions.filter(transaction => transaction.purpose === 'subscription');
     const wishes = transactions.filter(transaction => transaction.purpose === 'wishes');
 
+    const navigate = useNavigate();
+  
 
     let charges;
     function calcTotalAmount(amount) {
-        // let charges;
         const calcChargesAmount = (3 / 100) * amount;
         if (calcChargesAmount > 3000) {
             charges = 3000;
@@ -87,20 +101,32 @@ function Wallet() {
             charges = calcChargesAmount;
         }
         return amount + charges;
-        // return [charges, amount + charges];
     }
 
-    const publicKey = "pk_test_8fa5be5a113286b23f7775fe7f34c94ffd338c8c"
+    const publicKey = "pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7"
     const amountInKobo = calcTotalAmount(Number(amount)) * 100;
     const componentProps = {
         email,
         amount: amountInKobo,
+        metadata: {
+            name: user?.fullName,
+        },
         publicKey,
         text: "Pay!",
-        onSuccess: ({ reference }) => handlePayment(reference),
+        onSuccess: ({ reference }) => {
+            handlePayment(reference);
+            setShowDepositModal(false);
+        },
         onClose: () => handleFailure('Transaction Not Completed!'),
     };
-   
+
+
+    // HANDLE FETCH STATE RESET
+    function handleReset() {
+        setIsError(false);
+        setMessage('')
+        setIsSuccess(false);
+    }
 
     // HANDLE ON FETCH FAILURE
     function handleFailure(mess) {
@@ -109,32 +135,7 @@ function Wallet() {
         setTimeout(() => {
             setIsError(false);
             setMessage('')
-        }, 2000);
-    }
-
-    async function handlePayment(reference) {
-        try {
-            setIsLoading(true);
-            const res = fetch(`http://localhost:3010/api/transactions/payment-verification/${reference}/${charges}`, {
-                method: 'POST',
-                headers,
-            });
-            
-            if(!res.ok) throw new Error('Something went wrong!');
-            const data = await res.json();
-            console.log(res, data);
-            setMessage(data.message);
-			setIsSuccess(true);
-			setTimeout(() => {
-				setIsError(false);
-				setMessage("");
-                setShowModal(false);
-			}, 1500);
-        } catch(err) {
-            handleFailure(err.message)
-        } finally {
-            setIsLoading(false)
-        }
+        }, 3000);
     }
 
     const headers = {
@@ -142,141 +143,272 @@ function Wallet() {
         Authorization: `Bearer ${token}`,
     };
 
-    useEffect(function() {
+    async function handlePayment(reference) {
+        try {
+            handleReset();
+            setIsLoading(true);
+            setHelpReset(false);
+            const res = await fetch(`https://test.tajify.com/api/transactions/payment-verification/${reference}/${charges}`, {
+                method: 'POST',
+                headers,
+            });
+            console.log(helpReset)
+            if (!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            console.log(res, data)
+            if(data.success !== 'success') {
+                throw new Error(data?.message);
+            }
+            setIsSuccess(true);
+            setMessage("Deposit Successful!");
+            setTimeout(() => {
+                setIsSuccess(false);
+                setMessage("");
+                setHelpReset(true);
+            }, 2000);
+        } catch (err) {
+            handleFailure(err.message)
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+
+    useEffect(function () {
         async function handleWalletTransaction() {
             try {
                 setIsLoading(true);
+                setShowDepositModal(false)
                 const [walletRes, transactionsRes] = await Promise.all([
-                    fetch(`http://localhost:3010/api/wallet/`, { headers }),
-                    fetch(`http://localhost:3010/api/transactions/my-transactions`, { headers }),
+                    fetch(`https://test.tajify.com/api/wallet/`, { headers }),
+                    fetch(`https://test.tajify.com/api/transactions/my-transactions`, { headers }),
                 ]);
-                console.log(walletRes, transactionsRes);
 
-                if(!walletRes.ok || !transactionsRes.ok) {
+                if (!walletRes.ok || !transactionsRes.ok) {
                     throw new Error('Something went wrong!');
                 }
                 const walletData = await walletRes.json();
                 const transactionData = await transactionsRes.json();
-                if(walletData.status !== 'success' || transactionData.status !== 'success') {
+                if (walletData.status !== 'success' || transactionData.status !== 'success') {
                     throw new Error(walletData.message || transactionData.message)
                 }
                 setWallet(walletData.data.wallet);
                 setTransactions(transactionData.data.myTransactions);
-            } catch(err) {
+            } catch (err) {
                 console.log(err.message);
             } finally {
                 setIsLoading(false)
             }
         }
         handleWalletTransaction();
-    }, []);
+    }, [helpReset]);
 
 
-  return (
-    <>
-        {isLoading && (
-            <div className='gifting--loader'>
-                <Spinner />
-            </div>
-        )}
-        <Header />
-        <section className='section wallet__section'>
-            <div className="section__container wallet--container">
-                <div className="wallet--top">
-                    <div className="wallet--user-info">
-                        <img src={user.image} alt={user.username} />
-                        <div>
-                            <p className="wallet--user-name">{user.fullName || user.username}</p>
-                            <span className='wallet--user-balance'>
-                                <span>₦</span>
-                                <span>{numberConverter(wallet?.walletBalance || 0)}</span>
-                            </span>
-                            <span className='wallet--buttons'>
-                                <span className="wallet--button" onClick={() => setShowModal(true)}>Deposit</span>
-                                <span className="wallet--button">Withdrawal</span>
-                            </span>
+    return (
+        <>
+            {isLoading && (
+                <div className='gifting--loader'>
+                    {/* <Spinner /> */}
+                    <img src={GiftLoader} alt='loader' />
+                </div>
+            )}
+            <Header />
+            <section className='section wallet__section'>
+                <div className="section__container wallet--container">
+
+                    <span onClick={() => navigate(-1)} className='wishlist--back-btn'>Back</span>
+
+
+                    <div className="wallet--top">
+                        <div className="wallet--user-info">
+                            <img src={user.image} alt={user.username} />
+                            <div>
+                                <p className="wallet--user-name">{user.fullName || user.username}</p>
+                                <span className='wallet--user-balance'>
+                                    <span>₦</span>
+                                    <span>{numberConverter(wallet?.walletBalance || 0)}</span>
+                                </span>
+                                <span className='wallet--buttons'>
+                                    <span className="wallet--button" onClick={() => setShowDepositModal(true)}>Fund Wallet <FiPlus className='wallet--icon' /></span>
+                                    <span className="wallet--button" onClick={() => setShowWithdrawalModal(true)}>Withdraw <FiMinus className='wallet--icon' /></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="wallet--bottom">
-                    <span>
-						<h3 className="wallet--heading">Transactions History</h3>
-						<div className="wallet--tabs">
-							<span className={`wallet--tab ${activeTab === "deposit" && "tab--active"}`} onClick={() => { setActiveTab("deposit")}}>Deposit</span>
-							<span className={`wallet--tab ${activeTab === "reminder" && "tab--active"}`} onClick={() => { setActiveTab("reminder")}}>Reminder</span>
-							<span className={`wallet--tab ${activeTab === "giftings" && "tab--active"}`} onClick={() => { setActiveTab("giftings")}}>Giftings</span>
-							<span className={`wallet--tab ${activeTab === "wishes" && "tab--active"}`} onClick={() => { setActiveTab("wishes")}}>Wishes</span>
-							<span className={`wallet--tab ${activeTab === "withdrawal" && "tab--active"}`} onClick={() => { setActiveTab("withdrawal")}}>Withdrawal</span>
-							<span className={`wallet--tab ${activeTab === "subscription" && "tab--active"}`} onClick={() => { setActiveTab("subscription")}}>Subscription</span>
-						</div>
-					</span>
-					
-
-                    <DataTable 
-                        columns={columns}
-                        data={activeTab === 'deposit' ? deposit : activeTab === 'withdrawal' ? withdrawal : activeTab === 'reminder' ? reminder : activeTab === 'giftings' ? gifting : activeTab === 'wishes' ? wishes : activeTab === 'subscription' ? subscription : ''}
-                        pagination
-                        noDataComponent={<Message type={activeTab} />}
-                        customStyles={customStyles}
-                        selectableRows
-                    />
-                </div>
-            </div>
-        </section>
+                    <div className="wallet--bottom">
+                        <span>
+                            <h3 className="wallet--heading">Transactions History</h3>
+                            <div className="wallet--tabs">
+                                <span className={`wallet--tab ${activeTab === "deposit" && "tab--active"}`} onClick={() => { setActiveTab("deposit") }}>Deposit</span>
+                                <span className={`wallet--tab ${activeTab === "reminder" && "tab--active"}`} onClick={() => { setActiveTab("reminder") }}>Reminder</span>
+                                <span className={`wallet--tab ${activeTab === "giftings" && "tab--active"}`} onClick={() => { setActiveTab("giftings") }}>Giftings</span>
+                                <span className={`wallet--tab ${activeTab === "wishes" && "tab--active"}`} onClick={() => { setActiveTab("wishes") }}>Wishes</span>
+                                <span className={`wallet--tab ${activeTab === "withdrawal" && "tab--active"}`} onClick={() => { setActiveTab("withdrawal") }}>Withdrawal</span>
+                                <span className={`wallet--tab ${activeTab === "subscription" && "tab--active"}`} onClick={() => { setActiveTab("subscription") }}>Subscription</span>
+                            </div>
+                        </span>
 
 
-        {showModal && (
-            <DashboardModal setShowDashboardModal={setShowModal} customStyle={customModalStyle} title={
-                <>
-                    Make Deposit{' '}
-                    <picture style={{ transform: 'translateY(-.6rem)'}}>
-                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.webp" type="image/webp" />
-                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.gif" alt="🎉" width="32" height="32" />
-                    </picture>
-                </>
-            }>
-                <form className="pay--form" onSubmit={e => e.preventDefault()} style={{ marginTop: '.8rem' }}>
-                    <div className="form--item">
-                        <label htmlFor="email" className="form--label">Email</label>
-                        <input type="email" id='email' required placeholder='Email Address' name='email' value={email} onChange={e => setEmail(e.target.value)} className="form--input" />
-                    </div>
-                    <div className="form--item">
-                        <label htmlFor="amount" className="form--label">Amount</label>
-                        <CurrencyInput
-                            className='form--input'
-                            decimalsLimit={0}
-                            prefix='₦ '
-                            placeholder='Amount to pay'
-                            defaultValue={amount}
-                            value={amount}
-                            onValueChange={(value, _) => setAmount(value)}
-                            required
+                        <DataTable
+                            columns={columns}
+                            data={activeTab === 'deposit' ? deposit : activeTab === 'withdrawal' ? withdrawal : activeTab === 'reminder' ? reminder : activeTab === 'giftings' ? gifting : activeTab === 'wishes' ? wishes : activeTab === 'subscription' ? subscription : ''}
+                            pagination
+                            noDataComponent={<Message type={activeTab} />}
+                            customStyles={customStyles}
+                            selectableRows
                         />
                     </div>
-                    <div className="form--item">
-                        {(email && amount) ? (
-                            <PaystackButton type='submit' className="form--button" {...componentProps} />
-                            
-                        ) : (
-                            <button type='submit' className="form--button">Pay!</button>
-                        )}
-                    </div>
-                </form>
-            </DashboardModal>
-        )}
+                </div>
+            </section>
 
 
-        <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
-            {isSuccess ? (
-                <AiFillCheckCircle className="alert--icon" />
-            ) : isError && (
-                <AiFillExclamationCircle className="alert--icon" />
+            {showDepositModal && (
+                <DashboardModal setShowDashboardModal={setShowDepositModal} customStyle={customModalStyle} title={
+                    <>
+                        Make Deposit{' '}
+                        <picture style={{ transform: 'translateY(-.6rem)' }}>
+                            <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.webp" type="image/webp" />
+                            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.gif" alt="🎉" width="32" height="32" />
+                        </picture>
+                    </>
+                }>
+                    <span className='modal--info'> Ensure accuracy when funding your wallet to avoid transaction errors. Proceed with caution!</span>
+
+                    <form className="pay--form" onSubmit={e => e.preventDefault()} style={{ marginTop: '.8rem' }}>
+                        <div className="form--item">
+                            <label htmlFor="email" className="form--label">Email</label>
+                            <input type="email" id='email' required placeholder='Email Address' name='email' value={email} onChange={e => setEmail(e.target.value)} className="form--input" />
+                        </div>
+                        <div className="form--item">
+                            <label htmlFor="amount" className="form--label">Amount</label>
+                            <CurrencyInput
+                                className='form--input'
+                                decimalsLimit={0}
+                                prefix='₦ '
+                                placeholder='Amount to pay'
+                                defaultValue={amount}
+                                value={amount}
+                                onValueChange={(value, _) => setAmount(value)}
+                                required
+                            />
+                        </div>
+                        <div className="form--item">
+                            {(email && amount) ? (
+                                <PaystackButton type='submit' className="form--button" {...componentProps} />
+
+                            ) : (
+                                <button type='submit' className="form--button">Pay!</button>
+                            )}
+                        </div>
+                    </form>
+                </DashboardModal>
             )}
-            <p>{message}</p>
-        </Alert>
-    </>
-  )
+
+            {(showWithdrawalModal) && (
+                <DashboardModal setShowDashboardModal={setShowWithdrawalModal} customStyle={customWithdrawalModalStyle} title={'Make a Withdrawal 💰'}>
+                        <span className='modal--info'>Withdrawals are final. Confirm your details and available balance before initiating. Proceed with caution.!</span>
+                    <form className="pay--form">
+
+                        <div className="form--item">
+                            <label className="form--label" htmlFor="amount">
+                                Withdrawal Amount
+                            </label>
+                            <CurrencyInput
+                                id="amount"
+                                className="form--input"
+                                placeholder="Enter Your Desired Amount"
+                                defaultValue={amount}
+                                value={amount}
+                                decimalsLimit={2}
+                                required
+                                prefix="₦ "
+                                onValueChange={(value, _) => setAmount(value)}
+                            />
+                        </div>
+
+                        <div className="form--flex">
+                            <div className="form--item">
+                                <label className="form--label" htmlFor="bank">
+                                    Bank Name
+                                </label>
+                                <input
+                                    className="form--input"
+                                    type="text"
+                                    id="bank"
+                                    // onChange={(e) => setBankName(e.target.value)}
+                                    // value={bankName}
+                                    required
+                                    placeholder="Your Bank"
+                                />
+                            </div>
+
+                            <div className="form--item">
+                                <label className="form--label" htmlFor="acct-num">
+                                    Account Number
+                                </label>
+                                <input
+                                    className="form--input"
+                                    type="number"
+                                    id="acct-num"
+                                    // onChange={(e) => setAcctNumber(e.target.value)}
+                                    // value={acctNumber}
+                                    required
+                                    placeholder="Your Acct Number"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form--flex">
+                            <div className="form--item">
+                                <label className="form--label" htmlFor="acct-name">
+                                    Account Name
+                                </label>
+                                <input
+                                    className="form--input"
+                                    type="text"
+                                    id="acct-name"
+                                    // onChange={(e) => setHolderName(e.target.value)}
+                                    // value={holderName}
+                                    required
+                                    placeholder="Holder's Name"
+                                />
+                            </div>
+
+                            <div className="form--item">
+                                <label className="form--label" htmlFor="password">
+                                    Password Confirmation
+                                </label>
+                                <input
+                                    className="form--input"
+                                    type="password"
+                                    id="password"
+                                    // onChange={(e) => setPassword(e.target.value)}
+                                    // value={password}
+                                    required
+                                    placeholder="Password Confirmation"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form--item">
+                            <button className="form--submit">Withdrawal Request</button>
+                        </div>
+                    </form>
+                </DashboardModal>
+            )}
+
+
+            <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                {isSuccess ? (
+                    <AiFillCheckCircle className="alert--icon" />
+                ) : isError && (
+                    <AiFillExclamationCircle className="alert--icon" />
+                )}
+                <p>{message}</p>
+            </Alert>
+        </>
+    )
 }
 
 export default Wallet

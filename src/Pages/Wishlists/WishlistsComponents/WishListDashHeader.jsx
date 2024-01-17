@@ -10,7 +10,7 @@ import { LuSun, LuMoon, LuLayoutDashboard } from "react-icons/lu";
 import { TfiGift } from "react-icons/tfi";
 import { BsBell, BsJournalBookmark, BsShop } from "react-icons/bs";
 
-import '../../DashBoard/main.css';
+// import '../../DashBoard/main.css';
 
 
 function WishListDashHeader() {
@@ -22,19 +22,19 @@ function WishListDashHeader() {
         <>
 		<header className="dashboard__header" style={{ marginBottom: '7.2rem'}}>
 			<div className='main-header sticky'>
-				<Link to='/'>
+				<a href='https://getgifta.com/'>
 					<img src={GiftLogo} alt="logo" className="dashboard__logo" />
-				</Link>
+				</a>
 
 				<div className="dashboard__details">
 					<div className="dashboard__others">
-						<span className="dashboard--mode">
+						{/* <span className="dashboard--mode">
 							{mode === 'light' ? 
 								(<LuMoon onClick={() => setMode('dark')} />)
 							: 
 								(<LuSun onClick={() => setMode('light')} />)
 							}
-						</span>
+						</span> */}
 
 						<Link to="/settings">
 							<span className="dashboard__icon-box">

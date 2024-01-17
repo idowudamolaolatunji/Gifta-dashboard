@@ -9,6 +9,9 @@ import { expectedDateFormatter } from "../../utils/helper";
 import { useAuthContext } from "../../Auth/context/AuthContext";
 import SkelentonFour from "../../Components/SkelentonFour";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import Alert from "../../Components/Alert";
+import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
+import GiftLoader from '../../Assets/images/gifta-loader.gif';
 
 const customStyle = {
 	minHeight: "auto",
@@ -28,25 +31,169 @@ function Reminders() {
 	const [showPostponeModal, setShowPostponeModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
  	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingImg, setIsLoadingImg] = useState(false);
 	const [reminders, setReminders] = useState([]);
 	const [helpReset, setHelpReset] = useState(false);
+	const [reminderId , setReminderId] = useState(null)
 
+	const [isError, setIsError] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [message, setMessage] = useState('');
 
 	const [date, setDate] = useState('');
     const [time, setTime] = useState('');
 
 	const { user, token } = useAuthContext();
 
-
-	function handleShowModal() {
-		setShowDashboardModal(true)
+	function handleResetId() {
+		setReminderId(null)
 	}
 
+	function handleShowModal() {
+		setShowDashboardModal(true);
+	}
+
+	function handleDeleteModal(id) {
+		handleResetId();
+		setShowDeleteModal(true);
+		setReminderId(id);
+	}
+	
+	function handlePostponeModal(id) {
+		handleResetId();
+		setShowPostponeModal(true);
+		setReminderId(id);
+	}
+	
+	function handleCompleteModal(id) {
+		handleResetId();
+		setShowCompleteModal(true);
+		setReminderId(id);
+	}
+
+	// HANDLE FETCH STATE RESET
+	function handleReset() {
+        setIsError(false);
+        setMessage('')
+        setIsSuccess(false);
+    }
+
+    // HANDLE ON FETCH FAILURE
+    function handleFailure(mess) {
+        setIsError(true);
+        setMessage(mess)
+        setTimeout(() => {
+            setIsError(false);
+            setMessage('')
+        }, 3000);
+    }
+
+	async function handleCompleteReminder(reminderId) {
+		try {
+			setIsLoadingImg(true);
+			handleReset();
+
+			const res = await fetch(`https://test.tajify.com/api/reminders/delete-my-reminder/${reminderId}`, {
+				method: 'PATCH',
+				headers: {
+					"Comtent-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				}
+			})
+			console.log(res);
+			if(!res.ok) throw new Error('Something went wrong!');
+			const data = await res.json();
+			if(data.status !== "status") {
+				throw new Error(data.message)
+			}
+			setIsSuccess(true);
+            setMessage(data.message)
+            setTimeout(() => {
+                setIsSuccess(false);
+                setMessage('');
+                setHelpReset(true);
+                setShowCompleteModal(false);
+            }, 2000);
+		} catch(err) {
+			handleFailure(err.message);
+		} finally {
+			setIsLoadingImg(false);
+		}
+	}
+
+	async function handleDeleteReminder(reminderId) {
+		try {
+			setIsLoadingImg(true);
+			handleReset();
+
+			const res = await fetch(`https://test.tajify.com/api/reminders/mark-as-completed/${reminderId}`, {
+				method: 'DELETE',
+				headers: {
+					"Comtent-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				}
+			});
+			console.log(res);
+			if(!res.ok) throw new Error('Something went wrong!');
+			const data = await res.json();
+			if(data.status !== "status") {
+				throw new Error(data.message)
+			}
+			setIsSuccess(true);
+            setMessage(data.message)
+            setTimeout(() => {
+                setIsSuccess(false);
+                setMessage('');
+                setHelpReset(true);
+                setShowDeleteModal(false);
+            }, 2000);
+
+		} catch(err) {
+			handleFailure(err.message);
+		} finally {
+			setIsLoadingImg(false);
+		}		
+	}
+
+	async function handlePostponeReminder(reminderId) {
+		try {
+			setIsLoadingImg(true);
+			handleReset();
+
+			const res = await fetch(`https://test.tajify.com/api/reminders/postpone-reminder/${reminderId}`, {
+				method: 'PATCH',
+				headers: {
+					"Comtent-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				}
+			});
+			console.log(res);
+			if(!res.ok) throw new Error('Something went wrong!');
+			const data = await res.json();
+			if(data.status !== "status") {
+				throw new Error(data.message)
+			}
+			setIsSuccess(true);
+            setMessage(data.message)
+            setTimeout(() => {
+                setIsSuccess(false);
+                setMessage('');
+                setHelpReset(true);
+                setShowPostponeModal(false);
+            }, 2000);
+		} catch(err) {
+			handleFailure(err.message);
+		} finally {
+			setIsLoadingImg(false);
+		}
+	}
+
+	
 	useEffect(function() {
 		async function handleFetchReminders() {
 			try {
 				setIsLoading(true);
-				const res = await fetch(`http://localhost:3010/api/reminders/my-reminders`, {
+				const res = await fetch(`https://test.tajify.com/api/reminders/my-reminders`, {
 					method: 'GET', 
 					headers: {
 						"Content-Type": 'application/json',
@@ -73,6 +220,11 @@ function Reminders() {
 
 	return (
 		<>
+			{isLoadingImg && (
+				<div className='gifting--loader'>
+					<img src={GiftLoader} alt='loader' />
+				</div>
+			)}
 			<DashHeader />
 			<DashTabs />
 
@@ -92,11 +244,11 @@ function Reminders() {
 												<p>Date</p>
 												{expectedDateFormatter(`${reminder.reminderDate}`)}
 											</span>
-											<RiDeleteBin5Line className="reminder--delete" onClick={() => setShowDeleteModal(true)} />
+											<RiDeleteBin5Line className="reminder--delete" onClick={() => handleDeleteModal(reminder._id)} />
 										</span>
 										<span className="reminder--tasks">
-											<span onClick={() => setShowCompleteModal(true)}>Mark As Completed</span>
-											<span onClick={() => setShowPostponeModal(true)}>Postpone</span>
+											<span onClick={() => handleCompleteModal(reminder._id)}>Mark As Completed</span>
+											<span onClick={() => handlePostponeModal(reminder._id)}>Postpone</span>
 										</span>
 									</span>
 								</figure>
@@ -126,7 +278,7 @@ function Reminders() {
                 	<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
 					<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
 						<button type='button' className='cancel--btn' onClick={() => setShowCompleteModal(false)}>Cancel</button>
-						<button type='submit' className='set--btn'>Complete Reminder</button>
+						<button type='submit' className='set--btn' onClick={() => handleCompleteReminder(reminderId)}>Complete Reminder</button>
 					</div>
 				</DashboardModal>
 			)}
@@ -148,7 +300,7 @@ function Reminders() {
 						</div>
 						<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
 							<button type='button' className='cancel--btn' onClick={() => setShowPostponeModal(false)}>Cancel</button>
-							<button type='submit' className='set--btn'>Postpone Reminder</button>
+							<button type='submit' className='set--btn' onClick={() => handlePostponeReminder(reminderId)}>Postpone Reminder</button>
 						</div>
 					</form>
 				</DashboardModal>
@@ -160,9 +312,23 @@ function Reminders() {
                 	<span className='modal--info'>Note that everything relating data to this reminder would also be deleted including transaction history!</span>
 					<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
 						<button type='button' className='cancel--btn' onClick={() => setShowDeleteModal(false)}>Cancel</button>
-						<button type='submit' className='set--btn'>Delete</button>
+						<button type='submit' className='set--btn' onClick={() => handleDeleteReminder(reminderId)}>Delete</button>
 					</div>
 				</DashboardModal>
+			)}
+
+
+			{(isSuccess || isError) && (
+				<Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`} others={true}>
+					{isSuccess ? (
+						<AiFillCheckCircle className="alert--icon" />
+					) : isError ? (
+						<AiFillExclamationCircle className="alert--icon" />
+					) : (
+						""
+					)}
+					<p>{message}</p>
+				</Alert>
 			)}
 		</>
 	);

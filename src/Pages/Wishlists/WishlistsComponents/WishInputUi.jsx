@@ -8,7 +8,7 @@ import Alert from '../../../Components/Alert';
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
-function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
+function WishInputUi({ wishListId, wishDetails, setShowModal, type, setHelpReset }) {
     const [wish, setWish] = useState(wishDetails ? wishDetails.wish : '');
     const [description, setDescription] = useState(wishDetails ? wishDetails.description : '');
     const [date, setDate] = useState(wishDetails ? formatDate(wishDetails.deadLineDate) : '')
@@ -18,21 +18,14 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
 	const [message, setMessage] = useState("");
     const [inValid, setInValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [focus, setFocus] = useState(false);
+    const [focus, setFocus] = useState(null);
 
     const inputRef = useRef(null);
 
-    const navigate = useNavigate();
-    const location = useLocation();
     const { user, token } = useAuthContext();
-    const { wishListSlug } = useParams();
 
-    function handleNavigation() {
-        if(location.pathname.includes('/wish/edit')) {
-            navigate(-1)
-        } else {
-            navigate(`/dashboard/wishlists/${wishListSlug}`)
-        }
+    function handleCloseModal() {
+        setShowModal(false);
     }
 
     function handleReset() {
@@ -47,9 +40,8 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
 		setTimeout(() => {
 			setIsError(false);
 			setMessage("");
-		}, 2500);
+		}, 3000);
 	}
-
 
     async function handleWishInput(e) {
         e.preventDefault();
@@ -62,24 +54,24 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
                 }, 1500);
                 throw new Error('All fields must be filled!');
             }
+            setHelpReset(false)
             setIsLoading(true);
             handleReset();
             if(type === 'new') {
                 method = 'POST';
-                url = 'http://localhost:3010/api/wishlists/create-wish';
-            } else {
+                url = `https://test.tajify.com/api/wishlists/create-wish/${wishListId}`;
+            } else if(type === 'edit') {
                 method = "PATCH";
-                url = 'http://localhost:3010/api/wishlists/update-wish';
+                url = `https://test.tajify.com/api/wishlists/update-wish/${wishListId}/${wishDetails._id}`;
             }
 
-            console.log(amount)
-            const res = await fetch(`${url}/${wishListId}`, {
+            const res = await fetch(`${url}`, {
                 method: method,
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ wish, description, deadLineDate: date, amount: type === 'new' ? formattedAmount(amount) : amount}),
+                body: JSON.stringify({ wish, description, deadLineDate: date, amount: Number(amount) }),
             });
 
             console.log(res);
@@ -92,11 +84,11 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
             setMessage(data.message);
 			setIsSuccess(true);
 			setTimeout(() => {
+                handleCloseModal();
 				setIsSuccess(false);
 				setMessage("");
+                setHelpReset(true);
 			}, 1500);
-            navigate(`/dashboard/wishlists/${wishListSlug}`);
-            setHelpReset(true);
         } catch(err) {
             handleError(err.message);
         } finally {
@@ -112,14 +104,11 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
         if(focus) {
             inputRef.current.focus();
         }
-        if(!inputRef.current.focus()) {
-            setFocus(false)
-        }
     }, [focus])
 
   return (
     <>
-        <div className='wish--overlay' onClick={handleNavigation} />
+        <div className='wish--overlay' onClick={handleCloseModal} />
         {isLoading && (
             <div className='gifting--loader'>
                 <img src={GiftLoader} alt='loader' />
@@ -145,7 +134,7 @@ function WishInputUi({ wishListId, wishDetails, type, setHelpReset }) {
                     </span>
                 </span>
                 <span>
-                    <button type="button" className='wish--button btn--cancel' onClick={handleNavigation}>Cancel</button>
+                    <button type="button" className='wish--button btn--cancel' onClick={handleCloseModal}>Cancel</button>
                     <button type="submit" className='wish--button btn--submit'>Submit</button>
                 </span>
             </div>

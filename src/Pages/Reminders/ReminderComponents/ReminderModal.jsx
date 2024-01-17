@@ -61,7 +61,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             if(file) {
                 setImageFile(file);
             }
-        }, 1200);
+        }, 2000);
     }
 
     function handleModalClose() {
@@ -82,7 +82,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
         setTimeout(() => {
             setIsError(false);
             setMessage('')
-        }, 2000);
+        }, 3000);
     }
 
     async function handleSetReminder(e) {
@@ -90,9 +90,9 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             e.preventDefault();
             setIsLoading(true);
             handleReset();
-            setHelpReset(false)
+            setHelpReset(false);
 
-            const res = await fetch(`http://localhost:3010/api/reminders/create-reminder`, {
+            const res = await fetch(`https://test.tajify.com/api/reminders/create-reminder`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -131,7 +131,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                 setMessage('');
                 setHelpReset(true);
                 handleModalClose();
-            }, 2500);
+            }, 2000);
 
         } catch(err) {
             handleFailure(err.message);
@@ -144,7 +144,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            const res = await fetch(`http://localhost:3010/api/reminders/reminder-img/${id}`, {
+            const res = await fetch(`https://test.tajify.com/api/reminders/reminder-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -211,7 +211,6 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                                 onColor="#bb0505"
                                 handleDiameter={18}
                                 height={25}
-                                required
                             />
                         </div>
                     )}

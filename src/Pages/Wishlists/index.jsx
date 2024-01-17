@@ -23,8 +23,8 @@ import DeleteModalUi from './WishlistsComponents/DeleteModalUi'
 
 const customStyle = {
 	minHeight: "auto",
-	maxWidth: "45rem",
-	width: "45rem",
+	maxWidth: "48rem",
+	width: "48rem",
 };
 
 const shareCustomStyle = {
@@ -53,6 +53,7 @@ function Wishlists() {
 	const [showActionInfo, setShowActionInfo] = useState(false);
 	const [selectedId, setSelectedId] = useState();
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
+	const [showWishListEditModal, setShowWishListEditModal] = useState(false);
 
 	const { user, token } = useAuthContext();
 
@@ -69,7 +70,7 @@ function Wishlists() {
 
 	function handleSelectedWishList(data) {
 		setSelectedWishList(data);
-		setShowDashboardModal(!showDashboardModal)
+		setShowWishListEditModal(!showWishListEditModal)
 	}
 
 	function handleModal() {
@@ -94,14 +95,14 @@ function Wishlists() {
         setTimeout(() => {
             setIsError(false);
             setMessage('')
-        }, 2000);
+        }, 3000);
     }
 
 	useEffect(function () {
 		async function fetchWishlists() {
 			try {
 				setIsLoading(true);
-				const res = await fetch('http://localhost:3010/api/wishlists/user-wishlists/wishlists', {
+				const res = await fetch('https://test.tajify.com/api/wishlists/user-wishlists/wishlists', {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -146,19 +147,19 @@ function Wishlists() {
 							{wishLists.map(wishList => (
 								<figure key={wishList._id} className="wishlist--figure w-figure-action">
 									<span className="w-figure-category">{wishList.category}</span>
-									<a target='_blank' href={`http://localhost:3010/asset/others/${wishList.image}`}>
-										<img className="w-figure--image" src={`http://localhost:3010/asset/others/${wishList.image}`} alt={wishList.image} />
+									<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
+										<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
 									</a>
 									<figcaption className="w-figure--details">
 										<div className="w-figure--head">
 											<span className="w-figure--title">{wishList.name}</span>
 											<div className="w-figure--icons">
 												{(user.isPremium || (!user.isPremium && wishList?.wishes.length < 10)) && (
-													<Link to={`/dashboard/wishlists/${wishList?.slug}/wish?new=true`}>
-														<PiPlusBold className='figure--icon' />
+													<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
+														<PiPlusBold className='figure--icon' onClick={() => localStorage.setItem('wishNewModal', JSON.stringify(true)) }/>
 													</Link>
 												)}
-												<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://gifta.com/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
+												<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://getgifta.com/shared/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
 												<IoEllipsisVerticalSharp className="figure--icon" onClick={() => handleActionInfo(wishList._id)} />
 												{(showActionInfo && selectedId === wishList._id) && (
 													<div className="w-figure--action-box">
@@ -213,7 +214,16 @@ function Wishlists() {
 					customStyle={customStyle}
 					setShowDashboardModal={setShowDashboardModal}
 				>
-					<WishlistForm data={selectedWishList} setShowDashboardModal={setShowDashboardModal} setHelpReset={setHelpReset} />
+					<WishlistForm setShowDashboardModal={setShowDashboardModal} setHelpReset={setHelpReset} />
+				</DashboardModal>
+			)}
+			{showWishListEditModal && (
+				<DashboardModal
+					title={'Update your Wishlist'}
+					customStyle={customStyle}
+					setShowDashboardModal={setShowWishListEditModal}
+				>
+					<WishlistForm data={selectedWishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpReset} />
 				</DashboardModal>
 			)}
 			{share && (
@@ -231,7 +241,7 @@ function Wishlists() {
 				</DashboardModal>
 			)}
 			{(showDeleteModal) && (
-				<DeleteModalUi title={`Delete WishList!`}>
+				<DeleteModalUi title={`Delete WishList!`} setShowDeleteModal={setShowDeleteModal}>
 					<p className='modal--text'>Are you sure you want to delete this WishList?</p>
 					<span className='modal--info'>Note that everything relating data to this WishList would also be deleted including transaction history!</span>
 					<div className="modal--actions">

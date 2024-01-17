@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DashHeader from "./DashboardComponents/DashHeader";
 import DashTabs from "./DashboardComponents/DashTabs";
 
-import "./main.css";
+// import "./main.css";
 import { TfiGift } from "react-icons/tfi";
 import GiftImg from '../../Assets/images/casual-life-3d-pink-gift-box.png';
 import { Link } from "react-router-dom";
@@ -35,7 +35,7 @@ const DashBoard = () => {
 		async function fetchGiftings() {
 			try {
 				setIsLoading(true);
-				const res = await fetch('http://localhost:3010/api/giftings/my-giftings/bought', {
+				const res = await fetch('https://test.tajify.com/api/giftings/my-giftings/bought', {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const DashBoard = () => {
 									{console.log(gifting.gifter._id)}
 									return (
 										<SwiperSlide className='giftPackage--figure' key={gifting._id}>
-											<img src={`http://localhost:3010/asset/others/${gifting?.celebrantImage}` || GiftImg} alt={gifting?.celebrant} />
+											<img src={`https://test.tajify.com/asset/others/${gifting?.celebrantImage}` || GiftImg} alt={gifting?.celebrant} />
 											<figcaption className="giftPackage--details">
 												<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
 												<p className="package--description">{gifting.description}</p>

@@ -33,19 +33,19 @@ const DashHeader = ({ isDasboard }) => {
 	return (
 		<header className="dashboard__header">
 			<div className={`main-header ${show ? 'sticky' : ''}`}>
-				<Link to='/'>
+				<a href='https://getgifta.com/'>
 					<img src={GiftLogo} alt="logo" className="dashboard__logo" />
-				</Link>
+				</a>
 
 				<div className="dashboard__details">
 					<div className="dashboard__others">
-						<span className="dashboard--mode">
+						{/* <span className="dashboard--mode">
 							{mode === 'light' ? 
 								(<LuMoon onClick={() => setMode('dark')} />)
 							: 
 								(<LuSun onClick={() => setMode('light')} />)
 							}
-						</span>
+						</span> */}
 
 						<Link to="/settings">
 							<span className="dashboard__icon-box">

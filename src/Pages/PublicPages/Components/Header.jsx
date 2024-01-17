@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import GiftLogo from "../../../Assets/gifta-logo.png";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
-import '../../DashBoard/main.css';
+// import '../../DashBoard/main.css';
 import { LuMoon, LuSun } from "react-icons/lu";
 import { IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
 import Dropdown from "../../../Components/Dropdown";
@@ -19,19 +19,19 @@ function Header() {
   return (
     <header className="dashboard__header" style={{ marginBottom: '7.2rem' }}>
             <div className='main-header sticky'>
-                <Link to='/'>
+                <a href='https://getgifta.com/'>
                     <img src={GiftLogo} alt="logo" className="dashboard__logo" />
-                </Link>
+                </a>
 
                 <div className="dashboard__details">
                     <div className="dashboard__others">
-                        <span className="dashboard--mode">
+                        {/* <span className="dashboard--mode">
                             {mode === 'light' ?
                                 (<LuMoon onClick={() => setMode('dark')} />)
                                 :
                                 (<LuSun onClick={() => setMode('light')} />)
                             }
-                        </span>
+                        </span> */}
                         {(user && token) && (
                             <>
                                 <Link to="/settings">

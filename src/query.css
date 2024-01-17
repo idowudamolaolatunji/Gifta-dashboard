@@ -1,0 +1,116 @@
+
+
+
+
+
+/* ======================================= */
+/* SHARED WISHLIST PAGE */
+/* ======================================= */
+/* 650px === 65rem === 40.625em */
+@media screen and (max-width: 40.625em) {
+    html {
+        font-size: 53%;
+    }
+    .wishlist--title {
+        color: #fff;
+    }
+    .share--top {
+        position: relative;
+        display: block;
+        grid-template-columns: 1fr !important;
+        width: 100%;
+    }
+    .wishlish--share .share--top img {
+        width: 100%;
+        height: 30rem;
+        border-radius: 0;
+        object-fit: cover;
+    }
+    .share--top::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5));
+        border-radius: 0;
+    }
+    .share--top .top--details {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        
+        display: flex;
+        align-items: center;
+        color: #fff;
+        z-index: 50;
+        max-width: 80%;
+    }
+    .share--top .progress--bar {
+        height: 1.2rem;
+        position: relative;
+        max-width: 90%;
+        margin: 0 auto;
+    }
+    .share--top .progress--bar .progress {
+        height: 1.2rem;
+        position: absolute;
+    }
+    .share--top .progress--figure {
+        color: #fff;
+        margin-top: 1.8rem;
+    }
+    .share--bottom .lists--item-top,
+    .share--bottom .lists--item-bottom {
+        gap: 2rem;
+        display: grid;
+    }
+    .share--bottom .lists--item-top {
+        grid-template-columns: 1fr 8.4rem;
+    }
+    .share--bottom .lists--item-bottom {
+        grid-template-columns: 1fr 11rem;
+    }
+    .lists--item-bottom .lists--insight svg {
+        color: #bb0505;
+    }
+}
+
+
+@media screen and (max-width: 28.125em) {
+    .dashboard__header .profile__user {
+        display: none;
+    }
+    .modal {
+        width: 90% !important;
+    }
+    .modal .form--input {
+        font-size: 1.4rem;
+    }
+    .lists--item-top .lists--content p {
+        font-size: 1.5rem;
+    }
+    .wishlish--share .share--bottom {
+        max-width: 100%;
+        width: 100%;
+    }
+    .share--top .top--details {
+        max-width: 90%;
+    }
+    .share--top .progress--bar {
+        max-width: 100%;
+    }
+    .lists--item-bottom .lists--insight p {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    .share--bottom .lists--actions {
+        justify-content: flex-start;
+    }
+    .lists--item-bottom .progress--figure p {
+        font-size: 1rem;
+    }
+}

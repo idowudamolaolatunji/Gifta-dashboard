@@ -7,7 +7,7 @@ import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
 function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
-    const [imagePreview, setImagePreview] = useState(data?.image ? `http://localhost:3010/asset/others/${data?.image}` : null);
+    const [imagePreview, setImagePreview] = useState(data?.image ? `https://test.tajify.com/asset/others/${data?.image}` : null);
     const [imageFile, setImageFile] = useState(null);
     const [title, setTitle] = useState(data?.name || '');
     const [category, setCategory] = useState(data?.category || '');
@@ -15,13 +15,8 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
-    const timeout = 2000;
-
-    // console.log(data.image, imagePreview, imageFile)
-
 
     const { token } = useAuthContext();
-
 
     function handleModalClose() {
 		setShowDashboardModal(false);
@@ -41,7 +36,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
         setTimeout(() => {
             setIsError(false);
             setMessage('')
-        }, timeout);
+        }, 3000);
     }
 
     const handleImageChange = (event) => {
@@ -52,7 +47,6 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
             setImagePreview(imageUrl);
         }
     };
-
 
     async function handleCreateWishList(e) {
         let method, url;
@@ -69,7 +63,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
             setHelpReset(false);
             setIsLoading(true);
 
-            const res = await fetch(`http://localhost:3010/api/wishlists/${url}`, {
+            const res = await fetch(`https://test.tajify.com/api/wishlists/${url}`, {
                 method,
                 headers: {
                     "Content-Type": 'application/json',
@@ -87,7 +81,6 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
             if(data.status !== 'success') {
                 throw new Error(data.message);
             }
-            // console.log(res, data);
 
             // UPLOAD IMAGE
             const formData = new FormData();
@@ -103,7 +96,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
                 setMessage('');
                 setHelpReset(true);
                 handleModalClose();
-            }, 2500);
+            }, 2000);
 
         } catch(err) {
             handleFailure(err.message)
@@ -117,7 +110,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            const res = await fetch(`http://localhost:3010/api/wishlists/wishlist-img/${id}`, {
+            const res = await fetch(`https://test.tajify.com/api/wishlists/wishlist-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -133,7 +126,6 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
             setIsLoading(false)
         }
     }
-
 
   return (
     <>

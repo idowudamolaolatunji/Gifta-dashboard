@@ -35,7 +35,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     const totalAmount = calcTotalAmount(Number(productInfo.totalPrice));
     const charges = totalAmount - productInfo.totalPrice;
     const amountInKobo = totalAmount * 100;
-    const timeout = 2000;
+    const timeout = 3000;
     /////////////////////////////////////////////////////////////
 
 
@@ -58,7 +58,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
 
         const fieldsAreFilled =
           celebrant !== "" &&
-          description !== "" &&
           address !== "" &&
           country !== "" &&
           state !== "" &&
@@ -128,6 +127,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             handleReset();
             setIsLoading()
             const res = await fetch(`https://test.tajify.com/api/giftings/payment-verification/${reference}/${charges}`, {
+            // const res = await fetch(`http://localhost:3010/api/giftings/payment-verification/${reference}/${charges}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -166,6 +166,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             if(wallet.walletBalance < productInfo.totalPrice) throw new Error('InSufficient funds, Why with card Instead');
 
             const res = await fetch('https://test.tajify.com/api/giftings/payment-wallet/', {
+            // const res = await fetch('http://localhost:3010/api/giftings/payment-wallet/', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -202,7 +203,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             handleReset();
             setIsLoading(true);
 
-            const res = await fetch('http://localhost:3010/api/giftings/create-gifting/', {
+            const res = await fetch('https://test.tajify.com/api/giftings/create-gifting/', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -232,7 +233,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 setMessage('');
                 setIsLoading(false);
                 handleCloseModal();
-            }, 2500);
+            }, 2000);
         } catch(err) {
             handleFailure(err.message)
             setIsLoading(false);
@@ -243,7 +244,8 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     async function handleUploadImg(formData, id) {
         try {
             formData.append('image', imageFile);
-            const res = await fetch(`http://localhost:3010/api/giftings/gifting-img/${id}`, {
+            const res = await fetch(`https://test.tajify.com/api/giftings/gifting-img/${id}`, {
+            // const res = await fetch(`http://localhost:3010/api/giftings/gifting-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -401,10 +403,9 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                             </> 
                         }
                     </p>
-
                 </div>
                 <div className='form__item'>
-                    <label htmlFor="checkbox-2" className="form__label">Pay With Card</label>
+                    <label htmlFor="checkbox-2" className="form__label">Pay From Bank</label>
                     <input type="checkbox" id='checkbox-2' className='form__check' checked={cardPay} onChange={(e) => { setCardPay(e.target.checked); setWalletPay(false); }} />
                 </div>
             </div>
@@ -413,9 +414,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             <div className="form__item">
                 {!validations && <button type="submit" className="form__submit btn" disabled style={{ cursor: 'not-allowed', opacity:'0.5' }}>Pay & Save Gifting</button>}
 
-
                 {(validations && cardPay) && (<PaystackButton className="form__submit btn" {...componentProps} />)} 
-
 
                 {(validations && walletPay) && <button type="submit" className="form__submit btn" >Pay & Save Gifting</button>}
             </div>

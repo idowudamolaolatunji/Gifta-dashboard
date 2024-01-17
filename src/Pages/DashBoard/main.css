@@ -1181,6 +1181,9 @@ span.validity::after {
 	display: flex;
 	flex-direction: column;
 }
+.list--container {
+	max-width: 72rem;
+}
 .wishlist--back-btn {
 	position: absolute;
 	padding: 1rem 2rem;
@@ -1299,7 +1302,8 @@ span.validity::after {
 	gap: 1.2rem;
 	padding: 1.6rem 1.8rem;
 	border-radius: 1rem;
-	border: 1.5px solid #ddd;
+	border: 1.4px solid #ddd;
+	border-left: 2.8px solid #bb0505;
 }
 .lists--item-top,
 .lists--item-bottom {
@@ -1322,7 +1326,7 @@ span.validity::after {
 	cursor: pointer;
 }
 .lists--content p {
-	font-size: 1.6rem;
+	font-size: 1.64rem;
 	font-weight: 500;
 	color: #bb0505;
 	line-height: 1.4;
@@ -1618,7 +1622,7 @@ span.validity::after {
 	display: flex;
 	flex-direction: column;
 	gap: 4.8rem;
-	width: 90rem;
+	max-width: 80rem;
 	margin: 0 auto;
 }
 .share--top {
@@ -1642,9 +1646,13 @@ span.validity::after {
 	color: #bb0505;
 	font-weight: 500;
 }
+/* .share--bottom .wish--title {
+	font-size: 2.8rem;
+	color: #444;
+} */
 .wish--title {
-	font-size: 1.8rem;
-	color: #bb0505;
+	font-size: 2rem;
+	/* color: #bb0505; */
 	font-weight: 500;
 }
 .top--details .top--info {
@@ -1934,20 +1942,37 @@ span */
 	gap: 2rem;
 }
 .wallet--button {
-	padding: 1.2rem 2rem;
+	padding: .8rem 1.2rem;
 	border-radius: .6rem;
-	background-color: #bb0505;
-	color: #fff;
+	color: #bb0505;
+	box-shadow: inset 0 0 0 .16rem #bb0505;
+	/* color: #fff; */
 	font-size: 1.45rem;
 	font-weight: 600;
 	cursor: pointer;
+
+	display: flex;
+	align-items: center;
+	gap: 1.2rem;
+	transition: all .35s;
+}
+.wallet--icon {
+	font-size: 1.6rem;
+	background-color: #bb0505;
+	color: #fff;
+	width: 2.4rem;
+	height: 2.4rem;
+	border-radius: 50%;
+}
+.wallet--button:hover {
+	transform: translateY(-.2rem);
 }
 .wallet--bottom {
     background-color: #fff;
-    box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, .1);
+    /* box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, .1); */
+	/* border: 1.4px solid #ddd; */
     padding: 2.4rem;
     border-radius: 1rem;
-	border: 1.4px solid #ddd;
 }
 .wallet--bottom span {
 	margin-bottom: 2.8rem;
@@ -1976,4 +2001,33 @@ span */
 .wallet--tab.tab--active {
     background-color: #bb0505;
     color: #fff;
+}
+
+
+/* =============================================== */
+/* =============================================== */
+.otp--btn {
+	color: #777;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status p {
+    display: inline-block;
+    padding: .8rem 1.4rem;
+    border-radius: .6rem;
+}
+.status--pending p {
+    background-color: #ffe0cfb7;
+    color: #ff9248;
+}
+.status--error p {
+    background-color: #ffb09cb7;
+    color: #ee2400;
+}
+.status--success p {
+    color: #008001;
+    background-color: #d7ecd1b7;
 }

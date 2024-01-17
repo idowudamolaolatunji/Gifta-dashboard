@@ -9,6 +9,7 @@ import Spinner from "../Components/Spinner";
 import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 
 import './auth.css';
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 function Login() {
 	const [email, setEmail] = useState("");
@@ -17,9 +18,14 @@ function Login() {
 	const [isError, setIsError] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [message, setMessage] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
 
 	const navigate = useNavigate();
 	const { user, handleChange } = useAuthContext();
+
+	function togglePasswordVisibility() {
+		setShowPassword(!showPassword);
+	  };
 
 	function handleReset() {
 		setIsError(false);
@@ -86,11 +92,15 @@ function Login() {
 
 	return (
 		<>
-			{isLoading && <Spinner />}
+			{isLoading && (
+				<div className='gifting--loader'>
+					<Spinner />
+				</div>
+			)}
 			<div className="auth__container">
 				<div className="auth__image--box">
 					<span>
-						<a className="auth__logo" href={`/`}>
+						<a className="auth__logo" href={'https://getgifta.com/'}>
 							<img src={giftaWhiteLogo} alt="logo" />
 						</a>
 
@@ -134,15 +144,30 @@ function Login() {
 								Password
 							</label>
 
-							<input
-								type="password"
-								id="Password"
-								name="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								className="form--input"
-								placeholder="Enter your password"
-							/>
+							<div className="form--input-box">
+
+								<input
+									// type="password"
+									type={showPassword ? "text" : "password"}
+									id="Password"
+									name="password"
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+									className="form--input"
+									placeholder="Enter your password"
+								/>
+								{showPassword ? (
+									<FaRegEye
+										onClick={togglePasswordVisibility}
+										className="password__icon"
+									/>
+									) : (
+									<FaRegEyeSlash
+										onClick={togglePasswordVisibility}
+										className="password__icon"
+									/>
+								)}
+							</div>
 						</div>
 
 						<div className="form--check">

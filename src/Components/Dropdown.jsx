@@ -6,38 +6,35 @@ import { useAuthContext } from '../Auth/context/AuthContext';
 
 
 function Dropdown() {
-    const [isLoading, setIsLoading] = useState(false);
     const { logout } = useAuthContext();
 
-  function handleLogout () {
-        setIsLoading(true);
-		logout();
+    function handleLogout() {
+        logout();
 
-		// logging out
-		setTimeout(() => {
-            setIsLoading(false);
-            window.location.href = '/'
-		}, 500)
-	}
+        setTimeout(() => {
+            // window.location.href = '/login'
+            window.location.assign('/login')
+        }, 350)
+    }
 
-  return (
-    <div className='dropdown--figure'>
-        <ul>
-            <li onClick={'/dashboard/profile'}>
-                <CiUser />
-                <p>Account</p>
-            </li>
-            <li onClick={'/dashboard/plans'}>
-                <CiViewList />
-                <p>Plan</p>
-            </li>
-            <li>
-                <CiLogout />
-                <p onClick={handleLogout}>Logout</p>
-            </li>
-        </ul>
-    </div>
-  )
+    return (
+        <div className='dropdown--figure'>
+            <ul>
+                {/* <li onClick={'/dashboard/profile'}>
+                    <CiUser />
+                    <p>Account</p>
+                </li> */}
+                <li onClick={'/dashboard/plans'}>
+                    <CiViewList />
+                    <p>Plan</p>
+                </li>
+                <li onClick={handleLogout}>
+                    <CiLogout />
+                    <p>Logout</p>
+                </li>
+            </ul>
+        </div>
+    )
 }
 
 export default Dropdown
