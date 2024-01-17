@@ -160,7 +160,7 @@
 /* ///////////////////////////////////////////////////// */
 .hero__section {
 	padding: 13rem 0 5.4rem;
-	background-image: linear-gradient(to top, #bb050552, #bb050552),
+	background-image: linear-gradient(to top, rgba(187, 5, 5, 0.336), rgba(187, 5, 5, 0.336)),
 		url("../../Assets/images/4cda0f90-59d8-11ec-9fdf-a6153228cb9b.jpeg");
 	background-position: top;
 	background-repeat: no-repeat;
@@ -393,6 +393,45 @@ package--date */
 	transform: translateY(-0.4rem) scale(1.05);
 }
 
+.category--figure-m {
+	display: none;
+}
+.category--figure.category--figure-mobile {
+	position: static;
+	display: grid;
+	grid-template-columns: 10rem 1fr;
+	gap: 1.8rem;
+	height: 12.4rem;
+	padding: 1.2rem;
+	background-color: #eee;
+}
+.category--figure-mobile figcaption {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: .6rem;
+}
+.category--figure-mobile .category--image {
+	border-radius: .6rem;
+	height: 10rem;
+}
+.category--figure-mobile .category--heading {
+	font-size: 1.8rem;
+	font-weight: 500;
+}
+.category--figure-mobile .category--text {
+	font-size: 1.4rem;
+	line-height: 1.4;
+	margin-bottom: .4rem;
+}
+.category--figure-mobile .category--rating {
+	font-size: 1.4rem;
+	display: flex;
+	align-items: center;
+	gap: .4rem;
+}
+
+
 /* ====================================== */
 .category--page {
 	display: grid;
@@ -512,6 +551,8 @@ package--date */
 	align-items: center;
 	gap: 4.8rem;
 	margin-top: 1.2rem;
+	width: 100%;
+	justify-content: space-between;
 }
 .product--price {
 	font-size: 1.2rem;
@@ -1036,6 +1077,9 @@ span.validity::after {
 	border: none;
 	cursor: pointer;
 }
+.wishlist--figure.w-figure--mobile {
+	display: none;
+}
 .wishlist--figure {
 	grid-template-columns: 14rem 1fr;
 	display: grid;
@@ -1170,6 +1214,25 @@ span.validity::after {
 }
 .w-figure--action-box ul li:hover {
 	color: #bb0505;
+}
+.dashnoard--add-btn {
+	width: 4rem;
+	height: 4rem;
+	border-radius: 50%;
+	background-color: #bb0505;
+	color: #fff;
+	font-size: 2.8rem;
+	font-weight: 600;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	position: fixed;
+	bottom: 4rem;
+	right: 8%;
+
+	display: none;
 }
 
 /* ============= WISHLIST LISTS ============== */
@@ -1979,7 +2042,22 @@ span */
 }
 .wallet--heading {
     font-size: 2rem;
-	margin-bottom: 2.8rem;
+}
+.wallet--head-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 3.4rem;
+}
+.wallet--tabs-mobile {
+	padding: 1.2rem;
+	border-radius: .8rem;
+	border: 1.4px solid #eee;
+	display: none;
+}
+.wallet--tabs-mobile:focus {
+	outline: none;
+	border-color: #bb0505;
 }
 .wallet--tabs {
     display: flex;

@@ -10,6 +10,8 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 
 import './auth.css';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import GiftLoader from '../Assets/images/gifta-loader.gif';
+
 
 function Login() {
 	const [email, setEmail] = useState("");
@@ -94,7 +96,7 @@ function Login() {
 		<>
 			{isLoading && (
 				<div className='gifting--loader'>
-					<Spinner />
+					<img src={GiftLoader} alt='loader' />
 				</div>
 			)}
 			<div className="auth__container">

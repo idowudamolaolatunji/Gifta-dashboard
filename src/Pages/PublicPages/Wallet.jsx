@@ -90,7 +90,7 @@ function Wallet() {
     const wishes = transactions.filter(transaction => transaction.purpose === 'wishes');
 
     const navigate = useNavigate();
-  
+
 
     let charges;
     function calcTotalAmount(amount) {
@@ -156,7 +156,7 @@ function Wallet() {
             if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
             console.log(res, data)
-            if(data.success !== 'success') {
+            if (data.success !== 'success') {
                 throw new Error(data?.message);
             }
             setIsSuccess(true);
@@ -208,7 +208,6 @@ function Wallet() {
         <>
             {isLoading && (
                 <div className='gifting--loader'>
-                    {/* <Spinner /> */}
                     <img src={GiftLoader} alt='loader' />
                 </div>
             )}
@@ -238,7 +237,20 @@ function Wallet() {
 
                     <div className="wallet--bottom">
                         <span>
-                            <h3 className="wallet--heading">Transactions History</h3>
+                            <div className="wallet--head-title">
+                                <h3 className="wallet--heading">Transactions History</h3>
+                                <select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
+                                    <option value="deposit">Deposit</option>
+                                    <option value="reminder">Reminder</option>
+                                    <option value="giftings">Giftings</option>
+                                    <option value="wishes">Wishes</option>
+                                    <option value="withdrawal">Withdrawal</option>
+                                    <option value="subscription">Subscription</option>
+                                </select>
+                            </div>
+
+
+
                             <div className="wallet--tabs">
                                 <span className={`wallet--tab ${activeTab === "deposit" && "tab--active"}`} onClick={() => { setActiveTab("deposit") }}>Deposit</span>
                                 <span className={`wallet--tab ${activeTab === "reminder" && "tab--active"}`} onClick={() => { setActiveTab("reminder") }}>Reminder</span>
@@ -306,8 +318,16 @@ function Wallet() {
             )}
 
             {(showWithdrawalModal) && (
-                <DashboardModal setShowDashboardModal={setShowWithdrawalModal} customStyle={customWithdrawalModalStyle} title={'Make a Withdrawal 💰'}>
-                        <span className='modal--info'>Withdrawals are final. Confirm your details and available balance before initiating. Proceed with caution.!</span>
+                <DashboardModal setShowDashboardModal={setShowWithdrawalModal} customStyle={customWithdrawalModalStyle} title={
+                    <>
+                        Make a Withdrawal{' '}
+                        <picture style={{ transform: 'translateY(-.6rem)' }}>
+                            <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f911/512.webp" type="image/webp" />
+                            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f911/512.gif" alt="🤑" width="32" height="32" />
+                        </picture>
+                    </>
+                }>
+                    <span className='modal--info'>Withdrawals are final. Confirm your details and available balance before initiating. Proceed with caution.!</span>
                     <form className="pay--form">
 
                         <div className="form--item">

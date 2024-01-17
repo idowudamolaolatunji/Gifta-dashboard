@@ -12,6 +12,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import Alert from "../../Components/Alert";
 import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
+import SkelentonOne from "../../Components/SkelentonOne";
 
 const customStyle = {
 	minHeight: "auto",
@@ -30,18 +31,18 @@ function Reminders() {
 	const [showCompleteModal, setShowCompleteModal] = useState(false);
 	const [showPostponeModal, setShowPostponeModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
- 	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 	const [isLoadingImg, setIsLoadingImg] = useState(false);
 	const [reminders, setReminders] = useState([]);
 	const [helpReset, setHelpReset] = useState(false);
-	const [reminderId , setReminderId] = useState(null)
+	const [reminderId, setReminderId] = useState(null)
 
 	const [isError, setIsError] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [message, setMessage] = useState('');
+	const [isSuccess, setIsSuccess] = useState(false);
+	const [message, setMessage] = useState('');
 
 	const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
+	const [time, setTime] = useState('');
 
 	const { user, token } = useAuthContext();
 
@@ -58,13 +59,13 @@ function Reminders() {
 		setShowDeleteModal(true);
 		setReminderId(id);
 	}
-	
+
 	function handlePostponeModal(id) {
 		handleResetId();
 		setShowPostponeModal(true);
 		setReminderId(id);
 	}
-	
+
 	function handleCompleteModal(id) {
 		handleResetId();
 		setShowCompleteModal(true);
@@ -73,20 +74,20 @@ function Reminders() {
 
 	// HANDLE FETCH STATE RESET
 	function handleReset() {
-        setIsError(false);
-        setMessage('')
-        setIsSuccess(false);
-    }
+		setIsError(false);
+		setMessage('')
+		setIsSuccess(false);
+	}
 
-    // HANDLE ON FETCH FAILURE
-    function handleFailure(mess) {
-        setIsError(true);
-        setMessage(mess)
-        setTimeout(() => {
-            setIsError(false);
-            setMessage('')
-        }, 3000);
-    }
+	// HANDLE ON FETCH FAILURE
+	function handleFailure(mess) {
+		setIsError(true);
+		setMessage(mess)
+		setTimeout(() => {
+			setIsError(false);
+			setMessage('')
+		}, 3000);
+	}
 
 	async function handleCompleteReminder(reminderId) {
 		try {
@@ -101,20 +102,20 @@ function Reminders() {
 				}
 			})
 			console.log(res);
-			if(!res.ok) throw new Error('Something went wrong!');
+			if (!res.ok) throw new Error('Something went wrong!');
 			const data = await res.json();
-			if(data.status !== "status") {
+			if (data.status !== "status") {
 				throw new Error(data.message)
 			}
 			setIsSuccess(true);
-            setMessage(data.message)
-            setTimeout(() => {
-                setIsSuccess(false);
-                setMessage('');
-                setHelpReset(true);
-                setShowCompleteModal(false);
-            }, 2000);
-		} catch(err) {
+			setMessage(data.message)
+			setTimeout(() => {
+				setIsSuccess(false);
+				setMessage('');
+				setHelpReset(true);
+				setShowCompleteModal(false);
+			}, 2000);
+		} catch (err) {
 			handleFailure(err.message);
 		} finally {
 			setIsLoadingImg(false);
@@ -134,25 +135,25 @@ function Reminders() {
 				}
 			});
 			console.log(res);
-			if(!res.ok) throw new Error('Something went wrong!');
+			if (!res.ok) throw new Error('Something went wrong!');
 			const data = await res.json();
-			if(data.status !== "status") {
+			if (data.status !== "status") {
 				throw new Error(data.message)
 			}
 			setIsSuccess(true);
-            setMessage(data.message)
-            setTimeout(() => {
-                setIsSuccess(false);
-                setMessage('');
-                setHelpReset(true);
-                setShowDeleteModal(false);
-            }, 2000);
+			setMessage(data.message)
+			setTimeout(() => {
+				setIsSuccess(false);
+				setMessage('');
+				setHelpReset(true);
+				setShowDeleteModal(false);
+			}, 2000);
 
-		} catch(err) {
+		} catch (err) {
 			handleFailure(err.message);
 		} finally {
 			setIsLoadingImg(false);
-		}		
+		}
 	}
 
 	async function handlePostponeReminder(reminderId) {
@@ -168,47 +169,47 @@ function Reminders() {
 				}
 			});
 			console.log(res);
-			if(!res.ok) throw new Error('Something went wrong!');
+			if (!res.ok) throw new Error('Something went wrong!');
 			const data = await res.json();
-			if(data.status !== "status") {
+			if (data.status !== "status") {
 				throw new Error(data.message)
 			}
 			setIsSuccess(true);
-            setMessage(data.message)
-            setTimeout(() => {
-                setIsSuccess(false);
-                setMessage('');
-                setHelpReset(true);
-                setShowPostponeModal(false);
-            }, 2000);
-		} catch(err) {
+			setMessage(data.message)
+			setTimeout(() => {
+				setIsSuccess(false);
+				setMessage('');
+				setHelpReset(true);
+				setShowPostponeModal(false);
+			}, 2000);
+		} catch (err) {
 			handleFailure(err.message);
 		} finally {
 			setIsLoadingImg(false);
 		}
 	}
 
-	
-	useEffect(function() {
+
+	useEffect(function () {
 		async function handleFetchReminders() {
 			try {
 				setIsLoading(true);
 				const res = await fetch(`https://test.tajify.com/api/reminders/my-reminders`, {
-					method: 'GET', 
+					method: 'GET',
 					headers: {
 						"Content-Type": 'application/json',
 						Authorization: `Bearer ${token}`
 					}
 				});
-				if(!res.ok) {
+				if (!res.ok) {
 					throw new Error('Something went wrong!');
 				}
 				const data = await res.json();
-				if(data.status !== 'success') {
+				if (data.status !== 'success') {
 					throw new Error(data.message)
 				}
 				setReminders(data.data.reminders)
-			} catch(err) {
+			} catch (err) {
 				console.log(err.message)
 			} finally {
 				setIsLoading(false)
@@ -230,37 +231,51 @@ function Reminders() {
 
 			<section className="section reminder__section">
 				<div className="section__container">
-					{isLoading && (<SkelentonFour />)}
+					{isLoading && (
+						<>
+							<div className='category--spinner-destop'>
+								<SkelentonFour />
+							</div>
+
+							<div className='category--spinner-mobile'>
+								<SkelentonOne height={'12rem'} />
+								<SkelentonOne height={'12rem'} />
+							</div>
+						</>
+					)}
 
 					{(reminders && reminders.length > 0) ? (
-						<div className="reminder__grid">
-							<button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button>
-							{reminders?.map(reminder => (
-								<figure key={reminder._id} className="reminder--figure">
-									<p className="reminder--text">{reminder.title}.</p>
-									<span className="figure--bottom">
-										<span className="reminder--others">
-											<span className="reminder--date">
-												<p>Date</p>
-												{expectedDateFormatter(`${reminder.reminderDate}`)}
+						<>
+							<h3 className="section__heading" style={{ marginBottom: '2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations!</h3>
+							<div className="reminder__grid">
+								<button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button>
+								{reminders?.map(reminder => (
+									<figure key={reminder._id} className="reminder--figure">
+										<p className="reminder--text">{reminder.title}.</p>
+										<span className="figure--bottom">
+											<span className="reminder--others">
+												<span className="reminder--date">
+													<p>Date</p>
+													{expectedDateFormatter(`${reminder.reminderDate}`)}
+												</span>
+												<RiDeleteBin5Line className="reminder--delete" onClick={() => handleDeleteModal(reminder._id)} />
 											</span>
-											<RiDeleteBin5Line className="reminder--delete" onClick={() => handleDeleteModal(reminder._id)} />
+											<span className="reminder--tasks">
+												<span onClick={() => handleCompleteModal(reminder._id)}>Mark As Completed</span>
+												<span onClick={() => handlePostponeModal(reminder._id)}>Postpone</span>
+											</span>
 										</span>
-										<span className="reminder--tasks">
-											<span onClick={() => handleCompleteModal(reminder._id)}>Mark As Completed</span>
-											<span onClick={() => handlePostponeModal(reminder._id)}>Postpone</span>
-										</span>
-									</span>
-								</figure>
-							))}
-						</div>
-					) : (!isLoading) && (
-						<div className="reminder--banner banner">
-							<h3 className="section__heading">Lift us remind you of your <span style={{ color: '#bb0505' }}>special dates!</span></h3>
+									</figure>
+								))}
+							</div>
+						</>
+						) : (!isLoading) && (
+							<div className="reminder--banner banner">
+								<h3 className="section__heading">Lift us remind you of your <span style={{ color: '#bb0505' }}>special dates!</span></h3>
 
-							<img src={ReminderImg} alt={ReminderImg}  />
-							<button type="button" onClick={handleShowModal}>Set a Reminder</button>
-						</div>
+								<img src={ReminderImg} alt={ReminderImg} />
+								<button type="button" onClick={handleShowModal}>Set a Reminder</button>
+							</div>
 					)}
 
 				</div>
@@ -275,7 +290,7 @@ function Reminders() {
 			{showCompleteModal && (
 				<DashboardModal customStyle={customStyleOthers} title={'Mark Reminder as Completed'} setShowDashboardModal={setShowCompleteModal}>
 					<p className='modal--text-2'>You want to Complete this Reminder!</p>
-                	<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
+					<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
 					<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
 						<button type='button' className='cancel--btn' onClick={() => setShowCompleteModal(false)}>Cancel</button>
 						<button type='submit' className='set--btn' onClick={() => handleCompleteReminder(reminderId)}>Complete Reminder</button>
@@ -286,7 +301,7 @@ function Reminders() {
 			{showPostponeModal && (
 				<DashboardModal customStyle={customStyleOthers} title={'Postpone Reminder'} setShowDashboardModal={setShowPostponeModal}>
 					<p className='modal--text-2'>Are you sure you want to postpone this reminder?</p>
-                	<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
+					<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
 					<form className="reminder--form">
 						<div className="reminder--flex-2">
 							<div className="form--item">
@@ -309,7 +324,7 @@ function Reminders() {
 			{showDeleteModal && (
 				<DashboardModal customStyle={customStyleOthers} title={'Delete This Reminder!'} setShowDashboardModal={setShowDeleteModal}>
 					<p className='modal--text'>Are you sure you want to delete this Reminder?</p>
-                	<span className='modal--info'>Note that everything relating data to this reminder would also be deleted including transaction history!</span>
+					<span className='modal--info'>Note that everything relating data to this reminder would also be deleted including transaction history!</span>
 					<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
 						<button type='button' className='cancel--btn' onClick={() => setShowDeleteModal(false)}>Cancel</button>
 						<button type='submit' className='set--btn' onClick={() => handleDeleteReminder(reminderId)}>Delete</button>

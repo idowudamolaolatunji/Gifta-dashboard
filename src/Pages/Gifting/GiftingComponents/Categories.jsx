@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import SkelentonThree from '../../../Components/SkelentonThree';
+import { CiStar } from 'react-icons/ci';
+import SkelentonOne from '../../../Components/SkelentonOne';
 
 function Categories() {
     const [isLoading, setIsLoading] = useState(false);
@@ -41,20 +43,40 @@ function Categories() {
     <>
     {isLoading && (
         <>
-            <SkelentonThree />
-            <SkelentonThree />
+            <div className='category--spinner-destop'>
+                <SkelentonThree />
+                <SkelentonThree />
+            </div>
+
+            <div className='category--spinner-mobile'>
+                <SkelentonOne />
+                <SkelentonOne />
+            </div>
         </>
     )}
     <div className='gift__categories'>
         {categories &&
             categories.map(category => {
                 return (
-                    <Link to={`/dashboard/marketplace/${category.categoryName}`}>
-                        <figure className='category--figure' key={category._id}>
-                            <img className='category--image' src={category.categoryImage} alt={category.categoryName} />
-                            <div className="category--title">{category.categoryName}</div>
-                        </figure>
-                    </Link>
+                    <>
+                        <Link to={`/dashboard/marketplace/${category.categoryName}`}>
+                            <figure className='category--figure' key={category._id}>
+                                <img className='category--image' src={category.categoryImage} alt={category.categoryName} />
+                                <div className="category--title">{category.categoryName}</div>
+                            </figure>
+                        </Link>
+
+                        <Link className='category--figure-m' to={`/dashboard/marketplace/${category.categoryName}`}>
+                            <figure className='category--figure category--figure-mobile' key={category._id}>
+                                <img className='category--image' src={category.categoryImage} alt={category.categoryName} />
+                                <figcaption>
+                                    <p className="category--heading">{category.categoryName}</p>
+                                    <span className="category--text">Get all your {categories.categoryName} present, for your loved ones!</span>
+                                    <div className="category--rating">4.5 <CiStar style={{ color: '#bb0505' }} /></div>
+                                </figcaption>
+                            </figure>
+                        </Link>
+                    </>
                 );
             }) 
         }

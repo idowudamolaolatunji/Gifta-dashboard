@@ -19,6 +19,7 @@ import SkelentonOne from "../../Components/SkelentonOne";
 import SkelentonCard from "../../Components/SkelentonCard";
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 import DeleteModalUi from './WishlistsComponents/DeleteModalUi'
+import { FiPlus } from "react-icons/fi";
 
 
 const customStyle = {
@@ -131,7 +132,7 @@ function Wishlists() {
 			<DashHeader />
 			<DashTabs />
 			<section className="wishlist__section section">
-				<div className="section__container">
+				<div className="section__container" style={{ position: 'relative' }}>
 					{/* {isLoading && (<SkelentonTwo />)} */}
 					{isLoading &&  (
 						<div className='wishlist--grid' style={{ columnGap: '8rem' }}>
@@ -142,56 +143,78 @@ function Wishlists() {
 					)}
 
 					{(wishLists && wishLists.length > 0) ? (
-						<div className='wishlist--grid'>
-							<button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button>
-							{wishLists.map(wishList => (
-								<figure key={wishList._id} className="wishlist--figure w-figure-action">
-									<span className="w-figure-category">{wishList.category}</span>
-									<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
-										<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
-									</a>
-									<figcaption className="w-figure--details">
-										<div className="w-figure--head">
-											<span className="w-figure--title">{wishList.name}</span>
-											<div className="w-figure--icons">
-												{(user.isPremium || (!user.isPremium && wishList?.wishes.length < 10)) && (
-													<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
-														<PiPlusBold className='figure--icon' onClick={() => localStorage.setItem('wishNewModal', JSON.stringify(true)) }/>
-													</Link>
-												)}
-												<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://getgifta.com/shared/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
-												<IoEllipsisVerticalSharp className="figure--icon" onClick={() => handleActionInfo(wishList._id)} />
-												{(showActionInfo && selectedId === wishList._id) && (
-													<div className="w-figure--action-box">
-														<ul>
-															<li onClick={() => handleSelectedWishList(wishList)}>Edit</li>
-															<li onClick={() => setShowDeleteModal(true)}>Delete</li>
-														</ul>
+						<>
+							<div className='wishlist--grid'>
+								<button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button>
+								{wishLists.map(wishList => (
+									<>
+										<figure key={wishList._id} className="wishlist--figure w-figure-action">
+											<span className="w-figure-category">{wishList.category}</span>
+											<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
+												<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
+											</a>
+											<figcaption className="w-figure--details">
+												<div className="w-figure--head">
+													<span className="w-figure--title">{wishList.name}</span>
+													<div className="w-figure--icons">
+														{(user.isPremium || (!user.isPremium && wishList?.wishes.length < 10)) && (
+															<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
+																<PiPlusBold className='figure--icon' onClick={() => localStorage.setItem('wishNewModal', JSON.stringify(true)) }/>
+															</Link>
+														)}
+														<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://getgifta.com/shared/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
+														<IoEllipsisVerticalSharp className="figure--icon" onClick={() => handleActionInfo(wishList._id)} />
+														{(showActionInfo && selectedId === wishList._id) && (
+															<div className="w-figure--action-box">
+																<ul>
+																	<li onClick={() => handleSelectedWishList(wishList)}>Edit</li>
+																	<li onClick={() => setShowDeleteModal(true)}>Delete</li>
+																</ul>
+															</div>
+														)}
 													</div>
+												</div>
+												{wishList.wishes.length === 0 ? (
+													<p className="no-wish-item">You've no wish yet!</p>
+												) : (
+													<ul className="wish--list">
+														{wishList.wishes.slice(0, 5).map(wishItem => (
+															<li className="wish--item">{wishItem.wish}</li>
+														))}
+													</ul>
 												)}
-											</div>
-										</div>
-										{wishList.wishes.length === 0 ? (
-											<p className="no-wish-item">You've no wish yet!</p>
-										) : (
-											<ul className="wish--list">
-												{wishList.wishes.slice(0, 5).map(wishItem => (
-													<li className="wish--item">{wishItem.wish}</li>
-												))}
-											</ul>
-										)}
-										<div className="w-figure--info">
-											{wishList?.wishes.length >= 1 && (
-												<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
-													<span className="w-figure--view-more">View All ({wishList.wishes.length})</span>
-												</Link>
-											)}
-											<span className="wish--date">{dateConverter(wishList.updatedAt)}</span>
-										</div>
-									</figcaption>
-								</figure>
-							))}
-						</div>
+												<div className="w-figure--info">
+													{wishList?.wishes.length >= 1 && (
+														<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
+															<span className="w-figure--view-more">View All ({wishList.wishes.length})</span>
+														</Link>
+													)}
+													<span className="wish--date">{dateConverter(wishList.updatedAt)}</span>
+												</div>
+											</figcaption>
+										</figure>
+
+
+										{/*  */}
+										<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
+											<figure key={wishList._id} className="wishlist--figure w-figure-action w-figure--mobile">
+												<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
+													<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
+												</a>
+												<figcaption className="w-figure--details">
+													<div className="w-figure--head">
+														<span className="w-figure--title">{wishList.name}</span>
+													</div>
+													<li className="w-figure-category">{wishList.category}</li>
+												</figcaption>
+											</figure>
+										</Link>
+									</>
+								))}
+							</div>
+
+							<div className="dashnoard--add-btn"><FiPlus /></div>
+						</>
 					) : (wishLists && wishLists.length === 0 && !isLoading) && (
 						<div className="wishlist--banner banner">
 							<h3 className="section__heading">

@@ -81,7 +81,10 @@ function SharedWishlist({}) {
         amount: amountInKobo,
         publicKey,
         text: "Pay!",
-        onSuccess: ({ reference }) => handlePayment(reference),
+        onSuccess: ({ reference }) => {
+            handlePayment(reference)
+            setShowModal(false);
+        },
         onClose: () => handleFailure('Transaction Not Completed!'),
     };
 
@@ -107,12 +110,12 @@ function SharedWishlist({}) {
         setIsSuccess(false);
     }
 
-    console.log({ wishListID: wishList._id, wishID: selectedWishId, userID: wishList?.user?._id })
+    // console.log({ wishListID: wishList._id, wishID: selectedWishId, userID: wishList?.user?._id })
 
     async function handlePayment(reference) {
         try {
             handleReset();
-            setIsLoading(true);
+            setIsLoadingPay(true);
             setHelpReset(false);
             // const res = await fetch(`http://localhost:3010/api/wishlists/payment-verification/${reference}/${charges}`, {
             const res = await fetch(`https://test.tajify.com/api/wishlists/payment-verification/${reference}/${charges}`, {
@@ -126,29 +129,28 @@ function SharedWishlist({}) {
             if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
             console.log(res, data)
-            if(data.success !== 'success') {
+            if(data.success === 'fail') {
                 throw new Error(data?.message);
             }
             setIsSuccess(true);
             setMessage("Thank you for you payment!");
             setTimeout(() => {
+                setHelpReset(true);
                 setIsSuccess(false);
                 setMessage("");
-                setShowModal(false)
-                setHelpReset(true);
             }, 2000);
 
         } catch (err) {
             handleFailure(err.message)
         } finally {
-            setIsLoading(false);
+            setIsLoadingPay(false);
         }
     }
 
     useEffect(function() {
         async function handleFetchList() {
             try {
-                setIsLoading(true);
+                setIsLoadingPay(true);
 
                 const res = await fetch(`https://test.tajify.com/api/wishlists/shared-wishlist/${shareableUrl}`, {
                 // const res = await fetch(`http://localhost:3010/api/wishlists/shared-wishlist/${shareableUrl}`, {
@@ -164,7 +166,7 @@ function SharedWishlist({}) {
             } catch(err) {
                 console.log(err);
             } finally {
-                setIsLoading(false)
+                setIsLoadingPay(false)
             }
         }
         handleFetchList();
@@ -173,7 +175,6 @@ function SharedWishlist({}) {
     useEffect(function() {
         async function handleFetchWishes() {
             try {
-
                 // const wishesRes = await fetch(`http://localhost:3010/api/wishlists/all-wishes/${wishList._id}`, {
                 const wishesRes = await fetch(`https://test.tajify.com/api/wishlists/all-wishes/${wishList._id}`, {
                     method: 'GET',
@@ -202,11 +203,11 @@ function SharedWishlist({}) {
         <section className='section section__shareable'>
             <div className="section__container">
                 <div className="wishlish--share">
-                    {/* {isLoadingPay && (
+                    {isLoadingPay && (
                         <div className='gifting--loader'>
                             <Spinner />
                         </div>
-                    )} */}
+                    )}
                     {isLoading && (<SkelentonCard />)}
                     {(wishList && !isLoading) && (
                         <div className="share--top">
@@ -215,8 +216,8 @@ function SharedWishlist({}) {
                                 <p className="wishlist--title">{wishList.name}.</p>
                                 <span className='top--info'>
                                     <span>Contributors <TbUsersGroup />: <p>{wishList?.contributors || 0}</p></span>
-                                    <span>Wishlist subtotal<GiMoneyStack />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amount, 0))}</p></span>
-                                    <span>Accoumulated amount<GiTakeMyMoney />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amountPaid, 0))}</p></span>
+                                    <span>Wishes subtotal<GiMoneyStack />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amount, 0))}</p></span>
+                                    <span>Accoumulated <GiTakeMyMoney />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amountPaid, 0))}</p></span>
                                 </span>
                                 {/* <span className="top--insight">
                                     <span>date</span>
@@ -236,7 +237,6 @@ function SharedWishlist({}) {
                                 <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
                                     <span className='lists--item-top'>
                                         <span className='lists--content'>
-                                            {/* <span style={{ border: 'none' }}>{i + 1}.</span> */}
                                             <p>{wishItem.wish}</p>
                                         </span>
                                         <div className='lists--actions'>

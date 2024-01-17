@@ -1,116 +1,334 @@
-
-
-
-
-
-/* ======================================= */
-/* SHARED WISHLIST PAGE */
-/* ======================================= */
 /* 650px === 65rem === 40.625em */
 @media screen and (max-width: 40.625em) {
-    html {
-        font-size: 53%;
-    }
-    .wishlist--title {
-        color: #fff;
-    }
-    .share--top {
-        position: relative;
-        display: block;
-        grid-template-columns: 1fr !important;
-        width: 100%;
-    }
-    .wishlish--share .share--top img {
-        width: 100%;
-        height: 30rem;
-        border-radius: 0;
-        object-fit: cover;
-    }
-    .share--top::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5));
-        border-radius: 0;
-    }
-    .share--top .top--details {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        
-        display: flex;
-        align-items: center;
-        color: #fff;
-        z-index: 50;
-        max-width: 80%;
-    }
-    .share--top .progress--bar {
-        height: 1.2rem;
-        position: relative;
-        max-width: 90%;
-        margin: 0 auto;
-    }
-    .share--top .progress--bar .progress {
-        height: 1.2rem;
-        position: absolute;
-    }
-    .share--top .progress--figure {
-        color: #fff;
-        margin-top: 1.8rem;
-    }
-    .share--bottom .lists--item-top,
-    .share--bottom .lists--item-bottom {
-        gap: 2rem;
-        display: grid;
-    }
-    .share--bottom .lists--item-top {
-        grid-template-columns: 1fr 8.4rem;
-    }
-    .share--bottom .lists--item-bottom {
-        grid-template-columns: 1fr 11rem;
-    }
-    .lists--item-bottom .lists--insight svg {
-        color: #bb0505;
-    }
+	html {
+		font-size: 53%;
+	}
+
+	/* ======================================= */
+	/* SHARED WISHLIST PAGE */
+	/* ======================================= */
+	.wishlish--share .wishlist--title {
+		color: #fff;
+	}
+	.share--top {
+		position: relative;
+		display: block;
+		grid-template-columns: 1fr !important;
+		width: 100%;
+	}
+	.wishlish--share .share--top img {
+		width: 100%;
+		height: 30rem;
+		border-radius: 0;
+		object-fit: cover;
+	}
+	.share--top::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+		border-radius: 0;
+	}
+	.share--top .top--details {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100%;
+
+		display: flex;
+		align-items: center;
+		color: #fff;
+		z-index: 50;
+		max-width: 80%;
+	}
+	.share--top .progress--bar {
+		height: 1.2rem;
+		position: relative;
+		max-width: 90%;
+		margin: 0 auto;
+	}
+	.share--top .progress--bar .progress {
+		height: 1.2rem;
+		position: absolute;
+	}
+	.share--top .progress--figure {
+		color: #fff;
+		margin-top: 1.8rem;
+	}
+	.share--bottom .lists--item-top,
+	.share--bottom .lists--item-bottom {
+		gap: 2rem;
+		display: grid;
+	}
+	.share--bottom .lists--item-top {
+		grid-template-columns: 1fr 8.4rem;
+	}
+	.share--bottom .lists--item-bottom {
+		grid-template-columns: 1fr 11rem;
+	}
+	.lists--item-bottom .lists--insight svg {
+		color: #bb0505;
+	}
+
+	/* ======================================= */
+	/* WALLET PAGE */
+	/* ======================================= */
+	.wallet--top {
+		margin-top: 4.8rem;
+	}
+	.wallet--tabs {
+		display: none !important;
+	}
+	.wallet--tabs-mobile {
+		display: block;
+	}
+	.modal .form--flex {
+		gap: 2.4rem;
+		width: 100%;
+
+		display: flex;
+		flex-direction: column;
+		gap: 1.2rem;
+	}
 }
 
-
 @media screen and (max-width: 28.125em) {
-    .dashboard__header .profile__user {
+	html {
+		font-size: 52%;
+	}
+    
+    /* TEMPS */
+    .header__box h1 {
+        font-size: 2.6rem;
+    }
+    .hero__section {
+        padding: 8.6rem 0 2.8rem;
+    }
+    .dashnoard--add-btn {
+		display: flex;
+	}
+	.dashboard__tabs {
+		/* display: none; */
+        max-width: 100%;
+        overflow-x: auto;
+        height: 7rem;
+        padding: 1rem;
+	}
+
+
+	/* ========================================== */
+	/* AUTH PAGES */
+	/* ========================================== */
+	.auth__container {
+		grid-template-columns: 1fr;
+		height: auto;
+	}
+	.auth__image--box {
+		padding: 2rem;
+		min-height: 16rem;
+		position: relative;
+	}
+	.auth__image--box::after {
+		content: "";
+		display: inline-block;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5));
+		top: 0%;
+		left: 0;
+		position: absolute;
+	}
+	.auth__image--box span {
+		margin-top: 0;
+		z-index: 10;
+	}
+	.auth__logo {
+		margin-bottom: 1.8rem;
+	}
+	.auth__logo img {
+		height: 6.2rem;
+	}
+	.login--auth {
+		padding: 6.2rem 2.8rem;
+		width: 100%;
+	}
+	.signup--auth {
+		padding: 4.2rem 2.8rem;
+		max-width: 100%;
+	}
+	.auth__container .form--input {
+		font-size: 1.4rem;
+	}
+	.auth__container .form--flex {
+		gap: 2.4rem;
+
+		display: flex;
+		flex-direction: column;
+		gap: 1.8rem;
+	}
+	.auth__container .form--check {
+		align-items: flex-start;
+	}
+	.auth__container .form--content {
+		margin-top: -0.24rem;
+	}
+
+	/* ======================================= */
+	/* SHARED WISHLIST PAGE */
+	/* ======================================= */
+	.dashboard__header .profile__user {
+		display: none;
+	}
+	.modal {
+		width: 90% !important;
+	}
+	.modal .form--input {
+		font-size: 1.4rem;
+	}
+	.top--info span {
+		font-weight: 600;
+	}
+	.wishlish--share .wishlist--title {
+		font-size: 2.8rem;
+		text-align: left;
+	}
+	.lists--item-top .lists--content p {
+		font-size: 1.5rem;
+	}
+	.wishlish--share .share--bottom {
+		max-width: 100%;
+		width: 100%;
+	}
+	.share--top .top--details {
+		max-width: 90%;
+		align-items: flex-start;
+	}
+	.share--top .progress--bar {
+		max-width: 100%;
+	}
+	.lists--item-bottom .lists--insight p {
+		font-size: 1rem;
+		font-weight: 500;
+	}
+	.share--bottom .lists--actions {
+		justify-content: flex-start;
+	}
+	.lists--item-bottom .progress--figure p {
+		font-size: 1rem;
+	}
+
+	/* ======================================= */
+	/* WALLETS PAGE */
+	/* ======================================= */
+	.wallet--head-title {
+        flex-direction: column;
+		gap: 2rem;
+		align-items: flex-start;
+	}
+    
+    /* ======================================= */
+    /* CATEGORIES */
+    /* ======================================= */
+    .gift__categories {
+		grid-template-columns: 1fr;
+		gap: 1.4rem;
+		margin-top: -0.01rem;
+	}
+	.category--figure-m {
+		display: block;
+	}
+	.category--figure.category--figure-mobile {
+		display: grid;
+	}
+	.category--figure {
+		display: none;
+	}
+    .category--spinner-mobile {
+		display: block;
+	}
+	.category--spinner-destop {
+		display: none;
+	}
+
+
+    /* ======================================= */
+    /* CATEGORY PAGE */
+    /* ======================================= */
+    .category--page {
+        grid-template-columns: 1fr;
+    }
+    .page--sidebar {
         display: none;
     }
-    .modal {
-        width: 90% !important;
+    .page--grid {
+        grid-template-columns: 1fr;
     }
-    .modal .form--input {
-        font-size: 1.4rem;
+    /* product--figure */
+    .product--figure .product--img {
+        height: 20rem;
     }
-    .lists--item-top .lists--content p {
-        font-size: 1.5rem;
+    .product--figure .product--heading {
+        color: #bb0505;
     }
-    .wishlish--share .share--bottom {
-        max-width: 100%;
+    .product--figure .product--infos {
+        /* display: ; */
+    }
+
+
+
+	/* ======================================= */
+	/* WISHLISTS PAGE */
+	/* ======================================= */
+	.wishlist--grid {
+		display: flex;
+		flex-direction: column;
+		gap: 2.4rem;
+	}
+	.wishlist--figure {
+		display: none;
+	}
+	.wishlist--figure.w-figure--mobile {
+		display: grid;
+		grid-template-columns: 10rem 1fr;
+	}
+	.w-figure--mobile .w-figure-category {
+		position: static;
+		background-color: transparent;
+		padding: 0;
+	}
+	.w-figure--mobile .w-figure--details {
+		padding: 0;
+	}
+	.wishlist--grid .w-figure--btn {
+		display: none;
+	}
+
+
+    /* ===================================== */
+    /* REMINDER PAGE */
+    /* ===================================== */
+
+    .reminder__grid {
+        grid-template-columns: 1fr;
+    }
+    .reminder__grid .w-figure--btn {
+        display: none;
+    }
+
+
+    div.banner {
         width: 100%;
+        padding: 1.8rem;
     }
-    .share--top .top--details {
-        max-width: 90%;
+    div.banner img {
+        height: 6.2rem ;
     }
-    .share--top .progress--bar {
-        max-width: 100%;
+    div.banner .section__heading {
+        font-size: 2rem;
     }
-    .lists--item-bottom .lists--insight p {
-        font-size: 1rem;
-        font-weight: 500;
-    }
-    .share--bottom .lists--actions {
-        justify-content: flex-start;
-    }
-    .lists--item-bottom .progress--figure p {
-        font-size: 1rem;
-    }
+	
 }

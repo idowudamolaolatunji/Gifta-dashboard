@@ -17,6 +17,7 @@
 .auth__image--box, .auth__image--box span {
     display: flex;
     flex-direction: column;
+
 }
 .auth--box  {
     margin: auto;
