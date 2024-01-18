@@ -3,7 +3,7 @@ import Header from './Components/Header'
 import { useAuthContext } from '../../Auth/context/AuthContext';
 
 import DataTable from 'react-data-table-component';
-import { dateConverter, numberConverter } from '../../utils/helper';
+import { dateConverter, getInitials, numberConverter } from '../../utils/helper';
 import DashboardModal from '../../Components/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import { PaystackButton } from 'react-paystack';
@@ -156,7 +156,7 @@ function Wallet() {
             if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
             console.log(res, data)
-            if (data.success !== 'success') {
+            if (data.success === 'fail') {
                 throw new Error(data?.message);
             }
             setIsSuccess(true);
@@ -220,7 +220,16 @@ function Wallet() {
 
                     <div className="wallet--top">
                         <div className="wallet--user-info">
-                            <img src={user.image} alt={user.username} />
+                            {(user?.image === "") ? (
+							<img
+								alt={user?.fullName + " 's image"}
+								src={`https://test.tajify.com/asset/users/${user?.image}`}
+							/> 
+                            ) : (
+                                <span className="user__img-initials">
+                                    {getInitials(user?.fullName || user.username)}
+                                </span>
+                            )}
                             <div>
                                 <p className="wallet--user-name">{user.fullName || user.username}</p>
                                 <span className='wallet--user-balance'>

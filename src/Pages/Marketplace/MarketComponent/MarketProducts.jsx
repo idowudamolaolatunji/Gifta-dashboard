@@ -6,6 +6,7 @@ import SkeletonLoader from '../../../Components/SkeletonLoader';
 import SkeletonLoaderMini from '../../../Components/SkelentonLoaderMini';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import Product from './Product';
+import SkelentonOne from '../../../Components/SkelentonOne';
 
 function CategoryPage() {
     const [isLoading, setIsLoading] = useState(false)
@@ -116,7 +117,10 @@ function CategoryPage() {
 
     return (
         <section className='category-page__section'>
-            {isLoading ? <SkeletonLoader /> :
+            {isLoading ? 
+                <div className="category--spinner-destop">
+                    <SkeletonLoader /> 
+                </div> :
                 <div className='category--page'>
                     <div className='page--sidebar' style={stay ? { borderRight: 'none' } : {}}>
                         <ul className={`${stay ? 'sidebar--stay' : ''}`}>
@@ -130,8 +134,28 @@ function CategoryPage() {
                         </ul>
                     </div>
 
+                    <div className="page--tab-mobile">
+                        {categories.map((category) =>
+                            <Link to={`/dashboard/marketplace/${category.categoryName}`}>
+                                <p className={`tab-item ${currentCategory === category.categoryName ? 'active-tab-item' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
+                                    {category.categoryName}
+                                </p>
+                            </Link>
+                        )}
+                    </div>
 
-                    {isLoadingCat ? <SkeletonLoaderMini /> :
+                    {isLoadingCat ? 
+                        <>
+                            <div className='category--spinner-destop'>
+                                <SkeletonLoaderMini />
+                            </div>
+
+                            <div className='category--spinner-mobile'>
+                                <SkelentonOne height={'14rem'} />
+                                <SkelentonOne height={'14rem'} />
+                            </div>
+                        </> :
+                    // {isLoadingCat ? <SkeletonLoaderMini /> :
                         <div className={`page--main ${categoryProducts.length > 0 ? 'page--grid' : ''}`}>
                             {console.log(categoryProducts)}
                             {categoryProducts.length > 0 ? categoryProducts.map((product) =>
@@ -141,7 +165,7 @@ function CategoryPage() {
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{product.name}</h4>
                                         <div className='product--vendor'>
-                                            <img className='' src={product.vendor.image} alt={product.vendor.fullName} />
+                                            <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `https://test.tajify.com/asset/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
                                             <span className='product--vendor-info'>
                                                 <p>{product.vendor.fullName}</p>
                                                 <span>{product.vendor.location || 'Lagos, Nigeria'}</span>

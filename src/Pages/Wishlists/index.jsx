@@ -20,6 +20,8 @@ import SkelentonCard from "../../Components/SkelentonCard";
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 import DeleteModalUi from './WishlistsComponents/DeleteModalUi'
 import { FiPlus } from "react-icons/fi";
+import { TbJewishStarFilled } from "react-icons/tb";
+import { CiViewList } from "react-icons/ci";
 
 
 const customStyle = {
@@ -144,6 +146,7 @@ function Wishlists() {
 
 					{(wishLists && wishLists.length > 0) ? (
 						<>
+							<h3 className="section__heading heading--flex" style={{ marginBottom: '1rem', fontSize: '2.2rem', lineHeight: '1' }}>My wishlists <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><CiViewList /></span></h3>
 							<div className='wishlist--grid'>
 								<button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button>
 								{wishLists.map(wishList => (
@@ -162,7 +165,7 @@ function Wishlists() {
 																<PiPlusBold className='figure--icon' onClick={() => localStorage.setItem('wishNewModal', JSON.stringify(true)) }/>
 															</Link>
 														)}
-														<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://getgifta.com/shared/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
+														<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://app.getgifta.com/shared/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
 														<IoEllipsisVerticalSharp className="figure--icon" onClick={() => handleActionInfo(wishList._id)} />
 														{(showActionInfo && selectedId === wishList._id) && (
 															<div className="w-figure--action-box">
@@ -213,7 +216,7 @@ function Wishlists() {
 								))}
 							</div>
 
-							<div className="dashnoard--add-btn"><FiPlus /></div>
+							<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
 						</>
 					) : (wishLists && wishLists.length === 0 && !isLoading) && (
 						<div className="wishlist--banner banner">

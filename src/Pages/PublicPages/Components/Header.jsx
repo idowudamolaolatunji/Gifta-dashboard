@@ -8,6 +8,7 @@ import { LuMoon, LuSun } from "react-icons/lu";
 import { IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
 import Dropdown from "../../../Components/Dropdown";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { getInitials } from "../../../utils/helper";
 
 
 function Header() {
@@ -52,11 +53,17 @@ function Header() {
                         <div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
                             {showDropdown && <Dropdown />}
 
-                            <img
-                                alt="Profile Picture"
-                                src={user?.image}
-                                className="profile__img"
-                            />
+                            {(user?.image === "") ? (
+							<img
+								alt={user?.fullName + " 's image"}
+								src={`https://test.tajify.com/asset/users/${user?.image}`}
+								className='profile__img'
+							/> 
+                            ) : (
+                                <span className="profile__img-initials">
+                                    {getInitials(user?.fullName || user.username)}
+                                </span>
+                            )}
 
                             <span className="profile__user">
                                 <p className="user-username" >{user?.fullName || user?.username}</p>

@@ -42,7 +42,11 @@ a:visited, a:link {
 .section__heading {
 	line-height: 1.2;
 }
-
+.heading--flex {
+	display: flex;
+	align-items: center;
+	gap: .4rem;
+}
 /*  */
 ::-webkit-scrollbar {
 	width: 0.6rem;

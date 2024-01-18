@@ -13,6 +13,8 @@ import Alert from "../../Components/Alert";
 import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import SkelentonOne from "../../Components/SkelentonOne";
+import { FiPlus } from "react-icons/fi";
+import { IoHeart } from "react-icons/io5";
 
 const customStyle = {
 	minHeight: "auto",
@@ -229,7 +231,7 @@ function Reminders() {
 			<DashHeader />
 			<DashTabs />
 
-			<section className="section reminder__section">
+			<section className="section reminder__section" style={{ position: 'relative' }}>
 				<div className="section__container">
 					{isLoading && (
 						<>
@@ -246,7 +248,7 @@ function Reminders() {
 
 					{(reminders && reminders.length > 0) ? (
 						<>
-							<h3 className="section__heading" style={{ marginBottom: '2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations!</h3>
+							<h3 className="section__heading" style={{ marginBottom: '1.4rem', fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
 							<div className="reminder__grid">
 								<button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button>
 								{reminders?.map(reminder => (
@@ -279,6 +281,7 @@ function Reminders() {
 					)}
 
 				</div>
+				<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
 			</section>
 
 			{showDashboardModal && (

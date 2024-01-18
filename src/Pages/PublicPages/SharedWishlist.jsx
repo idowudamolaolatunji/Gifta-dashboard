@@ -17,6 +17,7 @@ import { useAuthContext } from '../../Auth/context/AuthContext';
 import { PaystackButton } from 'react-paystack';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+// import Spinner from '../../Components/Spinner';
 
 
 const customStyle = {
@@ -140,6 +141,8 @@ function SharedWishlist({}) {
                 setMessage("");
             }, 2000);
 
+            // setMessage('')
+
         } catch (err) {
             handleFailure(err.message)
         } finally {
@@ -172,11 +175,15 @@ function SharedWishlist({}) {
         handleFetchList();
     }, [])
 
+
+    console.log(shareableUrl, wishList?._id)
+
+
     useEffect(function() {
         async function handleFetchWishes() {
             try {
-                // const wishesRes = await fetch(`http://localhost:3010/api/wishlists/all-wishes/${wishList._id}`, {
-                const wishesRes = await fetch(`https://test.tajify.com/api/wishlists/all-wishes/${wishList._id}`, {
+                // const wishesRes = await fetch(`http://localhost:3010/api/wishlists/all-wishes/${wishList?._id}`, {
+                const wishesRes = await fetch(`https://test.tajify.com/api/wishlists/all-wishes/${wishList?._id}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type" : "application/json"
@@ -196,6 +203,7 @@ function SharedWishlist({}) {
         handleFetchWishes();
     }, [wishList, helpReset])
 
+
   return (
     <>
         <Header />
@@ -203,11 +211,11 @@ function SharedWishlist({}) {
         <section className='section section__shareable'>
             <div className="section__container">
                 <div className="wishlish--share">
-                    {isLoadingPay && (
+                    {/* {isLoadingPay && (
                         <div className='gifting--loader'>
                             <Spinner />
                         </div>
-                    )}
+                    )} */}
                     {isLoading && (<SkelentonCard />)}
                     {(wishList && !isLoading) && (
                         <div className="share--top">

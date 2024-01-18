@@ -9,6 +9,7 @@ import Dropdown from "../../../Components/Dropdown";
 import { LuSun, LuMoon, LuLayoutDashboard } from "react-icons/lu";
 import { TfiGift } from "react-icons/tfi";
 import { BsBell, BsJournalBookmark, BsShop } from "react-icons/bs";
+import { getInitials } from "../../../utils/helper";
 
 // import '../../DashBoard/main.css';
 
@@ -52,11 +53,17 @@ function WishListDashHeader() {
 					<div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
 						{showDropdown && <Dropdown />}
 
-						<img
-							alt="Profile Picture"
-							src={user?.image}
-							className="profile__img"
-						/>
+						{(user?.image === "") ? (
+							<img
+								alt={user?.fullName + " 's image"}
+								src={`https://test.tajify.com/asset/users/${user?.image}`}
+								className='profile__img'
+							/> 
+						) : (
+							<span className="profile__img-initials">
+								{getInitials(user?.fullName || user.username)}
+							</span>
+						)}
 
 						<span className="profile__user">
 							<p className="user-username" >{user.fullName || user.username}</p>

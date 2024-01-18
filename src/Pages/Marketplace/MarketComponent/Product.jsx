@@ -68,10 +68,11 @@ function Product({ product, handleCloseModal }) {
 
                         <div className="product--vendor">
                             <div className="vendor--main">
-                                <img src={product.vendor.image} alt={product.vendor.fullName} />
+                                <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `https://test.tajify.com/asset/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
+                                {/* <img src={product.vendor.image} alt={product.vendor.fullName} /> */}
                                 <div>
                                     <p>{product.vendor.fullName}</p>
-                                    <p>{product.vendor.email}</p>
+                                    <p className='product-vendor--email'>{product.vendor.email}</p>
                                 </div>
                             </div>
 

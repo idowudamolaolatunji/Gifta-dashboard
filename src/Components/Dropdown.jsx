@@ -20,10 +20,10 @@ function Dropdown() {
     return (
         <div className='dropdown--figure'>
             <ul>
-                {/* <li onClick={'/dashboard/profile'}>
+                <li onClick={'/dashboard/profile'}>
                     <CiUser />
                     <p>Account</p>
-                </li> */}
+                </li>
                 <li onClick={'/dashboard/plans'}>
                     <CiViewList />
                     <p>Plan</p>

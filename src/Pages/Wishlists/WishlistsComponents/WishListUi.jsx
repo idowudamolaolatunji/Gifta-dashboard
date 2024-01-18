@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import WishListDashHeader from './WishListDashHeader'
 import { useAuthContext } from '../../../Auth/context/AuthContext'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { PiFunnelBold, PiPlusBold } from 'react-icons/pi';
+import { PiFunnelBold, PiPlusBold, PiShareFatFill } from 'react-icons/pi';
 import { RiDeleteBin6Line, RiEditLine } from 'react-icons/ri';
-import { IoPricetagOutline } from 'react-icons/io5';
+import { IoChevronBackOutline, IoPricetagOutline } from 'react-icons/io5';
 import { SlCalender } from "react-icons/sl";
 import ProgressBar from '../../../Components/ProgressBar';
 import { calculatePercentage, dateConverter, expectedDateFormatter, numberConverter } from '../../../utils/helper';
@@ -13,18 +13,47 @@ import WishInputUi from './WishInputUi';
 import DeleteModalUi from './DeleteModalUi';
 import paystackSvg from '../../../Assets/svgs/paystack.svg';
 import SkelentonOne from '../../../Components/SkelentonOne';
+import DashboardModal from '../../../Components/Modal';
+import { ShareSocial } from 'react-share-social';
+import Alert from '../../../Components/Alert';
+import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
+
+
+const customStyle = {
+	minHeight: "auto",
+	maxWidth: "48rem",
+	width: "48rem",
+};
+
+const shareCustomStyle = {
+	root: {
+		padding: 0,
+		marginTop: '-1.2rem',
+	},
+	copyContainer: {
+		fontWeight: 600,
+		fontSize: '1.6rem',
+		padding: '1rem',
+	},
+}
 
 function WishListUi() {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState('all');
     const [wishList, setWishList] = useState({});
     const [wishes, setWishes] = useState([]);
-    const [checkedIds, setCheckedIds] = useState([]);
+    // const [checkedIds, setCheckedIds] = useState([]);
     const [selectedWishId, setSelectedWishId] = useState(null);
     const [selectedWish, setSelectedWish] = useState({});
     const [errMessage, setErrMessage] = useState('');
     const [helpReset, setHelpReset] = useState(false);
+    const [share, setShare] = useState(false);
+	const [url, setUrl] = useState('');
+
+    const [isError, setIsError] = useState(false);
+    const [message, setMessage] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const [showNewModal, setShowNewModal] = useState(function () {
         return JSON.parse(localStorage.getItem('wishNewModal')) || false;
@@ -34,7 +63,37 @@ function WishListUi() {
 
     useEffect(function () {
         return localStorage.setItem('wishNewModal', JSON.stringify(showNewModal));
-    }, [showNewModal])
+    }, [showNewModal]);
+
+    // function handle
+
+    function handleShare(link, hasWish) {
+		if(hasWish) {
+			setShare(true);
+			setUrl(link);
+		} else {
+			handleFailure('No wish to share!');
+			setShare(false);
+			setUrl('');
+		}
+	}
+
+     // HANDLE ON FETCH FAILURE
+     function handleFailure(mess) {
+        setIsError(true);
+        setMessage(mess)
+        setTimeout(() => {
+            setIsError(false);
+            setMessage('')
+        }, 3000);
+    }
+
+    // HANDLE FETCH STATE RESET
+    function handleReset() {
+        setIsError(false);
+        setMessage('')
+        setIsSuccess(false);
+    }
 
 
     const allWishes = wishes;
@@ -62,15 +121,6 @@ function WishListUi() {
 
     function handleChangeTab(tab) {
         setSelectedTab(tab)
-    }
-
-    function handleCheck(id) {
-        setCheckedIds(prev => {
-            if (prev.find(prevId => prevId === id)) {
-                return [...prev?.filter(prevId => prevId !== id)];
-            }
-            return [...prev, id];
-        });
     }
 
     async function handleDeleteWishItem() {
@@ -140,11 +190,23 @@ function WishListUi() {
             <section className="section">
                 <div className="section__container">
                     {/* <Link to={'/dashboard/wishlists'} className='wishlist--back-btn'>Back</Link> */}
-                    <span onClick={() => navigate(-1)} className='wishlist--back-btn'>Back</span>
+                    <span onClick={() => navigate(-1)} className='wishlist--back-btn back-btn'>Back</span>
 
 
                     <div className="wish--lists list--container">
-                        <span className='lists--title'>{wishList?.name}</span>
+                        <span className='lists--title destop-title'>{wishList?.name}</span>
+
+                        <div className="lists--head-box-mobile">
+                            <img src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList?.name} />
+                            <div>
+                                <span onClick={() => navigate(-1)} className='wishlist--back-btn-mobile'><IoChevronBackOutline /></span>
+                                <span className='lists--title'>{wishList?.name}</span>
+                                {/* <span className='lists--share-btn'>{wishList.shortSharableUrl}</span> */}
+                                <span className='lists--share-btn' onClick={() => handleShare(`https://app.getgifta.com/shared/${wishList.shortSharableUrl}`, wishes.length > 0)} >Share <PiShareFatFill /></span>
+                                <span className='lists--date'>Created: {' '}{dateConverter(wishList.createdAt)}</span>
+                            </div>
+                        </div>
+
                         <div className="lists--tabs">
                             <div className="main--tabs">
                                 <div className={`lists--tab ${selectedTab === 'all' ? 'tab--active' : ''}`} onClick={() => handleChangeTab('all')}>All <span>{allWishes?.length}</span></div>
@@ -164,8 +226,9 @@ function WishListUi() {
                                 <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
                                     <span className='lists--item-top'>
                                         <span className='lists--content'>
-                                            <span onClick={() => handleCheck(wishItem._id)} style={(checkedIds.find(id => id === wishItem._id)) ? { backgroundColor: '#bb0505', boxShadow: 'none' } : {}}>{(checkedIds.find(id => id === wishItem._id)) && <FaCheck style={{ color: '#fff' }} />}</span>
-                                            <p style={(checkedIds.find(id => id === wishItem._id)) ? { textDecoration: 'line-through' } : {}}>{wishItem.wish}</p>
+                                            {/* <span onClick={() => handleCheck(wishItem._id)} style={(checkedIds.find(id => id === wishItem._id)) ? { backgroundColor: '#bb0505', boxShadow: 'none' } : {}}>{(checkedIds.find(id => id === wishItem._id)) && <FaCheck style={{ color: '#fff' }} />}</span> */}
+                                            {/* <p style={(checkedIds.find(id => id === wishItem._id)) ? { textDecoration: 'line-through' } : {}}>{wishItem.wish}</p> */}
+                                            <p>{wishItem.wish}</p>
                                         </span>
                                         <div className='lists--actions'>
                                             <span onClick={() => handleSelectedWish(wishItem)}><RiEditLine /></span>
@@ -181,7 +244,7 @@ function WishListUi() {
                                     </span>
                                 </li>
 
-                            )) : (!isLoading && !errMessage && !wishList && wishArr && wishArr?.length === 0) && (
+                            )) : (!isLoading && wishArr?.length === 0) && (
                                 <li className='lists--message'>
                                     {selectedTab === 'completed' ? 'No Completed Wishes!' : 'You\'ve No Wishes Yet!'}
                                     <picture>
@@ -230,6 +293,30 @@ function WishListUi() {
                 </DeleteModalUi>
             )}
 
+            {share && (
+				<DashboardModal
+					title={'Make your wish come true! Share Link'}
+					setShowDashboardModal={setShare}
+					customStyle={customStyle}
+					>
+					<ShareSocial  
+						url={url}
+						socialTypes= {['facebook','twitter', 'whatsapp', 'telegram', 'linkedin']}
+						onSocialButtonClicked={ (data) => console.log(data)}  
+						style={shareCustomStyle}
+					/>
+				</DashboardModal>
+			)}
+
+
+            <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                {isSuccess ? (
+                    <AiFillCheckCircle className="alert--icon" />
+                ) : isError && (
+                    <AiFillExclamationCircle className="alert--icon" />
+                )}
+                <p>{message}</p>
+            </Alert>
         </>
     )
 }

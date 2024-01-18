@@ -3,6 +3,46 @@
 	html {
 		font-size: 53%;
 	}
+	.dashboard__tabs {
+        max-width: 100%;
+        overflow-x: auto;
+        height: 7rem;
+        padding: 1rem;
+	}
+	.dashboard__tabs::-webkit-scrollbar {
+		visibility: hidden;
+		display: none;
+	}
+
+
+
+
+	.product__modal {
+		max-width: 90%;
+		height: 90rem;
+		border: 1px solid #000;
+	}
+	.product--container {
+		display: flex;
+		flex-direction: column;
+	}
+	.product--container .product--img:hover {
+		transform: scale(1.2) rotate(0);
+	}
+	.sub-images img:hover {
+		transform: scale(1.06);
+	}
+
+	.gifting--form {
+		overflow-y: auto;
+	}
+	.form__flex-main {
+		grid-template-columns: 2fr;
+	}
+
+
+
+
 
 	/* ======================================= */
 	/* SHARED WISHLIST PAGE */
@@ -59,19 +99,27 @@
 		color: #fff;
 		margin-top: 1.8rem;
 	}
-	.share--bottom .lists--item-top,
-	.share--bottom .lists--item-bottom {
+	.lists--item-top,
+	.lists--item-bottom {
 		gap: 2rem;
 		display: grid;
 	}
-	.share--bottom .lists--item-top {
+	.lists--item-top {
 		grid-template-columns: 1fr 8.4rem;
 	}
-	.share--bottom .lists--item-bottom {
+	.lists--item-bottom {
 		grid-template-columns: 1fr 11rem;
 	}
 	.lists--item-bottom .lists--insight svg {
 		color: #bb0505;
+	}
+
+	.back-btn,
+	.destop-title {
+		display: none;
+	}
+	.lists--head-box-mobile {
+		display: block;
 	}
 
 	/* ======================================= */
@@ -86,6 +134,95 @@
 	.wallet--tabs-mobile {
 		display: block;
 	}
+
+
+	/* ======================================= */
+	/* WISHLISTS PAGE */
+	/* ======================================= */
+	.wishlist--grid {
+		display: flex;
+		flex-direction: column;
+		gap: 2.4rem;
+	}
+	.wishlist--figure {
+		display: none;
+	}
+	.wishlist--figure.w-figure--mobile {
+		display: grid;
+		grid-template-columns: 10rem 1fr;
+		/* height: 12rem; */
+	}
+	.w-figure--mobile .w-figure-category {
+		position: static;
+		background-color: transparent;
+		padding: 0;
+	}
+	.w-figure--mobile .w-figure--details {
+		padding: 0;
+	}
+	.wishlist--grid .w-figure--btn {
+		display: none;
+	}
+	.dashnoard--add-btn {
+		display: flex;
+	}
+
+
+	/* ======================================= */
+    /* CATEGORY PAGE */
+    /* ======================================= */
+    .category--page {
+        grid-template-columns: 1fr;
+		gap: 0;
+    }
+    .page--sidebar {
+        display: none;
+    }
+    .page--grid {
+        grid-template-columns: 1fr;
+    }
+    /* product--figure */
+    .product--figure .product--img {
+        height: 20rem;
+    }
+    .product--figure .product--heading {
+        color: #bb0505;
+    }
+    /* .product--figure .product--infos {} */
+
+
+    /* ===================================== */
+    /* REMINDER PAGE */
+    /* ===================================== */
+	
+    .reminder__grid {
+		grid-template-columns: 1fr;
+    }
+    .reminder__grid .w-figure--btn {
+		display: none;
+    }
+	
+	
+	
+	/* ===================================== */
+	/* BANNERS */
+	/* ===================================== */
+
+    div.banner {
+        width: 100%;
+        padding: 1.8rem;
+    }
+    div.banner img {
+        height: 6.2rem ;
+    }
+    div.banner .section__heading {
+        font-size: 2rem;
+    }
+
+
+	/* ======================================= */
+	/* MADALS AND OTHERS */
+	/* ======================================= */
 	.modal .form--flex {
 		gap: 2.4rem;
 		width: 100%;
@@ -94,8 +231,29 @@
 		flex-direction: column;
 		gap: 1.2rem;
 	}
+	.wish--form.wish--modal {
+		width: 100%;
+		padding: 1.2rem;
+
+		bottom: 2.5%;
+	}
+	.form--grid {
+		flex-direction: column;
+		gap: 2rem;
+	}
+	.form--grid span:nth-child(2) {
+		align-self: flex-end;
+	}
 }
 
+
+
+
+
+
+
+
+/*  */
 @media screen and (max-width: 28.125em) {
 	html {
 		font-size: 52%;
@@ -108,18 +266,14 @@
     .hero__section {
         padding: 8.6rem 0 2.8rem;
     }
-    .dashnoard--add-btn {
+    .dashnoard--add-btn, .page--tab-mobile {
 		display: flex;
 	}
-	.dashboard__tabs {
-		/* display: none; */
-        max-width: 100%;
-        overflow-x: auto;
-        height: 7rem;
-        padding: 1rem;
+	.dropdown--figure {
+		left: -10rem;
 	}
-
-
+	
+	
 	/* ========================================== */
 	/* AUTH PAGES */
 	/* ========================================== */
@@ -253,82 +407,8 @@
 	.category--spinner-destop {
 		display: none;
 	}
-
-
-    /* ======================================= */
-    /* CATEGORY PAGE */
-    /* ======================================= */
-    .category--page {
-        grid-template-columns: 1fr;
-    }
-    .page--sidebar {
-        display: none;
-    }
-    .page--grid {
-        grid-template-columns: 1fr;
-    }
-    /* product--figure */
-    .product--figure .product--img {
-        height: 20rem;
-    }
-    .product--figure .product--heading {
-        color: #bb0505;
-    }
-    .product--figure .product--infos {
-        /* display: ; */
-    }
-
-
-
-	/* ======================================= */
-	/* WISHLISTS PAGE */
-	/* ======================================= */
-	.wishlist--grid {
-		display: flex;
-		flex-direction: column;
-		gap: 2.4rem;
-	}
-	.wishlist--figure {
+	.product--container .product-vendor--email {
 		display: none;
 	}
-	.wishlist--figure.w-figure--mobile {
-		display: grid;
-		grid-template-columns: 10rem 1fr;
-	}
-	.w-figure--mobile .w-figure-category {
-		position: static;
-		background-color: transparent;
-		padding: 0;
-	}
-	.w-figure--mobile .w-figure--details {
-		padding: 0;
-	}
-	.wishlist--grid .w-figure--btn {
-		display: none;
-	}
-
-
-    /* ===================================== */
-    /* REMINDER PAGE */
-    /* ===================================== */
-
-    .reminder__grid {
-        grid-template-columns: 1fr;
-    }
-    .reminder__grid .w-figure--btn {
-        display: none;
-    }
-
-
-    div.banner {
-        width: 100%;
-        padding: 1.8rem;
-    }
-    div.banner img {
-        height: 6.2rem ;
-    }
-    div.banner .section__heading {
-        font-size: 2rem;
-    }
 	
 }
