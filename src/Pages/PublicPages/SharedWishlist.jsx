@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Header from './Components/Header';
 import { calculatePercentage, dateConverter, expectedDateFormatter, numberConverter } from '../../utils/helper';
+import fire from '../../utils/animation'
 import paystackSvg from '../../Assets/svgs/paystack.svg';
 import SkelentonOne from '../../Components/SkelentonOne';
 import { useParams } from 'react-router-dom';
@@ -51,8 +52,11 @@ function SharedWishlist({}) {
     const [isSuccess, setIsSuccess] = useState(false);
     const [randomText, setRandomText] = useState('');
 
+    const [fire, setFire] = useState(false);
     const [helpReset, setHelpReset] = useState(false);
     const [selectedWishId, setSelectedWishId] = useState(null);
+
+    const paidEl = useRef(null);
 
     const { shareableUrl } = useParams();
 
@@ -82,10 +86,7 @@ function SharedWishlist({}) {
         amount: amountInKobo,
         publicKey,
         text: "Pay!",
-        onSuccess: ({ reference }) => {
-            handlePayment(reference)
-            setShowModal(false);
-        },
+        onSuccess: ({ reference }) => handlePayment(reference),
         onClose: () => handleFailure('Transaction Not Completed!'),
     };
 
@@ -107,18 +108,16 @@ function SharedWishlist({}) {
     // HANDLE FETCH STATE RESET
     function handleReset() {
         setIsError(false);
+        setFire(false)
         setMessage('')
         setIsSuccess(false);
+        setHelpReset(false);
     }
-
-    // console.log({ wishListID: wishList._id, wishID: selectedWishId, userID: wishList?.user?._id })
 
     async function handlePayment(reference) {
         try {
             handleReset();
             setIsLoadingPay(true);
-            setHelpReset(false);
-            // const res = await fetch(`http://localhost:3010/api/wishlists/payment-verification/${reference}/${charges}`, {
             const res = await fetch(`https://test.tajify.com/api/wishlists/payment-verification/${reference}/${charges}`, {
                 method: 'POST',
                 headers: {
@@ -136,13 +135,16 @@ function SharedWishlist({}) {
             setIsSuccess(true);
             setMessage("Thank you for you payment!");
             setTimeout(() => {
+                setShowModal(false);
                 setHelpReset(true);
                 setIsSuccess(false);
                 setMessage("");
+                setFire(true)
             }, 2000);
 
-            // setMessage('')
-
+            // Fire the animation
+            const mockEvent = { target: { classList: [] } }; // Mock event
+            fire(mockEvent);
         } catch (err) {
             handleFailure(err.message)
         } finally {
@@ -174,9 +176,6 @@ function SharedWishlist({}) {
         }
         handleFetchList();
     }, [])
-
-
-    console.log(shareableUrl, wishList?._id)
 
 
     useEffect(function() {
@@ -248,7 +247,7 @@ function SharedWishlist({}) {
                                             <p>{wishItem.wish}</p>
                                         </span>
                                         <div className='lists--actions'>
-                                            <div className='lists--pay-btn' onClick={() => handlePay(i, wishItem._id)}><img height={'17rem'} src={paystackSvg} /><p>Pay</p></div>                                           
+                                            <div className='lists--pay-btn' onClick={() => handlePay(i, wishItem._id)}><img height={'17rem'} src={paystackSvg} ref={paidEl} /><p>Pay</p></div>                                           
                                         </div>
                                     </span>
                                     <span className='lists--item-bottom'>

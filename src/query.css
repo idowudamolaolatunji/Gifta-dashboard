@@ -3,24 +3,31 @@
 	html {
 		font-size: 53%;
 	}
+	.section__container {
+		padding: 0 2rem;
+	}
 	.dashboard__tabs {
         max-width: 100%;
         overflow-x: auto;
         height: 7rem;
         padding: 1rem;
 	}
-	.dashboard__tabs::-webkit-scrollbar {
-		visibility: hidden;
+	::-webkit-scrollbar {
 		display: none;
 	}
-
+	.dashboard__tabs::-webkit-scrollbar {
+		display: none;
+	}
+	.form-pag--actions {
+		display: block;
+	}
 
 
 
 	.product__modal {
 		max-width: 90%;
-		height: 90rem;
-		border: 1px solid #000;
+		height: 98rem;
+		position: fixed;
 	}
 	.product--container {
 		display: flex;
@@ -32,12 +39,33 @@
 	.sub-images img:hover {
 		transform: scale(1.06);
 	}
+	.product--title {
+		font-size: 1.8rem;
+	}
+	.form--heading {
+		font-size: 1.7rem;
+	}
+
+
 
 	.gifting--form {
-		overflow-y: auto;
+		display: none;
 	}
-	.form__flex-main {
-		grid-template-columns: 2fr;
+	.gifting--form-mobile {
+		display: block;
+		overflow-y: scroll !important;
+		margin-top: -1rem;
+	}
+	.gifting--form-mobile .form--heading {
+		margin: 0;
+	}
+	.form--main {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.form--main input, .form--main textarea, .form--main select {
+		font-size: 1.4rem;
 	}
 
 
@@ -163,9 +191,6 @@
 	.wishlist--grid .w-figure--btn {
 		display: none;
 	}
-	.dashnoard--add-btn {
-		display: flex;
-	}
 
 
 	/* ======================================= */
@@ -198,6 +223,11 @@
     .reminder__grid {
 		grid-template-columns: 1fr;
     }
+	.reminder--figure {
+		max-width: 30rem;
+		width: 30rem;
+		height: 24rem;
+	}
     .reminder__grid .w-figure--btn {
 		display: none;
     }
@@ -244,6 +274,13 @@
 	.form--grid span:nth-child(2) {
 		align-self: flex-end;
 	}
+
+
+	
+.giftPackage__cards {
+	grid-template-columns: 1fr 1fr;
+}
+
 }
 
 
@@ -266,7 +303,7 @@
     .hero__section {
         padding: 8.6rem 0 2.8rem;
     }
-    .dashnoard--add-btn, .page--tab-mobile {
+    .page--tab-mobile {
 		display: flex;
 	}
 	.dropdown--figure {
@@ -392,7 +429,7 @@
 		gap: 1.4rem;
 		margin-top: -0.01rem;
 	}
-	.category--figure-m {
+	.category--figure-m, .wishlist--figure-m {
 		display: block;
 	}
 	.category--figure.category--figure-mobile {
@@ -407,8 +444,144 @@
 	.category--spinner-destop {
 		display: none;
 	}
+
+
+	.product--close-icon {
+		transform: translate(0);
+		right: 2%;
+	}
 	.product--container .product-vendor--email {
 		display: none;
 	}
+	.product--container .product--vendor {
+		flex-direction: column;
+		gap: 0;
+		align-items: flex-start;
+		font-size: 1.4rem;
+	}
+	.product--vendor .vendor--main {
+		align-items: flex-start;
+	}
+	#location {
+		font-size: 1.2rem;
+		margin-left: 4.8rem;
+		margin-top: -1.8rem;
+	}
 	
+
+
+	.reminder--figure {
+		max-width: 100%;
+		width: 100%;
+	}
+
+
+
+
+	/* ===================================== */
+	/* SEARCH MODAL PAGE */
+	/* ===================================== */
+	.search--tabs,
+	.search--modal {
+		display: none;
+	}
+	.search--tabs-box {
+		overflow-y: hidden;
+		overflow-x: auto;
+		display: block;
+	}
+	.input--box-modal.input__isClick {
+		display: block;
+		position: fixed;
+		width: 100%;
+		top: 0;
+		right: 0;
+		left: 0;
+		z-index: 10000000000;
+		background-color: #fff;
+		margin: 0;
+		height: 100vh;
+		padding: 1.2rem 2rem;
+	}
+	.input--box-modal.input__isClick span {
+		display: flex;
+		justify-content: space-between;
+		gap: 2rem;
+		align-items: center;
+	}
+	.input__isClick .search--input {
+		padding: 1.4rem;
+		border: 1.4px solid #eee;
+		width: 90%;
+		font-size: 1.6rem;
+		border-radius: .6rem;
+	}
+	.input__isClick .search--input:focus {
+		outline: none;
+		border-color: #bb0505;
+	}
+	.input--box-modal.input__isClick .search--modal {
+		background-color: transparent;
+		box-shadow: none;
+		position: fixed;
+		z-index: 10;
+		width: 100%;
+		padding: 2rem;
+		display: block;
+		overflow: hidden;
+	}
+	.input--box-modal.input__isClick .search--content {
+		max-height: 100%;
+		height: 90vh;
+		overflow-y: auto;
+	}
+	.input--box-modal.input__isClick .search--tabs.search--tab-m {
+		justify-content: flex-start;
+		background-color: transparent;
+		width: 125%;
+		gap: .6rem;
+		overflow-x: scroll;
+		display: flex;
+	}
+	.input--box-modal.input__isClick .search--tab {
+		background-color: transparent;
+		padding: 1rem 1.2rem;
+		box-shadow: inset 0 0 0 .14rem #eee;
+		gap: 0.2rem;
+		flex-wrap: nowrap;
+	}
+	.search--input-icon {
+		color: #bb0505;
+		font-size: 3rem;
+	}
+	.input--box-modal.input__isClick .search--tab.tab--active {
+		background-color: #bb0505;
+		color: #fff;
+		box-shadow: none;
+	}
+
+
+
+
+
+
+	/* ===================================== */
+	/*  */
+	/* ===================================== */
+	
+	.giftPackage__cards {
+		grid-template-columns: 1fr;
+	}
+	.giftPackage--figure {
+		height: 26rem;
+		padding: 0;
+	}
+	.package--celebrant {
+		font-size: 2rem;
+		right: 5%;
+	}
+	.package--date {
+		right: 5%;
+	}
+
 }

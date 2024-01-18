@@ -151,8 +151,8 @@ function CategoryPage() {
                             </div>
 
                             <div className='category--spinner-mobile'>
-                                <SkelentonOne height={'14rem'} />
-                                <SkelentonOne height={'14rem'} />
+                                <SkelentonOne height={'18rem'} />
+                                <SkelentonOne height={'18rem'} />
                             </div>
                         </> :
                     // {isLoadingCat ? <SkeletonLoaderMini /> :

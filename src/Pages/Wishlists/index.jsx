@@ -137,18 +137,28 @@ function Wishlists() {
 				<div className="section__container" style={{ position: 'relative' }}>
 					{/* {isLoading && (<SkelentonTwo />)} */}
 					{isLoading &&  (
-						<div className='wishlist--grid' style={{ columnGap: '8rem' }}>
-							<SkelentonCard />
-							<SkelentonCard />
-							<SkelentonCard />
+							
+					<>
+						<div className='category--spinner-destop'>
+							<div className='wishlist--grid' style={{ columnGap: '8rem' }}>
+								<SkelentonCard />
+								<SkelentonCard />
+								<SkelentonCard />
+							</div>
 						</div>
+
+						<div className='category--spinner-mobile'>
+							<SkelentonOne height={'12.4rem'} />
+							<SkelentonOne height={'12.4rem'} />
+						</div>
+					</>
 					)}
 
 					{(wishLists && wishLists.length > 0) ? (
 						<>
 							<h3 className="section__heading heading--flex" style={{ marginBottom: '1rem', fontSize: '2.2rem', lineHeight: '1' }}>My wishlists <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><CiViewList /></span></h3>
 							<div className='wishlist--grid'>
-								<button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button>
+								{/* <button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button> */}
 								{wishLists.map(wishList => (
 									<>
 										<figure key={wishList._id} className="wishlist--figure w-figure-action">
@@ -199,7 +209,7 @@ function Wishlists() {
 
 
 										{/*  */}
-										<Link to={`/dashboard/wishlists/${wishList?.slug}`}>
+										<Link className="wishlist--figure-m" to={`/dashboard/wishlists/${wishList?.slug}`}>
 											<figure key={wishList._id} className="wishlist--figure w-figure-action w-figure--mobile">
 												<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
 													<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
@@ -217,6 +227,7 @@ function Wishlists() {
 							</div>
 
 							<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
+
 						</>
 					) : (wishLists && wishLists.length === 0 && !isLoading) && (
 						<div className="wishlist--banner banner">

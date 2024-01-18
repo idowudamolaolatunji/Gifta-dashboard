@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GiftLogo from "../../../Assets/gifta-logo.png";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
@@ -8,19 +8,35 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import Dropdown from "../../../Components/Dropdown";
 import { LuSun, LuMoon } from "react-icons/lu";
 import { getInitials } from "../../../utils/helper";
+import SearchModal from "../../../Components/SearchModal";
+import { AiOutlineClose } from "react-icons/ai";
 
 
 const DashHeader = ({ isDasboard }) => {
 	const [show, setShow] = useState(false);
 	const [showDropdown, setShowDropdown] = useState(false);
-	const [mode, setMode] = useState('light');
-	const { user } = useAuthContext();
+	// const [mode, setMode] = useState('light');
 
-	useEffect(function() {
+	const [searchQuery, setSearchQuery] = useState('');
+	const [showSearchModal, setShowSearchModal] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [message, setMessage] = useState('');
+	const [results, setResults] = useState({});
+	const [clicked, setClicked] = useState(false);
+
+
+	const { user, token } = useAuthContext();
+
+	function handleCloseSearch() {
+		setSearchQuery('');
+		setClicked(false);
+	}
+
+	useEffect(function () {
 		function controlNavbar() {
-			if (window.scrollY > 150 ) {
+			if (window.scrollY > 150) {
 				setShow(true)
-			} else{
+			} else {
 				setShow(false)
 			}
 		}
@@ -30,6 +46,53 @@ const DashHeader = ({ isDasboard }) => {
 			window.removeEventListener('scroll', controlNavbar)
 		}
 	}, [])
+
+
+	useEffect(function () {
+		const fetchSearch = setTimeout(async function () {
+			try {
+				if (searchQuery.trim() === '' || !setSearchQuery) {
+					setShowSearchModal(false)
+					setResults({});
+					return;
+				}
+
+				setMessage('');
+				setIsLoading(true);
+				setShowSearchModal(true);
+
+				// const res = await fetch(`http://localhost:3010/api/search?query=${searchQuery}`
+				const res = await fetch(`https://test.tajify.com/api/search?query=${searchQuery}`
+					, {
+						method: 'GET',
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${token}`
+						},
+					});
+
+				if (!res.ok) throw new Error('Something went wrong!');
+				setIsLoading(true)
+
+				const data = await res.json();
+				setShowSearchModal(true);
+				setResults(data.data.results);
+
+			} catch (err) {
+				if (err.name !== "AbortError") {
+					setMessage(err.message)
+					setShowSearchModal(false)
+				}
+			} finally {
+				setIsLoading(false);
+			}
+		}, 350)
+
+		return function () {
+			clearTimeout(fetchSearch)
+		};
+
+	}, [searchQuery]);
 
 	return (
 		<header className="dashboard__header">
@@ -61,18 +124,18 @@ const DashHeader = ({ isDasboard }) => {
 						</Link>
 					</div>
 
-					<div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
+					<div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)} onClick={() => setShowDropdown(!showDropdown)}>
 						{showDropdown && <Dropdown />}
 
-						{(user?.image === "") ? (
+						{(user?.image !== "") ? (
 							<img
 								alt={user?.fullName + " 's image"}
 								src={`https://test.tajify.com/asset/users/${user?.image}`}
 								className='profile__img'
-							/> 
+							/>
 						) : (
 							<span className="profile__img-initials">
-								{getInitials(user?.fullName || user.username)}
+								{getInitials(user?.fullName || user?.username)}
 							</span>
 						)}
 
@@ -97,11 +160,30 @@ const DashHeader = ({ isDasboard }) => {
 						<p>What will you do on Gifta today?</p>
 					</div>
 
-					{isDasboard && <div className="input-box">
-						<input className="header__input" id="search" type="search" placeholder="Search Gifta..." />
+					{isDasboard && <div className='input-box'>
+						<input className="header__input" id="search" type="search" placeholder="Search Gifta..." onChange={e => setSearchQuery(e.target.value)} value={searchQuery} onClick={() => setClicked(true)} />
 
 						<IoSearchOutline className="header__icon" />
+
+						{showSearchModal && <SearchModal showSearchModal={showSearchModal} setShowSearchModal={setShowSearchModal} isLoading={isLoading} message={message} results={results} closeIcon={true} />}
 					</div>}
+
+
+
+
+					{(isDasboard && clicked) && (
+						<div className={'input--box-modal input__isClick'}>
+							<span>
+								<input className="search--input" id="search" type="search" placeholder="Search Gifta..." onChange={e => setSearchQuery(e.target.value)} value={searchQuery} />
+
+								<AiOutlineClose className="search--input-icon" onClick={handleCloseSearch} />
+							</span>
+
+							{showSearchModal && <SearchModal showSearchModal={showSearchModal} setShowSearchModal={setShowSearchModal} isLoading={isLoading} message={message} results={results} closeIcon={false} />}
+						</div>
+					)}
+
+
 				</div>
 			</section>
 		</header>

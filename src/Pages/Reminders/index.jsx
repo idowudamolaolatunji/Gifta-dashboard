@@ -240,19 +240,19 @@ function Reminders() {
 							</div>
 
 							<div className='category--spinner-mobile'>
-								<SkelentonOne height={'12rem'} />
-								<SkelentonOne height={'12rem'} />
+								<SkelentonOne height={'15rem'} />
+								<SkelentonOne height={'15rem'} />
 							</div>
 						</>
 					)}
 
 					{(reminders && reminders.length > 0) ? (
 						<>
-							<h3 className="section__heading" style={{ marginBottom: '1.4rem', fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
+							<h3 className="section__heading" style={{ marginTop: '-1rem', marginBottom: '2.6rem', fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
 							<div className="reminder__grid">
-								<button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button>
+								{/* <button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button> */}
 								{reminders?.map(reminder => (
-									<figure key={reminder._id} className="reminder--figure">
+									<figure key={reminder._id} className="reminder--figure" style={{ backgroundImage: `linear-gradient(rgba(225, 225, 225, .8), rgba(225, 225, 225, 0.8)), url(https://test.tajify.com/asset/others/${reminder?.image})`}} >
 										<p className="reminder--text">{reminder.title}.</p>
 										<span className="figure--bottom">
 											<span className="reminder--others">
@@ -270,6 +270,7 @@ function Reminders() {
 									</figure>
 								))}
 							</div>
+							<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
 						</>
 						) : (!isLoading) && (
 							<div className="reminder--banner banner">
@@ -278,10 +279,9 @@ function Reminders() {
 								<img src={ReminderImg} alt={ReminderImg} />
 								<button type="button" onClick={handleShowModal}>Set a Reminder</button>
 							</div>
-					)}
-
+						)
+					}
 				</div>
-				<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
 			</section>
 
 			{showDashboardModal && (

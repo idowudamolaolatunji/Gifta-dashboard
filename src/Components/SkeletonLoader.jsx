@@ -5,7 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 function SkeletonLoader() {
   return (
-    <div className="skeleton-grid">
+    <div className="skeleton-grid" style={{ marginTop: '6rem' }}>
         <Skeleton height={"14rem"} />
         <Skeleton height={"14rem"} />
         <Skeleton height={"14rem"} />

@@ -53,7 +53,7 @@ function Header() {
                         <div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
                             {showDropdown && <Dropdown />}
 
-                            {(user?.image === "") ? (
+                            {(user?.image !== "") ? (
 							<img
 								alt={user?.fullName + " 's image"}
 								src={`https://test.tajify.com/asset/users/${user?.image}`}

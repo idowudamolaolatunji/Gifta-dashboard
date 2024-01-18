@@ -220,7 +220,7 @@ function Wallet() {
 
                     <div className="wallet--top">
                         <div className="wallet--user-info">
-                            {(user?.image === "") ? (
+                            {(user?.image !== "") ? (
 							<img
 								alt={user?.fullName + " 's image"}
 								src={`https://test.tajify.com/asset/users/${user?.image}`}
