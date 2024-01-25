@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
-import { CiLogout, CiUser, CiViewList } from "react-icons/ci";
-import { Link } from 'react-router-dom';
+import { CiHome, CiLogout, CiUser, CiViewList } from "react-icons/ci";
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../Auth/context/AuthContext';
 
 
-function Dropdown() {
+function Dropdown({ addHomeLink }) {
     const { logout } = useAuthContext();
+    const navigate = useNavigate()
 
     function handleLogout() {
         logout();
@@ -20,11 +21,17 @@ function Dropdown() {
     return (
         <div className='dropdown--figure'>
             <ul>
-                <li onClick={'/dashboard/profile'}>
+                {addHomeLink && (
+                    <li onClick={() => navigate('/dashboard')}>
+                        <CiHome />
+                        <p>Home</p>
+                    </li>
+                )}
+                <li onClick={() => navigate('/account-profile')}>
                     <CiUser />
                     <p>Account</p>
                 </li>
-                <li onClick={'/dashboard/plans'}>
+                <li onClick={'/plans'}>
                     <CiViewList />
                     <p>Plan</p>
                 </li>

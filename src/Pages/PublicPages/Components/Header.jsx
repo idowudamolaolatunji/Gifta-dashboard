@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import GiftLogo from "../../../Assets/gifta-logo.png";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 // import '../../DashBoard/main.css';
 import { LuMoon, LuSun } from "react-icons/lu";
-import { IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
+import { IoNotifications, IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
 import Dropdown from "../../../Components/Dropdown";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { getInitials } from "../../../utils/helper";
+import NotificationBox from "../../../Components/NotificationBox";
 
 
 function Header() {
-    const [mode, setMode] = useState(false);
+    // const [mode, setMode] = useState(false);
 	const [showDropdown, setShowDropdown] = useState(false);
-    const { user, token } = useAuthContext();
+    const [showNotificationBox, setShowNotificationBox] = useState(false);
+	const { user, token, notificationCount  } = useAuthContext();
 
 
   return (
@@ -35,6 +37,14 @@ function Header() {
                         </span> */}
                         {(user && token) && (
                             <>
+                               <span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
+                                    <IoNotifications className="dashboard__icon" style={{ fontSize: '2.8rem' }} />
+                                    {notificationCount > 0 && (<span>{notificationCount}</span>)}
+                                </span>
+                                {showNotificationBox && (
+                                    <NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />
+                                )}
+                                        
                                 <Link to="/settings">
                                     <span className="dashboard__icon-box">
                                         <IoSettingsOutline className="dashboard__icon" />
@@ -50,8 +60,8 @@ function Header() {
                         )}
                     </div>
                     {(token && user) ? (
-                        <div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
-                            {showDropdown && <Dropdown />}
+                        <div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)} onClick={() => setShowDropdown(!showDropdown)}>
+                            {showDropdown && <Dropdown addHomeLink={true} />}
 
                             {(user?.image !== "") ? (
 							<img
@@ -72,7 +82,8 @@ function Header() {
                             </span>
 
                             <span>
-                                <MdKeyboardArrowDown />
+                                {!showDropdown && <MdKeyboardArrowDown />}
+                                {showDropdown && <MdKeyboardArrowUp />}
                             </span>
                         </div>
                     ) : (

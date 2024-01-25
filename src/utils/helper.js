@@ -61,12 +61,12 @@ export function dateConverter(givenDate) {
 		return "Just now";
 	}
 	if (diffInSeconds < 60) {
-		return `${diffInSeconds} seconds ago`;
+		return `${diffInSeconds} secs ago`;
 	}
 
 	const diffInMins = moment().diff(inputDate, "minutes");
 	if (diffInMins < 60) {
-		return `${diffInMins} minute ago`;
+		return `${diffInMins} mins. ago`;
 	}
 	if (inputDate.isSame(currentDate, "day")) {
 		return `Today, ${inputDate.format("h:mm A")}`;

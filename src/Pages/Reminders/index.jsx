@@ -46,7 +46,7 @@ function Reminders() {
 	const [date, setDate] = useState('');
 	const [time, setTime] = useState('');
 
-	const { user, token } = useAuthContext();
+	const { token } = useAuthContext();
 
 	function handleResetId() {
 		setReminderId(null)
@@ -306,7 +306,7 @@ function Reminders() {
 					<p className='modal--text-2'>Are you sure you want to postpone this reminder?</p>
 					<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
 					<form className="reminder--form">
-						<div className="reminder--flex-2">
+						<div className="reminder--flex-2 postpone--flex">
 							<div className="form--item">
 								<label htmlFor="form--date" className="form--label">Date</label>
 								<input type="date" id="form--date" className='form--input' required value={date} onChange={e => setDate(e.target.value)} />
@@ -340,10 +340,8 @@ function Reminders() {
 				<Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`} others={true}>
 					{isSuccess ? (
 						<AiFillCheckCircle className="alert--icon" />
-					) : isError ? (
+					) : isError && (
 						<AiFillExclamationCircle className="alert--icon" />
-					) : (
-						""
 					)}
 					<p>{message}</p>
 				</Alert>

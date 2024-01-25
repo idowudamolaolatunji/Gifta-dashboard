@@ -1,21 +1,11 @@
 import React from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom'
 
 function DeleteModalUi({title, setShowDeleteModal, children}) {
-    const navigate = useNavigate();
 
     function handleCloseDeleteModal() {
         setShowDeleteModal(false)
     }
-    // function handleCloseDeleteModal() {
-    //     if(setShowDeleteModal) {
-    //         setShowDeleteModal(false)
-    //     } else {
-    //         navigate(-1);
-    //     }
-    // }
-
     return (
         <>
             <div className='delete--overlay' onClick={handleCloseDeleteModal} />

@@ -1,27 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import GiftLogo from "../../../Assets/gifta-logo.png";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
-import { IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { IoNotifications, IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import Dropdown from "../../../Components/Dropdown";
 import { LuSun, LuMoon, LuLayoutDashboard } from "react-icons/lu";
 import { TfiGift } from "react-icons/tfi";
 import { BsBell, BsJournalBookmark, BsShop } from "react-icons/bs";
 import { getInitials } from "../../../utils/helper";
+import NotificationBox from "../../../Components/NotificationBox";
 
 // import '../../DashBoard/main.css';
 
 
 function WishListDashHeader() {
 	const [showDropdown, setShowDropdown] = useState(false);
-	const [mode, setMode] = useState('light');
-	const { user } = useAuthContext();
+	// const [mode, setMode] = useState('light');
+	const [showNotificationBox, setShowNotificationBox] = useState(false);
+	const { user, notificationCount  } = useAuthContext();
+
 
 	return (
         <>
-		<header className="dashboard__header" style={{ marginBottom: '7.2rem'}}>
+		<header className="dashboard__header" style={{ marginBottom: '12rem'}}>
 			<div className='main-header sticky'>
 				<a href='https://getgifta.com/'>
 					<img src={GiftLogo} alt="logo" className="dashboard__logo" />
@@ -37,6 +40,14 @@ function WishListDashHeader() {
 							}
 						</span> */}
 
+						<span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
+							<IoNotifications className="dashboard__icon" style={{ fontSize: '2.8rem' }} />
+							{notificationCount > 0 && (<span>{notificationCount}</span>)}
+						</span>
+						{showNotificationBox && (
+							<NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />
+						)}
+
 						<Link to="/settings">
 							<span className="dashboard__icon-box">
 								<IoSettingsOutline className="dashboard__icon" />
@@ -50,7 +61,7 @@ function WishListDashHeader() {
 						</Link>
 					</div>
 
-					<div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
+					<div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)} onClick={() => setShowDropdown(!showDropdown)} >
 						{showDropdown && <Dropdown />}
 
 						{(user?.image !== "") ? (
@@ -72,7 +83,8 @@ function WishListDashHeader() {
 						</span>
 
 						<span>
-							<MdKeyboardArrowDown />
+							{!showDropdown && <MdKeyboardArrowDown />}
+							{showDropdown && <MdKeyboardArrowUp/>}
 						</span>
 					</div>
 				</div>

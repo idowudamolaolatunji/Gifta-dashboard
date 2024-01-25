@@ -92,6 +92,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             handleReset();
             setHelpReset(false);
 
+            // const res = await fetch(`http://localhost:3010/api/reminders/create-reminder`, {
             const res = await fetch(`https://test.tajify.com/api/reminders/create-reminder`, {
                 method: 'POST',
                 headers: {
@@ -104,8 +105,8 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                     reminderDate: date,
                     reminderTime: time,
                     RepeatAllDay: checkRepeat,
-                    sendMessage: toggle === 'send-message' ? true : false,
-                    sendThrough: checkedEmail ? 'email' : checkedSms && 'sms',
+                    sendMessage: toggle === 'send-message' ? true : true,
+                    sendThrough: checkedEmail ? 'email' : checkedSms && 'sms' || null,
                     emailAddress: checkedEmail ? contactInfo : '',
                     phoneNumber: checkedSms ? contactInfo : '',
                     reminderMessage
@@ -121,11 +122,12 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             // UPLOAD IMAGE
             const formData = new FormData();
             const id = data.data.reminder._id;
-            if(!imageFile) return
-            handleUploadImg(formData, id)
+            if(imageFile) {
+                handleUploadImg(formData, id);
+            }
 
             setIsSuccess(true);
-            setMessage(data.message)
+            setMessage(data.message);
             setTimeout(() => {
                 setIsSuccess(false);
                 setMessage('');
@@ -200,7 +202,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                     <label htmlFor="form--clock" className="form--label">Time</label>
                     <input type="time" id="form--clock" className='form--input' value={time} onChange={e => setTime(e.target.value)} required />
                 </div>
-                <div className="form--item">
+                <div className="form--item form--switches">
                     {toggle === 'just-remind' && (
                         <div className="form--flexy" style={{ flexDirection: 'column', alignItems: 'flex-start'}}>
                             <label htmlFor="form--mail" className="form--label">Repeat All Day!</label>
@@ -250,14 +252,14 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                 </span>
                 <div className="form--item">
                     <label htmlFor="image" className='form--label-img form--label'><IoIosCloudUpload className='form--label-icon' style={ imageFile ? { color: '#bb0505' } : {}} /> Upload Reminder Image {imageFile ? (<IoCheckmarkDone className="form--label-icon" style={{ color: '#bb0505' }} />) : ''}</label>
-                    <input type="file" id='image' className='form--input-img' required name='image' accept='image/*' onChange={e => handleUploadImage(e)} />
+                    <input type="file" id='image' className='form--input-img' name='image' accept='image/*' onChange={e => handleUploadImage(e)} />
                 </div>
             </div>
             {(toggle === 'send-message' && (checkedEmail || checkedSms)) && (
                 <>
                     <div className="form--item">
                         <label htmlFor="form--contact" className='form--label'>{checkedEmail ? 'Recipient Email Address' : checkedSms && 'Recipient Phone Number'}</label>
-                        <input style={{ width: '50%'}} type={checkedEmail ? 'text' : 'number'} required id="form--contact" className='form--input' placeholder={checkedEmail ? 'Enter Recipient Email' : checkedSms && 'Enter Recipient Phone'} value={contactInfo} onChange={e =>setContactInfo(e.target.value)} />
+                        <input type={checkedEmail ? 'text' : 'number'} required id="form--contact" className='form--input' placeholder={checkedEmail ? 'Enter Recipient Email' : checkedSms && 'Enter Recipient Phone'} value={contactInfo} onChange={e =>setContactInfo(e.target.value)} />
                     </div>
 
                     <div className="form--item">

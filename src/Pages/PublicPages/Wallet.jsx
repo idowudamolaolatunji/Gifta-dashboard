@@ -10,9 +10,14 @@ import { PaystackButton } from 'react-paystack';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import Spinner from '../../Components/Spinner';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import { FiMinus, FiPlus } from "react-icons/fi";
+
+import CollapsibleDiv from 'react-collapsible';
+import { MdArrowDropDown, MdKeyboardDoubleArrowRight } from 'react-icons/md';
+import { CiBank, CiCreditCard1 } from 'react-icons/ci';
+import { RiAdminLine } from "react-icons/ri";
 
 
 
@@ -78,6 +83,8 @@ function Wallet() {
 
     const [email, setEmail] = useState(user.email);
     const [amount, setAmount] = useState();
+    const [withdrawalAmount, setWithdrawalAmount] = useState();
+    const [password, setPassword] = useState('');
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
@@ -170,6 +177,42 @@ function Wallet() {
             handleFailure(err.message)
         } finally {
             setIsLoading(false);
+        }
+    }
+
+    async function handleWithdrawal(e) {
+        try {
+            if(!user?.bankName || !user?.holderName || !user?.acctNumber) {
+                throw new Error('Input Bank details in Profile');
+            }
+            if(!withdrawalAmount || !password) throw new Error('Fill all fields!');
+
+            e.preventDefault();
+            handleReset();
+            setIsLoading(true);
+            setHelpReset(false);
+
+            const res = await fetch(`https://test.tajify.com/api/transactions/withdrawal-request`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ amount: withdrawalAmount, password })
+            });
+            if(!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            if(data.status !== "success") throw new Error(data.message);
+            setIsSuccess(true);
+            setMessage("Withdrawal Request Successful!");
+            setTimeout(function() {
+                setIsSuccess(false);
+                setMessage("");
+                setShowWithdrawalModal(false);
+                setHelpReset(true);
+            }, 2000);
+
+        } catch(err) {
+            handleFailure(err.message);
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -337,8 +380,7 @@ function Wallet() {
                     </>
                 }>
                     <span className='modal--info'>Withdrawals are final. Confirm your details and available balance before initiating. Proceed with caution.!</span>
-                    <form className="pay--form">
-
+                    <form className="pay--form" onSubmit={e => handleWithdrawal(e)}>
                         <div className="form--item">
                             <label className="form--label" htmlFor="amount">
                                 Withdrawal Amount
@@ -347,95 +389,95 @@ function Wallet() {
                                 id="amount"
                                 className="form--input"
                                 placeholder="Enter Your Desired Amount"
-                                defaultValue={amount}
-                                value={amount}
+                                defaultValue={withdrawalAmount}
+                                value={withdrawalAmount}
                                 decimalsLimit={2}
                                 required
                                 prefix="₦ "
-                                onValueChange={(value, _) => setAmount(value)}
+                                onValueChange={(value, _) => setWithdrawalAmount(value)}
                             />
                         </div>
 
-                        <div className="form--flex">
-                            <div className="form--item">
-                                <label className="form--label" htmlFor="bank">
-                                    Bank Name
-                                </label>
-                                <input
-                                    className="form--input"
-                                    type="text"
-                                    id="bank"
-                                    // onChange={(e) => setBankName(e.target.value)}
-                                    // value={bankName}
-                                    required
-                                    placeholder="Your Bank"
-                                />
+                        <CollapsibleDiv trigger={
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <p>Bank Information</p>
+                                <MdArrowDropDown style={{ fontSize: '2.8rem' }} />
+                            </div>
+                        } className='form--collapsible'>
+                            <div className='bank-info'>
+                                <span>
+                                    <p><CiBank /> Bank Name</p>
+                                    <p style={ !user?.bankName ? { color: "#bb0505" } : {}}>{user?.bankName || "Empty"}</p>
+                                </span>
+                                <span>
+                                    <p><CiCreditCard1 /> Account Number</p>
+                                    <p style={ !user?.acctNumber ? { color: "#bb0505" } : {}}>{user?.acctNumber || "Empty"}</p>
+                                </span>
+                                <span>
+                                    <p><RiAdminLine /> Account Holder's Name</p>
+                                    <p style={ !user?.holderName ? { color: "#bb0505" } : {}}>{user?.holderName || "Empty"}</p>
+                                </span>
                             </div>
 
-                            <div className="form--item">
-                                <label className="form--label" htmlFor="acct-num">
-                                    Account Number
-                                </label>
-                                <input
-                                    className="form--input"
-                                    type="number"
-                                    id="acct-num"
-                                    // onChange={(e) => setAcctNumber(e.target.value)}
-                                    // value={acctNumber}
-                                    required
-                                    placeholder="Your Acct Number"
-                                />
+                            <Link to={'/account-profile'} className="form--item form--acct-btn">
+                                <div>Goto Account <MdKeyboardDoubleArrowRight style={{ fontSize: '1.6rem' }} /></div>
+                            </Link>
+                        </CollapsibleDiv>
+
+
+                        <div className="form--bank-info-d">
+                            <div className='bank-info'>
+                                <span>
+                                    <p><CiBank /> Bank Name</p>
+                                    <p style={ !user?.bankName ? { color: "#bb0505" } : {}}>{user?.bankName || "Empty"}</p>
+                                </span>
+                                <span>
+                                    <p><CiCreditCard1 /> Account Number</p>
+                                    <p style={ !user?.acctNumber ? { color: "#bb0505" } : {}}>{user?.acctNumber || "Empty"}</p>
+                                </span>
+                                <span>
+                                    <p><RiAdminLine /> Account Holder's Name</p>
+                                    <p style={ !user?.holderName ? { color: "#bb0505" } : {}}>{user?.holderName || "Empty"}</p>
+                                </span>
                             </div>
+
+                            <Link style={{ marginLeft: 'auto' }} to={'/account-profile'} className="form--item form--acct-btn">
+                                <div>Goto Account <MdKeyboardDoubleArrowRight style={{ fontSize: '1.6rem' }} /></div>
+                            </Link>
                         </div>
-
-                        <div className="form--flex">
-                            <div className="form--item">
-                                <label className="form--label" htmlFor="acct-name">
-                                    Account Name
-                                </label>
-                                <input
-                                    className="form--input"
-                                    type="text"
-                                    id="acct-name"
-                                    // onChange={(e) => setHolderName(e.target.value)}
-                                    // value={holderName}
-                                    required
-                                    placeholder="Holder's Name"
-                                />
-                            </div>
-
-                            <div className="form--item">
-                                <label className="form--label" htmlFor="password">
-                                    Password Confirmation
-                                </label>
-                                <input
-                                    className="form--input"
-                                    type="password"
-                                    id="password"
-                                    // onChange={(e) => setPassword(e.target.value)}
-                                    // value={password}
-                                    required
-                                    placeholder="Password Confirmation"
-                                />
-                            </div>
-                        </div>
-
                         <div className="form--item">
-                            <button className="form--submit">Withdrawal Request</button>
+                            <label className="form--label" htmlFor="password">
+                                Password Confirmation
+                            </label>
+                            <input
+                                className="form--input"
+                                type="password"
+                                id="password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
+                                required
+                                placeholder="Password Confirmation"
+                            />
+                        </div>
+
+                        <div className={`form--item ${(!user?.bankName || !user?.acctNumber || !user?.holderName) ? 'unclickable-form-item' : ''}`}>
+                            <button type='submit' className="form--submit">Withdrawal Request</button>
                         </div>
                     </form>
                 </DashboardModal>
             )}
 
 
-            <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
-                {isSuccess ? (
-                    <AiFillCheckCircle className="alert--icon" />
-                ) : isError && (
-                    <AiFillExclamationCircle className="alert--icon" />
-                )}
-                <p>{message}</p>
-            </Alert>
+            {(isError || isSuccess) && (
+                <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                    {isSuccess ? (
+                        <AiFillCheckCircle className="alert--icon" />
+                    ) : isError && (
+                        <AiFillExclamationCircle className="alert--icon" />
+                    )}
+                    <p>{message}</p>
+                </Alert>
+            )}
         </>
     )
 }

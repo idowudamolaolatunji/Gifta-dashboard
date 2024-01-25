@@ -3,13 +3,15 @@ import GiftLogo from "../../../Assets/gifta-logo.png";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
-import { IoSettingsOutline, IoSearchOutline, IoWalletOutline } from "react-icons/io5";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { IoSettingsOutline, IoSearchOutline, IoWalletOutline, IoNotifications } from "react-icons/io5";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import Dropdown from "../../../Components/Dropdown";
 import { LuSun, LuMoon } from "react-icons/lu";
 import { getInitials } from "../../../utils/helper";
 import SearchModal from "../../../Components/SearchModal";
 import { AiOutlineClose } from "react-icons/ai";
+import { IoIosNotificationsOutline } from "react-icons/io";
+import NotificationBox from "../../../Components/NotificationBox";
 
 
 const DashHeader = ({ isDasboard }) => {
@@ -23,9 +25,9 @@ const DashHeader = ({ isDasboard }) => {
 	const [message, setMessage] = useState('');
 	const [results, setResults] = useState({});
 	const [clicked, setClicked] = useState(false);
+	const [showNotificationBox, setShowNotificationBox] = useState(false);
 
-
-	const { user, token } = useAuthContext();
+	const { user, token, handleSetNotification, notificationCount  } = useAuthContext();
 
 	function handleCloseSearch() {
 		setSearchQuery('');
@@ -94,6 +96,9 @@ const DashHeader = ({ isDasboard }) => {
 
 	}, [searchQuery]);
 
+
+	
+
 	return (
 		<header className="dashboard__header">
 			<div className={`main-header ${show ? 'sticky' : ''}`}>
@@ -110,6 +115,14 @@ const DashHeader = ({ isDasboard }) => {
 								(<LuSun onClick={() => setMode('light')} />)
 							}
 						</span> */}
+
+						<span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
+							<IoNotifications className="dashboard__icon" style={{ fontSize: '2.8rem' }} />
+							{notificationCount > 0 && (<span>{notificationCount}</span>)}
+						</span>
+						{showNotificationBox && (
+							<NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />
+						)}
 
 						<Link to="/settings">
 							<span className="dashboard__icon-box">
@@ -146,7 +159,8 @@ const DashHeader = ({ isDasboard }) => {
 						</span>
 
 						<span>
-							<MdKeyboardArrowDown />
+							{!showDropdown && <MdKeyboardArrowDown />}
+							{showDropdown && <MdKeyboardArrowUp/>}
 						</span>
 					</div>
 				</div>

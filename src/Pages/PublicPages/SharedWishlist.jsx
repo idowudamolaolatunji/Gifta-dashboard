@@ -52,11 +52,11 @@ function SharedWishlist({}) {
     const [isSuccess, setIsSuccess] = useState(false);
     const [randomText, setRandomText] = useState('');
 
-    const [fire, setFire] = useState(false);
     const [helpReset, setHelpReset] = useState(false);
     const [selectedWishId, setSelectedWishId] = useState(null);
+    const [contributors, setContributors] = useState(0);
 
-    const paidEl = useRef(null);
+    const animatedBtnEl = useRef(null);
 
     const { shareableUrl } = useParams();
 
@@ -66,7 +66,6 @@ function SharedWishlist({}) {
         handleRendomText()
         setSelectedWishId(id)
     }
-
 
     let charges;
     function calcTotalAmount(amount) {
@@ -108,7 +107,6 @@ function SharedWishlist({}) {
     // HANDLE FETCH STATE RESET
     function handleReset() {
         setIsError(false);
-        setFire(false)
         setMessage('')
         setIsSuccess(false);
         setHelpReset(false);
@@ -134,17 +132,13 @@ function SharedWishlist({}) {
             }
             setIsSuccess(true);
             setMessage("Thank you for you payment!");
+            setShowModal(false);
             setTimeout(() => {
-                setShowModal(false);
                 setHelpReset(true);
                 setIsSuccess(false);
                 setMessage("");
-                setFire(true)
+                setContributors(prevContributors => prevContributors += 1)
             }, 2000);
-
-            // Fire the animation
-            const mockEvent = { target: { classList: [] } }; // Mock event
-            fire(mockEvent);
         } catch (err) {
             handleFailure(err.message)
         } finally {
@@ -168,6 +162,7 @@ function SharedWishlist({}) {
                 const data = await res.json();
                 if(data.status !== "success") throw new Error(data.message);
                 setWishList(data.data.wishList);
+                setContributors(data.data.wishList?.contributors || 0);
             } catch(err) {
                 console.log(err);
             } finally {
@@ -203,6 +198,25 @@ function SharedWishlist({}) {
     }, [wishList, helpReset])
 
 
+    useEffect(function() {
+        if (isSuccess) {
+            setTimeout(function() {
+                fireAnimation();
+            }, 3000);
+        }
+      }, [isSuccess]);
+
+
+    const fireAnimation = () => {
+        if (animatedBtnEl.current) {
+            // fire({ target: {} });
+            fire();
+        } else {
+          console.error('Btn not found!');
+        }
+    };
+
+
   return (
     <>
         <Header />
@@ -222,7 +236,7 @@ function SharedWishlist({}) {
                             <div className="top--details">
                                 <p className="wishlist--title">{wishList.name}.</p>
                                 <span className='top--info'>
-                                    <span>Contributors <TbUsersGroup />: <p>{wishList?.contributors || 0}</p></span>
+                                    <span>Contributors <TbUsersGroup />: <p>{contributors}</p></span>
                                     <span>Wishes subtotal<GiMoneyStack />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amount, 0))}</p></span>
                                     <span>Accoumulated <GiTakeMyMoney />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amountPaid, 0))}</p></span>
                                 </span>
@@ -247,7 +261,7 @@ function SharedWishlist({}) {
                                             <p>{wishItem.wish}</p>
                                         </span>
                                         <div className='lists--actions'>
-                                            <div className='lists--pay-btn' onClick={() => handlePay(i, wishItem._id)}><img height={'17rem'} src={paystackSvg} ref={paidEl} /><p>Pay</p></div>                                           
+                                            <div className='lists--pay-btn' onClick={() => handlePay(i, wishItem._id)}><img height={'17rem'} src={paystackSvg} ref={animatedBtnEl} /><p>Pay</p></div>                                           
                                         </div>
                                     </span>
                                     <span className='lists--item-bottom'>
@@ -255,7 +269,7 @@ function SharedWishlist({}) {
                                             <span><IoPricetagOutline /><p>₦{numberConverter(wishItem.amount)}</p></span>
                                             <span><SlCalender /><p>{expectedDateFormatter(wishItem.deadLineDate)}</p></span>
                                         </div>
-                                        <ProgressBar progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
+                                        <ProgressBar amountPaid={`₦${numberConverter(wishItem.amountPaid)}`} progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
                                     </span>
                                 </li>
                             ))}

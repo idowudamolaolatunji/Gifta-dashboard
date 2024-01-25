@@ -28,7 +28,7 @@
 	top: 0;
 }
 .section--stay {
-	position: fixed;
+	position: sticky;
 	top: 7.2rem;
 	z-index: 1000;
 }
@@ -42,6 +42,10 @@
 	color: #555;
 }
 .sticky .dashboard__icon-box .dashboard__icon {
+	color: #bb0505;
+}
+.sticky .dashboard__icon-box span {
+	background-color: #fff;
 	color: #bb0505;
 }
 .sticky .profile__img {
@@ -126,6 +130,27 @@
 .dashboard__icon-box .dashboard__icon {
 	color: #fff;
 	font-size: 2.4rem;
+}
+.dashboard__icon-box {
+	position: relative;
+}
+.dashboard__icon-box span {
+	position: absolute;
+	width: 1.4rem;
+	height: 1.4rem;
+	border-radius: 50%;
+	background-color: #bb0505;
+	color: #fff;
+	font-size: 1.2rem;
+	font-weight: 600;
+	box-shadow: .2rem .5rem 2rem rgba(0, 0, 0, 0.1);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	top: 0;
+	right: 0;
 }
 .dashboard--mode {
 	color: #fff;
@@ -1300,20 +1325,6 @@ span.validity::after {
 }
 
 
-
-/* 
-<div className="lists--head-box-mobile">
-	<span onClick={() => navigate(-1)} className='wishlist--back-btn-mobile'>Back</span>
-	<img src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList?.name} />
-	<div>
-		<span className='lists--title'>{wishList?.name}</span>
-		<span className='lists--share-btn'>{wishList.shortSharableUrl}</span>
-		<span className='lists--date'>{wishList.createdAt}</span>
-	</div>
-</div>
-
-*/
-
 .lists--head-box-mobile {
 	width: 100%;
 	height: 20rem;
@@ -1322,6 +1333,26 @@ span.validity::after {
 	overflow: hidden;
 	display: none;
 }
+.lists--head-box-mobile .figure--icon {
+	position: absolute;
+	top: -20%;
+	right: 2%;
+}
+.lists--head-box-mobile .w-figure--action-box {
+	width: 10rem;
+	position: fixed !important;
+	z-index: 2000;
+	top: 15%;
+	display: flex;
+	justify-content: flex-start;
+}
+.lists--head-box-mobile .w-figure--action-box ul {
+	color: #444;
+	font-weight: 500;
+	font-size: 1.4rem;
+}
+
+
 .wishlist--back-btn-mobile {
 	width: 3rem;
 	height: 3rem;
@@ -1945,6 +1976,9 @@ span.validity::after {
 	color: #777;
 	font-weight: 400;
 }
+#form--contact {
+	width: 50%;
+}
 .reminder--form .reminder--flex-2-1 {
 	grid-template-columns: 1.6fr 1fr;
 	gap: 1rem;
@@ -2279,3 +2313,260 @@ span */
     color: #008001;
     background-color: #d7ecd1b7;
 }
+
+
+
+
+/* =================================== */
+/* SETTINGS PAGE */
+/* =================================== */
+
+.setting--container, .account--container {
+	max-width: 60rem;
+	margin: 0 auto;
+
+	display: flex;
+	flex-direction: column;
+	gap: 4.8rem;
+	position: relative;
+}
+.settings--form, .account--form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.4rem;
+
+	padding: 1.2rem;
+	border-radius: 1rem;
+	background-color: #fefcff;
+}
+.settings--form input, .settings--form select, .account--form input {
+	font-size: 1.4rem;
+}
+.settings--form button, .account--form button {
+	padding: 1rem 1.4rem;
+	margin-left: auto;
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+.settings--heading {
+	font-size: 2.8rem;
+	text-align: center;
+	margin-bottom: 6rem;
+}
+.setting-form--heading {
+	color: #bb0505;
+	font-size: 2rem;
+	font-weight: 500;
+	margin-bottom: 2rem;
+}
+.form--input.disable {
+	opacity: .5;
+}
+
+
+.account--container {
+	gap: 3rem;
+}
+.account--top {
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1.2rem;
+}
+.account--top .wallet--user-name {
+	font-size: 2.2rem;
+	font-weight: 600;
+}
+#profile-image-input {
+	display: none;
+}
+#profile-image-label {
+	height: 12.8rem;
+	width: 12.8rem;
+	border-radius: 50%;
+	position: relative;
+	cursor: pointer;
+	overflow: hidden;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: all 0.35s;
+}
+
+#profile-image-label img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover !important;
+}
+#profile-image-label span, #profile-image-label img {
+	position: absolute;
+}
+#profile-image-label .image--label {
+	background-color: rgba(0, 0, 0, 0.2);
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: .8rem;
+	-webkit-backdrop-filter: blur(.5px);
+	backdrop-filter: blur(.5px);
+	color: #fff;
+	transition: all .35s;
+}
+#profile-image-label .image--label:hover {
+	background-color:  rgba(0, 0, 0, 0.35);
+	-webkit-backdrop-filter: blur(4px);
+	backdrop-filter: blur(4px);
+}
+#profile-image-label .user__img-initials {
+	width: 100%;
+	height: 100%;
+}
+
+
+/* =============================================== */
+/* NOTIFICATION */
+/* =============================================== */
+.notification--desktop {
+	width: 50rem;
+	height: 90vh;
+	position: absolute;
+	top: 7.6rem;
+	right: 0;
+	background-color:#fff;
+	z-index: 99;
+	box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
+
+	display: flex;
+	flex-direction: column;
+	padding: 1.8rem;
+	border-bottom-right-radius: .6rem;
+	border-bottom-left-radius: .6rem;
+	z-index: 2100;
+}
+.notification--overlay {
+	background-color: transparent;
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 2000;
+}
+.notification--title {
+	font-size: 2rem;
+	font-weight: 500;
+	margin-bottom: 1.4rem;
+	color: #bb0505;
+}
+.notification--tabs {
+	display: flex;
+	align-items: center;
+	align-self: flex-start;
+	gap: .8rem;
+}
+.notification--tab {
+	font-size: 1.3rem;
+	font-weight: 500;
+	padding: 1.2rem .8rem;
+	cursor: pointer;
+	transition: all .35s;
+}
+.notification--tab:hover {
+	color: #bb0505;
+}
+.notification--tab.tab--active {
+	background-color: #eee;
+	color: #bb0505;
+}
+.notification--icon {
+	font-size: 12rem;
+}
+.notification-empty {
+	border-radius: .6rem;
+	margin-top: 2rem;
+	background-color: #eee;
+	color: #bb0505;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+	padding: 1.2rem;
+}
+.notification--mobile .notification--box {
+	overflow-y: auto;
+	height: 90%;
+}
+.notification--mobile {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	right: 0;
+	/* transform: translate(-50%, -50%); */
+	width: 100%;
+	height: 100vh;
+	background-color: #fff;
+	z-index: 10000;
+	padding: 2rem;
+	display: none;
+	padding-bottom: 2.8rem;
+}
+.notification--top {
+	display: flex;
+	align-items: flex-start;
+	gap: .4rem;
+}
+.note--icon {
+	font-size: 1.6rem;
+	color: #bb0505;
+}
+.notification-close-icon {
+	color: #bb0505;
+	font-size: 2.8rem;
+	position: absolute;
+	right: 2rem;
+	top: 2rem;
+	cursor: pointer;
+}
+.dashboard__icon-box span {
+	box-shadow: .2rem 1rem 3rem rgba(0, 0, 0, 0.15);
+}
+.notification--box {
+	border-top: 1.6px solid #eee;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	margin-top: 1.4rem;
+	padding-top: 1.8rem;
+	overflow-y: auto;
+}
+.notification--figure {
+	display: flex;
+	flex-direction: column;
+	gap: .2rem;
+	background-color: #f9eeee23;
+	padding: 1rem;
+	border-radius: .4rem;
+}
+.notification--topic {
+	font-size: 1.5rem;
+	font-weight: 500;
+	color: #777;
+}
+.notification--content {
+	font-size: 1.2rem;
+	line-height: 1.6;
+}
+.notification--date {
+	font-size: 1rem;
+	margin-left: auto;
+	color: #bb0505;
+} 

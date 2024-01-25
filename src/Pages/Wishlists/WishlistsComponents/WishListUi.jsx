@@ -4,10 +4,10 @@ import { useAuthContext } from '../../../Auth/context/AuthContext'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PiFunnelBold, PiPlusBold, PiShareFatFill } from 'react-icons/pi';
 import { RiDeleteBin6Line, RiEditLine } from 'react-icons/ri';
-import { IoChevronBackOutline, IoPricetagOutline } from 'react-icons/io5';
+import { IoChevronBackOutline, IoEllipsisVerticalSharp, IoPricetagOutline } from 'react-icons/io5';
 import { SlCalender } from "react-icons/sl";
 import ProgressBar from '../../../Components/ProgressBar';
-import { calculatePercentage, dateConverter, expectedDateFormatter, numberConverter } from '../../../utils/helper';
+import { calculatePercentage, currencyConverter, dateConverter, expectedDateFormatter, numberConverter } from '../../../utils/helper';
 import { FaCheck } from 'react-icons/fa6';
 import WishInputUi from './WishInputUi';
 import DeleteModalUi from './DeleteModalUi';
@@ -17,6 +17,7 @@ import DashboardModal from '../../../Components/Modal';
 import { ShareSocial } from 'react-share-social';
 import Alert from '../../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 
 
 
@@ -60,6 +61,13 @@ function WishListUi() {
     });
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    
+    // WISHLIST ACTIONS ON MOBILE
+    const [showActionInfo, setShowActionInfo] = useState(false);
+	// const [showWishlistDeleteModal, setShowWishlistDeleteModal] = useState(false);
+	// const [showWishListEditModal, setShowWishListEditModal] = useState(false);
+
 
     useEffect(function () {
         return localStorage.setItem('wishNewModal', JSON.stringify(showNewModal));
@@ -123,13 +131,36 @@ function WishListUi() {
         setSelectedTab(tab)
     }
 
+
     async function handleDeleteWishItem() {
         try {
-
+            setIsLoading(true);
+            handleReset();
+            setHelpReset(false);
+            const res = await fetch(`https://test.tajify.com/api/wishlists/delete-wish/${wishList._id}/${selectedWishId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if(!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            if(data.status !== "success") {
+                throw new Error(data.message);
+            }
+            setMessage(data.message);
+			setIsSuccess(true);
+			setTimeout(() => {
+                showDeleteModal(false);
+				setIsSuccess(false);
+				setMessage("");
+                setHelpReset(true);
+			}, 1500);
         } catch (err) {
-
+            handleFailure(err.message);
         } finally {
-
+            setIsLoading(false);
         }
     }
 
@@ -183,13 +214,36 @@ function WishListUi() {
             }
         }
         handleFetchWishes();
-    }, [wishList, helpReset])
+    }, [wishList, helpReset]);
+
+
+    
     return (
         <>
             <WishListDashHeader />
+
+            <>
+                {isLoading && (
+                    <div className='gifting--loader'>
+                        <img src={GiftLoader} alt='loader' />
+                    </div>
+                )}
+            </>
+            
+            {/* {(showActionInfo) && (
+                <>
+                    <div className="overlay" onClick={() => setShowActionInfo(false)} style={{ zIndex: 3000 }} />
+                    <div className="w-figure--action-box">
+                        <ul>
+                            <li onClick={() => setShowWishListEditModal(true)}>Edit</li>
+                            <li onClick={() => setShowWishlistDeleteModal(true)}>Delete</li>
+                        </ul>
+                    </div>
+                </>
+            )} */}
+
             <section className="section">
                 <div className="section__container">
-                    {/* <Link to={'/dashboard/wishlists'} className='wishlist--back-btn'>Back</Link> */}
                     <span onClick={() => navigate(-1)} className='wishlist--back-btn back-btn'>Back</span>
 
 
@@ -201,9 +255,10 @@ function WishListUi() {
                             <div>
                                 <span onClick={() => navigate(-1)} className='wishlist--back-btn-mobile'><IoChevronBackOutline /></span>
                                 <span className='lists--title'>{wishList?.name}</span>
-                                {/* <span className='lists--share-btn'>{wishList.shortSharableUrl}</span> */}
                                 <span className='lists--share-btn' onClick={() => handleShare(`https://app.getgifta.com/shared/${wishList.shortSharableUrl}`, wishes.length > 0)} >Share <PiShareFatFill /></span>
                                 <span className='lists--date'>Created: {' '}{dateConverter(wishList.createdAt)}</span>
+
+                                <IoEllipsisVerticalSharp className="figure--icon" style={{ color: '#fff' }} onClick={() => setShowActionInfo(!showActionInfo)} />
                             </div>
                         </div>
 
@@ -240,7 +295,7 @@ function WishListUi() {
                                             <span><IoPricetagOutline /><p>₦{numberConverter(wishItem.amount)}</p></span>
                                             <span><SlCalender /><p>{expectedDateFormatter(wishItem.deadLineDate)}</p></span>
                                         </div>
-                                        <ProgressBar progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
+                                        <ProgressBar amountPaid={`₦${numberConverter(wishItem.amountPaid)}`} progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
                                     </span>
                                 </li>
 
@@ -309,14 +364,16 @@ function WishListUi() {
 			)}
 
 
-            <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
-                {isSuccess ? (
-                    <AiFillCheckCircle className="alert--icon" />
-                ) : isError && (
-                    <AiFillExclamationCircle className="alert--icon" />
-                )}
-                <p>{message}</p>
-            </Alert>
+            {(isError || isSuccess) && (
+                <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                    {isSuccess ? (
+                        <AiFillCheckCircle className="alert--icon" />
+                    ) : isError && (
+                        <AiFillExclamationCircle className="alert--icon" />
+                    )}
+                    <p>{message}</p>
+                </Alert>
+            )}
         </>
     )
 }

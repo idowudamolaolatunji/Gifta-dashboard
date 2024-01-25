@@ -11,7 +11,7 @@ import { useAuthContext } from "../../Auth/context/AuthContext";
 import { dateConverter } from "../../utils/helper";
 import { PiPlusBold, PiShareFatFill } from "react-icons/pi";
 import { ShareSocial } from 'react-share-social';
-import { AiFillExclamationCircle } from "react-icons/ai";
+import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 import Alert from "../../Components/Alert";
 import { Link } from "react-router-dom";
 import SkelentonTwo from "../../Components/SkelentonTwo";
@@ -52,6 +52,9 @@ function Wishlists() {
 
 	const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
+	const [isLoadingDel, setIsLoadingDel] = useState(false);
+
 	const [helpReset, setHelpReset] = useState(false);
 	const [showActionInfo, setShowActionInfo] = useState(false);
 	const [selectedId, setSelectedId] = useState();
@@ -63,12 +66,6 @@ function Wishlists() {
 	function handleActionInfo(id) {
 		setSelectedId(id);
 		setShowActionInfo(!showActionInfo);
-
-		// setShowActionInfo((prevShowActionInfo) => {
-		// 	const shouldToggle = prevShowActionInfo || selectedId !== id;
-		// 	setSelectedId(shouldToggle ? id : null);
-		// 	return !prevShowActionInfo;
-		// });
 	}
 
 	function handleSelectedWishList(data) {
@@ -91,6 +88,13 @@ function Wishlists() {
 		}
 	}
 
+	 // HANDLE FETCH STATE RESET
+	function handleReset() {
+        setIsError(false);
+        setMessage('')
+        setIsSuccess(false);
+    }
+
 	// HANDLE ON FETCH FAILURE
     function handleFailure(mess) {
         setIsError(true);
@@ -100,6 +104,38 @@ function Wishlists() {
             setMessage('')
         }, 3000);
     }
+
+	async function handleDeleteWishlist() {
+		try {
+			setIsLoadingDel(true);
+            handleReset();
+            setHelpReset(false);
+            const res = await fetch(`https://test.tajify.com/api/wishlists/delete-my-wishlist/${selectedId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if(!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            if(data.status !== "success") {
+                throw new Error(data.message);
+            }
+            setMessage(data.message);
+			setIsSuccess(true);
+			setTimeout(() => {
+                setShowDeleteModal(false);
+                setHelpReset(true);
+				setIsSuccess(false);
+				setMessage("");
+			}, 1500);
+        } catch (err) {
+            handleFailure(err.message);
+        } finally {
+            setIsLoadingDel(false);
+        }
+	}
 
 	useEffect(function () {
 		async function fetchWishlists() {
@@ -135,6 +171,15 @@ function Wishlists() {
 			<DashTabs />
 			<section className="wishlist__section section">
 				<div className="section__container" style={{ position: 'relative' }}>
+
+					<>
+						{isLoadingDel && (
+							<div className='gifting--loader'>
+								<img src={GiftLoader} alt='loader' />
+							</div>
+						)}
+					</>
+
 					{/* {isLoading && (<SkelentonTwo />)} */}
 					{isLoading &&  (
 							
@@ -245,6 +290,8 @@ function Wishlists() {
 					)}
 				</div>
 			</section>
+
+
 			{showDashboardModal && (
 				<DashboardModal
 					title={'Create your Wishlist'}
@@ -254,6 +301,7 @@ function Wishlists() {
 					<WishlistForm setShowDashboardModal={setShowDashboardModal} setHelpReset={setHelpReset} />
 				</DashboardModal>
 			)}
+
 			{showWishListEditModal && (
 				<DashboardModal
 					title={'Update your Wishlist'}
@@ -263,6 +311,7 @@ function Wishlists() {
 					<WishlistForm data={selectedWishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpReset} />
 				</DashboardModal>
 			)}
+
 			{share && (
 				<DashboardModal
 					title={'Make your wish come true! Share Link'}
@@ -277,23 +326,28 @@ function Wishlists() {
 					/>
 				</DashboardModal>
 			)}
+
 			{(showDeleteModal) && (
 				<DeleteModalUi title={`Delete WishList!`} setShowDeleteModal={setShowDeleteModal}>
 					<p className='modal--text'>Are you sure you want to delete this WishList?</p>
 					<span className='modal--info'>Note that everything relating data to this WishList would also be deleted including transaction history!</span>
 					<div className="modal--actions">
 						<span type="submit" className='delete--cancel' onClick={() => setShowDeleteModal(false)}>Cancel</span>
-						<span type="button" className='delete--submit' onClick={''}>Delete WishList</span>
+						<span type="button" className='delete--submit' onClick={handleDeleteWishlist}>Delete WishList</span>
 					</div>
 				</DeleteModalUi>
 			)}
 
-			{isError && (
-				<Alert alertType="error">
-					<AiFillExclamationCircle className="alert--icon" />
-					<p>{message}</p>
-				</Alert>
-			)}
+			{(isError || isSuccess) && (
+                <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                    {isSuccess ? (
+                        <AiFillCheckCircle className="alert--icon" />
+                    ) : isError && (
+                        <AiFillExclamationCircle className="alert--icon" />
+                    )}
+                    <p>{message}</p>
+                </Alert>
+            )}
 		</>
 	);
 }

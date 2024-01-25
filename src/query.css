@@ -149,6 +149,9 @@
 	.lists--head-box-mobile {
 		display: block;
 	}
+	.lists--message {
+		font-size: 1.4rem;
+	}
 
 	/* ======================================= */
 	/* WALLET PAGE */
@@ -161,6 +164,11 @@
 	}
 	.wallet--tabs-mobile {
 		display: block;
+		margin-left: auto;
+	}
+	.wallet--bottom {
+		padding: 0;
+		padding-top: 2.4rem;
 	}
 
 
@@ -240,14 +248,20 @@
 
     div.banner {
         width: 100%;
-        padding: 1.8rem;
+        padding: 2rem;
+		gap: 2.8rem;
     }
     div.banner img {
-        height: 6.2rem ;
+        height: 6.8rem ;
     }
     div.banner .section__heading {
         font-size: 2rem;
+		text-align: center;
     }
+	.page--main {
+		padding: 0;
+		margin-right: 0;
+	}
 
 
 	/* ======================================= */
@@ -261,18 +275,38 @@
 		flex-direction: column;
 		gap: 1.2rem;
 	}
+	.form--bank-info-d {
+		display: none !important;
+	}
+	.form--collapsible {
+		display: flex !important;
+	}
 	.wish--form.wish--modal {
-		width: 100%;
+		width: 90%;
 		padding: 1.2rem;
+		border-bottom-right-radius: 0;
+		border-bottom-left-radius: 0;
 
-		bottom: 2.5%;
+		/* bottom: 2.5%; */
 	}
 	.form--grid {
 		flex-direction: column;
 		gap: 2rem;
 	}
+	.form--grid span:nth-child(1) {
+		align-self: flex-start;
+	}
 	.form--grid span:nth-child(2) {
 		align-self: flex-end;
+	}
+	
+
+
+	.notification--desktop {
+		display: none !important;
+	}
+	.notification--mobile {
+		display: block !important;
 	}
 
 
@@ -295,6 +329,9 @@
 	html {
 		font-size: 52%;
 	}
+	.alert {
+		width: 80% !important;
+	}
     
     /* TEMPS */
     .header__box h1 {
@@ -308,6 +345,15 @@
 	}
 	.dropdown--figure {
 		left: -10rem;
+	}
+	.input-box {
+		max-width: 80%;
+	}
+	.dashboard__others {
+		gap: 1.4rem;
+	}
+	.section--stay {
+		position: fixed;
 	}
 	
 	
@@ -374,7 +420,7 @@
 	.dashboard__header .profile__user {
 		display: none;
 	}
-	.modal {
+	.modal, .delete--modal {
 		width: 90% !important;
 	}
 	.modal .form--input {
@@ -470,11 +516,47 @@
 	
 
 
+	 /* ===================================== */
+    /* REMINDER PAGE */
+    /* ===================================== */
+	.reminder--form {
+		height: auto;
+	}
+	.reminder--flex-2-1 {
+		display: flex;
+		flex-direction: column;
+	}
+	.reminder--flex-2-1 .form--item {
+		width: 100%;
+	}
+	.reminder--flex-3 {
+		grid-template-columns: 1fr 1fr !important;
+	}
+	.form--switches {
+		align-items: center;
+		flex-direction: row;
+		gap: 2.8rem !important;
+
+		grid-column: span 2;
+	}
+	.reminder--form .reminder--flex-2 {
+		display: flex !important;
+		flex-direction: column-reverse !important;
+		align-items: flex-start;
+	}
+	.reminder--flex-2.postpone--flex {
+		display: flex;
+		flex-direction: row !important;
+		align-items: center;
+	}
+
 	.reminder--figure {
 		max-width: 100%;
 		width: 100%;
 	}
-
+	#form--contact {
+		width: 100%;
+	}
 
 
 
@@ -582,6 +664,33 @@
 	}
 	.package--date {
 		right: 5%;
+	}
+
+
+	/* ===================================== */
+	/*  */
+	/* ===================================== */
+	.setting--container {
+		gap: 2.8rem;
+	}
+	.settings--heading {
+		padding-top: 6.2rem;
+		margin-bottom: 3.6rem;
+	}
+	.settings--form button {
+		margin-top: .8rem;
+	}
+	.setting-form--heading {
+		margin-bottom: 1.4rem;
+	}
+
+
+
+
+	.wish--form.wish--modal .form--grid span:nth-child(1) {
+		display: flex;
+		gap: 0.6rem;
+		width: 100%;
 	}
 
 }

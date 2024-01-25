@@ -11,22 +11,31 @@ export const AuthProvider = ({ children }) => {
 	);
 	const [token, setToken] = useState(Cookies.get("userToken") || null);
 	const [refetchHelp, setRefetchHelp] = useState(false);
+	///////////////////////////////////////////////////////////
+	const [notifications, setNotifications] = useState([]);
+	const [notificationCount, setNoticationCount] = useState(0);
+
+	function handleSetNotification(notifications, notificationCount) {
+	// function handleSetNotification(unreadNotifications, unreadCount, readNotification, read) {
+		setNotifications(notifications);
+		setNoticationCount(notificationCount)
+	}
 
 	// FUNCTION TO REFETCH
-	const handleRefetchHelp = () => {
+	function handleRefetchHelp() {
 		setRefetchHelp(!refetchHelp);
 	};
 
-	const handleChange = (user, token ) => {
+	function handleChange(user, token ) {
 		setUser(user);
 		setToken(token);
 	};
 
-	const handleUser = (user) => {
+	function handleUser(user) {
 		setUser(user);
 	};
 
-	const logout = async () => {
+	async function logout(){
 		try {
 			const res = await fetch("https://test.tajify.com/api/users/logout", {
 				method: "GET",
@@ -48,6 +57,39 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
+	function shouldKick(e) {
+		if (e.response.status === 401 || e.response.status === 403) {
+		  Cookies.remove("user");
+		  Cookies.remove("token");
+		  window.location.href = "/";
+		}
+	};
+
+
+	useEffect(function() {
+		async function handleFetchNotifications() {
+			const res = await fetch('https://test.tajify.com/api/notifications/my-notifications', {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				}
+			});
+			if(!res.ok) throw new Error('Something went wrong!');
+			const data = await res.json();
+			if(data.status !== "success") throw new Error(data.message);
+			const count = data?.data?.notifications?.filter(notification => notification.status === 'unread' );
+			handleSetNotification(data.data.notifications, count.length);
+		}
+		if(user) {
+			handleFetchNotifications();
+			const intervalId = setInterval(handleFetchNotifications, 150000); // 600,000 millsec === 10 mins
+			return () => clearInterval(intervalId);
+		}
+	}, [user, token]);
+
+
+
 	useEffect(() => {
 		Cookies.set("giftaUser", JSON.stringify(user), { expires: 365 });
 		Cookies.set("userToken", token, { expires: 365 });
@@ -61,6 +103,11 @@ export const AuthProvider = ({ children }) => {
 		logout,
 		refetchHelp,
 		handleRefetchHelp,
+		shouldKick,
+		////////////////////
+		handleSetNotification,
+		notifications,
+		notificationCount
 	};
 
 	return <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>;

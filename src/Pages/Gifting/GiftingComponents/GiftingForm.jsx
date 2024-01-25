@@ -334,7 +334,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 <div className='form__item'>
                     <label htmlFor="state" className="form__label">State</label>
                     <select type="text" id="state" value={state} className="form__select" onChange={(e) => setState(e.target.value)}>
-                        <option selected="selected">- Select a State -</option>
+                        <option selected>- Select a State -</option>
                         <option value="Abuja">Abuja FCT</option>
                         <option value="Abia">Abia</option>
                         <option value="Adamawa">Adamawa</option>
@@ -378,7 +378,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                     <label htmlFor="region" className="form__label">City / Region</label>
                     <select type="text" id='region' value={cityRegion} className="form__select" onChange={(e) => setCityRegion(e.target.value)}>
                     
-                        <option value="" selected="selected">- Select a Region -</option>
+                        <option value="" selected>- Select a Region -</option>
                     </select>
                 </div>
             </div>

@@ -15,9 +15,13 @@ import WishListUi from './Pages/Wishlists/WishlistsComponents/WishListUi';
 
 import SharedWishlist from './Pages/PublicPages/SharedWishlist';
 import Wallet from './Pages/PublicPages/Wallet';
+import Settings from './Pages/PublicPages/Settings';
+
+
 import './index.css'
 import './Pages/DashBoard/main.css';
 import './query.css';
+import AccountProfile from './Pages/PublicPages/AccountProfile';
 
 
 
@@ -42,6 +46,8 @@ function App() {
           <Route path="/dashboard/reminders" element={<Reminders />}></Route>
 
           <Route path="/wallet" element={<Wallet />}></Route>
+          <Route path="/settings" element={<Settings />}></Route>
+          <Route path="/account-profile" element={<AccountProfile />}></Route>
         </Route>
 
         <Route path="/login" element={<Login />}></Route>
