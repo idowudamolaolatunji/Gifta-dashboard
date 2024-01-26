@@ -22,6 +22,9 @@ import './index.css'
 import './Pages/DashBoard/main.css';
 import './query.css';
 import AccountProfile from './Pages/PublicPages/AccountProfile';
+import TermsOfUse from './Pages/PublicPages/TermsOfUse';
+import PrivacyPolicy from './Pages/PublicPages/PrivacyPolicy';
+import SubscriptionPlan from './Pages/PublicPages/SubscriptionPlan';
 
 
 
@@ -53,6 +56,10 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/shared/:shareableUrl" element={<SharedWishlist />}></Route>
+        <Route path="/terms-of-use" element={<TermsOfUse />}></Route>
+        <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
+        <Route path="/plans" element={<SubscriptionPlan />}></Route>
+
 
     </Routes>
     </BrowserRouter>

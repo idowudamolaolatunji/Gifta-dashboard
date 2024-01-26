@@ -330,7 +330,7 @@
 		font-size: 52%;
 	}
 	.alert {
-		width: 80% !important;
+		width: 100% !important;
 	}
     
     /* TEMPS */
@@ -673,7 +673,7 @@
 	.setting--container {
 		gap: 2.8rem;
 	}
-	.settings--heading {
+	.settings--heading, .terms--container {
 		padding-top: 6.2rem;
 		margin-bottom: 3.6rem;
 	}
@@ -682,6 +682,9 @@
 	}
 	.setting-form--heading {
 		margin-bottom: 1.4rem;
+	}
+	.terms--container .terms--heading {
+		margin-bottom: .4rem;
 	}
 
 

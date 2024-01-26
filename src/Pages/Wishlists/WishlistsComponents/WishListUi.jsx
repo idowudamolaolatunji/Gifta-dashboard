@@ -318,7 +318,6 @@ function WishListUi() {
                                     </picture>
                                 </li>
                             )}
-
                         </ul>
                     </div>
                 </div>

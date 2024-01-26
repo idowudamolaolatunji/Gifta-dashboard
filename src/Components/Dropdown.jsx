@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import { CiHome, CiLogout, CiUser, CiViewList } from "react-icons/ci";
+import { CiHome, CiLogout, CiSaveUp2, CiUser, CiViewList } from "react-icons/ci";
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../Auth/context/AuthContext';
+import { IoIosQrScanner } from "react-icons/io";
 
 
 function Dropdown({ addHomeLink }) {
@@ -31,9 +32,17 @@ function Dropdown({ addHomeLink }) {
                     <CiUser />
                     <p>Account</p>
                 </li>
-                <li onClick={'/plans'}>
-                    <CiViewList />
+                <li onClick={() => navigate('/plans')}>
+                    <CiSaveUp2 />
                     <p>Plan</p>
+                </li>
+                <li onClick={() => navigate('/privacy-policy')}>
+                    <CiViewList />
+                    <p>Privacy Policy</p>
+                </li>
+                <li onClick={() => navigate('/terms-of-use')}>
+                    <IoIosQrScanner />
+                    <p>Terms of Use</p>
                 </li>
                 <li onClick={handleLogout}>
                     <CiLogout />
