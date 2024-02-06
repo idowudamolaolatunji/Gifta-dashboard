@@ -22,9 +22,9 @@ function Header() {
   return (
     <header className="dashboard__header" style={{ marginBottom: '7.2rem' }}>
             <div className='main-header sticky'>
-                <a href='https://getgifta.com/'>
+                <Link to='/'>
                     <img src={GiftLogo} alt="logo" className="dashboard__logo" />
-                </a>
+                </Link>
 
                 <div className="dashboard__details">
                     <div className="dashboard__others">

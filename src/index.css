@@ -21,7 +21,9 @@ body {
 	position: relative;
 	overflow-x: hidden !important;
 }
-
+::selection {
+	background-color: #3333338c;
+}
 .section {
 	padding: 3.4rem 0;
 }

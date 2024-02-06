@@ -19,6 +19,8 @@ import { PaystackButton } from 'react-paystack';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 // import Spinner from '../../Components/Spinner';
+import Switch from "react-switch";
+import { LiaUserSecretSolid } from "react-icons/lia";
 
 
 const customStyle = {
@@ -35,7 +37,7 @@ const modalTexts = [
 ];
 
 
-function SharedWishlist({}) {
+function SharedWishlist() {
     const { user, token } = useAuthContext();
 
     const [wishList, setWishList] = useState({});
@@ -44,7 +46,8 @@ function SharedWishlist({}) {
     const [isLoadingPay, setIsLoadingPay] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [index, setIndex] = useState(null);
-    const [email, setEmail] = useState(user?.email || '');
+    const [payerEmail, setPayerEmail] = useState('');
+    const [payerName, setPayerName] = useState('')
     const [amount, setAmount] = useState('');
 
     const [isError, setIsError] = useState(false);
@@ -55,6 +58,7 @@ function SharedWishlist({}) {
     const [helpReset, setHelpReset] = useState(false);
     const [selectedWishId, setSelectedWishId] = useState(null);
     const [contributors, setContributors] = useState(0);
+    const [checkAnonymous, setCheckAnonymous] = useState(false);
 
     const animatedBtnEl = useRef(null);
 
@@ -81,7 +85,7 @@ function SharedWishlist({}) {
     const publicKey = "pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7"
     const amountInKobo = calcTotalAmount(Number(amount)) * 100;
     const componentProps = {
-        email,
+        email: payerEmail,
         amount: amountInKobo,
         publicKey,
         text: "Pay!",
@@ -121,7 +125,7 @@ function SharedWishlist({}) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ wishListID: wishList._id, wishID: selectedWishId, userID: wishList?.user._id })
+                body: JSON.stringify({ wishListID: wishList._id, wishID: selectedWishId, userID: wishList?.user._id, payerEmail, anonymous: checkAnonymous, payerName })
             });
             console.log(helpReset)
             if (!res.ok) throw new Error('Something went wrong!');
@@ -220,7 +224,6 @@ function SharedWishlist({}) {
   return (
     <>
         <Header />
-
         <section className='section section__shareable'>
             <div className="section__container">
                 <div className="wishlish--share">
@@ -292,27 +295,52 @@ function SharedWishlist({}) {
             }>
                 <span className='modal--info'>{randomText}</span>
                 <form className="pay--form" onSubmit={e => e.preventDefault()} style={{ marginTop: '.8rem' }}>
-                    <div className="form--item">
-                        <label htmlFor="email" className="form--label">Email</label>
-                        <input type="email" id='email' required placeholder='Email Address' name='email' value={email} onChange={e => setEmail(e.target.value)} className="form--input" />
+                
+                    <div className="form--flex" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <div className="form--item">
+                            <label htmlFor="amount" className="form--label">Amount</label>
+                            <CurrencyInput
+                                className='form--input'
+                                decimalsLimit={0}
+                                prefix='₦ '
+                                placeholder='Amount to pay'
+                                defaultValue={amount}
+                                value={amount}
+                                onValueChange={(value, _) => setAmount(value)}
+                                required
+                            />
+                        </div>
+
+                        {/* <div className="form--item" style={{ flexDirection: 'row', alignItems: 'center' }}> */}
+                        <div className="form--item">
+                            <label htmlFor="switch--check" className="form--label"><LiaUserSecretSolid /> Anonymous</label>
+                            <Switch
+                                onChange={next => setCheckAnonymous(next)}
+                                checked={checkAnonymous}
+                                className="form--switch"
+                                id='switch--check'
+                                onColor="#bb0505"
+                                handleDiameter={18}
+                                height={25}
+                            />
+                        </div>                        
                     </div>
+
+                    {!checkAnonymous && (
+                        <div className="form--item">
+                            <label htmlFor="name" className="form--label">Your Name</label>
+                            <input className='form--input' id='name' value={payerName} onChange={e => setPayerName(e.target.value)} type='text' placeholder='Enter a display name' required={ checkAnonymous ? true : false } />
+                        </div>
+                    )}
+
                     <div className="form--item">
-                        <label htmlFor="amount" className="form--label">Amount</label>
-                        <CurrencyInput
-                            className='form--input'
-                            decimalsLimit={0}
-                            prefix='₦ '
-                            placeholder='Amount to pay'
-                            defaultValue={amount}
-                            value={amount}
-                            onValueChange={(value, _) => setAmount(value)}
-                            required
-                        />
+                        <label htmlFor="email" className="form--label">Your Email</label>
+                        <input type="email" id='email' required placeholder='Email Address' name='email' value={payerEmail} onChange={e => setPayerEmail(e.target.value)} className="form--input" />
                     </div>
+
                     <div className="form--item">
                         {(email && amount) ? (
                             <PaystackButton type='submit' className="form--button" {...componentProps} />
-                            
                         ) : (
                             <button type='submit' className="form--button">Pay!</button>
                         )}
@@ -320,6 +348,7 @@ function SharedWishlist({}) {
                 </form>
             </DashboardModal>
         )}
+
 
         <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
             {isSuccess ? (
@@ -329,7 +358,6 @@ function SharedWishlist({}) {
             )}
             <p>{message}</p>
         </Alert>
-
     </>
   )
 }

@@ -105,8 +105,8 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                     reminderDate: date,
                     reminderTime: time,
                     RepeatAllDay: checkRepeat,
-                    sendMessage: toggle === 'send-message' ? true : true,
-                    sendThrough: checkedEmail ? 'email' : checkedSms && 'sms' || null,
+                    sendMessage: toggle === 'send-message' ? true : false,
+                    sendThrough: checkedEmail && 'email' || checkedSms && 'sms' || "",
                     emailAddress: checkedEmail ? contactInfo : '',
                     phoneNumber: checkedSms ? contactInfo : '',
                     reminderMessage

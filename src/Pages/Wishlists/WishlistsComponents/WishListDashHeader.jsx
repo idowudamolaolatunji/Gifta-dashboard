@@ -21,14 +21,13 @@ function WishListDashHeader() {
 	const [showNotificationBox, setShowNotificationBox] = useState(false);
 	const { user, notificationCount  } = useAuthContext();
 
-
 	return (
         <>
 		<header className="dashboard__header" style={{ marginBottom: '12rem'}}>
 			<div className='main-header sticky'>
-				<a href='https://getgifta.com/'>
+				<Link to='/'>
 					<img src={GiftLogo} alt="logo" className="dashboard__logo" />
-				</a>
+				</Link>
 
 				<div className="dashboard__details">
 					<div className="dashboard__others">
@@ -66,7 +65,7 @@ function WishListDashHeader() {
 
 						{(user?.image !== "") ? (
 							<img
-								alt={user?.fullName + " 's image"}
+								alt={user?.fullName + "'s image"}
 								src={`https://test.tajify.com/asset/users/${user?.image}`}
 								className='profile__img'
 							/> 
@@ -78,7 +77,6 @@ function WishListDashHeader() {
 
 						<span className="profile__user">
 							<p className="user-username" >{user.fullName || user.username}</p>
-
 							<p className="user-email">{user.email}</p>
 						</span>
 
@@ -91,8 +89,7 @@ function WishListDashHeader() {
 			</div>
 		</header>
 
-
-        <section className='section--stay'>
+        <section className='section--tab'>
 			<div className="section__container">
 				<div className="dashboard__tabs">
 					<Link className="tab" to="/dashboard">
@@ -121,6 +118,7 @@ function WishListDashHeader() {
 				</div>
 			</div>
 		</section>
+
         </>
 	);
 };

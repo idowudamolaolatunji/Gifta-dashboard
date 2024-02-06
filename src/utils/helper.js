@@ -52,6 +52,8 @@ export function calcTotalAmount(amount) {
 // 		return inputDate.format("MMM Do YYYY");
 // 	}
 // }
+
+
 export function dateConverter(givenDate) {
 	const currentDate = moment().startOf("day");
 	const inputDate = moment(givenDate);

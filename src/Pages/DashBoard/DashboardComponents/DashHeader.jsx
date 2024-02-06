@@ -102,9 +102,9 @@ const DashHeader = ({ isDasboard }) => {
 	return (
 		<header className="dashboard__header">
 			<div className={`main-header ${show ? 'sticky' : ''}`}>
-				<a href='https://getgifta.com/'>
+				<Link to='/'>
 					<img src={GiftLogo} alt="logo" className="dashboard__logo" />
-				</a>
+				</Link>
 
 				<div className="dashboard__details">
 					<div className="dashboard__others">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { RiArrowRightDoubleLine } from "react-icons/ri";
-import { currencyConverter, dateConverter } from '../../../utils/helper'
+import { numberConverter, dateConverter } from '../../../utils/helper'
 import SkeletonLoader from '../../../Components/SkeletonLoader';
 import SkeletonLoaderMini from '../../../Components/SkelentonLoaderMini';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -172,7 +172,7 @@ function CategoryPage() {
                                             </span>
                                         </div>
                                         <div className='product--infos'>
-                                            <span className='product--price'>₦{currencyConverter(product.price)}</span>
+                                            <span className='product--price'>₦{numberConverter(product.price)}</span>
                                             <span className='product--date'>{dateConverter(product.createdAt)}</span>
                                         </div>
                                     </figcaption>
@@ -195,4 +195,4 @@ function CategoryPage() {
     )
 }
 
-export default CategoryPage
+export default CategoryPage;

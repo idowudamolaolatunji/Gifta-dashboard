@@ -169,7 +169,7 @@ function AccountProfile() {
                     <div className="account--container">
                         <div className="account--top">
                             <div className='form--item'>
-                                <input type='file' id='profile-image-input' name='image' onChange={handleImageChange} accept="image/*" />
+                                <input type='file' id='profile-image-input' capture name='image' onChange={handleImageChange} accept="image/*" />
                                 <label htmlFor='profile-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='profile-image-label'>
                                     <span className='image--label' style={{ zIndex: 100 }}>
                                         <MdOutlineAddAPhoto style={{ fontSize: '2.4rem' }} />

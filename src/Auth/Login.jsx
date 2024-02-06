@@ -11,6 +11,9 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 import './auth.css';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import GiftLoader from '../Assets/images/gifta-loader.gif';
+// import GoogleLogin from "react-google-login";
+import { GoogleLogin } from 'react-google-login';
+import GoogleIcon from '../Assets/images/google-icon.png'
 
 
 function Login() {
@@ -25,9 +28,13 @@ function Login() {
 	const navigate = useNavigate();
 	const { user, handleChange } = useAuthContext();
 
+	const responseGoogle = (response) => {
+		console.log(response);
+	} 
+
 	function togglePasswordVisibility() {
 		setShowPassword(!showPassword);
-	  };
+	};
 
 	function handleReset() {
 		setIsError(false);
@@ -105,10 +112,8 @@ function Login() {
 						<a className="auth__logo" href={'https://getgifta.com/'}>
 							<img src={giftaWhiteLogo} alt="logo" />
 						</a>
-
 						<h2>Welcome back to Gifta</h2>
-
-						<p> Every Moment Deserves the Perfect Gift!</p>
+						<p>Where Every Moment Deserves the Perfect Gift!</p>
 					</span>
 				</div>
 
@@ -117,6 +122,27 @@ function Login() {
 					<h1 className="auth--heading">
 						Login
 					</h1>
+
+
+					<GoogleLogin
+						clientId='409185840466-dk2cs4mdrl315i7s3am5pop520c3uuig.apps.googleusercontent.com'
+						onSuccess={responseGoogle}
+						onFailure={responseGoogle}
+						cookiePolicy={"single_host_origin"}
+						isSignedIn={true}
+						render={(renderProps) => (
+							<div className="google--login" onClick={renderProps.onClick}>
+								<img src={GoogleIcon} style={{ cursor: 'pointer' }} />
+								<p>Sign in with Google</p>
+							</div>
+						)}
+					/>
+
+					<div className="auth--diff">
+						<span></span>
+						<span>OR</span>
+						<span></span>
+					</div>
 
 					<form onSubmit={handleLoginUser} className="auth--form">
 						<div className="form--item">
@@ -149,7 +175,6 @@ function Login() {
 							<div className="form--input-box">
 
 								<input
-									// type="password"
 									type={showPassword ? "text" : "password"}
 									id="Password"
 									name="password"

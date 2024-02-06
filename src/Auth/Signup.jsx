@@ -10,15 +10,20 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 import Spinner from "../Components/Spinner";
 import OTPMODAL from "./OTPMODAL";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { GoogleLogin } from 'react-google-login';
+import GoogleIcon from '../Assets/images/google-icon.png';
+import EmailIcons from '../Assets/images/icons8-email-48.png';
+
 
 
 function Signup() {
 	const [isLoading, setIsLoading] = useState(false);
+	const [signWithEmail, setSignWithEmail] = useState(false);
 	const [fullName, setFullName] = useState('');
 	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [checked, setChecked] = useState(false);
+	// const [checked, setChecked] = useState(false);
 	const [passwordConfirm, setPasswordConfirm] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
 	const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
@@ -31,6 +36,9 @@ function Signup() {
 		return info?.showOtpModal || false;
 	});
 
+	const responseGoogle = (response) => {
+		console.log(response);
+	} 
 
 	function togglePasswordVisibility() {
     setShowPassword(!showPassword);
@@ -68,7 +76,7 @@ function Signup() {
 			}
 
 			if(password !== passwordConfirm) throw new Error('Passwords are not the same!')
-			if(!checked) throw new Error('Accept our terms and condition')
+			// if(!checked) throw new Error('Accept our terms and condition')
 
 			const res = await fetch("https://test.tajify.com/api/users/signup", {
 				method: 'POST',
@@ -120,15 +128,35 @@ function Signup() {
 						</a>
 
 						<h2>Welcome back to Gifta</h2>
-
-						<p> Every Moment Deserves the Perfect Gift!</p>
+						<p>Where Every Moment Deserves the Perfect Gift!</p>
 					</span>
 				</div>
 
 				<div className="auth--box signup--auth">
 					<h2 className="auth--heading">Sign Up</h2>
 
-					<form onSubmit={handleSubmit} className="auth--form">
+
+					<GoogleLogin
+						clientId='409185840466-dk2cs4mdrl315i7s3am5pop520c3uuig.apps.googleusercontent.com'
+						onSuccess={responseGoogle}
+						onFailure={responseGoogle}
+						cookiePolicy={"single_host_origin"}
+						isSignedIn={true}
+						render={(renderProps) => (
+							<div className="google--login" onClick={renderProps.onClick}>
+								<img src={GoogleIcon} style={{ cursor: 'pointer' }} />
+								<p>Sign up with Google</p>
+							</div>
+						)}
+					/>
+
+					<div className="auth--diff">
+						<span></span>
+						<span>OR</span>
+						<span></span>
+					</div>
+
+					{signWithEmail && (<form onSubmit={handleSubmit} className="auth--form">
 						<div className="form--flex">
 							<div className="form--item">
 								<label htmlFor="FirstName" className="form--label">
@@ -234,7 +262,7 @@ function Signup() {
 							</div>
 						</div>
 
-						<div className="form--check">
+						{/* <div className="form--check">
 							<input
 								type="checkbox"
 								id="MarketingAccept"
@@ -247,7 +275,7 @@ function Signup() {
 							<p htmlFor="MarketingAccept" className="form--content">
 								I want to receive emails about events, product updates and company announcements.
 							</p>
-						</div>
+						</div> */}
 
 						<div className="form--item">
 							<span className="form--content">
@@ -263,7 +291,7 @@ function Signup() {
 							</span>
 						</div>
 
-						<div style={{ marginTop: '1rem' }} className="form--others">
+						<div className="form--others">
 							<button className="form--submit" type="submit" style={{ cursor: 'pointer' }}>
 								Create an account
 							</button>
@@ -276,7 +304,16 @@ function Signup() {
 								.
 							</p>
 						</div>
-					</form>
+					</form>)}
+
+					{!signWithEmail && (
+						<div className="email--login" onClick={() => setSignWithEmail(!signWithEmail)}>
+							<img src={EmailIcons} style={{ cursor: 'pointer' }} />
+							<p>Sign up with Email</p>
+						</div>
+					)}
+
+					
 				</div>
 			</div>
 
