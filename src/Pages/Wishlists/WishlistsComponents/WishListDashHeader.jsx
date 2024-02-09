@@ -41,7 +41,7 @@ function WishListDashHeader() {
 
 						<span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
 							<IoNotifications className="dashboard__icon" style={{ fontSize: '2.8rem' }} />
-							{notificationCount > 0 && (<span>{notificationCount}</span>)}
+							{notificationCount > 0 && (<span>{notificationCount >= 9 ? '9+' : notificationCount}</span>)}
 						</span>
 						{showNotificationBox && (
 							<NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />

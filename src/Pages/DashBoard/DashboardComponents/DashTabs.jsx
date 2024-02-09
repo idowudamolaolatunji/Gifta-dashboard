@@ -5,21 +5,23 @@ import { BsJournalBookmark } from "react-icons/bs";
 import { TfiGift } from "react-icons/tfi";
 import { BsShop } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
+import { PiHandbagSimple } from "react-icons/pi";
+
 
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 const DashTabs = () => {
-	const [stay, setStay] = useState(function() {
+	const [stay, setStay] = useState(function () {
 		return JSON.parse(localStorage.getItem('scrollY'))
 	});
 	let location = useLocation();
 	const { user } = useAuthContext();
 
-	useEffect(function() {
+	useEffect(function () {
 		function controlNavbar() {
-			if (window.scrollY > 170 ) {
+			if (window.scrollY > 170) {
 				setStay(true)
-			} else{
+			} else {
 				setStay(false)
 			}
 		}
@@ -59,7 +61,13 @@ const DashTabs = () => {
 						<p>MarketPlace</p>
 					</Link>
 
-					
+					{user.role === 'vendor' && (
+						<Link to="/dashboard/orders" className={`tab ${location.pathname.includes('/dashboard/orders') ? 'active-tab' : ''}`}>
+							<PiHandbagSimple className="tab-icon" />
+							<p>Orders</p>
+						</Link>
+					)}
+
 				</div>
 			</div>
 		</section>

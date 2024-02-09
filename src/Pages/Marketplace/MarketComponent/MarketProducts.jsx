@@ -7,6 +7,8 @@ import SkeletonLoaderMini from '../../../Components/SkelentonLoaderMini';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import Product from './Product';
 import SkelentonOne from '../../../Components/SkelentonOne';
+import { FiPlus } from 'react-icons/fi';
+import { useAuthContext } from '../../../Auth/context/AuthContext';
 
 function CategoryPage() {
     const [isLoading, setIsLoading] = useState(false)
@@ -20,6 +22,12 @@ function CategoryPage() {
 
     const navPath = useParams();
     const [currentCategory, setCurrentCategory] = useState(navPath.category);
+
+    // const [products, setProducts] = useState([]);
+    // const [currTab, setCurrTab] = useState('birthday');
+
+
+    const { user } = useAuthContext();
 
 
     // THIS IS TO SHOW THE MODAL
@@ -74,6 +82,7 @@ function CategoryPage() {
                 setIsLoadingCat(true);
                 setMess('')
 
+                // const res = await fetch(`https://test.tajify.com/api/gift-products/products`, {
                 const res = await fetch(`https://test.tajify.com/api/gift-products/products/category/${currentCategory}`, {
                     method: 'GET',
                     headers: { "Content-Type": "application/json", },
@@ -88,6 +97,7 @@ function CategoryPage() {
                     throw new Error(data.message);
                 }
                 setCategoryProducts(data.data.giftProducts)
+                // setProducts(data.data.giftProducts)
 
             } catch (err) {
                 setMess(err.message)
@@ -191,6 +201,8 @@ function CategoryPage() {
                 </div>}
 
             {(selectedProduct && showModal) && <Product product={selectedProduct} handleCloseModal={handleCloseModal} />}
+
+            { user.role === 'vendor' && (<div className="dashnoard--add-btn"><FiPlus /></div>)}
         </section>
     )
 }

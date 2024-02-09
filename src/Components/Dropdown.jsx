@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
 import { CiHome, CiLogout, CiSaveUp2, CiUser, CiViewList } from "react-icons/ci";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../Auth/context/AuthContext';
 import { IoIosQrScanner } from "react-icons/io";
+import { PiFolderSimpleUserLight, PiUserListLight } from 'react-icons/pi';
 
 
-function Dropdown({ addHomeLink }) {
-    const { logout } = useAuthContext();
+function Dropdown({ addHomeLink, setShowLoader }) {
+    const { user, logout } = useAuthContext();
     const navigate = useNavigate()
 
     function handleLogout() {
@@ -36,6 +37,13 @@ function Dropdown({ addHomeLink }) {
                     <CiSaveUp2 />
                     <p>Plan</p>
                 </li>
+                {user.role !== 'vendor' && (
+                    <li onClick={() => navigate('/vendor')}>
+                        <PiFolderSimpleUserLight />
+                        <p>Become a Vendor</p>
+                    </li>
+                )}
+               
                 <li onClick={() => navigate('/privacy-policy')}>
                     <CiViewList />
                     <p>Privacy Policy</p>

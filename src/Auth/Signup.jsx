@@ -1,7 +1,7 @@
 import GiftBox from "../Assets/giftbox.jpg";
 import GiftaLogo from "../Assets/gifta-logo.png";
 import GiftaWhiteLogo from "../Assets/gifta-white-logo.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import "./auth.css";
 import { useState } from "react";
@@ -35,6 +35,8 @@ function Signup() {
 		const info = JSON.parse(localStorage.getItem('otpDetails'))
 		return info?.showOtpModal || false;
 	});
+
+	const { inviteCode } = useParams();
 
 	const responseGoogle = (response) => {
 		console.log(response);
@@ -76,16 +78,15 @@ function Signup() {
 			}
 
 			if(password !== passwordConfirm) throw new Error('Passwords are not the same!')
-			// if(!checked) throw new Error('Accept our terms and condition')
 
-			const res = await fetch("https://test.tajify.com/api/users/signup", {
+			const res = await fetch(inviteCode ? `https://test.tajify.com/api/users/signup/${inviteCode}` : "https://test.tajify.com/api/users/signup", {
 				method: 'POST',
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ fullName, username, email, password, passwordConfirm }),
 			});
 
 			if (!res.ok) {
-				throw new Error("Something went wrong!")
+				throw new Error("Something went wrong!");
 			}
 
 			const data = await res.json();

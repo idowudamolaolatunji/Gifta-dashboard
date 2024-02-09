@@ -3,8 +3,8 @@ import Header from './Components/Header';
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../Auth/context/AuthContext';
-import { getInitials } from '../../utils/helper';
-import { MdOutlineAddAPhoto } from 'react-icons/md';
+import { getInitials, truncate } from '../../utils/helper';
+import { MdContentCopy, MdOutlineAddAPhoto } from 'react-icons/md';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import Alert from '../../Components/Alert';
 
@@ -34,6 +34,16 @@ function AccountProfile() {
             setImagePreview(imageUrl);
         }
     };
+
+    function copyInput(url) {
+        navigator.clipboard.writeText(`https://app.getgifta.com/invite/${url}`);
+        setIsSuccess(true);
+        setMessage('Referral Link Copied!')
+        setTimeout(() => {
+            setIsSuccess(false);
+            setMessage('')
+        }, 1500);
+    }
 
     console.log(imageFile)
 
@@ -220,7 +230,7 @@ function AccountProfile() {
                             </div>
                             <div className="form--item">
                                 <label className="form--label" htmlFor="username">
-                                    Email address
+                                    Username
                                 </label>
                                 <input
                                     className="form--input disable"
@@ -229,6 +239,22 @@ function AccountProfile() {
                                     readOnly="readonly"
                                     value={user?.username}
                                 />
+                            </div>
+                            <div className="form--item">
+                                <label className="form--label" htmlFor="url">
+                                    Referal URL
+                                </label>
+                                <div className="input--box">
+                                    <input
+                                        onClick={() => copyInput(user?.referralCode)}
+                                        className="form--input disable"
+                                        id="url"
+                                        type="text"
+                                        readOnly="readonly"
+                                        value={truncate(`https://app.getgifta.com/invite/${user?.referralCode}`)}
+                                    />
+                                    <MdContentCopy className='input--icon' onClick={() => copyInput(user?.referralCode)} />
+                                </div>
                             </div>
 
                             <div className="form--item">

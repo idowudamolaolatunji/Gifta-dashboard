@@ -37,6 +37,9 @@ body {
 	color: #555;
 	font-weight: 600;
 }
+.marketplace__section {
+	padding-bottom: 6.4rem;
+}
 a:visited,
 a:link {
 	color: #555;

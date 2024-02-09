@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import CurrencyInput from 'react-currency-input-field';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 import { TbMoneybag } from 'react-icons/tb';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { formatDate } from '../../../utils/helper';
@@ -119,7 +123,8 @@ function WishInputUi({ wishListId, wishDetails, setShowModal, type, setHelpReset
             <textarea className='wish--textarea' placeholder='A bit of description' value={description} onChange={(e) => setDescription(e.target.value)} />
             <div className="form--grid">
                 <span>
-                    <input type="date" className='wish--input input--date' placeholder='Deadline Date...' value={date} onChange={(e) => setDate(e.target.value)}/>
+                    {/* <input type="date" className='wish--input input--date' placeholder='Deadline Date...' value={date} onChange={(e) => setDate(e.target.value)}/> */}
+                    <DatePicker className='wish--input input--date' placeholderText='Deadline Date...' minDate={new Date()} selected={date} onChange={(date) => setDate(date)} />
                     <span className='wish--input-flex'>
                         <CurrencyInput 
                             className='wish--input input--number'

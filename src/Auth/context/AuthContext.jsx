@@ -50,10 +50,14 @@ export const AuthProvider = ({ children }) => {
 			if(data.status !== 'success') throw new Error(data.message);
 			Cookies.remove("giftaUser");
 			Cookies.remove("userToken");
+			// Cookies.remove("giftaUser", { domain: '.getgifta.com' });
+			// Cookies.remove("userToken", { domain: '.getgifta.com' });
 		} catch (err) {
 			console.log(err.message)
 			Cookies.remove("giftaUser");
 			Cookies.remove("userToken");
+			// Cookies.remove("giftaUser", { domain: '.getgifta.com' });
+			// Cookies.remove("userToken", { domain: '.getgifta.com' });
 		}
 	};
 
@@ -93,6 +97,8 @@ export const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		Cookies.set("giftaUser", JSON.stringify(user), { expires: 365 });
 		Cookies.set("userToken", token, { expires: 365 });
+		// Cookies.set("giftaUser", JSON.stringify(user), { expires: 365, domain: '.getgifta.com' });
+		// Cookies.set("userToken", token, { expires: 365, domain: '.getgifta.com' });
 	}, [user, token]);
 
 	let contextData = {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import WishListDashHeader from './WishListDashHeader'
 import { useAuthContext } from '../../../Auth/context/AuthContext'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { RiDeleteBin6Line, RiEditLine } from 'react-icons/ri';
 import { IoChevronBackOutline, IoEllipsisVerticalSharp, IoPricetagOutline } from 'react-icons/io5';
 import { SlCalender } from "react-icons/sl";
 import ProgressBar from '../../../Components/ProgressBar';
-import { calculatePercentage, currencyConverter, dateConverter, expectedDateFormatter, numberConverter } from '../../../utils/helper';
+import { calculatePercentage, currencyConverter, dateConverter, expectedDateFormatter, getInitials, numberConverter, truncate } from '../../../utils/helper';
 import { FaCheck } from 'react-icons/fa6';
 import WishInputUi from './WishInputUi';
 import DeleteModalUi from './DeleteModalUi';
@@ -18,25 +18,32 @@ import { ShareSocial } from 'react-share-social';
 import Alert from '../../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
+import { FiPlus, FiUsers } from "react-icons/fi";
 
+
+import { BiMessageSquareDetail } from "react-icons/bi";
+import PaymentLog from '../../../Components/PaymentLog';
+import { MdReply } from 'react-icons/md';
+import { IoMdSend } from 'react-icons/io';
+import ReactTextareaAutosize from 'react-textarea-autosize';
 
 
 const customStyle = {
-	minHeight: "auto",
-	maxWidth: "48rem",
-	width: "48rem",
+    minHeight: "auto",
+    maxWidth: "48rem",
+    width: "48rem",
 };
 
 const shareCustomStyle = {
-	root: {
-		padding: 0,
-		marginTop: '-1.2rem',
-	},
-	copyContainer: {
-		fontWeight: 600,
-		fontSize: '1.6rem',
-		padding: '1rem',
-	},
+    root: {
+        padding: 0,
+        marginTop: '-1.2rem',
+    },
+    copyContainer: {
+        fontWeight: 600,
+        fontSize: '1.6rem',
+        padding: '1rem',
+    },
 }
 
 function WishListUi() {
@@ -44,13 +51,14 @@ function WishListUi() {
     const [selectedTab, setSelectedTab] = useState('all');
     const [wishList, setWishList] = useState({});
     const [wishes, setWishes] = useState([]);
+    const [wishlistLogs, setWishlistLogs] = useState([]);
     // const [checkedIds, setCheckedIds] = useState([]);
     const [selectedWishId, setSelectedWishId] = useState(null);
     const [selectedWish, setSelectedWish] = useState({});
     const [errMessage, setErrMessage] = useState('');
     const [helpReset, setHelpReset] = useState(false);
     const [share, setShare] = useState(false);
-	const [url, setUrl] = useState('');
+    const [url, setUrl] = useState('');
 
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
@@ -61,12 +69,24 @@ function WishListUi() {
     });
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showLogsReplyModal, setShowLogsReplyModal] = useState(false);
+    const [selectedLog, setSeletedLog] = useState({});
+    const [replyMessage, setReplyMessage] = useState('');
+    const [append, setAppend] = useState(false);
+    const [isSent, setIsSent] = useState(false);
 
-    
+    useEffect(function() {
+        if(isSent) {
+            setAppend(true);
+        }
+    }, [isSent])
+
+
+
     // WISHLIST ACTIONS ON MOBILE
     const [showActionInfo, setShowActionInfo] = useState(false);
-	// const [showWishlistDeleteModal, setShowWishlistDeleteModal] = useState(false);
-	// const [showWishListEditModal, setShowWishListEditModal] = useState(false);
+    // const [showWishlistDeleteModal, setShowWishlistDeleteModal] = useState(false);
+    // const [showWishListEditModal, setShowWishListEditModal] = useState(false);
 
 
     useEffect(function () {
@@ -76,18 +96,18 @@ function WishListUi() {
     // function handle
 
     function handleShare(link, hasWish) {
-		if(hasWish) {
-			setShare(true);
-			setUrl(link);
-		} else {
-			handleFailure('No wish to share!');
-			setShare(false);
-			setUrl('');
-		}
-	}
+        if (hasWish) {
+            setShare(true);
+            setUrl(link);
+        } else {
+            handleFailure('No wish to share!');
+            setShare(false);
+            setUrl('');
+        }
+    }
 
-     // HANDLE ON FETCH FAILURE
-     function handleFailure(mess) {
+    // HANDLE ON FETCH FAILURE
+    function handleFailure(mess) {
         setIsError(true);
         setMessage(mess)
         setTimeout(() => {
@@ -103,10 +123,17 @@ function WishListUi() {
         setIsSuccess(false);
     }
 
+    function handleReply(log) {
+        setSeletedLog(log);
+        setShowLogsReplyModal(true);
+    }
+
 
     const allWishes = wishes;
     const completedWishes = wishes?.filter(wish => wish.isPaidFor === true)
-    const wishArr = selectedTab === 'all' ? allWishes : completedWishes;
+    console.log(wishList)
+    // console.log(allWishes, completedWishes, wishlistLogs)
+    const wishArr = selectedTab === 'all' ? allWishes : selectedTab === 'completed' && completedWishes;
 
     const { user, token } = useAuthContext();
 
@@ -115,13 +142,11 @@ function WishListUi() {
     const navigate = useNavigate();
 
     function handleSelectedWish(item) {
-        // navigate(`/dashboard/wishlists/${wishListSlug}/wish/edit?id=${item._id}`)
         setSelectedWish(item);
         setShowEditModal(true)
     }
 
     function handleSelectDeleteWish(item) {
-        // navigate(`/dashboard/wishlists/${wishListSlug}/wish/delete?id=${item._id}`);
         setSelectedWish(item);
         setSelectedWishId(item._id);
         setShowDeleteModal(true)
@@ -144,19 +169,19 @@ function WishListUi() {
                     Authorization: `Bearer ${token}`
                 }
             });
-            if(!res.ok) throw new Error('Something went wrong!');
+            if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
-            if(data.status !== "success") {
+            if (data.status !== "success") {
                 throw new Error(data.message);
             }
             setMessage(data.message);
-			setIsSuccess(true);
-			setTimeout(() => {
+            setIsSuccess(true);
+            setTimeout(() => {
                 showDeleteModal(false);
-				setIsSuccess(false);
-				setMessage("");
+                setIsSuccess(false);
+                setMessage("");
                 setHelpReset(true);
-			}, 1500);
+            }, 1500);
         } catch (err) {
             handleFailure(err.message);
         } finally {
@@ -169,7 +194,6 @@ function WishListUi() {
         async function handleFetchList() {
             try {
                 setIsLoading(true)
-                // const res = await fetch(`http://localhost:3010/api/wishlists/user-wishlists/wishlists/${wishListSlug}`, {
                 const res = await fetch(`https://test.tajify.com/api/wishlists/user-wishlists/wishlists/${wishListSlug}`, {
                     method: 'GET',
                     headers: {
@@ -188,7 +212,7 @@ function WishListUi() {
                 setIsLoading(false)
             }
         }
-        handleFetchList()
+        handleFetchList();
     }, []);
 
     useEffect(function () {
@@ -205,7 +229,6 @@ function WishListUi() {
                 if (!res.ok) throw new Error('Something went wrong!');
                 const data = await res.json();
                 if (data.status !== "success") throw new Error(data.message);
-
                 setWishes(data.data.wishes);
             } catch (err) {
                 console.log(err);
@@ -217,7 +240,45 @@ function WishListUi() {
     }, [wishList, helpReset]);
 
 
-    
+    useEffect(function () {
+        async function handleFetchWishLogs() {
+            try {
+                setIsLoading(true)
+                const res = await fetch(`https://test.tajify.com/api/wishlists/wishlist-log/logs/${wishList._id}`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                });
+                if (!res.ok) throw new Error('Something went wrong!');
+                const data = await res.json();
+                if (data.status !== "success") throw new Error(data.message);
+                console.log(data)
+
+                setWishlistLogs(data.data.wishlistLogs);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setIsLoading(false)
+            }
+        }
+        handleFetchWishLogs();
+    }, [wishList]);
+
+
+    async function handleSendMessge(e) {
+        try {
+            e.preventDefault();
+            setIsSent(true);
+
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
+
+
     return (
         <>
             <WishListDashHeader />
@@ -229,7 +290,7 @@ function WishListUi() {
                     </div>
                 )}
             </>
-            
+
             {/* {(showActionInfo) && (
                 <>
                     <div className="overlay" onClick={() => setShowActionInfo(false)} style={{ zIndex: 3000 }} />
@@ -266,23 +327,17 @@ function WishListUi() {
                             <div className="main--tabs">
                                 <div className={`lists--tab ${selectedTab === 'all' ? 'tab--active' : ''}`} onClick={() => handleChangeTab('all')}>All <span>{allWishes?.length}</span></div>
                                 <div className={`lists--tab ${selectedTab === 'completed' ? 'tab--active' : ''}`} onClick={() => handleChangeTab('completed')}>Completed <span>{completedWishes?.length}</span></div>
-                            </div>
-                            <div className="sub--tabs">
-                                {/* <Link to={`/dashboard/wishlists/${wishListSlug}/wish?new=${true}`}> */}
-                                <div className="lists--tab" onClick={() => setShowNewModal(true)}><PiPlusBold /> add{wishes?.length > 0 ? ' more' : ' '} wish</div>
-                                {/* </Link> */}
+                                <div className={`lists--tab ${selectedTab === 'logs' ? 'tab--active' : ''}`} onClick={() => handleChangeTab('logs')}><FiUsers /> Contributors <span>{wishlistLogs?.length}</span></div>
                             </div>
                         </div>
 
                         {isLoading && (<SkelentonOne />)}
 
                         <ul className='lists--figure'>
-                            {(wishArr && wishArr?.length > 0 && !isLoading) ? wishArr?.map(wishItem => (
+                            {selectedTab !== 'logs' && (wishArr && wishArr?.length > 0 && !isLoading) ? wishArr?.map(wishItem => (
                                 <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
                                     <span className='lists--item-top'>
                                         <span className='lists--content'>
-                                            {/* <span onClick={() => handleCheck(wishItem._id)} style={(checkedIds.find(id => id === wishItem._id)) ? { backgroundColor: '#bb0505', boxShadow: 'none' } : {}}>{(checkedIds.find(id => id === wishItem._id)) && <FaCheck style={{ color: '#fff' }} />}</span> */}
-                                            {/* <p style={(checkedIds.find(id => id === wishItem._id)) ? { textDecoration: 'line-through' } : {}}>{wishItem.wish}</p> */}
                                             <p>{wishItem.wish}</p>
                                         </span>
                                         <div className='lists--actions'>
@@ -318,14 +373,41 @@ function WishListUi() {
                                     </picture>
                                 </li>
                             )}
+
+
+                            {selectedTab === 'logs' && (wishlistLogs && !isLoading) ? wishlistLogs.map(wishLog => (
+                                <li className="list--contributors">
+                                    <div className="contributor--top">
+                                        <span className="contibutor__img-initials">
+                                            {getInitials(wishLog.anonymous ? 'Anonymous' : wishLog.name)}
+                                        </span>
+                                        <p>{wishLog.anonymous ? 'Anonymous' : wishLog.name}</p>
+                                    </div>
+                                    <div className="contributor--middle">
+                                        <p>{wishLog.message}</p>
+                                        <li className='contributor--wish'>{truncate(wishLog.wish.wish)}</li>
+                                    </div>
+                                    <div className="contributor--bottom">
+                                        <p>{dateConverter(wishLog.createdAt)}</p>
+                                        <span onClick={() => !wishLog.anonymous && handleReply(wishLog)} className={`contributor--reply ${wishLog.anonymous ? 'reply--anno' : ''}`}><MdReply /> Reply</span>
+                                    </div>
+                                </li>
+                            )) : (selectedTab === 'logs' && wishlistLogs.length === 0) && (
+                                <li className='lists--message'>
+                                    No Contributors
+                                    <picture>
+                                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.webp" type="image/webp" />
+                                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.gif" alt="😞" width="32" height="32" />
+                                    </picture>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>
+
+                {selectedTab === 'all' && <div className="dashnoard--add-btn" onClick={() => setShowNewModal(true)}><FiPlus /></div>}
+
             </section>
-
-
-            {/* {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish` && <WishInputUi wishListId={wishList._id} type={'new'} setHelpReset={setHelpReset} />}
-        {location.pathname === `/dashboard/wishlists/${wishListSlug}/wish/edit` && <WishInputUi wishDetails={selectedWish} wishListId={wishList._id} type={'edit'} setHelpReset={setHelpReset} />} */}
 
 
             {showNewModal && (
@@ -348,19 +430,62 @@ function WishListUi() {
             )}
 
             {share && (
-				<DashboardModal
-					title={'Make your wish come true! Share Link'}
-					setShowDashboardModal={setShare}
-					customStyle={customStyle}
-					>
-					<ShareSocial  
-						url={url}
-						socialTypes= {['facebook','twitter', 'whatsapp', 'telegram', 'linkedin']}
-						onSocialButtonClicked={ (data) => console.log(data)}  
-						style={shareCustomStyle}
-					/>
-				</DashboardModal>
-			)}
+                <DashboardModal
+                    title={'Make your wish come true! Share Link'}
+                    setShowDashboardModal={setShare}
+                    customStyle={customStyle}
+                >
+                    <ShareSocial
+                        url={url}
+                        socialTypes={['facebook', 'twitter', 'whatsapp', 'telegram', 'linkedin']}
+                        onSocialButtonClicked={(data) => console.log(data)}
+                        style={shareCustomStyle}
+                    />
+                </DashboardModal>
+            )}
+
+            {showLogsReplyModal && (
+                <>
+                    <div className='wish--overlay' onClick={() => setShowLogsReplyModal(false)} />
+                    <form className={`wish--form wish--modal form--reply`}>
+                        <div className="wish--form-heading">{`Replying to ${selectedLog.name}`}</div>
+                        <div className='form--chat form--chat-left'>
+                            <span className="contibutor__img-initials">
+                                {getInitials(selectedLog.name)}
+                            </span>
+                            <div className="reply--box reply--left">
+                                <p className='reply--name'>{selectedLog.name}</p>
+                                <p className='reply--message'>{selectedLog.message}</p>
+                                <li className='contributor--wish'>{truncate(selectedLog.wish.wish)}</li>
+                            </div>
+                        </div>
+                        {append && (
+                            <div className='form--chat form--chat-right'>
+                                <div className="reply--box reply--right">
+                                    <p className='reply--name'>You</p>
+                                    <p className='reply--message'>{replyMessage}</p>
+                                    <span className='reply--date'>{dateConverter(Date.now())}</span>
+                                </div>
+
+                                {(user?.image !== "") ? (
+                                    <img
+                                        alt={user?.fullName + "'s image"}
+                                        src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                    /> 
+                                ) : (
+                                    <span className="contibutor__img-initials">
+                                        {getInitials(user?.fullName || user.username)}
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                        <div className='form--send'>
+                            <ReactTextareaAutosize className='form__textarea' defaultValue="Message..." value={replyMessage} onChange={e => setReplyMessage(e.target.value)} />
+                            <button type="submit" className='reply--btn' onClick={(e) => handleSendMessge(e)}><IoMdSend /></button>
+                        </div>
+                    </form>
+                </>
+            )}
 
 
             {(isError || isSuccess) && (

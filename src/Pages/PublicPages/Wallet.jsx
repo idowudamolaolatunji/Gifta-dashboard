@@ -3,7 +3,7 @@ import Header from './Components/Header'
 import { useAuthContext } from '../../Auth/context/AuthContext';
 
 import DataTable from 'react-data-table-component';
-import { dateConverter, getInitials, numberConverter } from '../../utils/helper';
+import { currencyConverter, dateConverter, getInitials, numberConverter } from '../../utils/helper';
 import DashboardModal from '../../Components/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import { PaystackButton } from 'react-paystack';
@@ -18,7 +18,7 @@ import CollapsibleDiv from 'react-collapsible';
 import { MdArrowDropDown, MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import { CiBank, CiCreditCard1 } from 'react-icons/ci';
 import { RiAdminLine } from "react-icons/ri";
-
+import { GiCrownCoin } from 'react-icons/gi';
 
 
 function Message({ type }) {
@@ -75,7 +75,6 @@ function Wallet() {
     const [transactions, setTransactions] = useState([]);
     const [activeTab, setActiveTab] = useState('deposit');
     const [isLoading, setIsLoading] = useState(false);
-    const [showModal, setShowModal] = useState(false);
     const [showDepositModal, setShowDepositModal] = useState(false);
     const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
     const [helpReset, setHelpReset] = useState(false);
@@ -97,7 +96,6 @@ function Wallet() {
     const wishes = transactions.filter(transaction => transaction.purpose === 'wishes');
 
     const navigate = useNavigate();
-
 
     let charges;
     function calcTotalAmount(amount) {
@@ -182,10 +180,10 @@ function Wallet() {
 
     async function handleWithdrawal(e) {
         try {
-            if(!user?.bankName || !user?.holderName || !user?.acctNumber) {
+            if (!user?.bankName || !user?.holderName || !user?.acctNumber) {
                 throw new Error('Input Bank details in Profile');
             }
-            if(!withdrawalAmount || !password) throw new Error('Fill all fields!');
+            if (!withdrawalAmount || !password) throw new Error('Fill all fields!');
 
             e.preventDefault();
             handleReset();
@@ -197,19 +195,19 @@ function Wallet() {
                 headers,
                 body: JSON.stringify({ amount: withdrawalAmount, password })
             });
-            if(!res.ok) throw new Error('Something went wrong!');
+            if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
-            if(data.status !== "success") throw new Error(data.message);
+            if (data.status !== "success") throw new Error(data.message);
             setIsSuccess(true);
             setMessage("Withdrawal Request Successful!");
-            setTimeout(function() {
+            setTimeout(function () {
                 setIsSuccess(false);
                 setMessage("");
                 setShowWithdrawalModal(false);
                 setHelpReset(true);
             }, 2000);
 
-        } catch(err) {
+        } catch (err) {
             handleFailure(err.message);
         } finally {
             setIsLoading(false)
@@ -264,10 +262,10 @@ function Wallet() {
                     <div className="wallet--top">
                         <div className="wallet--user-info">
                             {(user?.image !== "") ? (
-							<img
-								alt={user?.fullName + " 's image"}
-								src={`https://test.tajify.com/asset/users/${user?.image}`}
-							/> 
+                                <img
+                                    alt={user?.fullName + " 's image"}
+                                    src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                />
                             ) : (
                                 <span className="user__img-initials">
                                     {getInitials(user?.fullName || user.username)}
@@ -279,6 +277,9 @@ function Wallet() {
                                     <span>₦</span>
                                     <span>{numberConverter(wallet?.walletBalance || 0)}</span>
                                 </span>
+
+                                <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{currencyConverter(wallet?.pointBalance || 0)} points</span>
+                                
                                 <span className='wallet--buttons'>
                                     <span className="wallet--button" onClick={() => setShowDepositModal(true)}>Fund Wallet <FiPlus className='wallet--icon' /></span>
                                     <span className="wallet--button" onClick={() => setShowWithdrawalModal(true)}>Withdraw <FiMinus className='wallet--icon' /></span>
@@ -300,7 +301,6 @@ function Wallet() {
                                     <option value="subscription">Subscription</option>
                                 </select>
                             </div>
-
 
 
                             <div className="wallet--tabs">
@@ -360,7 +360,6 @@ function Wallet() {
                         <div className="form--item">
                             {(email && amount) ? (
                                 <PaystackButton type='submit' className="form--button" {...componentProps} />
-
                             ) : (
                                 <button type='submit' className="form--button">Pay!</button>
                             )}
@@ -407,15 +406,15 @@ function Wallet() {
                             <div className='bank-info'>
                                 <span>
                                     <p><CiBank /> Bank Name</p>
-                                    <p style={ !user?.bankName ? { color: "#bb0505" } : {}}>{user?.bankName || "Empty"}</p>
+                                    <p style={!user?.bankName ? { color: "#bb0505" } : {}}>{user?.bankName || "Empty"}</p>
                                 </span>
                                 <span>
                                     <p><CiCreditCard1 /> Account Number</p>
-                                    <p style={ !user?.acctNumber ? { color: "#bb0505" } : {}}>{user?.acctNumber || "Empty"}</p>
+                                    <p style={!user?.acctNumber ? { color: "#bb0505" } : {}}>{user?.acctNumber || "Empty"}</p>
                                 </span>
                                 <span>
                                     <p><RiAdminLine /> Account Holder's Name</p>
-                                    <p style={ !user?.holderName ? { color: "#bb0505" } : {}}>{user?.holderName || "Empty"}</p>
+                                    <p style={!user?.holderName ? { color: "#bb0505" } : {}}>{user?.holderName || "Empty"}</p>
                                 </span>
                             </div>
 
@@ -429,15 +428,15 @@ function Wallet() {
                             <div className='bank-info'>
                                 <span>
                                     <p><CiBank /> Bank Name</p>
-                                    <p style={ !user?.bankName ? { color: "#bb0505" } : {}}>{user?.bankName || "Empty"}</p>
+                                    <p style={!user?.bankName ? { color: "#bb0505" } : {}}>{user?.bankName || "Empty"}</p>
                                 </span>
                                 <span>
                                     <p><CiCreditCard1 /> Account Number</p>
-                                    <p style={ !user?.acctNumber ? { color: "#bb0505" } : {}}>{user?.acctNumber || "Empty"}</p>
+                                    <p style={!user?.acctNumber ? { color: "#bb0505" } : {}}>{user?.acctNumber || "Empty"}</p>
                                 </span>
                                 <span>
                                     <p><RiAdminLine /> Account Holder's Name</p>
-                                    <p style={ !user?.holderName ? { color: "#bb0505" } : {}}>{user?.holderName || "Empty"}</p>
+                                    <p style={!user?.holderName ? { color: "#bb0505" } : {}}>{user?.holderName || "Empty"}</p>
                                 </span>
                             </div>
 
@@ -456,7 +455,7 @@ function Wallet() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 value={password}
                                 required
-                                placeholder="Password Confirmation"
+                                placeholder="●●●●●●●●●"
                             />
                         </div>
 

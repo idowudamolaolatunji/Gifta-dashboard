@@ -125,9 +125,8 @@ function SharedWishlist() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ wishListID: wishList._id, wishID: selectedWishId, userID: wishList?.user._id, payerEmail, anonymous: checkAnonymous, payerName })
+                body: JSON.stringify({ wishListID: wishList._id, wishID: selectedWishId, userID: wishList?.user._id, payerEmail, anonymous: checkAnonymous, payerName }),
             });
-            console.log(helpReset)
             if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
             console.log(res, data)
@@ -339,7 +338,7 @@ function SharedWishlist() {
                     </div>
 
                     <div className="form--item">
-                        {(email && amount) ? (
+                        {(payerEmail && amount) ? (
                             <PaystackButton type='submit' className="form--button" {...componentProps} />
                         ) : (
                             <button type='submit' className="form--button">Pay!</button>

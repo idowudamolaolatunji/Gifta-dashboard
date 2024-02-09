@@ -144,3 +144,12 @@ export function getInitials(fullName) {
         return nameArray[0].charAt(0);
     }
 }
+
+
+export function truncate(input) {
+    if (input.length > 30) {
+        return input.substring(0, 30) + "...";
+    } else {
+        return input;
+    }
+}
