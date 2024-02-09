@@ -56,10 +56,19 @@ const DashTabs = () => {
 						<p>Wishlists</p>
 					</Link>
 
-					<Link to="/dashboard/marketplace/birthday" className={`tab ${location.pathname.includes('/dashboard/marketplace') ? 'active-tab' : ''}`}>
-						<BsShop className="tab-icon" />
-						<p>MarketPlace</p>
-					</Link>
+					{user.role === 'user' && (
+						<Link className={`tab ${location.pathname.includes('/dashboard/marketplace') ? 'active-tab' : ''}`} to="/dashboard/marketplace/birthday">
+							<BsShop className="tab-icon" />
+							<p>MarketPlace</p>
+						</Link>
+					)}
+					
+					{user.role === 'vendor' && (
+						<Link className={`tab ${location.pathname.includes('/dashboard/product-catalogue') ? 'active-tab' : ''}`} to="/dashboard/product-catalogue">
+							<BsShop className="tab-icon" />
+							<p>Shop</p>
+						</Link>
+					)}
 
 					{user.role === 'vendor' && (
 						<Link to="/dashboard/orders" className={`tab ${location.pathname.includes('/dashboard/orders') ? 'active-tab' : ''}`}>
@@ -67,7 +76,6 @@ const DashTabs = () => {
 							<p>Orders</p>
 						</Link>
 					)}
-
 				</div>
 			</div>
 		</section>

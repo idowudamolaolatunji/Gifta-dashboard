@@ -27,6 +27,7 @@ import TermsOfUse from './Pages/PublicPages/TermsOfUse';
 import PrivacyPolicy from './Pages/PublicPages/PrivacyPolicy';
 import SubscriptionPlan from './Pages/PublicPages/SubscriptionPlan';
 import VendorReg from './Pages/PublicPages/VendorReg';
+import ProductCatalogue from './Pages/Marketplace/MarketComponent/ProductCatalogue';
 
 
 
@@ -49,6 +50,7 @@ function App() {
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
 
                     <Route path="/dashboard/reminders" element={<Reminders />}></Route>
+                    <Route path="/dashboard/product-catalogue" element={<ProductCatalogue />}></Route>
                     <Route path="/dashboard/orders" element={<Orders />}></Route>
 
                     <Route path="/wallet" element={<Wallet />}></Route>

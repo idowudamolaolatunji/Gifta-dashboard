@@ -111,10 +111,19 @@ function WishListDashHeader() {
 						<p>Wishlists</p>
 					</Link>
 
-					<Link className="tab" to="/dashboard/marketplace/birthday">
-						<BsShop className="tab-icon" />
-						<p>MarketPlace</p>
-					</Link>
+					{user.role === 'user' && (
+						<Link className="tab" to="/dashboard/marketplace/birthday">
+							<BsShop className="tab-icon" />
+							<p>MarketPlace</p>
+						</Link>
+					)}
+					
+					{user.role === 'vendor' && (
+						<Link className="tab" to="/dashboard/product-catalogue">
+							<BsShop className="tab-icon" />
+							<p>Shop</p>
+						</Link>
+					)}
 				</div>
 			</div>
 		</section>

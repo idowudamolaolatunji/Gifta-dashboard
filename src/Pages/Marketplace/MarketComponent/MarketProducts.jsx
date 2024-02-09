@@ -201,8 +201,6 @@ function CategoryPage() {
                 </div>}
 
             {(selectedProduct && showModal) && <Product product={selectedProduct} handleCloseModal={handleCloseModal} />}
-
-            { user.role === 'vendor' && (<div className="dashnoard--add-btn"><FiPlus /></div>)}
         </section>
     )
 }
