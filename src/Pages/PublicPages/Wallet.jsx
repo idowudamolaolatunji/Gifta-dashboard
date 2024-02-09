@@ -418,7 +418,7 @@ function Wallet() {
                                 </span>
                             </div>
 
-                            <Link to={'/account-profile'} className="form--item form--acct-btn">
+                            <Link to={'/settings'} className="form--item form--acct-btn">
                                 <div>Goto Account <MdKeyboardDoubleArrowRight style={{ fontSize: '1.6rem' }} /></div>
                             </Link>
                         </CollapsibleDiv>

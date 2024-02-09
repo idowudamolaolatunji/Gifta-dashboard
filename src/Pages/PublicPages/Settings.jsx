@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import DeleteModalUi from '../Wishlists/WishlistsComponents/DeleteModalUi';
 
 function Settings() {
     const { user, token, handleUser } = useAuthContext();
@@ -20,6 +21,8 @@ function Settings() {
     const [passwordCurrent, setPasswordCurrent] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [passwordDel, setpasswordDel] = useState('');
 
     const navigate = useNavigate();
 
@@ -125,6 +128,7 @@ function Settings() {
                     "Content-Type": 'application/json',
                     Authorization: `Bearer ${token}`
                 },
+                body: JSON.stringify({ password: passwordDel })
             });
             if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
@@ -306,13 +310,37 @@ function Settings() {
                                 you click <strong>Delete My Account!</strong>
                             </span>
                             <div className="form--item">
-                                <button className="btn delete-account" onClick={() => (true)}>Delete My Account</button>
+                                <button className="btn delete-account" onClick={() => setShowDeleteModal(true)}>Delete My Account</button>
                                 {/* onClick={handleDeleteAccount} */}
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+
+            {showDeleteModal && (
+                <DeleteModalUi title={'Delete Your Gifta Account'} setShowDeleteModal={setShowDeleteModal}>
+                    <span className='modal--info'>Note that everything relating to this Your Account would also be deleted including transactions.</span>
+                    <div className='delete--content'>
+                        <div className="form--item">
+                            <label htmlFor="password" className="form--label">Confirm Password</label>
+                            <input
+                                type="password" id="password"
+                                className="form--input"
+                                placeholder="••••••••••••"
+                                required="required"
+                                minLength={8}
+                                value={passwordDel}
+                                onChange={e => setpasswordDel(e.target.value)} 
+                            />
+                        </div>
+                        <div className="modal--actions">
+                            <span className='delete--cancel' onClick={() => setShowDeleteModal(false)}>Cancel</span>
+                            <span className='delete--submit' onClick={handleDeleteAccount}>Delete</span>
+                        </div>
+                    </div>
+                </DeleteModalUi>
+            )}
 
 
             {(isError || isSuccess) && (

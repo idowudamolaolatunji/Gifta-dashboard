@@ -30,9 +30,10 @@ function SubscriptionPlan() {
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
+    const [plan, setPlan] = useState()
 
     const navigate = useNavigate();
-    const { user, token } = useAuthContext();
+    const { user, token, handleUser } = useAuthContext();
 
 
     // HANDLE FETCH STATE RESET
@@ -52,13 +53,15 @@ function SubscriptionPlan() {
         }, 3000);
     }
 
-    function handleChecked(plan) {
-        if(plan === 'monthly') {
+    function handleChecked(subPlan) {
+        if(subPlan === 'semi-annual') {
             setCheckedMonthly(!checkedMonthly);
             setCheckedYearly(false);
+            setPlan(subPlan)
         } else {
             setCheckedYearly(!checkedYearly);
             setCheckedMonthly(false);
+            setPlan(subPlan)
         }
 
         setTimeout(() => {
@@ -85,7 +88,7 @@ function SubscriptionPlan() {
     }
 
     const publicKey = "pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7"
-    const amountInKobo = calcTotalAmount(Number(checkedMonthly ? 1200 : 50000)) * 100;
+    const amountInKobo = calcTotalAmount(Number(checkedMonthly ? 15000 : 50000)) * 100;
     const componentProps = {
         email: user?.email,
         amount: amountInKobo,
@@ -110,6 +113,27 @@ function SubscriptionPlan() {
             handleReset();
             setIsLoading(true);
 
+            const res = await fetch(`https://test.tajify.com/api/subscriptions/subscribe-from-card/${reference}/${charges}`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ plan })
+            });
+
+            if(!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            console.log(res, data);
+            if(data.status !== "status") throw new Error(data.message);
+
+            setIsSuccess(true);
+            setMessage(data.message);
+            setTimeout(function() {
+                setIsSuccess(false);
+                setMessage("");
+                handleUser(data?.data.user);
+            }, 2000);
 
         } catch(err) {
             handleFailure(err.message)
@@ -123,7 +147,29 @@ function SubscriptionPlan() {
             setIsLoading(true);
             handleReset();
 
-            // setShowModal(false)
+            const res = await fetch('https://test.tajify.com/api/subscriptions/subscribe-from-wallet', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ plan, amount: checkedMonthly ? 15000 : 50000 }),
+            });
+
+            if(!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            console.log(res, data);
+            if(data.status !== "status") throw new Error(data.message);
+
+            setIsSuccess(true);
+            setMessage(data.message);
+            setTimeout(function() {
+                setIsSuccess(false);
+                setMessage("");
+                handleUser(data?.data.user);
+                setShowModal(false);
+            }, 2000);
+
         } catch (err) {
             handleFailure(err.message)
         } finally {
@@ -147,13 +193,11 @@ function SubscriptionPlan() {
 
                     <div className="terms--container">
                         <h3 className="terms--heading">Plans.</h3>
-
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam corporis.</p>
 
-
                         <div className="plans--box">
-                            <figure className="plan-figure" onClick={() => handleChecked('monthly')}>
-                                <p className="plans--title">Monthly</p>
+                            <figure className="plan-figure" onClick={() => handleChecked('semi-annual')}>
+                                <p className="plans--title">Semi-annual</p>
                                 <span className={`plans--check ${checkedMonthly ? 'checked' : ''}`}>{checkedMonthly && <BsCheck className='check--icon' />}</span>
                                 <ul className="plans--infos">
                                     <li>Increased Profit Margins</li>
@@ -163,12 +207,12 @@ function SubscriptionPlan() {
                                     <li>Dynamic pricing models</li>
                                 </ul>
                                 <span className='plans--pricing'>
-                                    <span className='plans--number'>₦1,200</span>
-                                    <span>/ month</span>
+                                    <span className='plans--number'>₦12,000</span>
+                                    <span>/ 6 months</span>
                                 </span>
                             </figure>
-                            <figure className="plan-figure" onClick={() => handleChecked('yearly')}>
-                                <p className="plans--title">Yearly</p>
+                            <figure className="plan-figure" onClick={() => handleChecked('annual')}>
+                                <p className="plans--title">Annual</p>
                                 <span className={`plans--check ${checkedYearly ? 'checked' : ''}`}>{checkedYearly && <BsCheck className='check--icon' />}</span>
                                 <ul className="plans--infos">
                                     <li>Increased Profit Margins</li>
@@ -179,7 +223,7 @@ function SubscriptionPlan() {
                                 </ul>
                                 <span className='plans--pricing'>
                                     <span className='plans--number'>₦50,000</span>
-                                    <span>/ year</span>
+                                    <span>/ 1 year</span>
                                 </span>
                             </figure>
                         </div>
@@ -190,7 +234,7 @@ function SubscriptionPlan() {
 
             {showModal && (
                 <Modal customStyle={customStyle} setShowDashboardModal={setShowModal} title={'Choose a Payment Option!'}>
-                    <span className='modal--info'>Subscription plan for a {checkedYearly ? 'Year' : 'Month'}. Note the subtotal for this plan {checkedMonthly ? '₦1,200' : '₦50,000'}. Proceed with caution!</span>
+                    <span className='modal--info'>Subscription plan for {checkedYearly ? 'a Year' : 'Six-months'}. Note the subtotal for this plan {checkedMonthly ? '₦1,200' : '₦50,000'}. Proceed with caution!</span>
 
                     <div className="payment--option">
                         <span className='payment--action payment--wallet' onClick={handleSubscriptionWallet}><PiWallet style={{ color: 'bb0505', fontSize: '2rem' }} /> Pay from Wallet</span>
