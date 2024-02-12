@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GiftLogo from "../../../Assets/gifta-logo.png";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
@@ -7,20 +7,24 @@ import { useAuthContext } from "../../../Auth/context/AuthContext";
 import { LuMoon, LuSun } from "react-icons/lu";
 import { IoNotifications, IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
 import Dropdown from "../../../Components/Dropdown";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineWorkspacePremium } from "react-icons/md";
 import { getInitials } from "../../../utils/helper";
 import NotificationBox from "../../../Components/NotificationBox";
 
 
 function Header() {
     // const [mode, setMode] = useState(false);
-	const [showDropdown, setShowDropdown] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
     const [showNotificationBox, setShowNotificationBox] = useState(false);
-	const { user, token, notificationCount  } = useAuthContext();
+    const { user, token, notificationCount } = useAuthContext();
+
+    const location = useLocation();
+    const isProfileOrWallet = (!location.pathname.includes('account-profile') && !location.pathname.includes('wallet'))
 
 
-  return (
-    <header className="dashboard__header" style={{ marginBottom: '7.2rem' }}>
+
+    return (
+        <header className="dashboard__header" style={{ marginBottom: '7.2rem' }}>
             <div className='main-header sticky'>
                 <Link to='/'>
                     <img src={GiftLogo} alt="logo" className="dashboard__logo" />
@@ -37,14 +41,14 @@ function Header() {
                         </span> */}
                         {(user && token) && (
                             <>
-                               <span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
+                                <span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
                                     <IoNotifications className="dashboard__icon" style={{ fontSize: '2.8rem' }} />
                                     {notificationCount > 0 && (<span>{notificationCount >= 9 ? '9+' : notificationCount}</span>)}
                                 </span>
                                 {showNotificationBox && (
                                     <NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />
                                 )}
-                                        
+
                                 <Link to="/settings">
                                     <span className="dashboard__icon-box">
                                         <IoSettingsOutline className="dashboard__icon" />
@@ -63,17 +67,24 @@ function Header() {
                         <div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)} onClick={() => setShowDropdown(!showDropdown)}>
                             {showDropdown && <Dropdown addHomeLink={true} />}
 
-                            {(user?.image !== "") ? (
-							<img
-								alt={user?.fullName + " 's image"}
-								src={`https://test.tajify.com/asset/users/${user?.image}`}
-								className='profile__img'
-							/> 
-                            ) : (
-                                <span className="profile__img-initials">
-                                    {getInitials(user?.fullName || user.username)}
-                                </span>
-                            )}
+                            <span style={{ position: 'relative' }}>
+                                {(user?.image !== "") ? (
+                                    <img
+                                        alt={user?.fullName + " 's image"}
+                                        src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                        className='profile__img'
+                                    />
+                                ) : (
+                                    <span className="profile__img-initials">
+                                        {getInitials(user?.fullName || user?.username)}
+                                    </span>
+                                )}
+                                {(user?.isPremium && isProfileOrWallet) && (
+                                    <div className="premium--tag nav-tag">
+                                        <MdOutlineWorkspacePremium />
+                                    </div>
+                                )}
+                            </span>
 
                             <span className="profile__user">
                                 <p className="user-username" >{user?.fullName || user?.username}</p>
@@ -99,7 +110,7 @@ function Header() {
                 </div>
             </div>
         </header>
-  )
+    )
 }
 
 export default Header

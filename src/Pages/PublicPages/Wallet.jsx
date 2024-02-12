@@ -15,7 +15,7 @@ import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import { FiMinus, FiPlus } from "react-icons/fi";
 
 import CollapsibleDiv from 'react-collapsible';
-import { MdArrowDropDown, MdKeyboardDoubleArrowRight } from 'react-icons/md';
+import { MdArrowDropDown, MdKeyboardDoubleArrowRight, MdOutlineWorkspacePremium } from 'react-icons/md';
 import { CiBank, CiCreditCard1 } from 'react-icons/ci';
 import { RiAdminLine } from "react-icons/ri";
 import { GiCrownCoin } from 'react-icons/gi';
@@ -261,16 +261,25 @@ function Wallet() {
 
                     <div className="wallet--top">
                         <div className="wallet--user-info">
-                            {(user?.image !== "") ? (
-                                <img
-                                    alt={user?.fullName + " 's image"}
-                                    src={`https://test.tajify.com/asset/users/${user?.image}`}
-                                />
-                            ) : (
-                                <span className="user__img-initials">
-                                    {getInitials(user?.fullName || user.username)}
-                                </span>
-                            )}
+                            <span style={{ position: 'relative', overflow: 'hidden', borderRadius: '50%' }}>
+                                {(user?.image !== "") ? (
+                                    <img
+                                        alt={user?.fullName + " 's image"}
+                                        src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                    />
+                                ) : (
+                                    <span className="user__img-initials">
+                                        {getInitials(user?.fullName || user.username)}
+                                    </span>
+                                )}
+                                {user?.isPremium && (
+                                    <div className="premium--tag">
+                                        <p style={{ display: 'flex', alignItems: 'center', gap: '.2rem' }}>Premium <MdOutlineWorkspacePremium style={{ fontSize: '1.6rem' }} /></p>
+                                    </div>
+                                )}
+                            </span>
+
+
                             <div>
                                 <p className="wallet--user-name">{user.fullName || user.username}</p>
                                 <span className='wallet--user-balance'>
@@ -279,7 +288,7 @@ function Wallet() {
                                 </span>
 
                                 <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{currencyConverter(wallet?.pointBalance || 0)} points</span>
-                                
+
                                 <span className='wallet--buttons'>
                                     <span className="wallet--button" onClick={() => setShowDepositModal(true)}>Fund Wallet <FiPlus className='wallet--icon' /></span>
                                     <span className="wallet--button" onClick={() => setShowWithdrawalModal(true)}>Withdraw <FiMinus className='wallet--icon' /></span>

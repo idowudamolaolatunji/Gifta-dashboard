@@ -121,8 +121,8 @@
 		color: #fff;
 		margin-top: 1.8rem;
 	}
-	.lists--item-top,
-	.lists--item-bottom {
+	.lists--item-top
+	, .wishlish--share .lists--item-bottom {
 		gap: 2rem;
 		display: grid;
 	}
@@ -687,5 +687,34 @@
 	.bank-info {
 		column-gap: 0.4rem;
 		row-gap: 1.8rem;
+	}
+
+
+	.lists--completed::before {
+		content: "Completed";
+		display: inline-block !important;
+
+		width: 50%;
+		padding: .4rem 0;
+		background-color: #bb0505bf;
+		color: #fff;
+		font-size: 1rem;
+		font-weight: 600;
+	
+		text-align: center;
+	
+		top: 15%;
+		right: -15%;
+		transform: rotate(35deg);
+		z-index: 10;
+	}
+	.lists--completed::after {
+		content: "";
+		height: 100%;
+		width: 100%;
+		background-color: #ffffffa4;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 }

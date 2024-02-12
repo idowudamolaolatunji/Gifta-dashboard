@@ -146,9 +146,9 @@ export function getInitials(fullName) {
 }
 
 
-export function truncate(input) {
-    if (input.length > 30) {
-        return input.substring(0, 30) + "...";
+export function truncate(input, num=30) {
+    if (input.length > num) {
+        return input.substring(0, num) + "...";
     } else {
         return input;
     }

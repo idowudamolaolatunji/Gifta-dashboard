@@ -4,7 +4,7 @@ import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../Auth/context/AuthContext';
 import { getInitials, truncate } from '../../utils/helper';
-import { MdContentCopy, MdOutlineAddAPhoto } from 'react-icons/md';
+import { MdContentCopy, MdOutlineAddAPhoto, MdOutlineWorkspacePremium } from 'react-icons/md';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import Alert from '../../Components/Alert';
 
@@ -179,7 +179,7 @@ function AccountProfile() {
                     <div className="account--container">
                         <div className="account--top">
                             <div className='form--item'>
-                                <input type='file' id='profile-image-input' capture name='image' onChange={handleImageChange} accept="image/*" />
+                                <input type='file' id='profile-image-input' name='image' onChange={handleImageChange} accept="image/*" />
                                 <label htmlFor='profile-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='profile-image-label'>
                                     <span className='image--label' style={{ zIndex: 100 }}>
                                         <MdOutlineAddAPhoto style={{ fontSize: '2.4rem' }} />
@@ -190,7 +190,6 @@ function AccountProfile() {
                                         <img
                                             alt={user?.fullName + " 's image"}
                                             src={`https://test.tajify.com/asset/users/${user?.image}`}
-                                            // src={`http://localhost:3010/asset/users/${user?.image}`}
                                             style={imagePreview ? { display: 'none' } : {}}
                                         />
                                     ) : (!imagePreview || !user?.image) && (
@@ -200,6 +199,12 @@ function AccountProfile() {
                                     )}
                                     {(imagePreview) && (
                                         <img src={imagePreview} alt='Wishlist Preview' />
+                                    )}
+
+                                    {user?.isPremium && (
+                                        <div className="premium--tag">
+                                            <p style={{ display: 'flex', alignItems: 'center', gap: '.2rem' }}>Premium <MdOutlineWorkspacePremium style={{ fontSize: '1.6rem' }} /></p>
+                                        </div>
                                     )}
                                 </label>
                             </div>

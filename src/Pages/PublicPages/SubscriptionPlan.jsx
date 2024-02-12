@@ -54,18 +54,20 @@ function SubscriptionPlan() {
     }
 
     function handleChecked(subPlan) {
-        if(subPlan === 'semi-annual') {
+        if ( subPlan === 'semi-annual' && !user?.isPremium ) {
             setCheckedMonthly(!checkedMonthly);
             setCheckedYearly(false);
             setPlan(subPlan)
-        } else {
+        } else if ( subPlan === 'annual' && !user?.isPremium ) {
             setCheckedYearly(!checkedYearly);
             setCheckedMonthly(false);
             setPlan(subPlan)
         }
 
         setTimeout(() => {
-            setShowModal(true)
+            if(!user?.isPremium) {
+                setShowModal(true);
+            }
         }, 1000);
     }
 
@@ -195,8 +197,8 @@ function SubscriptionPlan() {
                         <h3 className="terms--heading">Plans.</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam corporis.</p>
 
-                        <div className="plans--box">
-                            <figure className="plan-figure" onClick={() => handleChecked('semi-annual')}>
+                        <div className={`plans--box ${user?.isPremium ? 'user--premium' : ''}`}>
+                            <figure className={`plan-figure ${user?.premiumDuration === 'half' ? 'user--premium-dur' : ''}`} onClick={() => handleChecked('semi-annual')}>
                                 <p className="plans--title">Semi-annual</p>
                                 <span className={`plans--check ${checkedMonthly ? 'checked' : ''}`}>{checkedMonthly && <BsCheck className='check--icon' />}</span>
                                 <ul className="plans--infos">
@@ -211,7 +213,7 @@ function SubscriptionPlan() {
                                     <span>/ 6 months</span>
                                 </span>
                             </figure>
-                            <figure className="plan-figure" onClick={() => handleChecked('annual')}>
+                            <figure className={`plan-figure ${user?.premiumDuration === 'full' ? 'user--premium-dur' : ''}`} onClick={() => handleChecked('annual')}>
                                 <p className="plans--title">Annual</p>
                                 <span className={`plans--check ${checkedYearly ? 'checked' : ''}`}>{checkedYearly && <BsCheck className='check--icon' />}</span>
                                 <ul className="plans--infos">

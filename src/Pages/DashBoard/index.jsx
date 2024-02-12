@@ -22,15 +22,25 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { FiPlus } from "react-icons/fi";
 import SkelentonOne from "../../Components/SkelentonOne";
+import MobileFullScreenModal from "../../Components/MobileFullScreenModal";
+import { MdArrowBackIos } from "react-icons/md";
+
 
 
 const DashBoard = () => {
 	// const [isLoading, setIsLoading] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
 	const [giftings, setGiftings] = useState([]);
+
+	const [selectedGift, setSelectedGift] = useState(null);
+	const [showGiftingModal, setShowGiftingModal] = useState(false);
 	const { user, token } = useAuthContext();
 
-	console.log(user._id)
+
+	function handleGiftPackage(gift) {
+		setShowGiftingModal(true);
+		setSelectedGift(gift);
+	}
 
 	
 	useEffect(() => {
@@ -50,18 +60,17 @@ const DashBoard = () => {
 					throw new Error(data.message);
 				}
 				setGiftings(data.data.giftings)
-				console.log(data.data.giftings)
 			} catch (err) {
 				console.log(err.message)
 			} finally {
 				setIsLoading(false)
 			}
 		}
-		fetchGiftings()
+		fetchGiftings();
 	}, [])
 
 	return (
-		<div>
+		<>
 			<DashHeader isDasboard={true} />
 			<DashTabs /> 
 
@@ -85,17 +94,16 @@ const DashBoard = () => {
 							<div>
 								<h3 className="section__heading" style={{ color: '#bb0505', margin: '0 0 3.2rem .8rem' }}>Gifts bought by you!</h3>
 								<div className="pagination--actions">
-									{/* <span><FaAngleLeft /></span> */}
-									{/* <span><FaAngleRight /></span> */}
-									{/* <span>Ongoing</span>
+									{/* <span><FaAngleLeft /></span>
+									<span><FaAngleRight /></span>
+									<span>Ongoing</span>
 									<span>Passed / Completed</span> */}
 								</div>
 							</div>
 							<div className="giftPackage__cards">
 								{giftings.map(gifting => {
-									{console.log(gifting.gifter._id)}
 									return (
-										<div className='giftPackage--figure' key={gifting._id}>
+										<div className='giftPackage--figure' key={gifting._id} onClick={() => handleGiftPackage(gifting)}>
 											<img src={`https://test.tajify.com/asset/others/${gifting?.celebrantImage}` || GiftImg} alt={gifting?.celebrant} />
 											<span className="package--category">{gifting.purpose}</span>
 											<figcaption className="giftPackage--details">
@@ -126,7 +134,21 @@ const DashBoard = () => {
 					)}
 				</div>
 			</section>
-		</div>
+
+
+
+			{showGiftingModal && (
+				<MobileFullScreenModal key={selectedGift._id}>
+					<div className="">
+						<span className="">
+							<MdArrowBackIos />
+						</span>
+						<img src={`https://test.tajify.com/asset/others/${selectedGift?.celebrantImage}` || GiftImg} alt={selectedGift?.celebrant} />
+						
+					</div>
+				</MobileFullScreenModal>
+			)}
+		</>
 	);
 };
 

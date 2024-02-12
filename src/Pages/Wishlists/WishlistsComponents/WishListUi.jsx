@@ -16,7 +16,7 @@ import SkelentonOne from '../../../Components/SkelentonOne';
 import DashboardModal from '../../../Components/Modal';
 import { ShareSocial } from 'react-share-social';
 import Alert from '../../../Components/Alert';
-import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import { AiFillCheckCircle, AiFillExclamationCircle, AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import { FiPlus, FiUsers } from "react-icons/fi";
 
@@ -26,6 +26,7 @@ import PaymentLog from '../../../Components/PaymentLog';
 import { MdReply } from 'react-icons/md';
 import { IoMdSend } from 'react-icons/io';
 import ReactTextareaAutosize from 'react-textarea-autosize';
+import { TbPigMoney } from 'react-icons/tb';
 
 
 const customStyle = {
@@ -63,10 +64,11 @@ function WishListUi() {
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
-
+    
     const [showNewModal, setShowNewModal] = useState(function () {
         return JSON.parse(localStorage.getItem('wishNewModal')) || false;
     });
+    const [showWishActionInfo, setWishShowActionInfo] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showLogsReplyModal, setShowLogsReplyModal] = useState(false);
@@ -85,8 +87,8 @@ function WishListUi() {
 
     // WISHLIST ACTIONS ON MOBILE
     const [showActionInfo, setShowActionInfo] = useState(false);
-    // const [showWishlistDeleteModal, setShowWishlistDeleteModal] = useState(false);
-    // const [showWishListEditModal, setShowWishListEditModal] = useState(false);
+    const [showWishlistDeleteModal, setShowWishlistDeleteModal] = useState(false);
+    const [showWishListEditModal, setShowWishListEditModal] = useState(false);
 
 
     useEffect(function () {
@@ -141,14 +143,18 @@ function WishListUi() {
     // const location = useLocation();
     const navigate = useNavigate();
 
-    function handleSelectedWish(item) {
+
+    function handleWish(item) {
+        setWishShowActionInfo(true)
+        setSelectedWishId(item._id);
         setSelectedWish(item);
+    }
+    function handleEditAction() {
+        setWishShowActionInfo(false);
         setShowEditModal(true)
     }
-
-    function handleSelectDeleteWish(item) {
-        setSelectedWish(item);
-        setSelectedWishId(item._id);
+    function handleDeleteAction() {
+        setWishShowActionInfo(false);
         setShowDeleteModal(true)
     }
 
@@ -174,8 +180,8 @@ function WishListUi() {
             if (data.status !== "success") {
                 throw new Error(data.message);
             }
-            setMessage(data.message);
             setIsSuccess(true);
+            setMessage(data.message);
             setTimeout(() => {
                 showDeleteModal(false);
                 setIsSuccess(false);
@@ -291,17 +297,7 @@ function WishListUi() {
                 )}
             </>
 
-            {/* {(showActionInfo) && (
-                <>
-                    <div className="overlay" onClick={() => setShowActionInfo(false)} style={{ zIndex: 3000 }} />
-                    <div className="w-figure--action-box">
-                        <ul>
-                            <li onClick={() => setShowWishListEditModal(true)}>Edit</li>
-                            <li onClick={() => setShowWishlistDeleteModal(true)}>Delete</li>
-                        </ul>
-                    </div>
-                </>
-            )} */}
+           
 
             <section className="section">
                 <div className="section__container">
@@ -335,22 +331,25 @@ function WishListUi() {
 
                         <ul className='lists--figure'>
                             {selectedTab !== 'logs' && (wishArr && wishArr?.length > 0 && !isLoading) ? wishArr?.map(wishItem => (
-                                <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
+                                <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id} onClick={() => (calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? '' : handleWish(wishItem)}>
                                     <span className='lists--item-top'>
                                         <span className='lists--content'>
-                                            <p>{wishItem.wish}</p>
+                                            <p>{truncate(wishItem.wish, 24)}</p>
                                         </span>
-                                        <div className='lists--actions'>
+                                        {/* <div className='lists--actions'>
                                             <span onClick={() => handleSelectedWish(wishItem)}><RiEditLine /></span>
                                             <span onClick={() => handleSelectDeleteWish(wishItem)}><RiDeleteBin6Line /></span>
-                                        </div>
+                                        </div> */}
+
+                                        <ProgressBar amountPaid={`₦${numberConverter(wishItem.amountPaid)}`} progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
+
                                     </span>
                                     <span className='lists--item-bottom'>
                                         <div className='lists--insight'>
                                             <span><IoPricetagOutline /><p>₦{numberConverter(wishItem.amount)}</p></span>
                                             <span><SlCalender /><p>{expectedDateFormatter(wishItem.deadLineDate)}</p></span>
+                                            <span><TbPigMoney /><p>₦{numberConverter(wishItem.amountPaid)}</p></span>
                                         </div>
-                                        <ProgressBar amountPaid={`₦${numberConverter(wishItem.amountPaid)}`} progress={`${calculatePercentage(wishItem.amount, wishItem.amountPaid)}%`} />
                                     </span>
                                 </li>
 
@@ -484,6 +483,26 @@ function WishListUi() {
                             <button type="submit" className='reply--btn' onClick={(e) => handleSendMessge(e)}><IoMdSend /></button>
                         </div>
                     </form>
+                </>
+            )}
+
+
+            {(showActionInfo) && (
+                <>
+                    <div className="overlay" onClick={() => setShowActionInfo(false)} style={{ zIndex: 2000 }} />
+                    <div className="w-figure--action-box">
+                        <span onClick={() => setShowWishListEditModal(true)}><AiOutlineEdit className='w-figure--action-icon' /> Edit</span>
+                        <span onClick={() => setShowWishlistDeleteModal(true)}><AiOutlineDelete className='w-figure--action-icon' /> Delete</span>
+                    </div>
+                </>
+            )}
+            {(showWishActionInfo) && (
+                <>
+                    <div className="overlay" onClick={() => setWishShowActionInfo(false)} style={{ zIndex: 2000 }} />
+                    <div className="w-figure--action-box">
+                        <span onClick={() => handleEditAction()}><AiOutlineEdit className='w-figure--action-icon' /> Edit</span>
+                        <span onClick={() => handleDeleteAction()}><AiOutlineDelete className='w-figure--action-icon' /> Delete</span>
+                    </div>
                 </>
             )}
 

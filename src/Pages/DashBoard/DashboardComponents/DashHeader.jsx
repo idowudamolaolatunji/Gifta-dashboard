@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 import { IoSettingsOutline, IoSearchOutline, IoWalletOutline, IoNotifications } from "react-icons/io5";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineWorkspacePremium } from "react-icons/md";
 import Dropdown from "../../../Components/Dropdown";
 import { LuSun, LuMoon } from "react-icons/lu";
 import { getInitials } from "../../../utils/helper";
@@ -140,17 +140,24 @@ const DashHeader = ({ isDasboard }) => {
 					<div className="dashboard__user-profile" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)} onClick={() => setShowDropdown(!showDropdown)}>
 						{showDropdown && <Dropdown />}
 
-						{(user?.image !== "") ? (
-							<img
-								alt={user?.fullName + " 's image"}
-								src={`https://test.tajify.com/asset/users/${user?.image}`}
-								className='profile__img'
-							/>
-						) : (
-							<span className="profile__img-initials">
-								{getInitials(user?.fullName || user?.username)}
-							</span>
-						)}
+						<span style={{ position: 'relative' }}>
+							{(user?.image !== "") ? (
+								<img
+									alt={user?.fullName + " 's image"}
+									src={`https://test.tajify.com/asset/users/${user?.image}`}
+									className='profile__img'
+								/>
+							) : (
+								<span className="profile__img-initials">
+									{getInitials(user?.fullName || user?.username)}
+								</span>
+							)}
+							{user?.isPremium && (
+								<div className="premium--tag nav-tag">
+									<MdOutlineWorkspacePremium />
+								</div>
+							)}
+						</span>
 
 						<span className="profile__user">
 							<p className="user-username" >{user.fullName || user.username}</p>
