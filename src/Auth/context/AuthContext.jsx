@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 		if (e.response.status === 401 || e.response.status === 403) {
 		  Cookies.remove("user");
 		  Cookies.remove("token");
-		  window.location.href = "/";
+		  window.location.href = "/login";
 		}
 	};
 

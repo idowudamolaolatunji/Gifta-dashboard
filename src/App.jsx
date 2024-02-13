@@ -50,7 +50,7 @@ function App() {
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
 
                     <Route path="/dashboard/reminders" element={<Reminders />}></Route>
-                    <Route path="/dashboard/product-catalogue" element={<ProductCatalogue />}></Route>
+                    <Route path="/dashboard/product-catalogue/:category" element={<ProductCatalogue />}></Route>
                     <Route path="/dashboard/orders" element={<Orders />}></Route>
 
                     <Route path="/wallet" element={<Wallet />}></Route>

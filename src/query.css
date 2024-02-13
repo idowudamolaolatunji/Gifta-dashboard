@@ -717,4 +717,20 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 	}
+
+
+
+	.mobile-modal--figure {
+		display: block;
+		width: 100%;
+		height: 105vh !important;
+		overflow: hidden;
+		background-color: #fff;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 3000;
+		transform: none !important;
+	}
 }

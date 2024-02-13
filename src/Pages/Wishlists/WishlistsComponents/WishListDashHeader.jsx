@@ -126,7 +126,7 @@ function WishListDashHeader() {
 						)}
 
 						{user.role === 'vendor' && (
-							<Link className="tab" to="/dashboard/product-catalogue">
+							<Link className="tab" to="/dashboard/product-catalogue/birthday">
 								<BsShop className="tab-icon" />
 								<p>Shop</p>
 							</Link>

@@ -8,7 +8,7 @@ import GiftImg from '../../Assets/images/casual-life-3d-pink-gift-box.png';
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../Auth/context/AuthContext";
 import SkeletonLoader from '../../Components/SkeletonLoader';
-import { dateConverter, expectedDateFormatter } from "../../utils/helper";
+import { dateConverter, expectedDateFormatter, numberConverter } from "../../utils/helper";
 import SkelentonFour from "../../Components/SkelentonFour";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
@@ -24,6 +24,8 @@ import { FiPlus } from "react-icons/fi";
 import SkelentonOne from "../../Components/SkelentonOne";
 import MobileFullScreenModal from "../../Components/MobileFullScreenModal";
 import { MdArrowBackIos } from "react-icons/md";
+import { IoLocationSharp, IoPricetagOutline } from "react-icons/io5";
+import { CiCalendar } from "react-icons/ci";
 
 
 
@@ -139,12 +141,32 @@ const DashBoard = () => {
 
 			{showGiftingModal && (
 				<MobileFullScreenModal key={selectedGift._id}>
-					<div className="">
-						<span className="">
-							<MdArrowBackIos />
-						</span>
-						<img src={`https://test.tajify.com/asset/others/${selectedGift?.celebrantImage}` || GiftImg} alt={selectedGift?.celebrant} />
+					<div className="gift--preview-figure">
 						
+						<div className="gift--preview-top">
+							<img src={`https://test.tajify.com/asset/others/${selectedGift?.celebrantImage}` || GiftImg} alt={selectedGift?.celebrant} />
+							<div className="gift--preview-details">
+								<span onClick={() => setShowGiftingModal(false)}><MdArrowBackIos /></span>
+								<p className="gift--preview-name">For {selectedGift?.celebrant}</p>
+								<p className="gift--preview-date">
+									<CiCalendar />
+									{expectedDateFormatter(selectedGift?.date)}
+								</p>
+							</div>
+						</div>
+
+						<div className="gift--preview-bottom">
+							<span className="gift--preview-title"> Purchased Gift <TfiGift style={{ color: '#bb0505' }} /></span>
+							<div className="gift--preview-flex">
+								<img src={selectedGift?.gift.image} />
+								<div>
+								<p>{selectedGift?.gift.name}</p>
+								<span className="gift--preview-price"><IoPricetagOutline /><p>₦{numberConverter(selectedGift?.amount)}</p></span>
+								</div>
+							</div>
+							<span className="gift--preview-title"> Delivery Location <IoLocationSharp style={{ color: '#bb0505' }} /></span>
+							<p style={{ fontSize: '1.4rem' }}>{selectedGift?.address}</p>
+						</div>
 					</div>
 				</MobileFullScreenModal>
 			)}

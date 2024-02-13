@@ -127,7 +127,9 @@ function SubscriptionPlan() {
             if(!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
             console.log(res, data);
-            if(data.status !== "status") throw new Error(data.message);
+            if(data?.status !== 'success') {
+                throw new Error(data?.message)
+            }
 
             setIsSuccess(true);
             setMessage(data.message);
@@ -160,8 +162,14 @@ function SubscriptionPlan() {
 
             if(!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
+            // if(data.message === 'Insufficient wallet balance') {
+            //     navigate('/wallet')
+            //     throw new Error('Insufficient wallet balance');
+            // }
             console.log(res, data);
-            if(data.status !== "status") throw new Error(data.message);
+             if(data?.status !== 'success') {
+                throw new Error(data?.message)
+            }
 
             setIsSuccess(true);
             setMessage(data.message);
@@ -213,6 +221,7 @@ function SubscriptionPlan() {
                                     <span>/ 6 months</span>
                                 </span>
                             </figure>
+                            {console.log(user?.premiumDuration)}
                             <figure className={`plan-figure ${user?.premiumDuration === 'full' ? 'user--premium-dur' : ''}`} onClick={() => handleChecked('annual')}>
                                 <p className="plans--title">Annual</p>
                                 <span className={`plans--check ${checkedYearly ? 'checked' : ''}`}>{checkedYearly && <BsCheck className='check--icon' />}</span>

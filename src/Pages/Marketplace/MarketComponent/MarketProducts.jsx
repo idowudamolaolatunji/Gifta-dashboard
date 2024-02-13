@@ -20,8 +20,8 @@ function CategoryPage() {
     const [stay, setStay] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
-    const navPath = useParams();
-    const [currentCategory, setCurrentCategory] = useState(navPath.category);
+    const { category } = useParams();
+    const [currentCategory, setCurrentCategory] = useState(category);
 
     // const [products, setProducts] = useState([]);
     // const [currTab, setCurrTab] = useState('birthday');
