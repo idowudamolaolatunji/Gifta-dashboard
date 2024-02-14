@@ -203,7 +203,7 @@ function SubscriptionPlan() {
 
                     <div className="terms--container">
                         <h3 className="terms--heading">Plans.</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam corporis.</p>
+                        <span className='modal--info'>Note that for everything successfully purchased products we own 5% and you own 95% of the profit</span>
 
                         <div className={`plans--box ${user?.isPremium ? 'user--premium' : ''}`}>
                             <figure className={`plan-figure ${user?.premiumDuration === 'half' ? 'user--premium-dur' : ''}`} onClick={() => handleChecked('semi-annual')}>

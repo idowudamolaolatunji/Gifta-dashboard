@@ -120,7 +120,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
                 mode: "no-cors"
             });
             if(!res.ok) throw new Error('Something went wrong!');            
-        } catch(err) {
+        } catch(err) {s
             console(err.message);
         } finally {
             setIsLoading(false)

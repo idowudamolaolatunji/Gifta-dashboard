@@ -16,7 +16,8 @@ function PrivacyPolicy() {
 
                     <div className="terms--container">
                         <h3 className="terms--heading">Privacy Policy</h3>
-                        <p>Welcome to Gifta's Privacy Policy. Your privacy is important to us, and we are committed to protecting your personal information. This Privacy Policy explains how Gifta collects, uses, and safeguards your data when you use our platform. By using Gifta, you agree to the terms outlined in this policy.</p>
+                        {/* <p>Welcome to Gifta's Privacy Policy. Your privacy is important to us, and we are committed to protecting your personal information. This Privacy Policy explains how Gifta collects, uses, and safeguards your data when you use our platform. By using Gifta, you agree to the terms outlined in this policy.</p> */}
+                        <span className='modal--info'>Welcome to Gifta's Privacy Policy. Your privacy is important to us, and we are committed to protecting your personal information. This Privacy Policy explains how Gifta collects, uses, and safeguards your data when you use our platform. By using Gifta, you agree to the terms outlined in this policy.</span>
 
                         <div className="terms--top">
                             <span>Information We Collect:</span>

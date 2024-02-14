@@ -10,6 +10,7 @@ import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import { TbArrowBackUp } from 'react-icons/tb';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
+import { FaLongArrowAltLeft } from 'react-icons/fa';
 
 
 function GiftingForm({ handleHideForm, handleCloseModal }) {
@@ -334,7 +335,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 <div className='form__item'>
                     <label htmlFor="state" className="form__label">State</label>
                     <select type="text" id="state" value={state} className="form__select" onChange={(e) => setState(e.target.value)}>
-                        <option selected>- Select a State -</option>
+                        <option hidden selected>- Select a State -</option>
                         <option value="Abuja">Abuja FCT</option>
                         <option value="Abia">Abia</option>
                         <option value="Adamawa">Adamawa</option>
@@ -378,7 +379,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                     <label htmlFor="region" className="form__label">City / Region</label>
                     <select type="text" id='region' value={cityRegion} className="form__select" onChange={(e) => setCityRegion(e.target.value)}>
                     
-                        <option value="" selected>- Select a Region -</option>
+                        <option hidden selected>- Select a Region -</option>
                     </select>
                 </div>
             </div>
@@ -387,8 +388,8 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 <div className='form__item form__item-date'>
                     <label htmlFor="date" className="form__label">Date of Delivery</label>
                     <span style={{ display: 'flex', alignItems: 'center' }}>
-                        <input id='date' value={date} type="date" className='form__date' onChange={(e) => setDate(e.target.value)} />
-                        <span class="validity"></span>
+                        <input id='date' value={date} type="date" min={new Date().toISOString().split('T')[0]} className='form__date' onChange={(e) => setDate(e.target.value)} />
+                        {/* <span class="validity"></span> */}
                     </span>
                 </div>
                 <div id='form--balance'>
@@ -427,7 +428,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
 
         <form className='gifting--form-mobile' onSubmit={handleForm}>
             <div className='form--head'>
-                <TbArrowBackUp className='form--icon-mobile' onClick={handleHideForm} />
+                <FaLongArrowAltLeft className='form--icon-mobile' onClick={handleHideForm} />
                 <h4 className="form--heading">Upload Celebrant Details</h4>
             </div>
 
@@ -474,7 +475,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                         <div className='form__item'>
                             <label htmlFor="state" className="form__label">State</label>
                             <select type="text" id="state" value={state} className="form__select" onChange={(e) => setState(e.target.value)}>
-                                <option selected="selected">- Select a State -</option>
+                                <option hidden selected="selected">- Select a State -</option>
                                 <option value="Abuja">Abuja FCT</option>
                                 <option value="Abia">Abia</option>
                                 <option value="Adamawa">Adamawa</option>
@@ -517,15 +518,14 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                         <div className='form__item'>
                             <label htmlFor="region" className="form__label">City / Region</label>
                             <select type="text" id='region' value={cityRegion} className="form__select" onChange={(e) => setCityRegion(e.target.value)}>
-                            
-                                <option value="" selected="selected">- Select a Region -</option>
+                                <option hidden selected="selected">- Select a Region -</option>
                             </select>
                         </div>
                         <div className='form__item form__item-date'>
                             <label htmlFor="date" className="form__label">Date of Delivery</label>
                             <span style={{ display: 'flex', alignItems: 'center' }}>
-                                <input id='date' value={date} type="date" className='form__date' onChange={(e) => setDate(e.target.value)} />
-                                <span class="validity"></span>
+                                <input id='date' value={date} type="date" min={new Date().toISOString().split('T')[0]} className='form__date' onChange={(e) => setDate(e.target.value)} />
+                                {/* <span class="validity"></span> */}
                             </span>
                         </div>
 
@@ -572,16 +572,18 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         </form>
 
 
-        <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
-            {isSuccess ? (
-                <AiFillCheckCircle className="alert--icon" />
-            ) : isError ? (
-                <AiFillExclamationCircle className="alert--icon" />
-            ) : (
-                ""
-            )}
-            <p>{message}</p>
-        </Alert>
+        {isSuccess || isError && (
+            <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                {isSuccess ? (
+                    <AiFillCheckCircle className="alert--icon" />
+                ) : isError ? (
+                    <AiFillExclamationCircle className="alert--icon" />
+                ) : (
+                    ""
+                )}
+                <p>{message}</p>
+            </Alert>
+        )}
         
     </>
   )

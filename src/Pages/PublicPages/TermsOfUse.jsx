@@ -17,7 +17,8 @@ function TermsOfUse() {
                     
                     <div className="terms--container">
                         <h3 className="terms--heading">Terms Of Use.</h3>
-                        <p>Welcome to Gifta! These Terms of Use outline the terms and conditions governing your use of the Gifta platform. By accessing or using Gifta, you agree to abide by these terms. If you do not agree with these terms, please refrain from using Gifta.</p>
+                        {/* <p>Welcome to Gifta! These Terms of Use outline the terms and conditions governing your use of the Gifta platform. By accessing or using Gifta, you agree to abide by these terms. If you do not agree with these terms, please refrain from using Gifta.</p> */}
+                        <span className='modal--info'>Welcome to Gifta! These Terms of Use outline the terms and conditions governing your use of the Gifta platform. By accessing or using Gifta, you agree to abide by these terms. If you do not agree with these terms, please refrain from using Gifta.</span>
 
                         <div className="terms--top">
                             <span>Acceptance of Terms:</span>

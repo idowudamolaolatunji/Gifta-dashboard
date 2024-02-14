@@ -46,7 +46,7 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                 {user.role === 'vendor' && (
                     <li onClick={() => navigate('/product-catalogue')}>
                         <CiShop />
-                        <p>My Store</p>
+                        <p>My Shop</p>
                     </li>
                 )}
                 {user.role === 'vendor' && (
@@ -55,8 +55,6 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                         <p>Orders</p>
                     </li>
                 )}
-
-
                 <li onClick={() => navigate('/privacy-policy')}>
                     <CiViewList />
                     <p>Privacy Policy</p>

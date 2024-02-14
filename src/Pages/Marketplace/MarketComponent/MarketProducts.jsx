@@ -39,7 +39,7 @@ function CategoryPage() {
     // THIS IS TO CLOSE MODAL
     function handleCloseModal() {
         setShowModal(false)
-        setSelectedProduct(null)
+        setSelectedProduct(null);
     }
 
     // GET ALL CATEGORY FROM THE DB

@@ -733,4 +733,8 @@
 		z-index: 3000;
 		transform: none !important;
 	}
+	.form--grid {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
 }

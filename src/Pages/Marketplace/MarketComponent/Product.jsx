@@ -53,12 +53,6 @@ function Product({ product, handleCloseModal }) {
                 <div className="product--container">
                     <span className='product--image-box'>
                         <img src={currImage} alt={currImage} className="product--img" />
-                        <span className='sub-images'>
-                            <img src={product.image} alt={product.image} onClick={() => setCurrImage(product.image)} />
-                            <img src={giftaLogo} alt={giftaLogo} onClick={() => setCurrImage(giftaLogo)} />
-                            <img src={product.image} alt={product.image} onClick={() => setCurrImage(product.image)} />
-                            <img src={giftaLogo} alt={giftaLogo} onClick={() => setCurrImage(giftaLogo)} />
-                        </span>
                     </span>
 
                     <div className="product--info">

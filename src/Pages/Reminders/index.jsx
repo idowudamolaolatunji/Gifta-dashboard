@@ -309,7 +309,7 @@ function Reminders() {
 						<div className="reminder--flex-2 postpone--flex">
 							<div className="form--item">
 								<label htmlFor="form--date" className="form--label">Date</label>
-								<input type="date" id="form--date" className='form--input' required value={date} onChange={e => setDate(e.target.value)} />
+								<input type="date" id="form--date" className='form--input' required value={date} min={new Date().toISOString().split('T')[0]} onChange={e => setDate(e.target.value)} />
 							</div>
 							<div className="form--item">
 								<label htmlFor="form--clock" className="form--label">Time</label>
