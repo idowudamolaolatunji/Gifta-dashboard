@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { CiHome, CiLogout, CiSaveUp2, CiUser, CiViewList } from "react-icons/ci";
+import { CiHome, CiLogout, CiSaveUp2, CiShop, CiShoppingBasket, CiUser, CiViewList } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../Auth/context/AuthContext';
 import { IoIosQrScanner } from "react-icons/io";
@@ -43,7 +43,20 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                         <p>Become a Vendor</p>
                     </li>
                 )}
-               
+                {user.role === 'vendor' && (
+                    <li onClick={() => navigate('/product-catalogue')}>
+                        <CiShop />
+                        <p>My Store</p>
+                    </li>
+                )}
+                {user.role === 'vendor' && (
+                    <li onClick={() => navigate('/orders')}>
+                        <CiShoppingBasket />
+                        <p>Orders</p>
+                    </li>
+                )}
+
+
                 <li onClick={() => navigate('/privacy-policy')}>
                     <CiViewList />
                     <p>Privacy Policy</p>

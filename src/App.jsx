@@ -16,7 +16,7 @@ import WishListUi from './Pages/Wishlists/WishlistsComponents/WishListUi';
 import SharedWishlist from './Pages/PublicPages/SharedWishlist';
 import Wallet from './Pages/PublicPages/Wallet';
 import Settings from './Pages/PublicPages/Settings';
-import Orders from './Pages/Orders';
+import Orders from './Pages/PublicPages/Orders';
 
 
 import './index.css'
@@ -27,7 +27,7 @@ import TermsOfUse from './Pages/PublicPages/TermsOfUse';
 import PrivacyPolicy from './Pages/PublicPages/PrivacyPolicy';
 import SubscriptionPlan from './Pages/PublicPages/SubscriptionPlan';
 import VendorReg from './Pages/PublicPages/VendorReg';
-import ProductCatalogue from './Pages/Marketplace/MarketComponent/ProductCatalogue';
+import ProductCatalogue from './Pages/PublicPages/ProductCatalogue';
 
 
 
@@ -50,8 +50,8 @@ function App() {
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
 
                     <Route path="/dashboard/reminders" element={<Reminders />}></Route>
-                    <Route path="/dashboard/product-catalogue/:category" element={<ProductCatalogue />}></Route>
-                    <Route path="/dashboard/orders" element={<Orders />}></Route>
+                    <Route path="/product-catalogue" element={<ProductCatalogue />}></Route>
+                    <Route path="/orders" element={<Orders />}></Route>
 
                     <Route path="/wallet" element={<Wallet />}></Route>
                     <Route path="/settings" element={<Settings />}></Route>

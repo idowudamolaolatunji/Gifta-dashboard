@@ -19,7 +19,7 @@ const DashTabs = () => {
 
 	useEffect(function () {
 		function controlNavbar() {
-			if (window.scrollY > 170) {
+			if (window.scrollY > 160) {
 				setStay(true)
 			} else {
 				setStay(false)
@@ -56,15 +56,15 @@ const DashTabs = () => {
 						<p>Wishlists</p>
 					</Link>
 
-					{user.role === 'user' && (
+					{/* {user.role === 'user' && ( */}
 						<Link className={`tab ${location.pathname.includes('/dashboard/marketplace') ? 'active-tab' : ''}`} to="/dashboard/marketplace/birthday">
 							<BsShop className="tab-icon" />
 							<p>MarketPlace</p>
 						</Link>
-					)}
+					{/* )} */}
 					
-					{user.role === 'vendor' && (
-						<Link className={`tab ${location.pathname.includes('/dashboard/product-catalogue') ? 'active-tab' : ''}`} to="/dashboard/product-catalogue/birthday">
+					{/* {user.role === 'vendor' && (
+						<Link className={`tab ${location.pathname.includes('/dashboard/product-catalogue') ? 'active-tab' : ''}`} to="/dashboard/product-catalogue">
 							<BsShop className="tab-icon" />
 							<p>Shop</p>
 						</Link>
@@ -75,7 +75,7 @@ const DashTabs = () => {
 							<PiHandbagSimple className="tab-icon" />
 							<p>Orders</p>
 						</Link>
-					)}
+					)} */}
 				</div>
 			</div>
 		</section>

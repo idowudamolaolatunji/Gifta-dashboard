@@ -221,12 +221,13 @@ function WishListUi() {
         handleFetchList();
     }, []);
 
+
     useEffect(function () {
         async function handleFetchWishes() {
             try {
+                console.log()
                 setIsLoading(true)
-                // const res = await fetch(`http://localhost:3010/api/wishlists/all-wishes/${wishList._id}`, {
-                const res = await fetch(`https://test.tajify.com/api/wishlists/all-wishes/${wishList._id}`, {
+                const res = await fetch(`https://test.tajify.com/api/wishlists/all-wishes/${wishList?._id}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json"
@@ -242,15 +243,20 @@ function WishListUi() {
                 setIsLoading(false)
             }
         }
-        handleFetchWishes();
+
+        if(wishList._id) {
+            handleFetchWishes();
+        }
     }, [wishList, helpReset]);
+
 
 
     useEffect(function () {
         async function handleFetchWishLogs() {
             try {
+                console.log(wishList._id)
                 setIsLoading(true)
-                const res = await fetch(`https://test.tajify.com/api/wishlists/wishlist-log/logs/${wishList._id}`, {
+                const res = await fetch(`https://test.tajify.com/api/wishlists/wishlist-log/logs/${wishList?._id}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -269,7 +275,10 @@ function WishListUi() {
                 setIsLoading(false)
             }
         }
-        handleFetchWishLogs();
+
+        if(wishList._id) {
+            handleFetchWishLogs();
+        }
     }, [wishList]);
 
 
@@ -391,7 +400,7 @@ function WishListUi() {
                                         <span onClick={() => !wishLog.anonymous && handleReply(wishLog)} className={`contributor--reply ${wishLog.anonymous ? 'reply--anno' : ''}`}><MdReply /> Reply</span>
                                     </div>
                                 </li>
-                            )) : (selectedTab === 'logs' && wishlistLogs.length === 0) && (
+                            )) : (selectedTab === 'logs' && wishlistLogs.length < 1) && (
                                 <li className='lists--message'>
                                     No Contributors
                                     <picture>
@@ -405,7 +414,6 @@ function WishListUi() {
                 </div>
 
                 {selectedTab === 'all' && <div className="dashnoard--add-btn" onClick={() => setShowNewModal(true)}><FiPlus /></div>}
-
             </section>
 
 

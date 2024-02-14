@@ -613,3 +613,24 @@ a.form--acct-btn div {
 .mobile-modal--figure {
 	display: none;
 }
+
+
+.table-flex {
+    display: grid;
+	grid-template-columns: 6rem 1fr;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.2rem;
+	height: 100%;
+}
+.table-flex span {
+	display: flex;
+	flex-direction: column;
+	gap: .6rem;
+}
+.table-product img {
+    height: 100%;
+    width: 100%;
+    border-radius: 1rem;
+	object-fit: cover;
+}

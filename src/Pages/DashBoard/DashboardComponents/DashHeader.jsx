@@ -47,7 +47,7 @@ const DashHeader = ({ isDasboard }) => {
 		return () => {
 			window.removeEventListener('scroll', controlNavbar)
 		}
-	}, [])
+	}, []);
 
 
 	useEffect(function () {
@@ -63,7 +63,6 @@ const DashHeader = ({ isDasboard }) => {
 				setIsLoading(true);
 				setShowSearchModal(true);
 
-				// const res = await fetch(`http://localhost:3010/api/search?query=${searchQuery}`
 				const res = await fetch(`https://test.tajify.com/api/search?query=${searchQuery}`
 					, {
 						method: 'GET',
@@ -188,7 +187,6 @@ const DashHeader = ({ isDasboard }) => {
 
 						{showSearchModal && <SearchModal showSearchModal={showSearchModal} setShowSearchModal={setShowSearchModal} isLoading={isLoading} message={message} results={results} closeIcon={true} />}
 					</div>}
-
 
 
 

@@ -11,6 +11,7 @@ import { TfiGift } from "react-icons/tfi";
 import { BsBell, BsJournalBookmark, BsShop } from "react-icons/bs";
 import { getInitials } from "../../../utils/helper";
 import NotificationBox from "../../../Components/NotificationBox";
+import { PiHandbagSimple } from "react-icons/pi";
 
 // import '../../DashBoard/main.css';
 
@@ -118,19 +119,26 @@ function WishListDashHeader() {
 							<p>Wishlists</p>
 						</Link>
 
-						{user.role === 'user' && (
+						{/* {user.role === 'user' && ( */}
 							<Link className="tab" to="/dashboard/marketplace/birthday">
 								<BsShop className="tab-icon" />
 								<p>MarketPlace</p>
 							</Link>
-						)}
+						{/* )} */}
 
-						{user.role === 'vendor' && (
-							<Link className="tab" to="/dashboard/product-catalogue/birthday">
+						{/* {user.role === 'vendor' && (
+							<Link className="tab" to="/dashboard/product-catalogue">
 								<BsShop className="tab-icon" />
 								<p>Shop</p>
 							</Link>
 						)}
+
+						{user.role === 'vendor' && (
+							<Link className="tab" to="/dashboard/orders">
+								<PiHandbagSimple className="tab-icon" />
+								<p>Orders</p>
+							</Link>
+						)} */}
 					</div>
 				</div>
 			</section>
