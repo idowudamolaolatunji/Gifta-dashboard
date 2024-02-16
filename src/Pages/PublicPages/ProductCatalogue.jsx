@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi';
 import { useAuthContext } from '../../Auth/context/AuthContext';
-import { dateConverter, expectedDateFormatter, numberConverter } from '../../utils/helper';
+import { dateConverter, numberConverter } from '../../utils/helper';
 import DashboardModal from '../../Components/Modal';
 import { MdDelete, MdOutlineAddAPhoto, MdOutlineEditNote } from 'react-icons/md';
 import Header from './Components/Header';
@@ -9,38 +9,48 @@ import CurrencyInput from 'react-currency-input-field';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import MobileFullScreenModal from '../../Components/MobileFullScreenModal';
 import { CiCalendar } from 'react-icons/ci';
-import { IoLocationSharp } from 'react-icons/io5';
+import { IoInformationCircle, IoLocationSharp, IoPricetagOutline } from 'react-icons/io5';
 
-import { FaLongArrowAltLeft } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
-import SkeletonLoaderMini from '../../Components/SkelentonLoaderMini';
 import SkelentonOne from '../../Components/SkelentonOne';
 import SkeletonLoader from '../../Components/SkeletonLoader';
+import Alert from '../../Components/Alert';
+import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+
+import GiftLoader from '../../Assets/images/gifta-loader.gif';
 
 
 const customStyle = {
     maxWidth: '55rem',
-    height: 'auto'
+    height: 'auto',
+    zIndex: 3500
 }
 
 function ProductCatalogue() {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(true)
-    
-    const [imagePreview, setImagePreview] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
+    const [categories, setCategories] = useState([]);
 
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
-	const [showProductModal, setShowProductModal] = useState(false);
-
-    const [categories, setCategories] = useState([]);
-    
-	const [showProductInfoModal, setShowProductInfoModal] = useState(false);
+    const [showProductModal, setShowProductModal] = useState(false);
 
     const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('')
-    
+    const [description, setDescription] = useState('');
+    const [name, setName] = useState('');
+    const [avail, setAvail] = useState(null);
+    const [category, setCategory] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+
+    const [isError, setIsError] = useState(false);
+    const [message, setMessage] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [showProductInfoModal, setShowProductInfoModal] = useState(false);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+
     const { user, token } = useAuthContext();
     const navigate = useNavigate();
 
@@ -55,10 +65,34 @@ function ProductCatalogue() {
     };
 
 
-	function handleProduct(product) {
-		setShowProductInfoModal(true);
-		setSelectedProduct(product);
-	}
+    function handleProduct(product) {
+        setShowProductInfoModal(true);
+        setSelectedProduct(product);
+    }
+
+
+    // HANDLE ON FETCH FAILURE
+    function handleFailure(mess) {
+        setIsError(true);
+        setMessage(mess)
+        setTimeout(() => {
+            setIsError(false);
+            setMessage('')
+        }, 3000);
+    }
+
+    // HANDLE FETCH STATE RESET
+    function handleReset() {
+        setIsError(false);
+        setMessage('')
+        setIsSuccess(false);
+    }
+
+    // function handleProductAction(type, id) {
+    //     if(type === 'edit') {
+    //         set
+    //     }
+    // }
 
     // GET ALL CATEGORY FROM THE DB
     useEffect(function () {
@@ -83,13 +117,13 @@ function ProductCatalogue() {
 
             } catch (err) {
                 console.log(err.message)
-            } 
+            }
         }
         handleFetchCategories()
     }, [])
 
 
-    useEffect(function() {
+    useEffect(function () {
         async function handleFetchMyProducts() {
             try {
                 setIsFetching(true);
@@ -97,7 +131,7 @@ function ProductCatalogue() {
                 const res = await fetch(`https://test.tajify.com/api/gift-products/my-products`, {
                     method: 'GET',
                     headers: {
-                        "Content-Type": "application/json", 
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`
                     }
                 });
@@ -117,12 +151,94 @@ function ProductCatalogue() {
             }
         }
         handleFetchMyProducts()
-    }, [])
+    }, []);
+
+
+    async function handleUploadProduct(e, type) {
+        let method, url;
+        if (type === 'new') {
+            method = 'POST';
+            url = 'https://test.tajify.com/api/gift-products/create-product';
+        } else {
+            method = 'PATCH';
+            url = `https://test.tajify.com/api/gift-products/update-my-product/${selectedProduct._id}`;
+        }
+        try {
+            e.preventDefault();
+            setIsLoading(true);
+            handleReset();
+
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    "Content-Type": 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ name, description, price, category, stockAvail: avail })
+            });
+
+            console.log(res);
+            if (!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+
+            console.log(data);
+            if (data.status !== "success") throw new Error(data.message);
+
+            // UPLOAD IMAGE
+            const formData = new FormData();
+            const id = data.data.product._id
+            if (imageFile) {
+                handleUploadImg(formData, id)
+            }
+
+            setIsSuccess(true);
+            setMessage(data.message);
+            setTimeout(function () {
+                setIsSuccess(false);
+                setMessage("");
+                setShowProductModal(false);
+            }, 2000);
+
+        } catch (err) {
+            handleFailure(err.message)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+
+    async function handleUploadImg(formData, id) {
+        try {
+            setIsLoading(true)
+            formData.append('image', imageFile);
+            const res = await fetch(`http://localhost:3010/api/gift-products/product-img/${id}`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData,
+                mode: "no-cors"
+            });
+            if (!res.ok) throw new Error('Something went wrong!');
+        } catch (err) {
+            s
+            console(err.message);
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
 
 
     return (
 
         <>
+            {isLoading && (
+                <div className='gifting--loader'>
+                    <img src={GiftLoader} alt='loader' />
+                </div>
+            )}
 
             <Header />
 
@@ -138,7 +254,7 @@ function ProductCatalogue() {
                     {(isFetching) && (
                         <>
                             <div className='category--spinner-destop'>
-                                <SkeletonLoader  />
+                                <SkeletonLoader />
                             </div>
 
                             <div className='category--spinner-mobile'>
@@ -149,24 +265,27 @@ function ProductCatalogue() {
                     )}
 
 
-                    {products && products.length > 0 ? (
+                    {(products && products.length > 0) && (
                         <div className='page--grid'>
                             {products.map((product) =>
                                 <figure className='product--figure' style={{ position: 'relative' }} key={product._id} onClick={() => handleProduct(product)}>
-                                    <img className='product--img' src={product.image} alt={product.name} />
+                                    <img className='product--img' src={product.image.startsWith('https') ? product.image : `https://test.tajify.com/asset/products/${product.image}`} alt={product.name} />
                                     <span className="package--category">{product.category}</span>
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{product.name}</h4>
                                         <div className='product--infos'>
-                                            <span className='product--price'>₦{numberConverter(product. price)}</span>
+                                            <span className='product--price'>₦{numberConverter(product.price)}</span>
                                             <span className='product--date'>{dateConverter(product.createdAt)}</span>
                                         </div>
                                     </figcaption>
                                 </figure>
                             )}
                         </div>
-                    ) : (
-                        <div className='note--box'>
+                    )}
+
+
+                    {(!isFetching && products.length === 0) && (
+                        <div className='note--box' style={{ maxWidth: '70rem' }}>
                             <p>{'You have no product'}</p>
                         </div>
                     )}
@@ -177,18 +296,18 @@ function ProductCatalogue() {
             </section>
 
 
-            {showProductModal && (
-                <DashboardModal customStyle={customStyle} title={'Upload a new product!'} setShowDashboardModal={setShowProductModal}>
+            {(showProductModal || showEditModal) && (
+                <DashboardModal customStyle={customStyle} overLayZIndex={true} title={'Upload a new product!'} setShowDashboardModal={showProductModal ? setShowProductModal : setShowEditModal}>
                     <span className='modal--info'>Note that for everything successfully purchased products we own 5% and you own 95% of the profit</span>
-                    
-                    <form className='form product--upload-form'>
+
+                    <form className='form product--upload-form' onSubmit={(e) => handleUploadProduct(e, showEditModal ? 'edit' : 'new')}>
                         <div className="form--item">
                             <label htmlFor="" className="form--label">Product Name</label>
-                            <input type="text" className="form--input" placeholder='Enter your product name' />
+                            <input type="text" required className="form--input" placeholder='Enter your product name' value={showEditModal ? selectedProduct?.name : name} onChange={e => setName(e.target.value)} />
                         </div>
                         <div className='form--item form-image-card'>
                             {!imagePreview && <p className='image-text'>Upload Product Image</p>}
-                            <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
+                            <input type='file' id='form-image-input' name='image' required onChange={handleImageChange} accept="image/*" />
                             <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} style={{ height: '15rem' }} id='form-image-label'>
                                 <span>
                                     <MdOutlineAddAPhoto />
@@ -200,54 +319,51 @@ function ProductCatalogue() {
 
                         <div className="form--item">
                             <label htmlFor="description" className="form--label">Product Description (Up to 400 Characters)</label>
-                            <ReactTextareaAutosize id='description' className='form__textarea' defaultValue="Enter a description" value={description} onChange={e => setDescription(e.target.value)} maxLength={'400'} placeholder='Enter product description' />
+                            <ReactTextareaAutosize id='description' className='form__textarea' defaultValue="Enter a description" value={showEditModal ? selectedProduct?.description : description} onChange={e => setDescription(e.target.value)} required maxLength={'400'} placeholder='Enter product description' />
                         </div>
 
-                        <div className="form--grid">
+                        <div className="form--grid-prod">
                             <div className="form--item">
                                 <label htmlFor="category" className="form--label">Product Category</label>
-                                <select id="category" className="form--input form--select">
+                                <select id="category" required value={showEditModal ? selectedProduct?.category : category} onChange={e => setCategory(e.target.value)} className="form--input form--select">
                                     <option hidden selected>-- Select a category --</option>
                                     {categories.map(category => (
                                         <option value={category.categoryName}>{category.categoryName}</option>
                                     ))}
                                 </select>
                             </div>
-                            <div className="form--item">
-                                <label htmlFor="amount" className="form--label">Product Price</label>
-                                <CurrencyInput 
-                                    className="form--input"
-                                    id="amount"
-                                    placeholder='Price'
-                                    value={price}
-                                    defaultValue={price}
-                                    onValueChange={(value, _) => setPrice(value)}
-                                    required
-                                    prefix="₦ "
-                                />
-                            </div>
-                            <div className="form--item">
-                                <label htmlFor="stockAvail" className="form--label">Stock Avail</label>
-                                <input type="number" placeholder='Avail.' id='stockAvail' className="form--input" />
+                            <div className="form--grid-prod-2">
+                                <div className="form--item">
+                                    <label htmlFor="amount" className="form--label">Product Price</label>
+                                    <CurrencyInput
+                                        className="form--input"
+                                        id="amount"
+                                        placeholder='Price'
+                                        value={showEditModal ? selectedProduct?.price : price}
+                                        defaultValue={price}
+                                        onValueChange={(value, _) => setPrice(value)}
+                                        required
+                                        prefix="₦ "
+                                    />
+                                </div>
+                                <div className="form--item">
+                                    <label htmlFor="stockAvail" className="form--label">Stock Avail</label>
+                                    <input type="number" placeholder='Avail.' id='stockAvail' className="form--input" required value={showEditModal ? selectedProduct?.stockAvail : avail} onChange={e => setAvail(e.target.value)} />
+                                </div>
                             </div>
                         </div>
 
                         <div className="form--item">
                             <button type="submit" style={{ marginLeft: 'auto' }}>Create Product</button>
                         </div>
-
-
-                        
                     </form>
-
-                    
                 </DashboardModal>
             )}
 
             {showProductInfoModal && (
                 <MobileFullScreenModal title={selectedProduct?.name} setCloseModal={setShowProductInfoModal}>
                     <div className="gift--preview-top">
-                        <img src={selectedProduct?.image} />
+                        <img src={selectedProduct?.image.startsWith('https') ? selectedProduct.image : `https://test.tajify.com/asset/products/${selectedProduct.image}`} />
                         <div className="gift--preview-details">
                             <p className="gift--preview-name">For {selectedProduct?.name}</p>
                             <p className="gift--preview-date">
@@ -258,20 +374,33 @@ function ProductCatalogue() {
                     </div>
 
                     <div className="gift--preview-bottom">
-                        
+                        <span className="gift--preview-title"> Product Info <IoInformationCircle style={{ color: '#bb0505' }} /></span>
+                        <p style={{ fontSize: '1.4rem', lineHeight: '1.4' }}>{selectedProduct.description}</p>
+                        <p style={{ fontSize: '1.4rem' }}><IoPricetagOutline style={{ color: '#bb0505', fontSize: '1.8rem' }} /> ₦{numberConverter(selectedProduct.price)}</p>
+
                         <span className="gift--preview-title"> Your Location <IoLocationSharp style={{ color: '#bb0505' }} /></span>
-                        <p style={{ fontSize: '1.4rem' }}>{selectedProduct?.vendor.address}</p>
-                        
-                        
+                        <p style={{ fontSize: '1.4rem' }}>{user.location}</p>
+
+
                         <div className="gift--preview-actions">
-                            <span>Edit Product <MdOutlineEditNote style={{ fontSize: '1.8rem' }} /></span>
-                            <span>Delete Product<MdDelete style={{ fontSize: '1.8rem' }} /></span>
+                            <button onClick={() => setShowEditModal(true)}>Edit Product <MdOutlineEditNote style={{ fontSize: '1.8rem' }} /></button>
+                            <button onClick={() => setShowDeleteModal(true)}>Delete Product<MdDelete style={{ fontSize: '1.8rem' }} /></button>
                         </div>
                     </div>
-
                 </MobileFullScreenModal>
             )}
 
+
+            {(isError || isSuccess) && (
+                <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                    {isSuccess ? (
+                        <AiFillCheckCircle className="alert--icon" />
+                    ) : isError && (
+                        <AiFillExclamationCircle className="alert--icon" />
+                    )}
+                    <p>{message}</p>
+                </Alert>
+            )}
         </>
     )
 }

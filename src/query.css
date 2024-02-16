@@ -1,7 +1,7 @@
 /* 650px === 65rem === 40.625em */
 @media screen and (max-width: 40.625em) {
 	html {
-		font-size: 55%;
+		font-size: 56%;
 	}
 	.section__container {
 		padding: 0 2rem;
@@ -304,12 +304,16 @@
 		grid-template-columns: 1fr;
 		gap: 2.8rem;
 	}
+
+	.dashnoard--add-btn {
+		right: 3.5%;
+	}
 }
 
 /*  */
 @media screen and (max-width: 28.125em) {
 	html {
-		font-size: 58.5%;
+		font-size: 59%;
 	}
 	.alert {
 		width: 100% !important;
@@ -733,8 +737,17 @@
 		z-index: 3000;
 		transform: none !important;
 	}
-	.form--grid {
+	.form--grid-prod {
 		grid-template-columns: 1fr;
 		gap: 1rem;
+	}
+	.form--grid-prod input {
+		width: 100%;
+	}
+
+
+
+	.dashnoard--add-btn {
+		right: 7%;
 	}
 }

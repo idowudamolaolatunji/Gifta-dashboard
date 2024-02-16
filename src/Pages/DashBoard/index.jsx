@@ -26,6 +26,7 @@ import MobileFullScreenModal from "../../Components/MobileFullScreenModal";
 import { MdArrowBackIos } from "react-icons/md";
 import { IoLocationSharp, IoPricetagOutline } from "react-icons/io5";
 import { CiCalendar } from "react-icons/ci";
+import TawkToSupport from "../../Components/TawkToSupport";
 
 
 
@@ -170,6 +171,8 @@ const DashBoard = () => {
 					</div>
 				</MobileFullScreenModal>
 			)}
+
+			<TawkToSupport />
 		</>
 	);
 };

@@ -4,7 +4,11 @@ import { CiHome, CiLogout, CiSaveUp2, CiShop, CiShoppingBasket, CiUser, CiViewLi
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../Auth/context/AuthContext';
 import { IoIosQrScanner } from "react-icons/io";
-import { PiFolderSimpleUserLight, PiUserListLight } from 'react-icons/pi';
+import { PiFolderSimpleUserLight, PiIdentificationCardLight, PiUserListLight } from 'react-icons/pi';
+import NewTag from './NewTag';
+import { MdOutlineSupportAgent } from 'react-icons/md';
+import { RiCustomerService2Line } from 'react-icons/ri';
+import { TfiHeadphoneAlt } from 'react-icons/tfi';
 
 
 function Dropdown({ addHomeLink, setShowLoader }) {
@@ -37,6 +41,11 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                     <CiSaveUp2 />
                     <p>Plan</p>
                 </li>
+                <li onClick={() => navigate('/kyc-verification')}>
+                    <PiIdentificationCardLight />
+                    <p>Kyc Verification</p>
+                    <NewTag />
+                </li>
                 {user.role !== 'vendor' && (
                     <li onClick={() => navigate('/vendor')}>
                         <PiFolderSimpleUserLight />
@@ -63,6 +72,11 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                     <IoIosQrScanner />
                     <p>Terms of Use</p>
                 </li>
+                {/* <li onClick={() => navigate('/support')}>
+                    <TfiHeadphoneAlt />
+                    <p>Supports</p>
+                    <NewTag />
+                </li> */}
                 <li onClick={handleLogout}>
                     <CiLogout />
                     <p>Logout</p>

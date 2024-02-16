@@ -24,6 +24,10 @@ body {
 ::selection {
 	background-color: #3333338c;
 }
+img {
+	font-size: 1.4rem;
+	color: #777;
+}
 .section {
 	padding: 3.4rem 0;
 }
@@ -634,3 +638,51 @@ a.form--acct-btn div {
     border-radius: 1rem;
 	object-fit: cover;
 }
+
+
+
+/* ============================================= */
+/* ============================================= */
+/* ============================================= */
+/* ============================================= */
+
+.new--tag {
+	position: absolute;
+	right: 10%;
+	top: 0;
+
+	font-size: .6rem;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: .2rem;
+	border-radius: .2rem;
+	border: 1px solid #bb0505;
+
+	animation: shacky 1.35s ease-in-out infinite;
+	backface-visibility: hidden;
+}
+
+@keyframes shacky {
+	0% { transform: rotate(0); }
+	25% { transform: rotate(15deg); }
+	50% { transform: rotate(-20deg); }
+	75% { transform: rotate(25deg); }
+	100% { transform: rotate(0); }
+}
+
+
+div.stepper--wrapper {
+	padding: 0;
+	margin-top: 2rem;
+}
+
+div.stepper--content {
+	padding: 0;
+	margin-top: 4.8rem;
+}
+
+/* ul.stepper--progress {} */
+
+/* li.stepper--step {} */

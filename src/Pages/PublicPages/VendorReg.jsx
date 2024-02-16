@@ -74,18 +74,6 @@ function VendorReg() {
     }
 
 
-    async function handleSunmit() {
-        try {
-
-            const res = await fetch()
-
-        } catch(err) {
-
-        } finally {
-
-        }
-    }
-
 
     return (
         <>
@@ -105,11 +93,11 @@ function VendorReg() {
                     <form className='vendor-reg__form' onSubmit={e => handleBecomeaVendor(e)}>
                         <div className="form--item">
                             <label htmlFor="email" className="form--label">Confirm Email</label>
-                            <input type="email" id="email" className="form--input" value={email} onChange={e => setEmail(e.target.value)} placeholder='Email address' />
+                            <input type="email" id="email" required className="form--input" value={email} onChange={e => setEmail(e.target.value)} placeholder='Email address' />
                         </div>
                         <div className="form--item">
                             <label htmlFor="password" className="form--label">Confirm Password</label>
-                            <input type="password" id="password" className="form--input" value={password} onChange={e => setPassword(e.target.value)} placeholder='●●●●●●●●●' />
+                            <input type="password" id="password" required className="form--input" value={password} onChange={e => setPassword(e.target.value)} placeholder='●●●●●●●●●' />
                         </div>
                         <div className="form--item">
                             <button type="submit" className="form--btn" style={{ width: '100%' }}>Submit Request</button>

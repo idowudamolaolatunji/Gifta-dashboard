@@ -6,6 +6,7 @@ import { TfiGift } from "react-icons/tfi";
 import { BsShop } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { PiHandbagSimple } from "react-icons/pi";
+// import { LiaDigitalTachographSolid } from "react-icons/lia";
 
 
 import { useAuthContext } from "../../../Auth/context/AuthContext";

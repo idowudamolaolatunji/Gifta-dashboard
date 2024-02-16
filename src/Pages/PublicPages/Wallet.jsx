@@ -287,7 +287,7 @@ function Wallet() {
                                     <span>{numberConverter(wallet?.walletBalance || 0)}</span>
                                 </span>
 
-                                <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{currencyConverter(wallet?.pointBalance || 0)} points</span>
+                                <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{numberConverter(wallet?.pointBalance || 0)} G-points</span>
 
                                 <span className='wallet--buttons'>
                                     <span className="wallet--button" onClick={() => setShowDepositModal(true)}>Fund Wallet <FiPlus className='wallet--icon' /></span>

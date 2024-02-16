@@ -7,7 +7,6 @@ import SkeletonLoaderMini from '../../../Components/SkelentonLoaderMini';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import Product from './Product';
 import SkelentonOne from '../../../Components/SkelentonOne';
-import { FiPlus } from 'react-icons/fi';
 import { useAuthContext } from '../../../Auth/context/AuthContext';
 
 function CategoryPage() {
@@ -27,7 +26,7 @@ function CategoryPage() {
     // const [currTab, setCurrTab] = useState('birthday');
 
 
-    const { user } = useAuthContext();
+    const { user, token } = useAuthContext();
 
 
     // THIS IS TO SHOW THE MODAL
@@ -82,10 +81,13 @@ function CategoryPage() {
                 setIsLoadingCat(true);
                 setMess('')
 
-                // const res = await fetch(`https://test.tajify.com/api/gift-products/products`, {
+                // const res = await fetch(`http://localhost:3010/api/gift-products/products/category/${currentCategory}`, {
                 const res = await fetch(`https://test.tajify.com/api/gift-products/products/category/${currentCategory}`, {
                     method: 'GET',
-                    headers: { "Content-Type": "application/json", },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
                 });
 
                 if (!res.ok) {
@@ -157,7 +159,7 @@ function CategoryPage() {
                     {isLoadingCat ? 
                         <>
                             <div className='category--spinner-destop'>
-                                <SkeletonLoaderMini />
+                                <SkeletonLoader  />
                             </div>
 
                             <div className='category--spinner-mobile'>
@@ -171,7 +173,7 @@ function CategoryPage() {
                             {categoryProducts.length > 0 ? categoryProducts.map((product) =>
                                 // <Link to={`/dashboard/marketplace/${currentCategory}/${product.slug}`}>
                                 <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
-                                    <img className='product--img' src={product.image} alt={product.name} />
+                                    <img className='product--img' src={product.image.startsWith('https') ? product.image : `https://test.tajify/asset/products/${product.image}`} alt={product.name} />
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{product.name}</h4>
                                         <div className='product--vendor'>

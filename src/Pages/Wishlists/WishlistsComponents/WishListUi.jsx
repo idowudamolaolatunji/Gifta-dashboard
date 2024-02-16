@@ -363,27 +363,13 @@ function WishListUi() {
                                 </li>
 
                             )) : (!isLoading && wishArr?.length === 0) && (
-                                <li className='lists--message'>
+                                <li className='lists--message note--box' style={{ fontSize: '1.4rem' }}>
                                     {selectedTab === 'completed' ? 'No Completed Wishes!' : 'You\'ve No Wishes Yet!'}
-                                    <picture>
-                                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.webp" type="image/webp" />
-                                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.gif" alt="😞" width="32" height="32" />
-                                    </picture>
-                                </li>
-                            )}
-
-                            {(!wishArr && errMessage) && (
-                                <li className='lists--message'>
-                                    {errMessage}
-                                    <picture>
-                                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.webp" type="image/webp" />
-                                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.gif" alt="🛸" width="32" height="32" />
-                                    </picture>
                                 </li>
                             )}
 
 
-                            {selectedTab === 'logs' && (wishlistLogs && !isLoading) ? wishlistLogs.map(wishLog => (
+                            {(selectedTab === 'logs' && wishlistLogs) ? wishlistLogs.map(wishLog => (
                                 <li className="list--contributors">
                                     <div className="contributor--top">
                                         <span className="contibutor__img-initials">
@@ -400,13 +386,9 @@ function WishListUi() {
                                         <span onClick={() => !wishLog.anonymous && handleReply(wishLog)} className={`contributor--reply ${wishLog.anonymous ? 'reply--anno' : ''}`}><MdReply /> Reply</span>
                                     </div>
                                 </li>
-                            )) : (selectedTab === 'logs' && wishlistLogs.length < 1) && (
-                                <li className='lists--message'>
-                                    No Contributors
-                                    <picture>
-                                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.webp" type="image/webp" />
-                                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/512.gif" alt="😞" width="32" height="32" />
-                                    </picture>
+                            )) : (selectedTab === 'logs') && (
+                                <li className='lists--message note--box' style={{ fontSize: '1.4rem' }}>
+                                    No Contributors.
                                 </li>
                             )}
                         </ul>
@@ -438,7 +420,7 @@ function WishListUi() {
 
             {share && (
                 <DashboardModal
-                    title={'Make your wish come true! Share Link'}
+                    title={'Make your wish come true!'}
                     setShowDashboardModal={setShare}
                     customStyle={customStyle}
                 >

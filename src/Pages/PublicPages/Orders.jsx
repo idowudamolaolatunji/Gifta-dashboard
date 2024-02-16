@@ -10,6 +10,7 @@ import { TfiGift } from 'react-icons/tfi';
 import { CiCalendar } from 'react-icons/ci';
 import { MdArrowBackIos } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { GiReceiveMoney } from 'react-icons/gi';
 
 
 const customStyles = {
@@ -37,7 +38,7 @@ const columns = [
             return (
                 <div className="table-flex table-product">
                     {/* <img src={`https://test.tajify.com/asset/others/${row?.gift.image}`} alt={row?.gift.name} /> */}
-                    <img src={row?.gift.image}  />
+                    <img src={row?.gift?.image.startsWith('https') ? row?.gift?.image : `https://test.tajify.com/asset/products/${row?.gift?.image}`}  />
                     <span>
                         <p>{row?.gift.name}</p>
                         <p>Quantity: {row?.quantity}</p>
@@ -121,8 +122,6 @@ function Order() {
 
 
     function handleOrderRow(order) {
-        console.log('I was clicked', order)
-
         setShowOrderModal(true);
         setSelectedOrder(order);
     }
@@ -162,13 +161,13 @@ function Order() {
                 <div className="gift--preview-figure">
                     
                     <div className="gift--preview-top">
-                        <img src={`https://test.tajify.com/asset/others/${selectedOrder?.gift.image}` || selectedOrder?.gift.image} alt={selectedOrder?.celebrant} />
+                        <img src={selectedOrder?.gift.image.startsWith('https') ? selectedOrder?.gift.image : `https://test.tajify.com/asset/product/${selectedOrder?.gift.image}` || selectedOrder?.gift.image} alt={selectedOrder?.celebrant} />
                         <div className="gift--preview-details">
                             <span onClick={() => setShowOrderModal(false)}><MdArrowBackIos /></span>
                             <p className="gift--preview-name">For {selectedOrder?.gift.name}</p>
                             <p className="gift--preview-date">
                                 <CiCalendar />
-                                {expectedDateFormatter(selectedOrder?.date)}
+                                {expectedDateFormatter(selectedOrder?.deliveryDate)}
                             </p>
                         </div>
                     </div>
@@ -176,10 +175,10 @@ function Order() {
                     <div className="gift--preview-bottom">
                         <span className="gift--preview-title"> Purchased For <TfiGift style={{ color: '#bb0505' }} /></span>
                         <div className="gift--preview-flex">
-                            <img src={`https://test.tajify.com/asset/others/${selectedOrder?.gifter?.image}` } />
+                            <img src={`https://test.tajify.com/asset/users/${selectedOrder?.gifter?.image}` } />
                             <div>
-                                <p>{selectedOrder?.gifter?.name}</p>
-                                <span className="gift--preview-price"><IoPricetagOutline /><p>Quantity: (selectedOrder?.quantity)</p></span>
+                                <p>{selectedOrder?.gifter?.fullName || selectedOrder?.gifter?.username}</p>
+                                <span className="gift--preview-price"><GiReceiveMoney /><p>Quantity: {selectedOrder?.quantity}</p></span>
                                 <span className="gift--preview-price"><IoPricetagOutline /><p>Amount: {`${numberConverter(selectedOrder?.amount)}`}</p></span>
                             </div>
                         </div>
@@ -188,8 +187,8 @@ function Order() {
 
 
                         <div className="gift--preview-actions">
-                            <span>Accept Order </span>
-                            <span>Reject Order</span>
+                            <button>Accept Order </button>
+                            <button>Reject Order</button>
                         </div>
                     </div>
                 </div>

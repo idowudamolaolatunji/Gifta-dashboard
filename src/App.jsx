@@ -28,6 +28,7 @@ import PrivacyPolicy from './Pages/PublicPages/PrivacyPolicy';
 import SubscriptionPlan from './Pages/PublicPages/SubscriptionPlan';
 import VendorReg from './Pages/PublicPages/VendorReg';
 import ProductCatalogue from './Pages/PublicPages/ProductCatalogue';
+import KycVer from './Pages/PublicPages/KycVer';
 
 
 
@@ -48,15 +49,16 @@ function App() {
                     <Route path="/dashboard/wishlists/:wishListSlug/wish" element={<WishListUi />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/edit" element={<WishListUi />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
-
                     <Route path="/dashboard/reminders" element={<Reminders />}></Route>
-                    <Route path="/product-catalogue" element={<ProductCatalogue />}></Route>
-                    <Route path="/orders" element={<Orders />}></Route>
 
                     <Route path="/wallet" element={<Wallet />}></Route>
                     <Route path="/settings" element={<Settings />}></Route>
                     <Route path="/account-profile" element={<AccountProfile />}></Route>
+                    <Route path="/kyc-verification" element={<KycVer />}></Route>
+                    
                     <Route path="/vendor" element={<VendorReg />}></Route>
+                    <Route path="/product-catalogue" element={<ProductCatalogue />}></Route>
+                    <Route path="/orders" element={<Orders />}></Route>
                 </Route>
                 
 
@@ -67,6 +69,7 @@ function App() {
                 <Route path="/terms-of-use" element={<TermsOfUse />}></Route>
                 <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
                 <Route path="/plans" element={<SubscriptionPlan />}></Route>
+                
 
             </Routes>
         </BrowserRouter>
