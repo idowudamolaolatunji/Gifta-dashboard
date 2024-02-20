@@ -640,6 +640,13 @@ a.form--acct-btn div {
 }
 
 
+.form--grid-prod input {
+	width: 100%;
+}
+.form--select, .form--select option {
+	text-transform: capitalize;
+}
+
 
 /* ============================================= */
 /* ============================================= */

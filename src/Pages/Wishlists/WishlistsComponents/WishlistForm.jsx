@@ -61,6 +61,12 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
             e.preventDefault();
             handleReset();
             setHelpReset(false);
+
+            if(!imageFile || !title || !category) {
+                handleFailure('Fill all fields');
+                return;
+            }
+
             setIsLoading(true);
 
             const res = await fetch(`https://test.tajify.com/api/wishlists/${url}`, {
@@ -120,8 +126,8 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
                 mode: "no-cors"
             });
             if(!res.ok) throw new Error('Something went wrong!');            
-        } catch(err) {s
-            console(err.message);
+        } catch(err) {
+            console.log(err.message);
         } finally {
             setIsLoading(false)
         }

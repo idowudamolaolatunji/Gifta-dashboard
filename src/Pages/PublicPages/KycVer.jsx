@@ -3,6 +3,7 @@ import Header from './Components/Header'
 import { useNavigate } from 'react-router-dom'
 import StepProgressBar from 'react-step-progress';
 import 'react-step-progress/dist/index.css';
+import KycForm from '../../Components/KycForm';
 
 
 function KycVer() {
@@ -47,7 +48,7 @@ function KycVer() {
                         <div className="modal--info">Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga nam suscipit reprehenderit ab quos ipsum sequi iusto expedita iste inventore illo, fugiat, hic voluptatum aut eum ipsam nisi quis, porro qui possimus saepe? Eligendi pariatur quos ad totam aperiam tempora eaque labore eveniet enim voluptatibus itaque ab nisi, doloremque vel?</div>
 
 
-                        <StepProgressBar 
+                        {/* <StepProgressBar 
                             startingStep={0}
                             onSubmit={onFormSubmit}
                             wrapperClass='stepper--wrapper'
@@ -71,8 +72,10 @@ function KycVer() {
                               },
                               
                             ]}
-                        
-                        />
+                        /> */}
+
+
+                        <KycForm />
 
                     </div>
                 </div>

@@ -13,7 +13,7 @@ import { PiPlusBold, PiShareFatFill } from "react-icons/pi";
 import { ShareSocial } from 'react-share-social';
 import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 import Alert from "../../Components/Alert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SkelentonTwo from "../../Components/SkelentonTwo";
 import SkelentonOne from "../../Components/SkelentonOne";
 import SkelentonCard from "../../Components/SkelentonCard";
@@ -57,20 +57,30 @@ function Wishlists() {
 
 	const [helpReset, setHelpReset] = useState(false);
 	const [showActionInfo, setShowActionInfo] = useState(false);
-	const [selectedId, setSelectedId] = useState();
+	const [selectedId, setSelectedId] = useState(null);
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
 	const [showWishListEditModal, setShowWishListEditModal] = useState(false);
 
 	const { user, token } = useAuthContext();
+	const navigate = useNavigate();
 
 	function handleActionInfo(id) {
 		setSelectedId(id);
-		setShowActionInfo(!showActionInfo);
+		setShowActionInfo(true);
+	}
+
+	function handleActionInfoLeave() {
+		setShowActionInfo(false);
 	}
 
 	function handleSelectedWishList(data) {
 		setSelectedWishList(data);
 		setShowWishListEditModal(!showWishListEditModal)
+	}
+
+	function handleSelectedDeleteWishList(id) {
+		setSelectedId(id);
+		setShowDeleteModal(true);
 	}
 
 	function handleModal() {
@@ -113,29 +123,61 @@ function Wishlists() {
             const res = await fetch(`https://test.tajify.com/api/wishlists/delete-my-wishlist/${selectedId}`, {
                 method: "DELETE",
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
             });
-            if(!res.ok) throw new Error('Something went wrong!');
-            const data = await res.json();
-            if(data.status !== "success") {
-                throw new Error(data.message);
+			console.log(res);
+            if(!res.ok) {
+				throw new Error('Something went wrong!');
+			}
+
+			if(res.status === 204) {
+                setIsSuccess(true);
+                setMessage('Wishlist deleted successfully!');
+                setTimeout(() => {
+                    setShowDeleteModal(false);
+                    setIsSuccess(false);
+                    setMessage("");
+                    setHelpReset(true);
+                    window.location.reload();
+                }, 1500);
+                return;
             }
-            setMessage(data.message);
-			setIsSuccess(true);
-			setTimeout(() => {
-                setShowDeleteModal(false);
-                setHelpReset(true);
-				setIsSuccess(false);
-				setMessage("");
-			}, 1500);
+            const data = await res.json();
+			
+			if(data?.message === "You cannot perfom this task, Upgrade Account!") {
+				setTimeout(() => {
+					navigate('/plans');
+				}, 1500);
+				throw new Error(data.message);
+			}
+            if(data.status !== "success") {
+				throw new Error(data.message);
+            }
+
+            // setMessage(data.message);
+			// THERE IS AN ERROR HERE I DONT UNDERSTAND JUST YET, TILL THEN I AM FORCING THE DOM TO RELOAD
+
+
+            // setMessage('Wishlist deleted successfully!');
+			// setIsSuccess(true);
+			// setTimeout(() => {
+			// 	// window.location.reload();
+            //     setShowDeleteModal(false);
+            //     setHelpReset(true);
+			// 	setIsSuccess(false);
+			// 	setMessage("");
+			// }, 1500);
         } catch (err) {
             handleFailure(err.message);
+			console.error(err)
         } finally {
             setIsLoadingDel(false);
         }
 	}
+
+	
 
 	useEffect(function () {
 		async function fetchWishlists() {
@@ -206,7 +248,7 @@ function Wishlists() {
 								{/* <button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button> */}
 								{wishLists.map(wishList => (
 									<>
-										<figure key={wishList._id} className="wishlist--figure w-figure-action">
+										<figure key={wishList._id} className="wishlist--figure w-figure-action" onMouseLeave={() => handleActionInfoLeave()} >
 											<span className="w-figure-category">{wishList.category}</span>
 											<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
 												<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
@@ -220,15 +262,13 @@ function Wishlists() {
 																<PiPlusBold className='figure--icon' onClick={() => localStorage.setItem('wishNewModal', JSON.stringify(true)) }/>
 															</Link>
 														)}
-														<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://app.getgifta.com/shared/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)} />
+														<PiShareFatFill className='figure--icon' onClick={() => handleShare(`https://app.getgifta.com/shared/${wishList.shortSharableUrl}`, wishList.wishes.length > 0)}  />
 														<IoEllipsisVerticalSharp className="figure--icon" onClick={() => handleActionInfo(wishList._id)} />
 														{(showActionInfo && selectedId === wishList._id) && (
-															<div className="w-figure--action-box">
-																<ul>
-																	<li onClick={() => handleSelectedWishList(wishList)}>Edit</li>
-																	<li onClick={() => setShowDeleteModal(true)}>Delete</li>
-																</ul>
-															</div>
+															<ul className="w-figure--action-list">
+																<li onClick={() => handleSelectedWishList(wishList)}>Edit</li>
+																<li onClick={() => handleSelectedDeleteWishList(wishList._id)}>Delete</li>
+															</ul>
 														)}
 													</div>
 												</div>
@@ -332,6 +372,7 @@ function Wishlists() {
 					<p className='modal--text'>Are you sure you want to delete this WishList?</p>
 					<span className='modal--info'>Note that everything relating data to this WishList would also be deleted including transaction history!</span>
 					<div className="modal--actions">
+						{console.log(selectedId)}
 						<span type="submit" className='delete--cancel' onClick={() => setShowDeleteModal(false)}>Cancel</span>
 						<span type="button" className='delete--submit' onClick={handleDeleteWishlist}>Delete WishList</span>
 					</div>

@@ -3,7 +3,7 @@ import { RiSafeLine } from 'react-icons/ri';
 import { useLocation } from 'react-router-dom';
 
 
-function ProgressBar({ progress, amountPaid }) {
+function ProgressBar({ progress, amountPaid, screen }) {
   const progessNum = Number(progress.slice(0, -1));
   const location = useLocation();
 
@@ -14,6 +14,7 @@ function ProgressBar({ progress, amountPaid }) {
       </div>
       <>
         {(amountPaid && !location.pathname.includes('/dashboard/wishlists/')) && <div className="progress--figure">Accumulated: <p>{amountPaid}</p></div>}
+        {(amountPaid && screen === 'desktop') && <div className="progress--figure">Accumulated: <p>{amountPaid}</p></div>}
         {/* {(amountPaid && location.pathname.includes('/dashboard/wishlists/')) && <div className="progress--figure"><p style={{ fontSize: '1.2rem'}}>{amountPaid}</p></div>} */}
         {!amountPaid && <div className="progress--figure">Accumulated: <p>{progress}</p></div>}
       </>

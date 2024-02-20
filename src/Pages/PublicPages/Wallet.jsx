@@ -19,6 +19,7 @@ import { MdArrowDropDown, MdKeyboardDoubleArrowRight, MdOutlineWorkspacePremium 
 import { CiBank, CiCreditCard1 } from 'react-icons/ci';
 import { RiAdminLine } from "react-icons/ri";
 import { GiCrownCoin } from 'react-icons/gi';
+import { GoInfo } from "react-icons/go";
 
 
 function Message({ type }) {
@@ -78,6 +79,8 @@ function Wallet() {
     const [showDepositModal, setShowDepositModal] = useState(false);
     const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
     const [helpReset, setHelpReset] = useState(false);
+
+    const [showPointsInfo, setShowPointsInfo] = useState(false);
 
 
     const [email, setEmail] = useState(user.email);
@@ -287,7 +290,12 @@ function Wallet() {
                                     <span>{numberConverter(wallet?.walletBalance || 0)}</span>
                                 </span>
 
-                                <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{numberConverter(wallet?.pointBalance || 0)} G-points</span>
+                                <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{numberConverter(wallet?.pointBalance || 0)} G-points <GoInfo className='wallet--user-info-icon' onMouseOver={() => setShowPointsInfo(true)} onMouseLeave={() => setShowPointsInfo(false)} onClick={() => setShowPointsInfo(true)} style={ showPointsInfo ? { color: '#bb0505' } : {} } />
+                                
+                                    {showPointsInfo && (
+                                        <div className="modal--info wallet--point-modal">Lorem ipsum dolor sit amet, consectetur adipisicing elit, Debitis officia tempore.</div>
+                                    )}
+                                </span>
 
                                 <span className='wallet--buttons'>
                                     <span className="wallet--button" onClick={() => setShowDepositModal(true)}>Fund Wallet <FiPlus className='wallet--icon' /></span>
@@ -348,7 +356,13 @@ function Wallet() {
                 }>
                     <span className='modal--info'> Ensure accuracy when funding your wallet to avoid transaction errors. Proceed with caution!</span>
 
-                    <form className="pay--form" onSubmit={e => e.preventDefault()} style={{ marginTop: '.8rem' }}>
+                    <form className="pay--form" onSubmit={e => {
+                        e.preventDefault();
+                        if(amount < 1000) {
+                            handleFailure('Minimum Deposits is ₦1,000')
+                            return;
+                        }
+                    }} style={{ marginTop: '.8rem' }}>
                         <div className="form--item">
                             <label htmlFor="email" className="form--label">Email</label>
                             <input type="email" id='email' required placeholder='Email Address' name='email' value={email} onChange={e => setEmail(e.target.value)} className="form--input" />
@@ -367,7 +381,7 @@ function Wallet() {
                             />
                         </div>
                         <div className="form--item">
-                            {(email && amount) ? (
+                            {(email && (amount && amount >= 1000)) ? (
                                 <PaystackButton type='submit' className="form--button" {...componentProps} />
                             ) : (
                                 <button type='submit' className="form--button">Pay!</button>

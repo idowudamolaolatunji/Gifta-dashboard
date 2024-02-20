@@ -135,6 +135,12 @@
 	.lists--item-bottom .lists--insight svg {
 		color: #bb0505;
 	}
+	.desktop--list-item {
+		display: none;
+	}
+	.mobile--list-item {
+		display: flex;
+	}
 
 	.back-btn,
 	.destop-title {
@@ -277,10 +283,17 @@
 
 		/* bottom: 2.5%; */
 	}
-	.form--grid {
+	.form--grid, .form--grid-kyc {
 		flex-direction: column;
 		gap: 2rem;
 	}
+	.wallet--point-modal {
+		top: 100%;
+		right: 50%;
+	
+		/* transform: translateX(50%); */
+	}
+	
 	.form--grid span:nth-child(1) {
 		align-self: flex-start;
 	}
