@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 
 function Product({ product, handleCloseModal }) {
     const [showGiftingForm, setShowGiftingForm] = useState('');
-    const [currImage, setCurrImage] = useState(product.image.startsWith('https') ? product.image : `https://test.tajify.com/asset/products/${product.image}`);
+    const [currImage, setCurrImage] = useState(`https://test.tajify.com/asset/products/${product.image}`);
     const [quantity, setQuantity] = useState(1);
     const amount = Number(quantity * product.price);
 

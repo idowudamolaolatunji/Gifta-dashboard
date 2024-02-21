@@ -3405,3 +3405,10 @@ span */
 	gap: 1.2rem;
 	margin-bottom: 1.8rem;
 }
+
+.form--check {
+	align-items: center !important;
+}
+.form--check input[type="checkbox"]{
+    margin-top: 0;
+}

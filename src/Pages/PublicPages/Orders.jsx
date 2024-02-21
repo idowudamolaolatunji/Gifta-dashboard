@@ -78,7 +78,7 @@ const columns = [
 
 const Spinner = () => <p style={{ padding: '2rem', fontSize: '1.8rem', fontWeight: '500' }}>Loading...</p>
 function Message() {
-    return (<p className="no-pcontent-message">You have No Order (0)</p>)
+    return (<p className="modal--info" style={{ margin: '2rem auto'}}>You have No Order (0)</p>)
 }
 
 

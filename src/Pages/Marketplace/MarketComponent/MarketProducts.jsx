@@ -173,7 +173,7 @@ function CategoryPage() {
                             {categoryProducts.length > 0 ? categoryProducts.map((product) =>
                                 // <Link to={`/dashboard/marketplace/${currentCategory}/${product.slug}`}>
                                 <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
-                                    <img className='product--img' src={product.image.startsWith('https') ? product.image : `https://test.tajify/asset/products/${product.image}`} alt={product.name} />
+                                    <img className='product--img' src={`https://test.tajify.com/asset/products//${product.image}`} alt={product.name} />
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{product.name}</h4>
                                         <div className='product--vendor'>

@@ -275,6 +275,7 @@
 	.form--collapsible {
 		display: flex !important;
 	}
+	
 	.wish--form.wish--modal {
 		width: 90%;
 		padding: 1.2rem;
@@ -700,6 +701,10 @@
 	.wish--input-flex,
 	.wish--input-flex .wish--input.input--number {
 		width: 100%;
+	}
+	.form--grid span:nth-child(2) {
+		padding-right: 0 !important;
+		margin-right: auto;
 	}
 	.main--tabs {
 		gap: 0.7rem;

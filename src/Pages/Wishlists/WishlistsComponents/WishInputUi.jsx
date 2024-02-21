@@ -27,6 +27,7 @@ function WishInputUi({ wishListId, wishDetails, setShowModal, type, setHelpReset
     const inputRef = useRef(null);
 
     const { user, token } = useAuthContext();
+    const navigate = useNavigate();
 
     function handleCloseModal() {
         setShowModal(false);
@@ -82,6 +83,12 @@ function WishInputUi({ wishListId, wishDetails, setShowModal, type, setHelpReset
             if(!res.ok) throw new Error('Something went wrong!');
 
             const data = await res.json();
+            if(data?.message === "You cannot perfom this task, Upgrade Account!") {
+				setTimeout(() => {
+					navigate('/plans');
+				}, 1500);
+				throw new Error(data.message);
+			}
             if(data.status !== 'success') {
                 throw new Error(data.message);
             }

@@ -10,9 +10,11 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 import Spinner from "../Components/Spinner";
 import OTPMODAL from "./OTPMODAL";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-import { GoogleLogin } from 'react-google-login';
-import GoogleIcon from '../Assets/images/google-icon.png';
+// import { GoogleLogin } from 'react-google-login';
+// import GoogleIcon from '../Assets/images/google-icon.png';
 import EmailIcons from '../Assets/images/icons8-email-48.png';
+
+import { GoogleLogin } from '@react-oauth/google';
 
 
 
@@ -38,9 +40,9 @@ function Signup() {
 
 	const { inviteCode } = useParams();
 
-	const responseGoogle = (response) => {
-		console.log(response);
-	} 
+	// const responseGoogle = (response) => {
+	// 	console.log(response);
+	// } 
 
 	function togglePasswordVisibility() {
     setShowPassword(!showPassword);
@@ -137,7 +139,7 @@ function Signup() {
 					<h2 className="auth--heading">Sign Up</h2>
 
 
-					<GoogleLogin
+					{/* <GoogleLogin
 						clientId='409185840466-dk2cs4mdrl315i7s3am5pop520c3uuig.apps.googleusercontent.com'
 						onSuccess={responseGoogle}
 						onFailure={responseGoogle}
@@ -149,6 +151,15 @@ function Signup() {
 								<p>Sign up with Google</p>
 							</div>
 						)}
+					/> */}
+
+					<GoogleLogin
+						onSuccess={credentialResponse => {
+							console.log(credentialResponse);
+						}}
+						onError={() => {
+							console.log('Login Failed');
+						}}
 					/>
 
 					<div className="auth--diff">

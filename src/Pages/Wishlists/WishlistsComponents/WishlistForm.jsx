@@ -124,7 +124,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            const res = await fetch(`https://test.tajify.com/api/wishlists/wishlist-img/${id}`, {
+            await fetch(`https://test.tajify.com/api/wishlists/wishlist-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -133,7 +133,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
                 body: formData,
                 mode: "no-cors"
             });
-            if(!res.ok) throw new Error('Something went wrong!');            
+            // if(!res.ok) throw new Error('Something went wrong!');            
         } catch(err) {
             console.log(err.message);
         } finally {

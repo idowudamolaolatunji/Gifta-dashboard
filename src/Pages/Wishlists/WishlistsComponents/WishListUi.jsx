@@ -373,7 +373,7 @@ function WishListUi() {
                             {selectedTab !== 'logs' && (wishArr && wishArr?.length > 0 && !isLoading) ? wishArr?.map(wishItem => (
 
                                 <>
-                                    <li className={`desktop--list-item lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
+                                    <li className={`desktop--list-item lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} >
                                         <span className='lists--item-top'>
                                             <span className='lists--content'>
                                                 <p>{truncate(wishItem.wish, 24)}</p>

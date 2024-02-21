@@ -92,12 +92,12 @@ function KycVer() {
             console.log(data)
             
             // UPLOAD IMAGE
-            // const formData = new FormData();
-            // const id = data?.data?.kyc._id
-            // if(imageFile || frontImage || backImage) {
-            //     console.log('nice')
-            //     handleUploadDocImgs(formData, id);
-            // }
+            const formData = new FormData();
+            const id = data?.data?.kyc._id
+            if(imageFile || frontImage || backImage) {
+                console.log('nice')
+                handleUploadDocImgs(formData, id);
+            }
             setIsSuccess(true);
             setMessage(data.message)
             setTimeout(() => {
@@ -133,7 +133,7 @@ function KycVer() {
         } catch(err) {
             console.log(err.message);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 

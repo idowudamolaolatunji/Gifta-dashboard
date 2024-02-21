@@ -46,6 +46,7 @@ function ProductCatalogue() {
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
+    const [helpReset, setHelpReset] = useState(false);
     const [showProductInfoModal, setShowProductInfoModal] = useState(false);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -151,7 +152,7 @@ function ProductCatalogue() {
             }
         }
         handleFetchMyProducts()
-    }, []);
+    }, [helpReset]);
 
 
     async function handleUploadProduct(e, type) {
@@ -165,8 +166,9 @@ function ProductCatalogue() {
         }
         try {
             e.preventDefault();
-            setIsLoading(true);
             handleReset();
+            setHelpReset(false);
+            setIsLoading(true);
 
             const res = await fetch(url, {
                 method,
@@ -196,6 +198,7 @@ function ProductCatalogue() {
             setTimeout(function () {
                 setIsSuccess(false);
                 setMessage("");
+                setHelpReset(true)
                 setShowProductModal(false);
             }, 2000);
 
@@ -211,7 +214,7 @@ function ProductCatalogue() {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            const res = await fetch(`http://localhost:3010/api/gift-products/product-img/${id}`, {
+            await fetch(`https://test.tajify.com/api/gift-products/product-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -220,9 +223,8 @@ function ProductCatalogue() {
                 body: formData,
                 mode: "no-cors"
             });
-            if (!res.ok) throw new Error('Something went wrong!');
+            // if (!res.ok) throw new Error('Something went wrong!');
         } catch (err) {
-            s
             console(err.message);
         } finally {
             setIsLoading(false)
@@ -348,7 +350,7 @@ function ProductCatalogue() {
                                 </div>
                                 <div className="form--item">
                                     <label htmlFor="stockAvail" className="form--label">Stock Avail</label>
-                                    <input type="number" placeholder='Avail.' id='stockAvail' className="form--input" required value={showEditModal ? selectedProduct?.stockAvail : avail} onChange={e => setAvail(e.target.value)} />
+                                    <input type="number" placeholder='Avail.' id='stockAvail' className="form--input" value={showEditModal ? selectedProduct?.stockAvail : avail} onChange={e => setAvail(e.target.value)} />
                                 </div>
                             </div>
                         </div>

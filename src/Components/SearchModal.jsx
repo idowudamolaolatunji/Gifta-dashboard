@@ -92,7 +92,7 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
                             (
                             <Link to={`/dashboard/marketplace/${product.category}`}>
                                 <figure className='search--figure'>
-                                    <img src={product.image} />
+                                    <img src={`https://test.tajify.com/asset/products/${product.image}`} />
                                     <figcaption className='search--details'>
                                         <p className='search--name'>{product.name}</p>
                                     </figcaption>

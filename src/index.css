@@ -310,7 +310,7 @@ textarea {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	z-index: 2500;
+	z-index: 35000;
 }
 .gifting--loader img {
 	height: 10rem;

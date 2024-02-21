@@ -146,7 +146,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            const res = await fetch(`https://test.tajify.com/api/reminders/reminder-img/${id}`, {
+            await fetch(`https://test.tajify.com/api/reminders/reminder-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -155,7 +155,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                 body: formData,
                 mode: "no-cors"
             });
-            if(!res.ok) throw new Error('Something went wrong!');            
+            // if(!res.ok) throw new Error('Something went wrong!');            
         } catch(err) {
             console(err.message);
         } finally {

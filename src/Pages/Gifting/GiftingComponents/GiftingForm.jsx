@@ -248,7 +248,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     async function handleUploadImg(formData, id) {
         try {
             formData.append('image', imageFile);
-            const res = await fetch(`https://test.tajify.com/api/giftings/gifting-img/${id}`, {
+            await fetch(`https://test.tajify.com/api/giftings/gifting-img/${id}`, {
             // const res = await fetch(`http://localhost:3010/api/giftings/gifting-img/${id}`, {
                 method: 'POST',
                 headers: {
@@ -258,9 +258,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 body: formData,
                 mode: "no-cors"
             });
-            if(!res.ok) throw new Error('Something went wrong!');
-            const data = await res.json();
-            console.log(data)
             
         } catch(err) {
             handleFailure(err.message);

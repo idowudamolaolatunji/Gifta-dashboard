@@ -12,8 +12,14 @@ import './auth.css';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import GiftLoader from '../Assets/images/gifta-loader.gif';
 // import GoogleLogin from "react-google-login";
-import { GoogleLogin } from 'react-google-login';
-import GoogleIcon from '../Assets/images/google-icon.png'
+// import { GoogleLogin } from 'react-google-login';
+// import GoogleIcon from '../Assets/images/google-icon.png';
+
+import { GoogleLogin } from '@react-oauth/google';
+
+
+
+
 
 
 function Login() {
@@ -50,6 +56,7 @@ function Login() {
 			setMessage("");
 		}, 2500);
 	}
+
 
 	async function handleLoginUser(e) {
 		try {
@@ -123,19 +130,31 @@ function Login() {
 						Login
 					</h1>
 
+						
+					{/* 
+						<GoogleLogin
+							clientId='409185840466-dk2cs4mdrl315i7s3am5pop520c3uuig.apps.googleusercontent.com'
+							onSuccess={responseGoogle}
+							onFailure={responseGoogle}
+							cookiePolicy={"single_host_origin"}
+							isSignedIn={true}
+							render={(renderProps) => (
+								<div className="google--login" onClick={renderProps.onClick}>
+									<img src={GoogleIcon} style={{ cursor: 'pointer' }} />
+									<p>Sign in with Google</p>
+								</div>
+							)}
+						/> 
+					*/}
+
 
 					<GoogleLogin
-						clientId='409185840466-dk2cs4mdrl315i7s3am5pop520c3uuig.apps.googleusercontent.com'
-						onSuccess={responseGoogle}
-						onFailure={responseGoogle}
-						cookiePolicy={"single_host_origin"}
-						isSignedIn={true}
-						render={(renderProps) => (
-							<div className="google--login" onClick={renderProps.onClick}>
-								<img src={GoogleIcon} style={{ cursor: 'pointer' }} />
-								<p>Sign in with Google</p>
-							</div>
-						)}
+						onSuccess={credentialResponse => {
+							console.log(credentialResponse);
+						}}
+						onError={() => {
+							console.log('Login Failed');
+						}}
 					/>
 
 					<div className="auth--diff">
