@@ -12,6 +12,32 @@
 	right: 0;
 	z-index: 1000;
 }
+.subscribe--header {
+	position: fixed;
+	top: 7.4rem;
+	z-index: 1001;
+
+	background-color: #eee;
+	width: 100%;
+	height: 3.4rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .48rem;
+	font-size: 1.3rem;
+	font-weight: 500;
+	border-bottom: 1.4px solid #ddd;
+}
+.subscribe--header a {
+	color: #bb0505;
+	font-weight: 600;
+	font-size: 1.2rem;
+
+	display: flex;
+	align-items: center;
+	gap: .2rem;
+}
 .section--tab {
 	position: fixed;
 	top: 7.6rem;
@@ -726,10 +752,28 @@ div.banner button:hover {
 /* ====================================== */
 .kyc--form {
 	margin-top: 2rem;
+	background-color: #fefcff;
+	padding: 2rem;
+	border-radius: 1.8rem;
 }
 .kyc--form #form-image-label {
 	height: 20rem;
 	/* cursor: auto; */
+}
+.kyc--form.form--verified {
+	position: relative;
+}
+/* .kyc--form.form--verified::after {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	background-image: linear-gradient( black, black), url('../../Assets/images/verified-grunge-stamp-white-background-verified-stamp-106024310-removebg.png');
+} */
+.doc--grid #form-image-label {
+	border: 1.8px dashed #ddd;
 }
 .form--grid-kyc {
 	display: grid;

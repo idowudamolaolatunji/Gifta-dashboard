@@ -91,6 +91,7 @@ function Reminders() {
 		}, 3000);
 	}
 
+	console.log(reminderId)
 	async function handleCompleteReminder(reminderId) {
 		try {
 			setIsLoadingImg(true);

@@ -5,18 +5,20 @@ import { useAuthContext } from '../../../Auth/context/AuthContext';
 import Alert from '../../../Components/Alert';
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
-function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
-    const [imagePreview, setImagePreview] = useState(data?.image ? `https://test.tajify.com/asset/others/${data?.image}` : null);
+function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
+    const [imagePreview, setImagePreview] = useState(itemData?.image ? `https://test.tajify.com/asset/others/${itemData?.image}` : null);
     const [imageFile, setImageFile] = useState(null);
-    const [title, setTitle] = useState(data?.name || '');
-    const [category, setCategory] = useState(data?.category || '');
+    const [title, setTitle] = useState(itemData?.name || '');
+    const [category, setCategory] = useState(itemData?.category || '');
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
 
     const { token } = useAuthContext();
+    const navigate = useNavigate();
 
     function handleModalClose() {
 		setShowDashboardModal(false);
@@ -50,9 +52,9 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
 
     async function handleCreateWishList(e) {
         let method, url;
-        if(data) {
+        if(itemData) {
             method = "PATCH";
-            url = `update-my-wishlist/${data._id}`
+            url = `update-my-wishlist/${itemData._id}`
         } else {
             method = "POST";
             url = 'create-wishlist'
@@ -62,7 +64,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
             handleReset();
             setHelpReset(false);
 
-            if(!imageFile || !title || !category) {
+            if((!itemData && !imageFile) || !title || !category) {
                 handleFailure('Fill all fields');
                 return;
             }
@@ -84,6 +86,12 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, data }) {
             if(!res.ok) throw new Error('Something went wrong!');
 
             const data = await res.json();
+            if(data?.message === "You cannot perfom this task, Upgrade Account!") {
+				setTimeout(() => {
+					navigate('/plans');
+				}, 1500);
+				throw new Error(data.message);
+			}
             if(data.status !== 'success') {
                 throw new Error(data.message);
             }

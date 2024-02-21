@@ -5,6 +5,7 @@ import Signup from './Auth/Signup';
 import DashBoard from './Pages/DashBoard';
 
 import Gifting from './Pages/Gifting';
+import DigitalProduct from './Pages/DigitalProduct';
 import Marketplace from './Pages/Marketplace';
 import Wishlists from './Pages/Wishlists';
 import Reminders from './Pages/Reminders';
@@ -29,6 +30,7 @@ import SubscriptionPlan from './Pages/PublicPages/SubscriptionPlan';
 import VendorReg from './Pages/PublicPages/VendorReg';
 import ProductCatalogue from './Pages/PublicPages/ProductCatalogue';
 import KycVer from './Pages/PublicPages/KycVer';
+import ProductStats from './Pages/PublicPages/ProductStats';
 
 
 
@@ -43,6 +45,7 @@ function App() {
                     <Route path="/dashboard/gifting" element={<Gifting />}></Route>
                     <Route path="/dashboard/marketplace/:category" element={<Marketplace />}></Route>
                     <Route path="/dashboard/marketplace/:category/:productSlug" element={<Marketplace />}></Route>
+                    <Route path="/dashboard/digital-products" element={<DigitalProduct />}></Route>
 
                     <Route path="/dashboard/wishlists" element={<Wishlists />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug" element={<WishListUi />}></Route>
@@ -59,6 +62,7 @@ function App() {
                     <Route path="/vendor" element={<VendorReg />}></Route>
                     <Route path="/product-catalogue" element={<ProductCatalogue />}></Route>
                     <Route path="/orders" element={<Orders />}></Route>
+                    <Route path="/stats" element={<ProductStats />}></Route>
                 </Route>
                 
 

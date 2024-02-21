@@ -10,6 +10,7 @@ import { PiHandbagSimple } from "react-icons/pi";
 
 
 import { useAuthContext } from "../../../Auth/context/AuthContext";
+import { LiaDigitalTachographSolid } from "react-icons/lia";
 
 const DashTabs = () => {
 	const [stay, setStay] = useState(function () {
@@ -45,6 +46,11 @@ const DashTabs = () => {
 					<Link to="/dashboard/gifting" className={`tab ${location.pathname.includes('/dashboard/gifting') ? 'active-tab' : ''}`}>
 						<TfiGift className="tab-icon" />
 						<p>Gifting</p>
+					</Link>
+
+					<Link to="/dashboard/digital-products" className={`tab ${location.pathname.includes('/dashboard/digital-products') ? 'active-tab' : ''}`}>
+						<LiaDigitalTachographSolid className="tab-icon" />
+						<p>DigitalProducts</p>
 					</Link>
 
 					<Link to="/dashboard/reminders" className={`tab ${location.pathname.includes('/dashboard/reminders') ? 'active-tab' : ''}`}>

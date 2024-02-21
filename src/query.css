@@ -686,6 +686,9 @@
 	.wish--form.wish--modal {
 		width: 100%;
 	}
+	.wish--form .wish--input {
+		width: 100%;
+	}
 
 	.form--grid span:nth-child(1) {
 		display: flex;
@@ -762,5 +765,26 @@
 
 	.dashnoard--add-btn {
 		right: 7%;
+	}
+
+	.form--grid-kyc {
+		display: flex;
+		flex-direction: column;
+		gap: 1.4rem;
+		margin-bottom: 1rem;
+	}
+	.form--flex, .doc--grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2rem;
+	}
+	.kyc--form {
+		padding: 2rem 1rem;
+	}
+	#form-check {
+		align-items: flex-start;
+	}
+	#form-check .form--label {
+		line-height: 1.3;
 	}
 }

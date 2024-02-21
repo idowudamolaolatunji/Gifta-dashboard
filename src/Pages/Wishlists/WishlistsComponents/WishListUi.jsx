@@ -180,7 +180,7 @@ function WishListUi() {
             setIsLoading(true);
             handleReset();
             setHelpReset(false);
-            const res = await fetch(`http://localhost:3010/api/wishlists/delete-wish/${wishList._id}/${selectedWishId}`, {
+            const res = await fetch(`https://test.tajify.com/api/wishlists/delete-wish/${wishList._id}/${selectedWishId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -555,7 +555,7 @@ function WishListUi() {
 					customStyle={customStyle}
 					setShowDashboardModal={setShowWishListEditModal}
 				>
-					<WishlistForm data={wishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpReset} />
+					<WishlistForm itemData={wishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpReset} />
 				</DashboardModal>
 			)}
 

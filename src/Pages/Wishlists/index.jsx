@@ -348,7 +348,7 @@ function Wishlists() {
 					customStyle={customStyle}
 					setShowDashboardModal={setShowWishListEditModal}
 				>
-					<WishlistForm data={selectedWishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpReset} />
+					<WishlistForm itemData={selectedWishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpReset} />
 				</DashboardModal>
 			)}
 

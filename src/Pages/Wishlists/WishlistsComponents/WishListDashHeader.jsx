@@ -4,7 +4,7 @@ import GiftLogo from "../../../Assets/gifta-logo.png";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 import { IoNotifications, IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineWorkspacePremium } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdKeyboardDoubleArrowRight, MdOutlineWorkspacePremium } from "react-icons/md";
 import Dropdown from "../../../Components/Dropdown";
 import { LuSun, LuMoon, LuLayoutDashboard } from "react-icons/lu";
 import { TfiGift } from "react-icons/tfi";
@@ -12,8 +12,7 @@ import { BsBell, BsJournalBookmark, BsShop } from "react-icons/bs";
 import { getInitials } from "../../../utils/helper";
 import NotificationBox from "../../../Components/NotificationBox";
 import { PiHandbagSimple } from "react-icons/pi";
-
-// import '../../DashBoard/main.css';
+import { LiaDigitalTachographSolid } from "react-icons/lia";
 
 
 function WishListDashHeader() {
@@ -97,7 +96,17 @@ function WishListDashHeader() {
 				</div>
 			</header>
 
-			<section className='section--tab'>
+			{(user?.role === 'vendor' && !user?.isKycVerified) && (
+                <div className="subscribe--header">
+                    <p>Compulsory that vendors completes</p>
+                    <Link to={'/kyc-verification'}>
+                        Kyc Verification
+                        <MdKeyboardDoubleArrowRight />
+                    </Link>
+                </div>
+            )}
+
+			<section className='section--tab' style={(user?.role === 'vendor' && !user?.isKycVerified) && { top: '10.4rem' }} >
 				<div className="section__container">
 					<div className="dashboard__tabs">
 						<Link className="tab" to="/dashboard">
@@ -107,6 +116,10 @@ function WishListDashHeader() {
 						<Link className="tab" to="/dashboard/gifting">
 							<TfiGift className="tab-icon" />
 							<p>Gifting</p>
+						</Link>
+						<Link className="tab" to="/dashboard/digital-products">
+							<LiaDigitalTachographSolid className="tab-icon" />
+							<p>DigitalProducts</p>
 						</Link>
 
 						<Link className="tab" to="/dashboard/reminders">
@@ -119,26 +132,10 @@ function WishListDashHeader() {
 							<p>Wishlists</p>
 						</Link>
 
-						{/* {user.role === 'user' && ( */}
-							<Link className="tab" to="/dashboard/marketplace/birthday">
-								<BsShop className="tab-icon" />
-								<p>MarketPlace</p>
-							</Link>
-						{/* )} */}
-
-						{/* {user.role === 'vendor' && (
-							<Link className="tab" to="/dashboard/product-catalogue">
-								<BsShop className="tab-icon" />
-								<p>Shop</p>
-							</Link>
-						)}
-
-						{user.role === 'vendor' && (
-							<Link className="tab" to="/dashboard/orders">
-								<PiHandbagSimple className="tab-icon" />
-								<p>Orders</p>
-							</Link>
-						)} */}
+						<Link className="tab" to="/dashboard/marketplace/birthday">
+							<BsShop className="tab-icon" />
+							<p>MarketPlace</p>
+						</Link>
 					</div>
 				</div>
 			</section>

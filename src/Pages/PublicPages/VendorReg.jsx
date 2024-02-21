@@ -43,7 +43,7 @@ function VendorReg() {
             setIsLoading(true);
             handleReset()
             
-            const res = await fetch('http://localhost:3010/api/users/role/become-vendor', {
+            const res = await fetch('https://test.tajify.com/api/users/role/become-vendor', {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -64,6 +64,7 @@ function VendorReg() {
                 setIsSuccess(false);
                 setMessage("");
                 handleUser(data?.data.user);
+                navigate('/product-catalogue')
             }, 2000);
 
         } catch(err) {

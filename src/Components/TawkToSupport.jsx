@@ -7,7 +7,7 @@ const TawkToSupport = () => {
 
     s1.async = true;
     s1.src = 'https://embed.tawk.to/64e23766cc26a871b03054a8/1hmmmt15j';
-    s1.charset = 'UTF-8';
+    // s1.charset = 'UTF-8';
     s1.setAttribute('crossorigin', '*');
 
     s0.parentNode.insertBefore(s1, s0);

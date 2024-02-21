@@ -293,7 +293,7 @@ function Wallet() {
                                 <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{numberConverter(wallet?.pointBalance || 0)} G-points <GoInfo className='wallet--user-info-icon' onMouseOver={() => setShowPointsInfo(true)} onMouseLeave={() => setShowPointsInfo(false)} onClick={() => setShowPointsInfo(true)} style={ showPointsInfo ? { color: '#bb0505' } : {} } />
                                 
                                     {showPointsInfo && (
-                                        <div className="modal--info wallet--point-modal">Lorem ipsum dolor sit amet, consectetur adipisicing elit, Debitis officia tempore.</div>
+                                        <div className="modal--info wallet--point-modal">Your point is valid till on the 25th of February, use it now before it expires.</div>
                                     )}
                                 </span>
 
@@ -463,7 +463,7 @@ function Wallet() {
                                 </span>
                             </div>
 
-                            <Link style={{ marginLeft: 'auto' }} to={'/account-profile'} className="form--item form--acct-btn">
+                            <Link style={{ marginLeft: 'auto' }} to={'/settings'} className="form--item form--acct-btn">
                                 <div>Goto Account <MdKeyboardDoubleArrowRight style={{ fontSize: '1.6rem' }} /></div>
                             </Link>
                         </div>

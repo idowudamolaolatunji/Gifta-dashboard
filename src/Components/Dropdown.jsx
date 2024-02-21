@@ -6,9 +6,8 @@ import { useAuthContext } from '../Auth/context/AuthContext';
 import { IoIosQrScanner } from "react-icons/io";
 import { PiFolderSimpleUserLight, PiIdentificationCardLight, PiUserListLight } from 'react-icons/pi';
 import NewTag from './NewTag';
-import { MdOutlineSupportAgent } from 'react-icons/md';
-import { RiCustomerService2Line } from 'react-icons/ri';
-import { TfiHeadphoneAlt } from 'react-icons/tfi';
+
+import { GiChart } from "react-icons/gi";
 
 
 function Dropdown({ addHomeLink, setShowLoader }) {
@@ -53,16 +52,22 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                     </li>
                 )}
                 {user.role === 'vendor' && (
-                    <li onClick={() => navigate('/product-catalogue')}>
-                        <CiShop />
-                        <p>My Shop</p>
-                    </li>
-                )}
-                {user.role === 'vendor' && (
-                    <li onClick={() => navigate('/orders')}>
-                        <CiShoppingBasket />
-                        <p>Orders</p>
-                    </li>
+                    <>
+                        <li onClick={() => navigate('/product-catalogue')}>
+                            <CiShop />
+                            <p>My Shop</p>
+                        </li>
+
+                        <li onClick={() => navigate('/orders')}>
+                            <CiShoppingBasket />
+                            <p>Orders</p>
+                        </li>
+
+                        <li onClick={() => navigate('/stats')}>
+                            <GiChart />
+                            <p>Product Stat</p>
+                        </li>
+                    </>
                 )}
                 <li onClick={() => navigate('/privacy-policy')}>
                     <CiViewList />
@@ -72,11 +77,7 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                     <IoIosQrScanner />
                     <p>Terms of Use</p>
                 </li>
-                {/* <li onClick={() => navigate('/support')}>
-                    <TfiHeadphoneAlt />
-                    <p>Supports</p>
-                    <NewTag />
-                </li> */}
+                
                 <li onClick={handleLogout}>
                     <CiLogout />
                     <p>Logout</p>
