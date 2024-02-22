@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
 		}
 		if(user) {
 			handleFetchNotifications();
-			const intervalId = setInterval(handleFetchNotifications, 35000); // 150000 === 600,000 millsec === 10 mins
+			const intervalId = setInterval(handleFetchNotifications, 17500); // 150000 === 600,000 millsec === 10 mins
 			return () => clearInterval(intervalId);
 		}
 	}, [user, token]);

@@ -63,7 +63,7 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                             <p>Orders</p>
                         </li>
 
-                        <li onClick={() => navigate('/stats')}>
+                        <li onClick={() => navigate('/product-stats')}>
                             <GiChart />
                             <p>Product Stat</p>
                         </li>

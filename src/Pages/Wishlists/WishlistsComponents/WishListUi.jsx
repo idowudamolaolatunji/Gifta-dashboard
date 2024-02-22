@@ -275,6 +275,55 @@ function WishListUi() {
     }, [wishList, helpReset]);
 
 
+    async function handleDeleteWishlist() {
+		try {
+			setIsLoading(true);
+            handleReset();
+            setHelpReset(false);
+            const res = await fetch(`https://test.tajify.com/api/wishlists/delete-my-wishlist/${wishList._id}`, {
+                method: "DELETE",
+                headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+            });
+			console.log(res);
+            if(!res.ok) {
+				throw new Error('Something went wrong!');
+			}
+
+			if(res.status === 204) {
+                setIsSuccess(true);
+                setMessage('Wishlist deleted successfully!');
+                setTimeout(() => {
+                    setShowDeleteModal(false);
+                    setIsSuccess(false);
+                    setMessage("");
+                    setHelpReset(true);
+                    navigate('/dashboard/wishlists')
+                }, 1500);
+                return;
+            }
+            const data = await res.json();
+			
+			if(data?.message === "You cannot perfom this task, Upgrade Account!") {
+				setTimeout(() => {
+					navigate('/plans');
+				}, 1500);
+				throw new Error(data.message);
+			}
+            if(data.status !== "success") {
+				throw new Error(data.message);
+            }
+           
+        } catch (err) {
+            handleFailure(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+	}
+
+
 
     useEffect(function () {
         async function handleFetchWishLogs() {
@@ -566,7 +615,7 @@ function WishListUi() {
 					<span className='modal--info'>Note that everything relating data to this WishList would also be deleted including transaction history!</span>
 					<div className="modal--actions">
 						<span type="submit" className='delete--cancel' onClick={() => setShowDeleteModal(false)}>Cancel</span>
-						<span type="button" className='delete--submit' onClick={''}>Delete WishList</span>
+						<span type="button" className='delete--submit' onClick={handleDeleteWishlist}>Delete WishList</span>
 					</div>
 				</DeleteModalUi>
 			)}

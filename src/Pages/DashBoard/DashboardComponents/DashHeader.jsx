@@ -49,6 +49,8 @@ const DashHeader = ({ isDasboard }) => {
 		}
 	}, []);
 
+	console.log(showNotificationBox)
+
 
 	useEffect(function () {
 		const fetchSearch = setTimeout(async function () {

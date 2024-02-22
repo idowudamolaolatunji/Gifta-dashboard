@@ -14,34 +14,44 @@ function NotificationBox({ showNotificationBox, setShowNotificationBox }) {
     const notificationArr = tab === 'unread' ? unreadNotification : readNotification;
 
 
-    useEffect(function () {
-        async function handleSetReadNotifications() {
-            try {
-                if (notificationCount === 0) return;
+    // useEffect(function () {
+        
 
-                const res = await fetch('https://test.tajify.com/api/notifications/mark-as-read/my-notifications', {
-                    method: 'GET',
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-                if (!res.ok) throw new Error('Something went wrong');
-                const data = await res.json();
-                if (data.status !== "success") throw new Error(data.message);
-            } catch (err) {
-                console.log(err.message);
-            }
+    //     if(showNotificationBox) {
+    //         handleSetReadNotifications();
+    //     }
+
+    // }, [showNotificationBox])
+
+    async function handleSetReadNotifications() {
+        try {
+            if (notificationCount === 0) return;
+
+            const res = await fetch('https://test.tajify.com/api/notifications/mark-as-read/my-notifications', {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            if (!res.ok) throw new Error('Something went wrong');
+            const data = await res.json();
+            if (data.status !== "success") throw new Error(data.message);
+        } catch (err) {
+            console.log(err.message);
         }
+    }
+
+    function handleReadNotification() {
         handleSetReadNotifications();
+        setShowNotificationBox(false)
+    }
 
-    }, [showNotificationBox])
-
-
+    
 
     return (
         <>
-            <div className="notification--overlay" onClick={() => setShowNotificationBox(false)}></div>
+            <div className="notification--overlay" onClick={handleReadNotification}></div>
             <div className="notification--desktop">
                 <p className='notification--title'>Notification.</p>
                 <div className="notification--tabs">
@@ -74,7 +84,7 @@ function NotificationBox({ showNotificationBox, setShowNotificationBox }) {
 
             <div className="notification--mobile">
                 <p className='notification--title'>Notification.</p>
-                <AiOutlineClose className='notification-close-icon' onClick={() => setShowNotificationBox(false)} />
+                <AiOutlineClose className='notification-close-icon' onClick={handleReadNotification} />
 
 
                 <div className="notification--tabs">
