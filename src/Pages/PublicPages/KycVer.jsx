@@ -162,9 +162,13 @@ function KycVer() {
         fetchKycDoc();
     }, [helpReset]);
 
-    useEffect(function () {
-        window.scrollTo(0, 0);
-    }, [])
+    
+
+    useEffect(function() {
+		document.title = 'Gifta | KYC Verification';
+
+        window.scrollTo(0, 0)
+	}, [])
 
 
     return (

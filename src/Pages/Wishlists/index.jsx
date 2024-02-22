@@ -207,6 +207,11 @@ function Wishlists() {
 	}, [helpReset]);
 
 
+	useEffect(function() {
+		document.title = 'Gifta | Wishlists'
+	}, [])
+
+
 	return (
 		<>
 			<DashHeader />

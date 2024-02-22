@@ -152,6 +152,9 @@
 	.lists--message {
 		font-size: 1.4rem;
 	}
+	.lists--message.note--box {
+		font-size: 1.4rem;
+	}
 
 	/* ======================================= */
 	/* WALLET PAGE */

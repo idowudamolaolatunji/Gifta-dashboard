@@ -160,6 +160,11 @@ function AccountProfile() {
     //     return () => clearTimeout(timeoutId);
     // }, [imageFile]);
 
+    useEffect(function() {
+		document.title = 'Gifta | Account Profile';
+
+        window.scrollTo(0, 0)
+	}, [])
 
     return (
         <>

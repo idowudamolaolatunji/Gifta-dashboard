@@ -220,6 +220,13 @@ function SharedWishlist() {
     };
 
 
+    useEffect(function() {
+		document.title = 'Gifta | Meet a Wish | Every Moment Deserves the Perfect Gift!';
+
+        window.scrollTo(0, 0);
+	}, [])
+
+
   return (
     <>
         <Header />

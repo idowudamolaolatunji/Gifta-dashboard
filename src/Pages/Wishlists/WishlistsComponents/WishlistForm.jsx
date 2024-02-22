@@ -151,8 +151,8 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
 
         <form className='wishlist--form form' onSubmit={(e) => handleCreateWishList(e)}>
             <div className='form--item form-image-card'>
-                {!imagePreview && <p className='image-text'>Upload An Image For this Wishlist (Optional)</p>}
-                <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
+                {!imagePreview && <p className='image-text'>Upload An Image For this Wishlist (Required)</p>}
+                <input required type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
                 <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='form-image-label'>
                     <span>
                         <MdOutlineAddAPhoto />

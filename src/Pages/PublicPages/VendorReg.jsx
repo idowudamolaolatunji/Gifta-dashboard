@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Components/Header';
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../Auth/context/AuthContext';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
 function VendorReg() {
     const [isLoading, setIsLoading] = useState(false);
@@ -14,10 +15,15 @@ function VendorReg() {
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
-    
+
+    const [showPassword, setShowPassword] = useState(false);
     
     const navigate = useNavigate();
     const { user, token, handleUser } = useAuthContext();
+
+    function toggleShowPassword() {
+        setShowPassword(!showPassword);
+    }
 
     // HANDLE FETCH STATE RESET
     function handleReset() {
@@ -75,6 +81,13 @@ function VendorReg() {
     }
 
 
+    useEffect(function() {
+		document.title = 'Gifta | Become a Vendor';
+
+        window.scrollTo(0, 0)
+	}, [])
+
+
 
     return (
         <>
@@ -98,7 +111,29 @@ function VendorReg() {
                         </div>
                         <div className="form--item">
                             <label htmlFor="password" className="form--label">Confirm Password</label>
-                            <input type="password" id="password" required className="form--input" value={password} onChange={e => setPassword(e.target.value)} placeholder='●●●●●●●●●' />
+                            {/* <input type="password" id="password" required className="form--input" value={password} onChange={e => setPassword(e.target.value)} placeholder='●●●●●●●●●' /> */}
+                            <div className="form--input-box">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    className="form--input"
+                                    id="password"
+                                    onChange={e => setPassword(e.target.value)}
+                                    value={password}
+                                    required
+                                    placeholder="••••••••••••"
+                                />
+                                {showPassword ? (
+                                    <FaRegEye
+                                        onClick={toggleShowPassword}
+                                        className="password__icon"
+                                    />
+                                    ) : (
+                                    <FaRegEyeSlash
+                                        onClick={toggleShowPassword}
+                                        className="password__icon"
+                                    />
+                                )}
+                            </div>
                         </div>
                         <div className="form--item">
                             <button type="submit" className="form--btn" style={{ width: '100%' }}>Submit Request</button>

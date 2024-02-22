@@ -127,6 +127,13 @@ function Order() {
     }
 
 
+    useEffect(function() {
+		document.title = 'Gifta | My Orders';
+
+        window.scrollTo(0, 0)
+	}, [])
+
+
     return (
         <>
 

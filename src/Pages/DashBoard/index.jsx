@@ -70,6 +70,10 @@ const DashBoard = () => {
 			}
 		}
 		fetchGiftings();
+	}, []);
+
+	useEffect(function() {
+		document.title = 'Gifta | User Dashboard'
 	}, [])
 
 	return (

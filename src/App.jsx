@@ -68,6 +68,7 @@ function App() {
 
                 <Route path="/login" element={<Login />}></Route>
                 <Route path="/signup" element={<Signup />}></Route>
+                <Route path="/signup/:verificationType" element={<Signup />}></Route>
                 <Route path="/invite/:inviteCode" element={<Signup />}></Route>
                 <Route path="/shared/:shareableUrl" element={<SharedWishlist />}></Route>
                 <Route path="/terms-of-use" element={<TermsOfUse />}></Route>

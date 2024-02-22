@@ -219,7 +219,12 @@ function Reminders() {
 			}
 		}
 		handleFetchReminders();
-	}, [helpReset])
+	}, [helpReset]);
+
+
+	useEffect(function() {
+		document.title = 'Gifta | Reminder'
+	}, []);
 
 
 	return (

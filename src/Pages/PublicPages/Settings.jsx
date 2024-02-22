@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuthContext } from '../../Auth/context/AuthContext';
 import Header from './Components/Header'
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import DeleteModalUi from '../Wishlists/WishlistsComponents/DeleteModalUi';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
 function Settings() {
     const { user, token, handleUser } = useAuthContext();
@@ -24,7 +25,18 @@ function Settings() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [passwordDel, setpasswordDel] = useState('');
 
+    const [showCurrPassword, setShowCurrPassword] = useState(false)
+    const [showNewPassword, setShowNewPassword] = useState(false)
+
     const navigate = useNavigate();
+
+
+    function toggleShowCurrPassword () {
+        setShowCurrPassword(!showCurrPassword)
+    }
+    function toggleShowNewPassword () {
+        setShowNewPassword(!showNewPassword)
+    }
 
     // HANDLE FETCH STATE RESET
     function handleReset() {
@@ -151,6 +163,13 @@ function Settings() {
         }
     }
 
+
+    useEffect(function() {
+		document.title = 'Gifta | Settings';
+
+        window.scrollTo(0, 0)
+	}, [])
+
     return (
         <>
             {isLoading && (
@@ -252,33 +271,60 @@ function Settings() {
                                 <label className="form--label" htmlFor="password-current">
                                     Current Password
                                 </label>
-                                <input
-                                    className="form--input"
-                                    id="password-current"
-                                    name="password-current"
-                                    type="password"
-                                    placeholder="••••••••••••"
-                                    required="required"
-                                    minLength={8}
-                                    value={passwordCurrent}
-                                    onChange={e => setPasswordCurrent(e.target.value)}
-                                />
+                                <div className="form--input-box">
+                                    <input
+                                        className="form--input"
+                                        id="password-current"
+                                        name="password-current"
+                                        type={showCurrPassword ? "text" : "password"}
+                                        placeholder="••••••••••••"
+                                        required="required"
+                                        minLength={8}
+                                        value={passwordCurrent}
+                                        onChange={e => setPasswordCurrent(e.target.value)}
+                                    />
+                                    {showCurrPassword ? (
+                                        <FaRegEye
+                                            onClick={toggleShowCurrPassword}
+                                            className="password__icon"
+                                        />
+                                        ) : (
+                                        <FaRegEyeSlash
+                                            onClick={toggleShowCurrPassword}
+                                            className="password__icon"
+                                        />
+                                    )}
+							    </div>
                             </div>
                             <div className="form--item">
                                 <label className="form--label" htmlFor="password">
                                     New Password
                                 </label>
-                                <input
-                                    className="form--input"
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    placeholder="••••••••••••"
-                                    required="required"
-                                    minLength={8}
-                                    value={newPassword}
-                                    onChange={e => setNewPassword(e.target.value)}
-                                />
+
+                                <div className="form--input-box">
+                                    <input
+                                        className="form--input"
+                                        id="password"
+                                        name="password"
+                                        type={showNewPassword ? "text" : "password"}
+                                        placeholder="••••••••••••"
+                                        required="required"
+                                        minLength={8}
+                                        value={newPassword}
+                                        onChange={e => setNewPassword(e.target.value)}
+                                    />
+                                    {showNewPassword ? (
+                                        <FaRegEye
+                                            onClick={toggleShowNewPassword}
+                                            className="password__icon"
+                                        />
+                                        ) : (
+                                        <FaRegEyeSlash
+                                            onClick={toggleShowNewPassword}
+                                            className="password__icon"
+                                        />
+                                    )}
+							    </div>
                             </div>
                             <div className="form--item">
                                 <label className="form--label" htmlFor="password-confirm">

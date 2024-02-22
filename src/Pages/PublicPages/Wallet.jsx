@@ -20,6 +20,7 @@ import { CiBank, CiCreditCard1 } from 'react-icons/ci';
 import { RiAdminLine } from "react-icons/ri";
 import { GiCrownCoin } from 'react-icons/gi';
 import { GoInfo } from "react-icons/go";
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
 
 function Message({ type }) {
@@ -91,6 +92,8 @@ function Wallet() {
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const deposit = transactions.filter(transaction => transaction.purpose === 'deposit');
     const gifting = transactions.filter(transaction => transaction.purpose === 'gifting');
     const withdrawal = transactions.filter(transaction => transaction.purpose === 'withdrawal');
@@ -99,6 +102,10 @@ function Wallet() {
     const wishes = transactions.filter(transaction => transaction.purpose === 'wishes');
 
     const navigate = useNavigate();
+
+    function toggleShowPassword() {
+        setShowPassword(!showPassword);
+    }
 
     let charges;
     function calcTotalAmount(amount) {
@@ -246,6 +253,13 @@ function Wallet() {
         }
         handleWalletTransaction();
     }, [helpReset]);
+
+
+    useEffect(function() {
+		document.title = 'Gifta | My Wallet';
+
+        window.scrollTo(0, 0)
+	}, [])
 
 
     return (
@@ -471,15 +485,29 @@ function Wallet() {
                             <label className="form--label" htmlFor="password">
                                 Password Confirmation
                             </label>
-                            <input
-                                className="form--input"
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                value={password}
-                                required
-                                placeholder="●●●●●●●●●"
-                            />
+                            <div className="form--input-box">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    className="form--input"
+                                    id="password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={password}
+                                    required
+                                    // placeholder="●●●●●●●●●"
+                                    placeholder="••••••••••••"
+                                />
+                                {showPassword ? (
+                                    <FaRegEye
+                                        onClick={toggleShowPassword}
+                                        className="password__icon"
+                                    />
+                                    ) : (
+                                    <FaRegEyeSlash
+                                        onClick={toggleShowPassword}
+                                        className="password__icon"
+                                    />
+                                )}
+                            </div>
                         </div>
 
                         <div className={`form--item ${(!user?.bankName || !user?.acctNumber || !user?.holderName) ? 'unclickable-form-item' : ''}`}>

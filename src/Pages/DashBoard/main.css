@@ -3412,3 +3412,9 @@ span */
 .form--check input[type="checkbox"]{
     margin-top: 0;
 }
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+	.dashboard__tabs {
+		gap: 3.6rem;
+	} 
+}

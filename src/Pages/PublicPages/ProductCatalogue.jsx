@@ -232,6 +232,13 @@ function ProductCatalogue() {
     }
 
 
+    useEffect(function() {
+		document.title = 'Gifta | My Product Catalogue';
+
+        window.scrollTo(0, 0)
+	}, [])
+
+
 
     return (
 

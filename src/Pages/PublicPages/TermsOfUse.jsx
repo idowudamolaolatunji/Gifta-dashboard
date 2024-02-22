@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './Components/Header';
 import { useNavigate } from 'react-router-dom';
 
 function TermsOfUse() {
     const navigate = useNavigate();
+
+
+    useEffect(function() {
+		document.title = 'Gifta | My Orders';
+
+        window.scrollTo(0, 0)
+	}, [])
 
     return (
         <>

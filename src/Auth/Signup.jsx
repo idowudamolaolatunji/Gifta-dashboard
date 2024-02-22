@@ -1,7 +1,7 @@
 import GiftBox from "../Assets/giftbox.jpg";
 import GiftaLogo from "../Assets/gifta-logo.png";
 import GiftaWhiteLogo from "../Assets/gifta-white-logo.png";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import "./auth.css";
 import { useState } from "react";
@@ -33,23 +33,25 @@ function Signup() {
 	const [message, setMessage] = useState('');
 	const [isError, setIsError] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
-	const [showOtpModal, setShowOtpModal] = useState(function() {
-		const info = JSON.parse(localStorage.getItem('otpDetails'))
-		return info?.showOtpModal || false;
-	});
+	// const [showOtpModal, setShowOtpModal] = useState(function() {
+	// 	const info = JSON.parse(localStorage.getItem('otpDetails'))
+	// 	return info?.showOtpModal || false;
+	// });
+	
+	
+	const { inviteCode, verificationType } = useParams();
+	const [showOtpModal, setShowOtpModal] = useState(verificationType === '_un' ? true : false);
+	
 
-	const { inviteCode } = useParams();
-
-	// const responseGoogle = (response) => {
-	// 	console.log(response);
-	// } 
+	const navigate = useNavigate();
+	
 
 	function togglePasswordVisibility() {
-    setShowPassword(!showPassword);
-  };
+		setShowPassword(!showPassword);
+	};
 	function togglePasswordConfirmVisibility() {
-    setShowPasswordConfirm(!showPasswordConfirm);
-  };
+		setShowPasswordConfirm(!showPasswordConfirm);
+	};
 
 
 	function handleReset() {
@@ -68,7 +70,7 @@ function Signup() {
 	}
 
 
-	const handleSubmit = async (e) => {
+	const handleSignup = async (e) => {
 		try {
 			e.preventDefault();
 			setIsLoading(true);
@@ -92,20 +94,25 @@ function Signup() {
 			}
 
 			const data = await res.json();
+			if(data.message === 'Email Already Exists and Unverified!' ) {
+				localStorage.setItem('otpEmail', JSON.stringify(email));
+				setTimeout(function() {
+					navigate('/signup/_un');
+				}, 1500);
+			}
 			if (data.status !== 'success') {
 				throw new Error(data.message);
 			}
 
 			setIsSuccess(true);
 			setMessage(data.message || 'Signup Successful. Verify OTP Code')
-			// setMessage(data.message)
 			setTimeout(() => {
 				setIsSuccess(false);
 				setMessage("");
 				setShowOtpModal(true);
-			}, 1000);
+			}, 1500);
 			const otpDetails = {
-				email, showOtpModal: true,
+				email,
 			}
 			localStorage.setItem('otpDetails', JSON.stringify(otpDetails))
 		} catch (err) {
@@ -168,7 +175,7 @@ function Signup() {
 						<span></span>
 					</div>
 
-					{signWithEmail && (<form onSubmit={handleSubmit} className="auth--form">
+					{signWithEmail && (<form onSubmit={handleSignup} className="auth--form">
 						<div className="form--flex">
 							<div className="form--item">
 								<label htmlFor="FirstName" className="form--label">
@@ -292,11 +299,11 @@ function Signup() {
 						<div className="form--item">
 							<span className="form--content">
 								By creating an account, you agree to our{' '}
-								<Link to={`#`} className="">
+								<Link to={`/terms-of-use`} className="">
 									terms and conditions
 								</Link>
 								{' '}and{' '}
-								<Link to={`#`} className="">
+								<Link to={`/privacy-policy`} className="">
 									privacy policy
 								</Link>
 								.

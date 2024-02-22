@@ -3,7 +3,7 @@ import OTPInput from 'react-otp-input';
 import Spinner from '../Components/Spinner';
 import Alert from '../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const customStyle = {
     minHeight: "auto",
@@ -19,9 +19,9 @@ const containerStyle = {
 }
 
 const inputStyle = {
-    width: '4rem',
-    height: '4rem',
-    fontSize: '1.8rem',
+    width: '5.2rem',
+    height: '5.2rem',
+    fontSize: '2rem',
     border: '1.6px solid #ccc',
     borderRadius: '.4rem',
     color: '#444',
@@ -30,7 +30,7 @@ const inputStyle = {
 function OTPMODAL({ setShowOtpModal }) {
     const [otp, setOtp] = useState(null);
     const [countdownOver, setCountdownOver] = useState(false);
-    const [currentSecond, setCurrentSecond] = useState(150);
+    const [currentSecond, setCurrentSecond] = useState(180);
     const [showOtp, setShowOtp] = useState(true)
     const [showReset, setShowReset] = useState(false);
 
@@ -39,9 +39,11 @@ function OTPMODAL({ setShowOtpModal }) {
 	const [isError, setIsError] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 
+    // const info = JSON.parse(localStorage.getItem('otpDetails'))
+    // const email = info?.email;
+    const email = JSON.parse(localStorage.getItem('otpEmail'))
 
-    const info = JSON.parse(localStorage.getItem('otpDetails'))
-    const email = info?.email;
+    const { verificationType } = useParams();
     const navigate = useNavigate();
 
 
@@ -69,28 +71,36 @@ function OTPMODAL({ setShowOtpModal }) {
 		}, 2500);
 	}
 
-
-    function startCountdown(setCountdownOver) {
-        let seconds = 2.5 * 60;
-
-        const intervalId = setInterval(() => {
-            if (seconds <= 0) {
-                clearInterval(intervalId);
-                setCountdownOver(true);
-                setCurrentSecond(0)
-            } else {
-                if (seconds > 0) {
-                    setCountdownOver(false);
-                    setCurrentSecond(seconds);
-                    seconds -= 1;
-                }
-            }
-        }, 1000);
-    }
-
     useEffect(() => {
+        let intervalId;
+        function startCountdown(setCountdownOver) {
+            let seconds = 180;
+
+            intervalId = setInterval(() => {
+                if (seconds < 1) {
+                    clearInterval(intervalId);
+                    setCountdownOver(true);
+                    setCurrentSecond(0);
+                } else {
+                    if (seconds > 0) {
+                        setCountdownOver(false);
+                        setCurrentSecond(seconds);
+                        seconds -= 1;
+                    }
+                }
+            }, 1000);
+        }
+
         startCountdown(setCountdownOver);
+
+        return () => clearInterval(intervalId)
     }, []);
+
+    useEffect(function() {
+        if(verificationType === '_un') {
+            handleShowReset();
+        }
+    }, [])
 
 
     async function handleFetchResetOtp() {
@@ -115,16 +125,17 @@ function OTPMODAL({ setShowOtpModal }) {
             }
             setIsSuccess(true);
 			setMessage(data.message)
-            handleShowOtp();
+            setTimeout(() => {
+                handleShowOtp();
+                setIsSuccess(false);
+                setMessage('')
+            }, 2000);
         } catch (err) {
             handleError(err.message);
         } finally {
             setIsLoading(false)
         }
     }
-
-    console.log(Number(otp))
-
 
     async function handleFetchSubmitOtp() {
         try {
@@ -146,16 +157,13 @@ function OTPMODAL({ setShowOtpModal }) {
                 throw new Error(data.message);
             }
             setIsSuccess(true);
-			setMessage(data.message)
+			setMessage(data.message || "OTP Verification Successful!")
 			setTimeout(() => {
 				setIsSuccess(false);
 				setMessage("");
                 setShowOtpModal(false)
-			}, 1000);
-            const otpDetails = {
-				email: '', showOtpModal: false,
-			}
-			localStorage.setItem('otpDetails', JSON.stringify(otpDetails))
+			}, 1500);
+			localStorage.setItem('otpDetails', JSON.stringify({email: ''}))
             navigate('/login')
         } catch (err) {
             handleError(err.message);
@@ -168,6 +176,15 @@ function OTPMODAL({ setShowOtpModal }) {
         // handleFetchResetOtp();
     }, []);
 
+    function handleCloseOpt() {
+        if(verificationType === '_un') {
+            setShowOtpModal();
+            navigate('/signup');
+        } else {
+            return;
+        }
+    }
+
 
     return (
         <>
@@ -176,7 +193,7 @@ function OTPMODAL({ setShowOtpModal }) {
                     <Spinner />
                 </div>
             )}
-            <div className="overlay" />
+            <div className="overlay" onClick={handleCloseOpt} />
             <div className="modal" style={customStyle}>
                 {showOtp && (
                     <>
@@ -190,7 +207,7 @@ function OTPMODAL({ setShowOtpModal }) {
                             renderInput={(props) => <input {...props} />}
                         />
                         <div className="reminder--actions" style={{ marginTop: '2.4rem', justifyContent: 'space-between' }}>
-                            <span onClick={countdownOver ? handleShowReset : ''} className='otp--btn' style={countdownOver ? { fontWeight: '500', cursor: 'pointer', color: "#bb0505" } : {}}>Request new OTP in <p style={{ fontWeight: '600', color: "#bb0505" }}>({currentSecond}s)</p></span>
+                            <span onClick={countdownOver ? handleShowReset : ''} className='otp--btn' style={countdownOver ? { fontWeight: '500', cursor: 'pointer', color: "#bb0505" } : {}}>Request new OTP {currentSecond === 0 ? '' : 'in'} <p style={{ fontWeight: '600', color: "#bb0505" }}>{currentSecond === 0 ? 'now' : `(${currentSecond}s)`}</p></span>
                             <button type='submit' className='set--btn' onClick={handleFetchSubmitOtp}>Submit</button>
                         </div>
                     </>

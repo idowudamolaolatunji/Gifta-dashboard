@@ -187,6 +187,12 @@ function SubscriptionPlan() {
         }
     }
 
+    useEffect(function() {
+		document.title = 'Gifta | Subscription Plans';
+
+        window.scrollTo(0, 0)
+	}, [])
+
 
     return (
         <>

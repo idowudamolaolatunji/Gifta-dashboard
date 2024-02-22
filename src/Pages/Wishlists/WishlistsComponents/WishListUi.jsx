@@ -415,7 +415,7 @@ function WishListUi() {
                                 </>
 
                             )) : (!isLoading && wishArr?.length === 0) && (
-                                <li className='lists--message note--box' style={{ fontSize: '1.4rem' }}>
+                                <li className='lists--message note--box'>
                                     {selectedTab === 'completed' ? 'No Completed Wishes!' : 'You\'ve No Wishes Yet!'}
                                 </li>
                             )}
@@ -439,7 +439,7 @@ function WishListUi() {
                                     </div>
                                 </li>
                             )) : (selectedTab === 'logs') && (
-                                <li className='lists--message note--box' style={{ fontSize: '1.4rem' }}>
+                                <li className='lists--message note--box'>
                                     No Contributors.
                                 </li>
                             )}

@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DashHeader from "../DashBoard/DashboardComponents/DashHeader";
 import DashTabs from "../DashBoard/DashboardComponents/DashTabs";
 import MarketProducts from "./MarketComponent/MarketProducts";
 
 function MarketPlace() {
+
+	useEffect(function() {
+		document.title = 'Gifta | Marketplace'
+	}, [])
+
 	return (
 		<>
 			<DashHeader />

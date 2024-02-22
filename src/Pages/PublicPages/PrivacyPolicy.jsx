@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from './Components/Header'
 import { useNavigate } from 'react-router-dom';
 
 function PrivacyPolicy() {
     const navigate = useNavigate();
+
+    useEffect(function() {
+		document.title = 'Gifta | Privacy Ploicy';
+
+        window.scrollTo(0, 0)
+	}, [])
 
     return (
         <>

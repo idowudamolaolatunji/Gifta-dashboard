@@ -5,6 +5,14 @@ import { useNavigate } from 'react-router-dom'
 function ProductStats() {
 
     const navigate = useNavigate();
+
+    useEffect(function() {
+		document.title = 'Gifta | My Product Stats';
+
+        window.scrollTo(0, 0)
+	}, []);
+
+
   return (
     <>
 

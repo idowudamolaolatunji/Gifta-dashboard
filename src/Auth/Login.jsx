@@ -79,9 +79,16 @@ function Login() {
 			}
 
 			const data = await res.json();
+			if(data.message === 'Not Verified!' ) {
+				localStorage.setItem('otpEmail', JSON.stringify(email));
+				setTimeout(function(){
+					navigate('/signup/_un');
+				}, 2000);
+			}
 			if (data.status !== "success") {
 				throw new Error(data.message);
 			}
+			
 
 			setMessage(data.message || "User Login Successful!");
 			setIsSuccess(true);
