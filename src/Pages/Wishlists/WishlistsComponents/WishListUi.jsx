@@ -300,6 +300,7 @@ function WishListUi() {
                     setIsSuccess(false);
                     setMessage("");
                     setHelpReset(true);
+                    // window.location.reload();
                     navigate('/dashboard/wishlists')
                 }, 1500);
                 return;

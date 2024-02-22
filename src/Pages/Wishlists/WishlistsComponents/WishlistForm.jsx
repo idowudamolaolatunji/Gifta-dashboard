@@ -64,8 +64,16 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
             handleReset();
             setHelpReset(false);
 
-            if((!itemData && !imageFile) || !title || !category) {
-                handleFailure('Fill all fields');
+            if(!itemData && !imageFile) {
+                handleFailure('Image field cannot be left empty');
+                return;
+            }
+            if(!title) {
+                handleFailure('Title field cannot be left empty');
+                return;
+            }
+            if(!category) {
+                handleFailure('Category field cannot be left empty');
                 return;
             }
 
@@ -152,7 +160,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
         <form className='wishlist--form form' onSubmit={(e) => handleCreateWishList(e)}>
             <div className='form--item form-image-card'>
                 {!imagePreview && <p className='image-text'>Upload An Image For this Wishlist (Required)</p>}
-                <input required type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
+                <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
                 <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='form-image-label'>
                     <span>
                         <MdOutlineAddAPhoto />

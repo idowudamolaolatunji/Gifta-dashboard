@@ -106,7 +106,7 @@ function WishListDashHeader() {
                 </div>
             )}
 
-			<section className='section--tab' style={(user?.role === 'vendor' && !user?.isKycVerified) && { top: '10.4rem' }} >
+			<section className='section--tab' style={(user?.role === 'vendor' && !user?.isKycVerified) ? { top: '10.4rem' } : {}} >
 				<div className="section__container">
 					<div className="dashboard__tabs">
 						<Link className="tab" to="/dashboard">

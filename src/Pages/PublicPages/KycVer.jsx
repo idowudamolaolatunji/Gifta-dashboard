@@ -38,7 +38,7 @@ function KycVer() {
     const [checked, setChecked] = useState(false);
 
     const navigate = useNavigate();
-    const { user, token } = useAuthContext();
+    const { user, token, handleUser } = useAuthContext();
 
 
     // IMAGE PREVIEW FUNCTION
@@ -153,6 +153,7 @@ function KycVer() {
                 if (!res.ok) throw new Error('Something went wrong!');
                 const data = await res.json();
                 setKyc(data?.data?.kyc);
+                handleUser(data?.data?.user);
             } catch (err) {
                 console.log(err.message);
             } finally {

@@ -1977,6 +1977,7 @@ span.validity::after {
 }
 .mobile--list-item {
 	display: none;
+	cursor: pointer;
 }
 
 

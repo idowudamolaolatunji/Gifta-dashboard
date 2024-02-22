@@ -111,10 +111,7 @@ function Signup() {
 				setMessage("");
 				setShowOtpModal(true);
 			}, 1500);
-			const otpDetails = {
-				email,
-			}
-			localStorage.setItem('otpDetails', JSON.stringify(otpDetails))
+			localStorage.setItem('otpEmail', JSON.stringify(email));
 		} catch (err) {
 			handleError(err.message)
 		} finally {

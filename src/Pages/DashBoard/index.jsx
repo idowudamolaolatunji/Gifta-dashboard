@@ -74,7 +74,9 @@ const DashBoard = () => {
 
 	useEffect(function() {
 		document.title = 'Gifta | User Dashboard'
-	}, [])
+	}, []);
+
+	console.log(selectedGift)
 
 	return (
 		<>
@@ -111,7 +113,7 @@ const DashBoard = () => {
 								{giftings.map(gifting => {
 									return (
 										<div className='giftPackage--figure' key={gifting._id} onClick={() => handleGiftPackage(gifting)}>
-											<img src={`https://test.tajify.com/asset/others/${gifting?.celebrantImage}` || GiftImg} alt={gifting?.celebrant} />
+											<img src={`https://test.tajify.com/asset/others/${gifting?.celebrantImage}`} alt={gifting?.celebrant} />
 											<span className="package--category">{gifting.purpose}</span>
 											<figcaption className="giftPackage--details">
 												<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
@@ -163,9 +165,9 @@ const DashBoard = () => {
 						<div className="gift--preview-bottom">
 							<span className="gift--preview-title"> Purchased Gift <TfiGift style={{ color: '#bb0505' }} /></span>
 							<div className="gift--preview-flex">
-								<img src={selectedGift?.gift.image} />
+								<img src={selectedGift?.gift?.image} />
 								<div>
-								<p>{selectedGift?.gift.name}</p>
+								<p>{selectedGift?.gift?.name}</p>
 								<span className="gift--preview-price"><IoPricetagOutline /><p>₦{numberConverter(selectedGift?.amount)}</p></span>
 								</div>
 							</div>

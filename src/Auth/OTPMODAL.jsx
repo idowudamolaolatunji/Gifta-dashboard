@@ -41,7 +41,7 @@ function OTPMODAL({ setShowOtpModal }) {
 
     // const info = JSON.parse(localStorage.getItem('otpDetails'))
     // const email = info?.email;
-    const email = JSON.parse(localStorage.getItem('otpEmail'))
+    const email = JSON.parse(localStorage.getItem('otpEmail'));
 
     const { verificationType } = useParams();
     const navigate = useNavigate();
@@ -161,10 +161,10 @@ function OTPMODAL({ setShowOtpModal }) {
 			setTimeout(() => {
 				setIsSuccess(false);
 				setMessage("");
-                setShowOtpModal(false)
+                setShowOtpModal(false);
+                navigate('/login');
+                localStorage.setItem('otpEmail', JSON.stringify(''));
 			}, 1500);
-			localStorage.setItem('otpDetails', JSON.stringify({email: ''}))
-            navigate('/login')
         } catch (err) {
             handleError(err.message);
         } finally {
