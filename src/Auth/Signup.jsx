@@ -81,7 +81,8 @@ function Signup() {
 				throw new Error('All fields are required!');
 			}
 
-			if(password !== passwordConfirm) throw new Error('Passwords are not the same!')
+			if(password !== passwordConfirm) throw new Error('Passwords are not the same!');
+			if(password.length < 8 || passwordConfirm.length < 8) throw new Error('Passwords must not be less 8 characters');
 
 			const res = await fetch(inviteCode ? `https://test.tajify.com/api/users/signup/${inviteCode}` : "https://test.tajify.com/api/users/signup", {
 				method: 'POST',

@@ -43,7 +43,7 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                 <li onClick={() => navigate('/kyc-verification')}>
                     <PiIdentificationCardLight />
                     <p>Kyc Verification</p>
-                    <NewTag />
+                    {!user?.isKycVerified && <NewTag />}
                 </li>
                 {user.role !== 'vendor' && (
                     <li onClick={() => navigate('/vendor')}>

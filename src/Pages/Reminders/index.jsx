@@ -48,12 +48,25 @@ function Reminders() {
 
 	const { token } = useAuthContext();
 
+	const remainingReminder = reminders.filter(reminder => reminder.isCompleted === false);
+
 	function handleResetId() {
 		setReminderId(null)
 	}
-
 	function handleShowModal() {
 		setShowDashboardModal(true);
+	}
+	function handleCloseModal(type) {
+		handleResetId();
+		if(type === 'complete') {
+			setShowCompleteModal(false);
+		}
+		if(type === 'postpone') {
+			setShowPostponeModal(false)
+		}
+		if(type === 'delete') {
+			setShowDeleteModal(false);
+		}
 	}
 
 	function handleDeleteModal(id) {
@@ -61,13 +74,11 @@ function Reminders() {
 		setShowDeleteModal(true);
 		setReminderId(id);
 	}
-
 	function handlePostponeModal(id) {
 		handleResetId();
 		setShowPostponeModal(true);
 		setReminderId(id);
 	}
-
 	function handleCompleteModal(id) {
 		handleResetId();
 		setShowCompleteModal(true);
@@ -80,7 +91,6 @@ function Reminders() {
 		setMessage('')
 		setIsSuccess(false);
 	}
-
 	// HANDLE ON FETCH FAILURE
 	function handleFailure(mess) {
 		setIsError(true);
@@ -91,13 +101,13 @@ function Reminders() {
 		}, 3000);
 	}
 
-	console.log(reminderId)
-	async function handleCompleteReminder(reminderId) {
+	async function handleCompleteReminder() {
 		try {
 			setIsLoadingImg(true);
 			handleReset();
+			setHelpReset(false)
 
-			const res = await fetch(`https://test.tajify.com/api/reminders/delete-my-reminder/${reminderId}`, {
+			const res = await fetch(`https://test.tajify.com/api/reminders/mark-as-completed/${reminderId}`, {
 				method: 'PATCH',
 				headers: {
 					"Comtent-Type": "application/json",
@@ -107,7 +117,7 @@ function Reminders() {
 			console.log(res);
 			if (!res.ok) throw new Error('Something went wrong!');
 			const data = await res.json();
-			if (data.status !== "status") {
+			if (data.status !== "success") {
 				throw new Error(data.message)
 			}
 			setIsSuccess(true);
@@ -116,7 +126,7 @@ function Reminders() {
 				setIsSuccess(false);
 				setMessage('');
 				setHelpReset(true);
-				setShowCompleteModal(false);
+				handleCloseModal('complete');
 			}, 2000);
 		} catch (err) {
 			handleFailure(err.message);
@@ -125,12 +135,12 @@ function Reminders() {
 		}
 	}
 
-	async function handleDeleteReminder(reminderId) {
+	async function handleDeleteReminder() {
 		try {
 			setIsLoadingImg(true);
 			handleReset();
 
-			const res = await fetch(`https://test.tajify.com/api/reminders/mark-as-completed/${reminderId}`, {
+			const res = await fetch(`https://test.tajify.com/api/reminders/delete-my-reminder/${reminderId}`, {
 				method: 'DELETE',
 				headers: {
 					"Comtent-Type": "application/json",
@@ -139,18 +149,23 @@ function Reminders() {
 			});
 			console.log(res);
 			if (!res.ok) throw new Error('Something went wrong!');
+
+			if(res.status === 204) {
+                setIsSuccess(true);
+                setMessage('Reminder deleted!');
+                setTimeout(() => {
+                    setIsSuccess(false);
+					setMessage('');
+					setHelpReset(true);
+					handleCloseModal('delete')
+                    window.location.reload();
+                }, 1500);
+                return;
+            }
 			const data = await res.json();
-			if (data.status !== "status") {
+			if (data.status !== "success") {
 				throw new Error(data.message)
 			}
-			setIsSuccess(true);
-			setMessage(data.message)
-			setTimeout(() => {
-				setIsSuccess(false);
-				setMessage('');
-				setHelpReset(true);
-				setShowDeleteModal(false);
-			}, 2000);
 
 		} catch (err) {
 			handleFailure(err.message);
@@ -159,8 +174,9 @@ function Reminders() {
 		}
 	}
 
-	async function handlePostponeReminder(reminderId) {
+	async function handlePostponeReminder(e) {
 		try {
+			e.preventDefault();
 			setIsLoadingImg(true);
 			handleReset();
 
@@ -174,7 +190,7 @@ function Reminders() {
 			console.log(res);
 			if (!res.ok) throw new Error('Something went wrong!');
 			const data = await res.json();
-			if (data.status !== "status") {
+			if (data.status !== "success") {
 				throw new Error(data.message)
 			}
 			setIsSuccess(true);
@@ -183,7 +199,7 @@ function Reminders() {
 				setIsSuccess(false);
 				setMessage('');
 				setHelpReset(true);
-				setShowPostponeModal(false);
+				handleCloseModal('postpone');
 			}, 2000);
 		} catch (err) {
 			handleFailure(err.message);
@@ -252,12 +268,12 @@ function Reminders() {
 						</>
 					)}
 
-					{(reminders && reminders.length > 0) ? (
+					{(reminders && remainingReminder.length > 0) ? (
 						<>
 							<h3 className="section__heading" style={{ marginTop: '-1rem', marginBottom: '2.6rem', fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
 							<div className="reminder__grid">
 								{/* <button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button> */}
-								{reminders?.map(reminder => (
+								{remainingReminder?.map(reminder => (
 									<figure key={reminder._id} className="reminder--figure" style={{ backgroundImage: `linear-gradient(rgba(225, 225, 225, .8), rgba(225, 225, 225, 0.8)), url(https://test.tajify.com/asset/others/${reminder?.image})`}} >
 										<p className="reminder--text">{reminder.title}.</p>
 										<span className="figure--bottom">
@@ -301,8 +317,8 @@ function Reminders() {
 					<p className='modal--text-2'>You want to Complete this Reminder!</p>
 					<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
 					<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
-						<button type='button' className='cancel--btn' onClick={() => setShowCompleteModal(false)}>Cancel</button>
-						<button type='submit' className='set--btn' onClick={() => handleCompleteReminder(reminderId)}>Complete Reminder</button>
+						<button type='button' className='cancel--btn' onClick={() => handleCloseModal('complete')}>Cancel</button>
+						<button type='submit' className='set--btn' onClick={handleCompleteReminder}>Complete Reminder</button>
 					</div>
 				</DashboardModal>
 			)}
@@ -311,20 +327,20 @@ function Reminders() {
 				<DashboardModal customStyle={customStyleOthers} title={'Postpone Reminder'} setShowDashboardModal={setShowPostponeModal}>
 					<p className='modal--text-2'>Are you sure you want to postpone this reminder?</p>
 					<span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
-					<form className="reminder--form">
+					<form className="reminder--form" onSubmit={handlePostponeReminder}>
 						<div className="reminder--flex-2 postpone--flex">
 							<div className="form--item">
 								<label htmlFor="form--date" className="form--label">Date</label>
-								<input type="date" id="form--date" className='form--input' required value={date} min={new Date().toISOString().split('T')[0]} onChange={e => setDate(e.target.value)} />
+								<input type="date" id="form--date" className='form--input' required placeholder='Reminder Date..' value={date} min={new Date().toISOString().split('T')[0]} onChange={e => setDate(e.target.value)} />
 							</div>
 							<div className="form--item">
 								<label htmlFor="form--clock" className="form--label">Time</label>
-								<input type="time" id="form--clock" className='form--input' value={time} onChange={e => setTime(e.target.value)} required />
+								<input type="time" id="form--clock" className='form--input' value={time} placeholder='Reminder Time..' onChange={e => setTime(e.target.value)} required />
 							</div>
 						</div>
 						<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
-							<button type='button' className='cancel--btn' onClick={() => setShowPostponeModal(false)}>Cancel</button>
-							<button type='submit' className='set--btn' onClick={() => handlePostponeReminder(reminderId)}>Postpone Reminder</button>
+							<button type='button' className='cancel--btn' onClick={() => handleCloseModal('postpone')}>Cancel</button>
+							<button type='submit' className='set--btn'>Postpone Reminder</button>
 						</div>
 					</form>
 				</DashboardModal>
@@ -335,7 +351,7 @@ function Reminders() {
 					<p className='modal--text'>Are you sure you want to delete this Reminder?</p>
 					<span className='modal--info'>Note that everything relating data to this reminder would also be deleted including transaction history!</span>
 					<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
-						<button type='button' className='cancel--btn' onClick={() => setShowDeleteModal(false)}>Cancel</button>
+						<button type='button' className='cancel--btn' onClick={() => handleCloseModal('delete')}>Cancel</button>
 						<button type='submit' className='set--btn' onClick={() => handleDeleteReminder(reminderId)}>Delete</button>
 					</div>
 				</DashboardModal>
@@ -343,7 +359,7 @@ function Reminders() {
 
 
 			{(isSuccess || isError) && (
-				<Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`} others={true}>
+				<Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
 					{isSuccess ? (
 						<AiFillCheckCircle className="alert--icon" />
 					) : isError && (

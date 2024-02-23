@@ -25,8 +25,9 @@ function Settings() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [passwordDel, setpasswordDel] = useState('');
 
-    const [showCurrPassword, setShowCurrPassword] = useState(false)
-    const [showNewPassword, setShowNewPassword] = useState(false)
+    const [showCurrPassword, setShowCurrPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
     const navigate = useNavigate();
 
@@ -36,6 +37,9 @@ function Settings() {
     }
     function toggleShowNewPassword () {
         setShowNewPassword(!showNewPassword)
+    }
+    function toggleShowConfirmNewPassword() {
+        setShowConfirmNewPassword(!showConfirmNewPassword)
     }
 
     // HANDLE FETCH STATE RESET
@@ -99,6 +103,10 @@ function Settings() {
             if(newPassword !== confirmNewPassword) {
                 throw new Error('Passwords are not the same!');
             }
+            if(passwordCurrent === newPassword) throw new Error('Current Password and New Password cannot be the same!')
+
+            if(passwordCurrent.length < 8) throw new Error('Current Password must not be less 8 characters');
+            if(newPassword.length < 8) throw new Error('New Password must not be less 8 characters');
 
             const res = await fetch('https://test.tajify.com/api/users/me/update-password', {
                 method: 'PATCH',
@@ -132,7 +140,9 @@ function Settings() {
     async function handleDeleteAccount() {
         try {
             handleReset();
-            setIsLoading(true)
+            setIsLoading(true);
+
+            if(passwordDel.length < 8) throw new Error('Password must not be less 8 characters');
 
             const res = await fetch('https://test.tajify.com/api/users/me/delete-account', {
                 method: 'DELETE',
@@ -279,7 +289,6 @@ function Settings() {
                                         type={showCurrPassword ? "text" : "password"}
                                         placeholder="••••••••••••"
                                         required="required"
-                                        minLength={8}
                                         value={passwordCurrent}
                                         onChange={e => setPasswordCurrent(e.target.value)}
                                     />
@@ -309,7 +318,6 @@ function Settings() {
                                         type={showNewPassword ? "text" : "password"}
                                         placeholder="••••••••••••"
                                         required="required"
-                                        minLength={8}
                                         value={newPassword}
                                         onChange={e => setNewPassword(e.target.value)}
                                     />
@@ -330,17 +338,31 @@ function Settings() {
                                 <label className="form--label" htmlFor="password-confirm">
                                     Confirm New Password
                                 </label>
-                                <input
-                                    className="form--input"
-                                    id="password-confirm"
-                                    name="password-confirm"
-                                    type="password"
-                                    placeholder="••••••••••••"
-                                    required="required"
-                                    minLength={8}
-                                    value={confirmNewPassword}
-                                    onChange={e => setConfirmNewPassword(e.target.value)}
-                                />
+                                <div className="form--input-box">
+                                    <input
+                                        className="form--input"
+                                        id="password-confirm"
+                                        name="password-confirm"
+                                        type="password"
+                                        placeholder="••••••••••••"
+                                        required="required"
+                                        // minLength={8}
+                                        value={confirmNewPassword}
+                                        onChange={e => setConfirmNewPassword(e.target.value)}
+                                    />
+
+                                    {showConfirmNewPassword ? (
+                                        <FaRegEye
+                                            onClick={toggleShowConfirmNewPassword}
+                                            className="password__icon"
+                                        />
+                                        ) : (
+                                        <FaRegEyeSlash
+                                            onClick={toggleShowConfirmNewPassword}
+                                            className="password__icon"
+                                        />
+                                    )}
+                                </div>
                             </div>
                             <div className="form--item right">
                                 <button type='submit' className="btn form-btn">Save password</button>

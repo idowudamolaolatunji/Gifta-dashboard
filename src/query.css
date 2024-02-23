@@ -795,4 +795,12 @@
 	#form-check .form--label {
 		line-height: 1.3;
 	}
+	/* input[type="date"]:before, input[type="time"]:before { */
+	input[type="date"]:before {
+		content: attr(placeholder) !important;
+	}
+	/* input[type="date"]:focus:before, input[type="time"]:focus:before { */
+	input[type="date"]:focus:before {
+		content: '' !important;
+	}
 }

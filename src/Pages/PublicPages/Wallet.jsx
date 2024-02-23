@@ -194,6 +194,7 @@ function Wallet() {
                 throw new Error('Input Bank details in Profile');
             }
             if (!withdrawalAmount || !password) throw new Error('Fill all fields!');
+            if(password.length < 8) throw new Error('Password must not be less 8 characters');
 
             e.preventDefault();
             handleReset();

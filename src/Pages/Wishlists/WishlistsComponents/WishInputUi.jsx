@@ -127,17 +127,17 @@ function WishInputUi({ wishListId, wishDetails, setShowModal, type, setHelpReset
         )}
         <form className={`wish--form wish--modal ${inValid ? 'form--focus' : ''}`} onSubmit={handleWishInput}>
             <input type="text" className='wish--input' placeholder='Write a wish here' value={wish} onChange={(e) => setWish(e.target.value)} />
-            <textarea className='wish--textarea' placeholder='A bit of description' value={description} onChange={(e) => setDescription(e.target.value)} />
+            <textarea className='wish--textarea' placeholder='A bit of description..' value={description} onChange={(e) => setDescription(e.target.value)} />
             <div className="form--grid">
                 <span>
-                    <input type="date" className='wish--input input--date' placeholder='Deadline Date...' min={new Date().toISOString().split('T')[0]} value={date} onChange={(e) => setDate(e.target.value)}/>
+                    <input type="date" className='wish--input input--date' placeholder='Deadline Date!' min={new Date().toISOString().split('T')[0]} value={date} onChange={(e) => setDate(e.target.value)}/>
                     {/* <DatePicker className='wish--input input--date' placeholderText='Deadline Date...' minDate={new Date()} selected={date} onChange={(date) => setDate(date)} /> */}
                     <span className='wish--input-flex'>
                         <CurrencyInput 
                             className='wish--input input--number'
                             decimalsLimit={0}
                             prefix='₦ '
-                            placeholder='Wish Amount'
+                            placeholder='Wish Amount (₦)'
                             defaultValue={amount}
                             onValueChange={(value, _) => setAmount(value)}
                             ref={inputRef}

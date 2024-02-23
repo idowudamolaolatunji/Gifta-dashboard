@@ -61,7 +61,7 @@ function WishListUi() {
     const [helpReset, setHelpReset] = useState(false);
     const [share, setShare] = useState(false);
     const [url, setUrl] = useState('');
-
+    
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
@@ -85,14 +85,15 @@ function WishListUi() {
             setAppend(true);
         }
     }, [isSent])
-
-
-
+    
+    
+    
     // WISHLIST ACTIONS ON MOBILE
     const [showActionInfo, setShowActionInfo] = useState(false);
     const [showWishlistDeleteModal, setShowWishlistDeleteModal] = useState(false);
     const [showWishListEditModal, setShowWishListEditModal] = useState(false);
-
+    const [helpResetList, setHelpResetList] = useState(false);
+    
 
     useEffect(function () {
         return localStorage.setItem('wishNewModal', JSON.stringify(showNewModal));
@@ -244,7 +245,7 @@ function WishListUi() {
             }
         }
         handleFetchList();
-    }, []);
+    }, [helpResetList]);
 
 
     useEffect(function () {
@@ -605,7 +606,7 @@ function WishListUi() {
 					customStyle={customStyle}
 					setShowDashboardModal={setShowWishListEditModal}
 				>
-					<WishlistForm itemData={wishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpReset} />
+					<WishlistForm itemData={wishList} setShowDashboardModal={setShowWishListEditModal} setHelpReset={setHelpResetList} />
 				</DashboardModal>
 			)}
 
