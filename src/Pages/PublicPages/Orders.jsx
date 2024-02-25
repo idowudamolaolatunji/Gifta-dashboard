@@ -16,15 +16,15 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
 
 const customStyles = {
-	head: {
-		style: {
-			fontSize: "12px",
-			fontWeight: "bold",
-			color: "#777",
+    head: {
+        style: {
+            fontSize: "12px",
+            fontWeight: "bold",
+            color: "#777",
             minHeight: '100px',
-		},
-	},
-	rows: {
+        },
+    },
+    rows: {
         style: {
             minHeight: '100px',
             cursor: 'pointer'
@@ -69,34 +69,43 @@ const columns = [
     },
     {
         name: "Delivery Date",
-        selector: (row) => dateConverter(row.deliveryDate),
+        selector: (row) => expectedDateFormatter(row.deliveryDate),
     },
     {
         name: "Delivery Status",
-        selector: (row) => row.isDelivered,
+        selector: (row) => (
+            <span className={`status status--${!row.isDelivered ? "pending" : "success"}`}>
+                <p>{row.isDelivered ? 'Delivered' : 'Pending'}</p>
+            </span>
+        ),
     },
 ];
 
 const Spinner = () => <p style={{ padding: '2rem', fontSize: '1.8rem', fontWeight: '500' }}>Loading...</p>
 function Message() {
-    return (<p className="modal--info" style={{ margin: '2rem auto'}}>You have No Order (0)</p>)
+    return (<p className="modal--info" style={{ margin: '2rem auto' }}>You have No Order (0)</p>)
 }
 
 
 function Order() {
-    const [isLoading, setIsLoading] = useState(true);
-    const [orders, setOrders] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    // const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState({});
     const [showOrderModal, setShowOrderModal] = useState(false);
 
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
-    const [helpReset, setHelpReset] = useState(false);
+    // const [helpReset, setHelpReset] = useState(false);
 
-    const { user, token } = useAuthContext();
+    const [activeTab, setActiveTab] = useState('all');
+
+    const { user, token, orders, handleSetOrder } = useAuthContext();
     const navigate = useNavigate();
 
+    const all = orders;
+    const pendingOrders = all?.filter(order => order?.status === 'pending' || !order?.isDelivered);
+    const deliveredOrders = all?.filter(order => order?.status === 'delivered' || order?.isDelivered);
 
     // HANDLE FETCH STATE RESET
     function handleReset() {
@@ -115,34 +124,34 @@ function Order() {
         }, 3000);
     }
 
-    async function handleOrders() {
-        try {
-            setIsLoading(true)
-            const res = await fetch('https://test.tajify.com/api/orders', {
-                method: 'GET',
-                headers: {
-                    "Content-Type": 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            });
+    // async function handleOrders() {
+    //     try {
+    //         setIsLoading(true)
+    //         const res = await fetch('https://test.tajify.com/api/orders', {
+    //             method: 'GET',
+    //             headers: {
+    //                 "Content-Type": 'application/json',
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
 
-            if(!res.ok) throw new Error('Something went wrong!');
+    //         if(!res.ok) throw new Error('Something went wrong!');
 
-            const data = await res.json();
-            if(data?.status !== "success") {
-                throw new Error(data.message);
-            }
-            setOrders(data?.data?.orders);
-        } catch(err) {     
-            console.log(err);
-        } finally {
-            setIsLoading(false)
-        }
-    }
+    //         const data = await res.json();
+    //         if(data?.status !== "success") {
+    //             throw new Error(data.message);
+    //         }
+    //         setOrders(data?.data?.orders);
+    //     } catch(err) {     
+    //         console.log(err);
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
 
-    useEffect(function() {
-        handleOrders()
-    }, [helpReset]);
+    // useEffect(function() {
+    //     handleOrders()
+    // }, [helpReset]);
 
 
     function handleOrderRow(order) {
@@ -151,13 +160,13 @@ function Order() {
     }
 
 
-    useEffect(function() {
-		document.title = 'Gifta | My Orders';
+    useEffect(function () {
+        document.title = 'Gifta | My Orders';
 
         window.scrollTo(0, 0)
-	}, []);
+    }, []);
 
-    console.log(orders)
+    // console.log(orders)
 
 
 
@@ -165,7 +174,7 @@ function Order() {
         try {
             handleReset();
             setIsLoading(true);
-            setHelpReset(false);
+            // setHelpReset(false);
 
             const res = await fetch(`https://test.tajify.com/api/orders/accept-order/${selectedOrder._id}`, {
                 method: 'PATCH',
@@ -175,9 +184,10 @@ function Order() {
                 }
             });
 
-            if(!res.ok) throw new Error('Something went wrong!');
+            if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
-            if(data.status !== "success") throw new Error(data.message);
+            if (data.status !== "success") throw new Error(data.message);
+            const count = data?.data?.orders?.filter(order => !order.isDelivered && !order.isRejectedOrder);
 
             setIsSuccess(true);
             setMessage(data.message);
@@ -186,10 +196,11 @@ function Order() {
                 setIsSuccess(false);
                 setMessage("");
                 setShowOrderModal(true);
-                setHelpReset(true);
+                // setHelpReset(true);
+                handleSetOrder(data.data.orders, count.length);
             }, 2000);
 
-        } catch(err) {
+        } catch (err) {
             handleFailure(err.message)
         } finally {
             setIsLoading(false);
@@ -202,7 +213,7 @@ function Order() {
             setIsLoading(true);
 
 
-        } catch(err) {
+        } catch (err) {
             handleFailure(err.message);
         } finally {
             setIsLoading(false);
@@ -220,13 +231,26 @@ function Order() {
                     <div className="section--head">
                         <span onClick={() => navigate(-1)} className='wishlist--back-btn'>Back</span>
 
-                        <p className='section__heading' style={{ fontSize: '2.8rem', fontWeight: '500' }}>My Orders</p>
+                        <span className='section--flex-two' style={{ marginBottom: '2rem' }}>
+                            <p className='section__heading' style={{ margin: '0', fontSize: '2.8rem', fontWeight: '500' }}>My Orders</p>
+                            <div className="wallet--tabs">
+                                <span className={`wallet--tab ${activeTab === "all" && "tab--active"}`} onClick={() => { setActiveTab("all") }}>All Orders({all.length})</span>
+                                <span className={`wallet--tab ${activeTab === "pending" && "tab--active"}`} onClick={() => { setActiveTab("pending") }}>Pending({pendingOrders.length})</span>
+                                <span className={`wallet--tab ${activeTab === "delivered" && "tab--active"}`} onClick={() => { setActiveTab("delivered") }}>Delivered({deliveredOrders.length})</span>
+                            </div>
+
+                            <select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
+                                <option value="all">All Orders({all.length})</option>
+                                <option value="pending">Pending({pendingOrders.length})</option>
+                                <option value="delivered">Delivered({deliveredOrders.length})</option>
+                            </select>
+                        </span>
                     </div>
 
 
                     <DataTable
                         columns={columns}
-                        data={orders}
+                        data={(activeTab === 'all') ? all : (activeTab === 'pending') ? pendingOrders : (activeTab === 'delivered') ? deliveredOrders : ''}
                         pagination
                         persistTableHead
                         highlightOnHover
@@ -241,43 +265,43 @@ function Order() {
 
             {showOrderModal && (
                 <MobileFullScreenModal>
-                <div className="gift--preview-figure">
-                    
-                    <div className="gift--preview-top">
-                        <img src={`https://test.tajify.com/asset/products/${selectedOrder?.gift.image}`} alt={selectedOrder?.celebrant} />
-                        <div className="gift--preview-details">
-                            <span onClick={() => setShowOrderModal(false)}><MdArrowBackIos /></span>
-                            <p className="gift--preview-name">For {selectedOrder?.gift.name}</p>
-                            <p className="gift--preview-date">
-                                <CiCalendar />
-                                {expectedDateFormatter(selectedOrder?.deliveryDate)}
-                            </p>
-                        </div>
-                    </div>
+                    <div className="gift--preview-figure">
 
-                    <div className="gift--preview-bottom">
-                        <span className="gift--preview-title"> Purchased For <TfiGift style={{ color: '#bb0505' }} /></span>
-                        <div className="gift--preview-flex">
-                            {/* <img src={`https://test.tajify.com/asset/users/${selectedOrder?.gifter?.image}` } /> */}
-                            <img src={`https://test.tajify.com/asset/others/${selectedOrder?.celebrantImage}` } />
-                            <div>
-                                {/* <p>{selectedOrder?.gifter?.fullName || selectedOrder?.gifter?.username}</p> */}
-                                <p>{selectedOrder?.celebrant}</p>
-                                <span className="gift--preview-price"><GiReceiveMoney /><p>Quantity: {selectedOrder?.quantity}</p></span>
-                                <span className="gift--preview-price"><IoPricetagOutline /><p>Amount: {`${numberConverter(selectedOrder?.amount)}`}</p></span>
+                        <div className="gift--preview-top">
+                            <img src={`https://test.tajify.com/asset/products/${selectedOrder?.gift.image}`} alt={selectedOrder?.celebrant} />
+                            <div className="gift--preview-details">
+                                <span onClick={() => setShowOrderModal(false)}><MdArrowBackIos /></span>
+                                <p className="gift--preview-name">For {selectedOrder?.gift.name}</p>
+                                <p className="gift--preview-date">
+                                    <CiCalendar />
+                                    {expectedDateFormatter(selectedOrder?.deliveryDate)}
+                                </p>
                             </div>
                         </div>
-                        <span className="gift--preview-title"> Delivery Location <IoLocationSharp style={{ color: '#bb0505' }} /></span>
-                        <p style={{ fontSize: '1.4rem' }}>{selectedOrder?.address}</p>
+
+                        <div className="gift--preview-bottom">
+                            <span className="gift--preview-title"> Purchased For <TfiGift style={{ color: '#bb0505' }} /></span>
+                            <div className="gift--preview-flex">
+                                {/* <img src={`https://test.tajify.com/asset/users/${selectedOrder?.gifter?.image}` } /> */}
+                                <img src={`https://test.tajify.com/asset/others/${selectedOrder?.celebrantImage}`} />
+                                <div>
+                                    {/* <p>{selectedOrder?.gifter?.fullName || selectedOrder?.gifter?.username}</p> */}
+                                    <p>For {selectedOrder?.celebrant}</p>
+                                    <span className="gift--preview-amount"><IoPricetagOutline /><p>Amount: <span>{`₦${numberConverter(selectedOrder?.amount)}`}</span></p></span>
+                                    <span className="gift--preview-amount"><GiReceiveMoney /><p>Quantity: <span>{selectedOrder?.quantity}</span></p></span>
+                                </div>
+                            </div>
+                            <span className="gift--preview-title"> Delivery Location <IoLocationSharp style={{ color: '#bb0505' }} /></span>
+                            <p style={{ fontSize: '1.4rem' }}>{selectedOrder?.address}</p>
 
 
-                        <div className="gift--preview-actions">
-                            <button type='button' onClick={handleAcceptOrder}>Accept Order </button>
-                            <button type='button' onClick={handleRejectOrder}>Reject Order</button>
+                            <div className="gift--preview-actions">
+                                <button type='button' onClick={handleAcceptOrder}>Accept Order </button>
+                                <button type='button' onClick={handleRejectOrder}>Reject Order</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </MobileFullScreenModal>
+                </MobileFullScreenModal>
             )}
 
 

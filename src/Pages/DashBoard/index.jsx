@@ -37,7 +37,13 @@ const DashBoard = () => {
 
 	const [selectedGift, setSelectedGift] = useState(null);
 	const [showGiftingModal, setShowGiftingModal] = useState(false);
+
+	const [activeTab, setActiveTab] = useState('active');
 	const { user, token } = useAuthContext();
+
+	const activeGiftings = giftings?.filter(gifts => !gifts?.isDelivered);
+	const compltedGiftings = giftings?.filter(gifts => gifts?.isDelivered);
+	const mapGiftings = activeTab === 'active' ? activeGiftings : compltedGiftings;
 
 
 	function handleGiftPackage(gift) {
@@ -100,33 +106,40 @@ const DashBoard = () => {
 					{/* {isLoading && (<SkelentonFour />)} */}
 					{giftings.length > 0 ? (
 						<div className="dashboard--gifting">
-							<div>
-								<h3 className="section__heading" style={{ color: '#bb0505', margin: '0 0 3.2rem .8rem' }}>Gifts bought by you!</h3>
-								<div className="pagination--actions">
-									{/* <span><FaAngleLeft /></span>
-									<span><FaAngleRight /></span>
-									<span>Ongoing</span>
-									<span>Passed / Completed</span> */}
+							<span className='section--flex' style={{ marginBottom: '3.2rem', justifyContent: 'space-between' }}>
+								<h3 className="section__heading" style={{ color: '#bb0505', margin: '0' }}>Gifts bought by you!</h3>
+								<div className="wallet--tabs">
+									<span className={`wallet--tab ${activeTab === "active" && "tab--active"}`} onClick={() => { setActiveTab("active") }}>Active Gifting</span>
+									<span className={`wallet--tab ${activeTab === "completed" && "tab--active"}`} onClick={() => { setActiveTab("completed") }}>Completed Gifting</span>
 								</div>
-							</div>
-							<div className="giftPackage__cards">
-								{giftings.map(gifting => {
-									return (
-										<div className='giftPackage--figure' key={gifting._id} onClick={() => handleGiftPackage(gifting)}>
-											<img src={`https://test.tajify.com/asset/others/${gifting?.celebrantImage}`} alt={gifting?.celebrant} />
-											<span className="package--category">{gifting.purpose}</span>
-											<figcaption className="giftPackage--details">
-												<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
-												<p className="package--date">
-													{expectedDateFormatter(gifting.date)}
-												</p>
-												{/* <p className="package--description">{gifting.description}</p> */}
-												{/* <span className="package--info"></span> */}
-											</figcaption>
-										</div>
-									)
-								})}
-							</div> 
+							</span>
+								
+							<>
+								{mapGiftings.length === 0 && (
+									<div className='note--box' style={{ backgroundColor: 'transparent', padding: '0', height: 'auto' }}>
+										<p>No {activeTab} Gifting!</p>
+									</div>
+								)}
+							
+								<div className="giftPackage__cards">
+									{mapGiftings.map(gifting => {
+										return (
+											<div className='giftPackage--figure' key={gifting._id} onClick={() => handleGiftPackage(gifting)}>
+												<img src={`https://test.tajify.com/asset/others/${gifting?.celebrantImage}`} alt={gifting?.celebrant} />
+												<span className="package--category">{gifting.purpose}</span>
+												<figcaption className="giftPackage--details">
+													<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
+													<p className="package--date">
+														{expectedDateFormatter(gifting.date)}
+													</p>
+													{/* <p className="package--description">{gifting.description}</p> */}
+													{/* <span className="package--info"></span> */}
+												</figcaption>
+											</div>
+										)
+									})}
+								</div> 
+							</>
 
 							<Link to={'/dashboard/gifting'}>
 								<div className="dashnoard--add-btn" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><FiPlus /></div>
@@ -165,7 +178,7 @@ const DashBoard = () => {
 						<div className="gift--preview-bottom">
 							<span className="gift--preview-title"> Purchased Gift <TfiGift style={{ color: '#bb0505' }} /></span>
 							<div className="gift--preview-flex">
-								<img src={selectedGift?.gift?.image} />
+								<img src={`https://test.tajify.com/asset/products/${selectedGift?.gift?.image}`} />
 								<div>
 								<p>{selectedGift?.gift?.name}</p>
 								<span className="gift--preview-price"><IoPricetagOutline /><p>₦{numberConverter(selectedGift?.amount)}</p></span>

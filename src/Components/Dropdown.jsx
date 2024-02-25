@@ -11,7 +11,7 @@ import { GiChart } from "react-icons/gi";
 
 
 function Dropdown({ addHomeLink, setShowLoader }) {
-    const { user, logout } = useAuthContext();
+    const { user, logout, ordersCount } = useAuthContext();
     const navigate = useNavigate()
 
     function handleLogout() {
@@ -60,7 +60,14 @@ function Dropdown({ addHomeLink, setShowLoader }) {
 
                         <li onClick={() => navigate('/orders')}>
                             <CiShoppingBasket />
-                            <p>Orders</p>
+                            {ordersCount > 0 ? (
+                                <>
+                                    <p>Orders</p>
+                                    <NewTag title={`${ordersCount} pending..`} addNoStyle={true} />
+                                </>
+                            ) : (
+                                <p>Orders</p>
+                            )}
                         </li>
 
                         <li onClick={() => navigate('/product-stats')}>

@@ -227,7 +227,7 @@ function KycVer() {
                                         <div className="form--flex">
                                             <div className="form--item">
                                                 <label htmlFor="dob" className="form--label">Date of Birth</label>
-                                                <input type="date" id="dob" className='form--input' placeholder='Phone Number' max={'2010-01-01'} required value={dob} onChange={e => setDob(e.target.value)} />
+                                                <input type="date" id="dob" style={{ width: '100%' }} className='form--input' placeholder='D-O-B' max={'2010-01-01'} required value={dob} onChange={e => setDob(e.target.value)} />
                                             </div>
                                             <div className="form--item">
                                                 <label htmlFor="country" className="form--label">Country</label>

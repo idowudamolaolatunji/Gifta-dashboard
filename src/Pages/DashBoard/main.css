@@ -2620,6 +2620,7 @@ span */
 	border-radius: .8rem;
 	border: 1.4px solid #eee;
 	display: none;
+	text-transform: capitalize;
 }
 .wallet--tabs-mobile:focus {
 	outline: none;
@@ -2645,6 +2646,11 @@ span */
 .wallet--tab.tab--active {
     background-color: #bb0505;
     color: #fff;
+}
+.section--flex, .section--flex-two {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 
@@ -3256,6 +3262,7 @@ span */
 .gift--preview-name {
 	font-size: 2rem;
 	font-weight: 500;
+	text-align: center;
 }
 .gift--preview-date {
 	color: #bb0505;
@@ -3298,12 +3305,29 @@ span */
 	color: #bb0505;
 	/* text-align: center; */
 }
-.gift--preview-price {
+.gift--preview-price, .gift--preview-amount {
 	display: flex;
 	align-items: center;
 	font-size: 1.3rem;
 	color: #bb0505;
 	gap: .4rem;
+}
+.gift--preview-amount {
+	font-size: 1.8rem;
+	align-items: flex-end;
+}
+.gift--preview-amount p {
+	color: #555;
+	font-size: 1.3rem;
+
+	display: flex;
+	
+	gap: .6rem;
+}
+.gift--preview-amount p span {
+	font-size: 1.2rem;
+	font-weight: 600;
+	align-self: flex-end;
 }
 .gift--preview-actions {
 	display: flex;

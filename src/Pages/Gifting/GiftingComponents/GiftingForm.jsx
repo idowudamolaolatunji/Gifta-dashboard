@@ -11,6 +11,7 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import { TbArrowBackUp } from 'react-icons/tb';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { FaLongArrowAltLeft } from 'react-icons/fa';
+import { createPortal } from 'react-dom';
 
 
 function GiftingForm({ handleHideForm, handleCloseModal }) {
@@ -102,6 +103,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             setImagePreview(imageUrl);
         }
     };
+
 
     // EFFECT FUNCTION THAT FETCHES THE USER WALLET
     useEffect(function() {
@@ -208,12 +210,13 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             setIsLoading(true);
 
             const res = await fetch('https://test.tajify.com/api/giftings/create-gifting/', {
+            // const res = await fetch('http://localhost:3010/api/giftings/create-gifting/', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ productId: productInfo.id, celebrant, purpose: productInfo.purpose, description, amount: productInfo.totalPrice, country, state, cityRegion, address, date }),
+                body: JSON.stringify({ productId: productInfo.id, celebrant, purpose: productInfo.purpose, description, amount: productInfo.totalPrice, country, state, cityRegion, address, date, quantity: productInfo.quantity }),
             });
             console.log(res)
             if(!res.ok) throw new Error('Something went wrong!');
@@ -227,7 +230,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             // IMAGE UPLOAD
             const formData = new FormData();
             const id = data.data.gifting._id
-            console.log(id);
+            // console.log(id);
             handleUploadImg(formData, id);
 
             setIsSuccess(true);
@@ -278,10 +281,12 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
   return (
       <>
 
-        {isLoading && (
-            <div className='gifting--loader'>
-                <img src={GiftLoader} alt='loader' />
-            </div>
+        {createPortal(
+            isLoading && (
+                <div className='gifting--loader'>
+                    <img src={GiftLoader} alt='loader' />
+                </div>
+            ), document.body
         )}
 
         <form className='gifting--form form' onSubmit={handleForm}>
@@ -567,7 +572,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 {(formTab === 1) && (<span onClick={() => setFormTab(2)}><FaAngleRight /> Next</span>)}
             </div>
         </form>
-
 
         {isSuccess || isError && (
             <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>

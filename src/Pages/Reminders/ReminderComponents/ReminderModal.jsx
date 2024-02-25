@@ -196,11 +196,11 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             <div className="reminder--flex-3" style={toggle === 'just-remind' ? { alignItems: 'center'} : {}}>
                 <div className="form--item">
                     <label htmlFor="form--date" className="form--label">Date</label>
-                    <input type="date" id="form--date" className='form--input' placeholder='Reminder Date..' required value={date} min={new Date().toISOString().split('T')[0]} onChange={e => setDate(e.target.value)} />
+                    <input type="date" id="form--date" className='form--input' placeholder={date ? '' : 'Reminder Date'} required value={date} min={new Date().toISOString().split('T')[0]} onChange={e => setDate(e.target.value)} />
                 </div>
                 <div className="form--item">
                     <label htmlFor="form--clock" className="form--label">Time</label>
-                    <input type="time" id="form--clock" className='form--input' placeholder='Reminder Time..' value={time} onChange={e => setTime(e.target.value)} required />
+                    <input type="time" id="form--clock" className='form--input' placeholder={time ? '' : '00:00'} value={time} onChange={e => setTime(e.target.value)} required />
                 </div>
                 <div className="form--item form--switches">
                     {toggle === 'just-remind' && (

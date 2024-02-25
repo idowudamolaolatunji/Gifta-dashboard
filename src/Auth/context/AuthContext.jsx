@@ -14,11 +14,18 @@ export const AuthProvider = ({ children }) => {
 	///////////////////////////////////////////////////////////
 	const [notifications, setNotifications] = useState([]);
 	const [notificationCount, setNoticationCount] = useState(0);
+	const [orders, setOrders] = useState([]);
+	const [ordersCount, setOrdersCount] = useState(0);
 
 	function handleSetNotification(notifications, notificationCount) {
 	// function handleSetNotification(unreadNotifications, unreadCount, readNotification, read) {
 		setNotifications(notifications);
 		setNoticationCount(notificationCount)
+	}
+
+	function handleSetOrder(orders, ordersCount) {
+		setOrders(orders);
+		setOrdersCount(ordersCount);
 	}
 
 	// FUNCTION TO REFETCH
@@ -92,6 +99,31 @@ export const AuthProvider = ({ children }) => {
 		}
 	}, [user, token]);
 
+	useEffect(function() {
+		async function handleFetchOrder() {
+			const res = await fetch('https://test.tajify.com/api/orders', {
+                method: 'GET',
+                headers: {
+                    "Content-Type": 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+			if(!res.ok) throw new Error('Something went wrong!');
+
+            const data = await res.json();
+            if(data?.status !== "success") {
+                throw new Error(data.message);
+            }
+			const count = data?.data?.orders?.filter(order => !order.isDelivered && !order.isRejectedOrder );
+			handleSetOrder(data.data.orders, count.length);
+		}
+		if(user && user.role === 'vendor') {
+			handleFetchOrder();
+			// const intervalId = setInterval(handleFetchOrder, 3600000); // 3,600,000 millsec === 1hr
+			// return () => clearInterval(intervalId);
+		}
+	}, [user, token]);
+
 
 
 	useEffect(() => {
@@ -113,7 +145,11 @@ export const AuthProvider = ({ children }) => {
 		////////////////////
 		handleSetNotification,
 		notifications,
-		notificationCount
+		notificationCount,
+		////////////////////
+		handleSetOrder,
+		orders,
+		ordersCount
 	};
 
 	return <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>;

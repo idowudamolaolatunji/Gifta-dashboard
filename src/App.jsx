@@ -63,19 +63,18 @@ function App() {
                     <Route path="/product-catalogue" element={<ProductCatalogue />}></Route>
                     <Route path="/orders" element={<Orders />}></Route>
                     <Route path="/product-stats" element={<ProductStats />}></Route>
+                    <Route path="/plans" element={<SubscriptionPlan />}></Route>
                 </Route>
                 
 
                 <Route path="/login" element={<Login />}></Route>
                 <Route path="/signup" element={<Signup />}></Route>
                 <Route path="/signup/:verificationType" element={<Signup />}></Route>
-                <Route path="/invite/:inviteCode" element={<Signup />}></Route>
+                <Route path="/invite/:inviteCode" element={<Signup />}></Route>                
                 <Route path="/shared/:shareableUrl" element={<SharedWishlist />}></Route>
                 <Route path="/terms-of-use" element={<TermsOfUse />}></Route>
                 <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
-                <Route path="/plans" element={<SubscriptionPlan />}></Route>
                 
-
             </Routes>
         </BrowserRouter>
     )

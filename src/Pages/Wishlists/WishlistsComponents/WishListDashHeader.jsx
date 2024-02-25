@@ -117,6 +117,7 @@ function WishListDashHeader() {
 							<TfiGift className="tab-icon" />
 							<p>Gifting</p>
 						</Link>
+						
 						<Link className="tab" to="/dashboard/digital-products">
 							<LiaDigitalTachographSolid className="tab-icon" />
 							<p>DigitalProducts</p>
@@ -132,7 +133,7 @@ function WishListDashHeader() {
 							<p>Wishlists</p>
 						</Link>
 
-						<Link className="tab" to="/dashboard/marketplace/birthday">
+						<Link className="tab" to="/dashboard/marketplace/anniversary">
 							<BsShop className="tab-icon" />
 							<p>MarketPlace</p>
 						</Link>

@@ -1,8 +1,8 @@
 import React from 'react'
 
-function NewTag() {
+function NewTag({ title='New', addNoStyle }) {
   return (
-    <span className='new--tag'>New</span>
+    <span className='new--tag' style={ addNoStyle ? { animation: 'none' } : {} }>{title}</span>
   )
 }
 

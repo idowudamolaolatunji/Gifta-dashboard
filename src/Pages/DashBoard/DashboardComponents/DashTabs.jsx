@@ -64,7 +64,7 @@ const DashTabs = () => {
 					</Link>
 
 					{/* {user.role === 'user' && ( */}
-						<Link className={`tab ${location.pathname.includes('/dashboard/marketplace') ? 'active-tab' : ''}`} to="/dashboard/marketplace/birthday">
+						<Link className={`tab ${location.pathname.includes('/dashboard/marketplace') ? 'active-tab' : ''}`} to="/dashboard/marketplace/anniversary">
 							<BsShop className="tab-icon" />
 							<p>MarketPlace</p>
 						</Link>

@@ -30,6 +30,7 @@ function ProductCatalogue() {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(true)
     const [categories, setCategories] = useState([]);
+    const [activeTab, setActiveTab] = useState('all')
 
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -54,6 +55,10 @@ function ProductCatalogue() {
 
     const { user, token } = useAuthContext();
     const navigate = useNavigate();
+
+    const filteredCatalogueCategory = activeTab === 'all' ? products : products?.filter(product => product.category === `${categories.forEach(cat => cat.categoryName)}`);
+
+    console.log(filteredCatalogueCategory)
 
 
     const handleImageChange = (event) => {
@@ -256,7 +261,24 @@ function ProductCatalogue() {
                     <div className="section--head">
                         <span onClick={() => navigate(-1)} className='wishlist--back-btn'>Back</span>
 
-                        <p className='section__heading' style={{ fontSize: '2.8rem', fontWeight: '500' }}>My Shop</p>
+                        <span className='section--flex-two' style={{ marginBottom: '2rem' }}>
+                            <p className='section__heading' style={{ margin: '0', fontSize: '2.8rem', fontWeight: '500' }}>My Shop</p>
+                            <div className="wallet--tabs">
+                                <>
+                                <span className={`wallet--tab ${activeTab === "all" && "tab--active"}`} onClick={() => { setActiveTab("all") }}>All</span>
+                                {categories.map(category => (
+                                    <span className={`wallet--tab ${activeTab === `${category?.categoryName}` && "tab--active"}`} onClick={() => { setActiveTab(`${category.categoryName}`) }}>{category.categoryName}</span>
+                                ))}
+                                </>
+                            </div>
+
+                            <select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
+                                    <option value="all">All</option>
+                                    {categories.map(category => (
+                                        <option value={category.categoryName}>{category.categoryName}</option>
+                                    ))}
+                                </select>
+                        </span>
                     </div>
 
 
@@ -274,9 +296,9 @@ function ProductCatalogue() {
                     )}
 
 
-                    {(products && products.length > 0) && (
+                    {(products && filteredCatalogueCategory.length > 0) ? (
                         <div className='page--grid'>
-                            {products.map((product) =>
+                            {filteredCatalogueCategory.map((product) =>
                                 <figure className='product--figure' style={{ position: 'relative' }} key={product._id} onClick={() => handleProduct(product)}>
                                     <img className='product--img' src={product.image.startsWith('https') ? product.image : `https://test.tajify.com/asset/products/${product.image}`} alt={product.name} />
                                     <span className="package--category">{product.category}</span>
@@ -289,6 +311,10 @@ function ProductCatalogue() {
                                     </figcaption>
                                 </figure>
                             )}
+                        </div>
+                    ) : (
+                        <div className='note--box' style={{ fontSize: '1.4rem', textAlign: 'center' }}>
+                            <p>You don't have any {activeTab} products!</p>
                         </div>
                     )}
 

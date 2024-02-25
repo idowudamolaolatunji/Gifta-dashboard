@@ -37,7 +37,8 @@ function Reminders() {
 	const [isLoadingImg, setIsLoadingImg] = useState(false);
 	const [reminders, setReminders] = useState([]);
 	const [helpReset, setHelpReset] = useState(false);
-	const [reminderId, setReminderId] = useState(null)
+	const [reminderId, setReminderId] = useState(null);
+	// const [selectedReminder, setSelectedReminder] = useState({});
 
 	const [isError, setIsError] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
@@ -46,9 +47,13 @@ function Reminders() {
 	const [date, setDate] = useState('');
 	const [time, setTime] = useState('');
 
+	const [activeTab, setActiveTab] = useState('pending')
+
 	const { token } = useAuthContext();
 
-	const remainingReminder = reminders.filter(reminder => reminder.isCompleted === false);
+	const remainingReminder = reminders.filter(reminder => !reminder.isCompleted);
+	const completedReminder = reminders.filter(reminder => reminder.isCompleted);
+	const mapReminder = activeTab === 'pending' ? remainingReminder : completedReminder
 
 	function handleResetId() {
 		setReminderId(null)
@@ -58,6 +63,7 @@ function Reminders() {
 	}
 	function handleCloseModal(type) {
 		handleResetId();
+		// setSelectedReminder({})
 		if(type === 'complete') {
 			setShowCompleteModal(false);
 		}
@@ -74,10 +80,10 @@ function Reminders() {
 		setShowDeleteModal(true);
 		setReminderId(id);
 	}
-	function handlePostponeModal(id) {
+	function handlePostponeModal(item) {
 		handleResetId();
 		setShowPostponeModal(true);
-		setReminderId(id);
+		setReminderId(item._id);
 	}
 	function handleCompleteModal(id) {
 		handleResetId();
@@ -178,14 +184,21 @@ function Reminders() {
 		try {
 			e.preventDefault();
 			setIsLoadingImg(true);
+			setHelpReset(false);
 			handleReset();
+			console.log(date, time)
 
-			const res = await fetch(`https://test.tajify.com/api/reminders/postpone-reminder/${reminderId}`, {
+			// const res = await fetch(`https://test.tajify.com/api/reminders/postpone-reminder/${reminderId}`, {
+			const res = await fetch(`https://test.tajify.com/api/reminders/postpone-reminder/${date}/${time}/${reminderId}`, {
 				method: 'PATCH',
 				headers: {
 					"Comtent-Type": "application/json",
 					Authorization: `Bearer ${token}`,
-				}
+				},
+				// body: JSON.stringify({
+				// 	reminderDate: date,
+                //     reminderTime: time
+				// })
 			});
 			console.log(res);
 			if (!res.ok) throw new Error('Something went wrong!');
@@ -270,10 +283,21 @@ function Reminders() {
 
 					{(reminders && remainingReminder.length > 0) ? (
 						<>
-							<h3 className="section__heading" style={{ marginTop: '-1rem', marginBottom: '2.6rem', fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
+							<span className='section--flex' style={{ marginBottom: '2.6rem', }}>
+								<h3 className="section__heading" style={{ marginTop: '-1rem',  fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
+								<div className="wallet--tabs">
+									<span className={`wallet--tab ${activeTab === "pending" && "tab--active"}`} onClick={() => { setActiveTab("pending") }}>Pending</span>
+									<span className={`wallet--tab ${activeTab === "completed" && "tab--active"}`} onClick={() => { setActiveTab("completed") }}>Completed</span>
+								</div>
+							</span>
+							{mapReminder.length === 0 && (
+								<div className='note--box'>
+									<p>No {activeTab} Gifting!</p>
+								</div>
+							)}
 							<div className="reminder__grid">
 								{/* <button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button> */}
-								{remainingReminder?.map(reminder => (
+								{mapReminder?.map(reminder => (
 									<figure key={reminder._id} className="reminder--figure" style={{ backgroundImage: `linear-gradient(rgba(225, 225, 225, .8), rgba(225, 225, 225, 0.8)), url(https://test.tajify.com/asset/others/${reminder?.image})`}} >
 										<p className="reminder--text">{reminder.title}.</p>
 										<span className="figure--bottom">
@@ -286,7 +310,7 @@ function Reminders() {
 											</span>
 											<span className="reminder--tasks">
 												<span onClick={() => handleCompleteModal(reminder._id)}>Mark As Completed</span>
-												<span onClick={() => handlePostponeModal(reminder._id)}>Postpone</span>
+												<span onClick={() => handlePostponeModal(reminder)}>Postpone</span>
 											</span>
 										</span>
 									</figure>
@@ -331,11 +355,11 @@ function Reminders() {
 						<div className="reminder--flex-2 postpone--flex">
 							<div className="form--item">
 								<label htmlFor="form--date" className="form--label">Date</label>
-								<input type="date" id="form--date" className='form--input' required placeholder='Reminder Date..' value={date} min={new Date().toISOString().split('T')[0]} onChange={e => setDate(e.target.value)} />
+								<input type="date" id="form--date" className='form--input' required placeholder={date ? '' : 'Reminder Date'} value={date} min={new Date().toISOString().split('T')[0]} onChange={e => setDate(e.target.value)} />
 							</div>
 							<div className="form--item">
 								<label htmlFor="form--clock" className="form--label">Time</label>
-								<input type="time" id="form--clock" className='form--input' value={time} placeholder='Reminder Time..' onChange={e => setTime(e.target.value)} required />
+								<input type="time" id="form--clock" className='form--input' value={time} placeholder={time ? '' : '00:00'} onChange={e => setTime(e.target.value)} required />
 							</div>
 						</div>
 						<div className="reminder--actions" style={{ marginTop: '1.4rem' }}>

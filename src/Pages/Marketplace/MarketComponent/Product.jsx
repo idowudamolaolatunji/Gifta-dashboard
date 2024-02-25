@@ -14,8 +14,10 @@ function Product({ product, handleCloseModal }) {
     const [showGiftingForm, setShowGiftingForm] = useState('');
     const [currImage, setCurrImage] = useState(`https://test.tajify.com/asset/products/${product.image}`);
     const [quantity, setQuantity] = useState(1);
+    console.log(quantity, product.price);
     const amount = Number(quantity * product.price);
-
+    console.log(amount);
+    
     const productInfo = {
         name: product.name,
         id: product._id,

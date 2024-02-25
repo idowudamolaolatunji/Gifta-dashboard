@@ -61,6 +61,8 @@ function Wishlists() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
 	const [showWishListEditModal, setShowWishListEditModal] = useState(false);
 
+	const [activeTab, setActiveTab] = useState('')
+
 	const { user, token } = useAuthContext();
 	const navigate = useNavigate();
 
@@ -248,7 +250,13 @@ function Wishlists() {
 
 					{(wishLists && wishLists.length > 0) ? (
 						<>
-							<h3 className="section__heading heading--flex" style={{ marginBottom: '1rem', fontSize: '2.2rem', lineHeight: '1' }}>My wishlists <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><CiViewList /></span></h3>
+							<span className='section--flex'>
+								<h3 className="section__heading heading--flex" style={{ fontSize: '2.2rem', lineHeight: '1' }}>My wishlists <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><CiViewList /></span></h3>
+								<select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
+									{/* loop categories here */}
+                                    <option value="subscription">Subscription</option>
+                                </select>
+							</span>
 							<div className='wishlist--grid'>
 								{/* <button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button> */}
 								{wishLists.map(wishList => (
