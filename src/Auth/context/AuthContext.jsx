@@ -119,8 +119,8 @@ export const AuthProvider = ({ children }) => {
 		}
 		if(user && user.role === 'vendor') {
 			handleFetchOrder();
-			// const intervalId = setInterval(handleFetchOrder, 3600000); // 3,600,000 millsec === 1hr
-			// return () => clearInterval(intervalId);
+			const intervalId = setInterval(handleFetchOrder, 3600000); // 3,600,000 millsec === 1hr
+			return () => clearInterval(intervalId);
 		}
 	}, [user, token]);
 

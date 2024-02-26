@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
-function DashboardModal({ setShowDashboardModal, title, customStyle, children, overLayZIndex }) {
+function DashboardModal({ setShowDashboardModal, title, customStyle, children, overLayZIndex, top }) {
 
 	function handleModalClose() {
 		setShowDashboardModal(false);

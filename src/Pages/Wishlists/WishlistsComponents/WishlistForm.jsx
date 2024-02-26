@@ -65,16 +65,13 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
             setHelpReset(false);
 
             if(!itemData && !imageFile) {
-                handleFailure('Image field cannot be left empty');
-                return;
+                throw new Error('Image field cannot be left empty');
             }
             if(!title) {
-                handleFailure('Title field cannot be left empty');
-                return;
+                throw new Error('Title field cannot be left empty');
             }
             if(!category) {
-                handleFailure('Category field cannot be left empty');
-                return;
+                throw new Error('Category field cannot be left empty');
             }
 
             setIsLoading(true);

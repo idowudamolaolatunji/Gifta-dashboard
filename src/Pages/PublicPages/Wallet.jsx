@@ -305,6 +305,13 @@ function Wallet() {
                                     <span>{numberConverter(wallet?.walletBalance || 0)}</span>
                                 </span>
 
+                                {(user?.role === 'vendor') && (
+                                    <span className='wallet--user-pending-balance'>
+                                        <span>Pending Balance: </span>
+                                        <span>₦{numberConverter(wallet?.pendingWalletBalance || 0)}</span>
+                                    </span>
+                                )}
+
                                 <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{numberConverter(wallet?.pointBalance || 0)} G-points <GoInfo className='wallet--user-info-icon' onMouseOver={() => setShowPointsInfo(true)} onMouseLeave={() => setShowPointsInfo(false)} onClick={() => setShowPointsInfo(true)} style={ showPointsInfo ? { color: '#bb0505' } : {} } />
                                 
                                     {showPointsInfo && (

@@ -609,6 +609,7 @@
 	font-size: 1.5rem;
 	font-weight: 500;
 	margin-bottom: 1rem;
+	text-align: left;
 }
 .product--vendor,
 .product--vendor .vendor--main {
@@ -2540,6 +2541,13 @@ span.validity::after {
 	font-size: 2.4rem;
 	font-weight: 600;
 	/* margin-bottom: 1rem; */
+}
+.wallet--user-pending-balance {
+	font-size: 1rem;
+}
+.wallet--user-pending-balance span:nth-child(2) {
+	color: #bb0505;
+	font-weight: 500;
 }
 .wallet--user-point {
 	margin-bottom: 1rem;

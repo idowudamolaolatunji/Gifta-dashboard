@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi';
 import { useAuthContext } from '../../Auth/context/AuthContext';
-import { dateConverter, numberConverter } from '../../utils/helper';
+import { dateConverter, numberConverter, truncate } from '../../utils/helper';
 import DashboardModal from '../../Components/Modal';
 import { MdDelete, MdOutlineAddAPhoto, MdOutlineEditNote } from 'react-icons/md';
 import Header from './Components/Header';
@@ -18,6 +18,7 @@ import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
+import { createPortal } from 'react-dom';
 
 
 const customStyle = {
@@ -26,6 +27,13 @@ const customStyle = {
     zIndex: 3500
 }
 
+const customStyleModal = {
+	minHeight: "auto",
+	maxWidth: "44rem",
+	width: "44rem",
+    zIndex: 30000
+};
+
 function ProductCatalogue() {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(true)
@@ -33,9 +41,10 @@ function ProductCatalogue() {
     const [activeTab, setActiveTab] = useState('all')
 
     const [products, setProducts] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState(null);
     const [showProductModal, setShowProductModal] = useState(false);
-
+    
+    const [selectedProduct, setSelectedProduct] = useState({});
+    
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [name, setName] = useState('');
@@ -56,7 +65,12 @@ function ProductCatalogue() {
     const { user, token } = useAuthContext();
     const navigate = useNavigate();
 
-    const filteredCatalogueCategory = activeTab === 'all' ? products : products?.filter(product => product.category === `${categories.forEach(cat => cat.categoryName)}`);
+    // const filteredCatalogueCategory = activeTab === 'all' ? products : activeTab === `${categories.forEach(cat => cat.categoryName)}` && products?.filter(product => product.category === `${categories.forEach(cat => cat.categoryName)}`);
+
+    const filteredCatalogueCategory = activeTab === 'all' ? products 
+    : products?.filter(product => {
+        return categories.some(cat => cat.categoryName === activeTab && product.category === cat.categoryName);
+    });
 
     console.log(filteredCatalogueCategory)
 
@@ -160,20 +174,62 @@ function ProductCatalogue() {
     }, [helpReset]);
 
 
+    async function handleDeleteProduct() {
+        try {
+            handleReset();
+            setHelpReset(false)
+            setIsLoading(true);
+
+            // const res = await fetch(`http://localhost:3010/api/gift-products/delete-my-product/${selectedProduct?._id}`, {
+            const res = await fetch(`https://test.tajify.com/api/gift-products/delete-my-product/${selectedProduct?._id}`, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+            });
+
+            if(!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            if(data?.status !== "success") throw new Error(data.message);
+
+            setIsSuccess(true);
+            setMessage(data.message);
+            setTimeout(function () {
+                setShowDeleteModal(false);
+                setShowProductInfoModal(false)
+                setIsSuccess(false);
+                setMessage("");
+                setHelpReset(true);
+            }, 2000);
+
+        } catch(err) {
+            handleFailure(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     async function handleUploadProduct(e, type) {
         let method, url;
         if (type === 'new') {
             method = 'POST';
             url = 'https://test.tajify.com/api/gift-products/create-product';
-        } else {
+            console.log(type)
+        } 
+        if(type === 'edit') {
             method = 'PATCH';
-            url = `https://test.tajify.com/api/gift-products/update-my-product/${selectedProduct._id}`;
+            // url = `http://localhost:3010/api/gift-products/update-my-product/${selectedProduct?._id}`;
+            url = `https://test.tajify.com/api/gift-products/update-my-product/${selectedProduct?._id}`;
+            console.log(type)
         }
         try {
             e.preventDefault();
             handleReset();
             setHelpReset(false);
             setIsLoading(true);
+
+            if(type === 'new' && !imageFile) throw new Error('Image field cannot be left empty');
 
             const res = await fetch(url, {
                 method,
@@ -195,16 +251,17 @@ function ProductCatalogue() {
             const formData = new FormData();
             const id = data.data.product._id
             if (imageFile) {
-                handleUploadImg(formData, id)
+                handleUploadImg(formData, id);
             }
 
             setIsSuccess(true);
             setMessage(data.message);
             setTimeout(function () {
+                type === 'new' ? setShowProductModal(false) : setShowEditModal(false);
+                type === 'edit' && setShowProductInfoModal(false)
                 setIsSuccess(false);
                 setMessage("");
                 setHelpReset(true)
-                setShowProductModal(false);
             }, 2000);
 
         } catch (err) {
@@ -213,7 +270,6 @@ function ProductCatalogue() {
             setIsLoading(false)
         }
     }
-
 
     async function handleUploadImg(formData, id) {
         try {
@@ -241,8 +297,26 @@ function ProductCatalogue() {
 		document.title = 'Gifta | My Product Catalogue';
 
         window.scrollTo(0, 0)
-	}, [])
+	}, []);
 
+    useEffect(function() {
+        if(selectedProduct && showEditModal) {
+            setPrice(selectedProduct?.price);
+            setDescription(selectedProduct?.description);
+            setAvail(selectedProduct?.stockAvail);
+            setCategory(selectedProduct?.category);
+            setImagePreview(`https://test.tajify.com/asset/products/${selectedProduct?.image}`);
+            setName(selectedProduct?.name)
+        } else {
+            setPrice('');
+            setDescription('');
+            setAvail('');
+            setCategory('');
+            setImagePreview('');
+            setName('')
+
+        }
+    }, [selectedProduct, showEditModal]);
 
 
     return (
@@ -303,7 +377,7 @@ function ProductCatalogue() {
                                     <img className='product--img' src={product.image.startsWith('https') ? product.image : `https://test.tajify.com/asset/products/${product.image}`} alt={product.name} />
                                     <span className="package--category">{product.category}</span>
                                     <figcaption className='product--details'>
-                                        <h4 className='product--heading'>{product.name}</h4>
+                                        <h4 className='product--heading'>{truncate(product.name, 30)}</h4>
                                         <div className='product--infos'>
                                             <span className='product--price'>₦{numberConverter(product.price)}</span>
                                             <span className='product--date'>{dateConverter(product.createdAt)}</span>
@@ -338,11 +412,11 @@ function ProductCatalogue() {
                     <form className='form product--upload-form' onSubmit={(e) => handleUploadProduct(e, showEditModal ? 'edit' : 'new')}>
                         <div className="form--item">
                             <label htmlFor="" className="form--label">Product Name</label>
-                            <input type="text" required className="form--input" placeholder='Enter your product name' value={showEditModal ? selectedProduct?.name : name} onChange={e => setName(e.target.value)} />
+                            <input type="text" required className="form--input" placeholder='Enter your product name' value={name} onChange={e => setName(e.target.value)} />
                         </div>
                         <div className='form--item form-image-card'>
                             {!imagePreview && <p className='image-text'>Upload Product Image</p>}
-                            <input type='file' id='form-image-input' name='image' required onChange={handleImageChange} accept="image/*" />
+                            <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
                             <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} style={{ height: '15rem' }} id='form-image-label'>
                                 <span>
                                     <MdOutlineAddAPhoto />
@@ -354,13 +428,13 @@ function ProductCatalogue() {
 
                         <div className="form--item">
                             <label htmlFor="description" className="form--label">Product Description (Up to 400 Characters)</label>
-                            <ReactTextareaAutosize id='description' className='form__textarea' defaultValue="Enter a description" value={showEditModal ? selectedProduct?.description : description} onChange={e => setDescription(e.target.value)} required maxLength={'400'} placeholder='Enter product description' />
+                            <ReactTextareaAutosize id='description' className='form__textarea' defaultValue="" value={description} onChange={e => setDescription(e.target.value)} required maxLength={'400'} placeholder='Enter a description' />
                         </div>
 
                         <div className="form--grid-prod">
                             <div className="form--item">
                                 <label htmlFor="category" className="form--label">Product Category</label>
-                                <select id="category" required value={showEditModal ? selectedProduct?.category : category} onChange={e => setCategory(e.target.value)} className="form--input form--select">
+                                <select id="category" required value={category} onChange={e => setCategory(e.target.value)} className="form--input form--select">
                                     <option hidden selected>-- Select a category --</option>
                                     {categories.map(category => (
                                         <option value={category.categoryName}>{category.categoryName}</option>
@@ -374,7 +448,7 @@ function ProductCatalogue() {
                                         className="form--input"
                                         id="amount"
                                         placeholder='Price'
-                                        value={showEditModal ? selectedProduct?.price : price}
+                                        value={price}
                                         defaultValue={price}
                                         onValueChange={(value, _) => setPrice(value)}
                                         required
@@ -383,24 +457,24 @@ function ProductCatalogue() {
                                 </div>
                                 <div className="form--item">
                                     <label htmlFor="stockAvail" className="form--label">Stock Avail</label>
-                                    <input type="number" placeholder='Avail.' id='stockAvail' className="form--input" value={showEditModal ? selectedProduct?.stockAvail : avail} onChange={e => setAvail(e.target.value)} />
+                                    <input type="number" placeholder='Avail.' id='stockAvail' className="form--input" value={avail} onChange={e => setAvail(e.target.value)} />
                                 </div>
                             </div>
                         </div>
 
                         <div className="form--item">
-                            <button type="submit" style={{ marginLeft: 'auto' }}>Create Product</button>
+                            <button type="submit" style={{ marginLeft: 'auto' }}>{showEditModal ? 'Edit' : 'Create'} Product</button>
                         </div>
                     </form>
                 </DashboardModal>
             )}
 
             {showProductInfoModal && (
-                <MobileFullScreenModal title={selectedProduct?.name} setCloseModal={setShowProductInfoModal}>
+                <MobileFullScreenModal title={truncate(selectedProduct?.name, 28)} setCloseModal={setShowProductInfoModal}>
                     <div className="gift--preview-top">
                         <img src={selectedProduct?.image.startsWith('https') ? selectedProduct.image : `https://test.tajify.com/asset/products/${selectedProduct.image}`} />
                         <div className="gift--preview-details">
-                            <p className="gift--preview-name">For {selectedProduct?.name}</p>
+                            <p className="gift--preview-name" style={{ textTransform: 'capitalize' }}>{selectedProduct?.category} product</p>
                             <p className="gift--preview-date">
                                 <CiCalendar />
                                 {dateConverter(selectedProduct?.createdAt)}
@@ -425,17 +499,29 @@ function ProductCatalogue() {
                 </MobileFullScreenModal>
             )}
 
-
-            {(isError || isSuccess) && (
-                <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
-                    {isSuccess ? (
-                        <AiFillCheckCircle className="alert--icon" />
-                    ) : isError && (
-                        <AiFillExclamationCircle className="alert--icon" />
-                    )}
-                    <p>{message}</p>
-                </Alert>
+            {showDeleteModal && (
+                <DashboardModal customStyle={customStyleModal} title='Delete this Product' setShowDashboardModal={setShowDeleteModal} overLayZIndex={true} >
+                <p className='modal--text-2'>Are you sure you want to delete this Order?</p>
+                <span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
+                <div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
+                    <button type='button' className='cancel--btn' onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                    <button type='submit' className='set--btn' onClick={handleDeleteProduct}>Delete Product</button>
+                </div>
+            </DashboardModal>
             )}
+
+
+            {createPortal(
+                (isError || isSuccess) && (
+                    <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                        {isSuccess ? (
+                            <AiFillCheckCircle className="alert--icon" />
+                        ) : isError && (
+                            <AiFillExclamationCircle className="alert--icon" />
+                        )}
+                        <p>{message}</p>
+                    </Alert>
+            ), document.body )}
         </>
     )
 }

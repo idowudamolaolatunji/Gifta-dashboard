@@ -105,6 +105,16 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     };
 
 
+    // FUNCTION THAT MAKES THE DECISION BASED ON WHAT TO DO!
+    function handleForm(e) {
+        e.preventDefault();
+        if(walletPay) {
+            handleWalletPayment();
+            return;
+        }
+    }
+
+
     // EFFECT FUNCTION THAT FETCHES THE USER WALLET
     useEffect(function() {
         async function getWallet() {
@@ -125,7 +135,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         }
         getWallet();
     }, []);
-
 
     // MAKE PAYMENT FROM CARD / PAYSTATCK
     async function handlePaystackPayment(reference) {
@@ -161,7 +170,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             setIsLoading(false)
         }
     }
-
 
     // MAKE PAYMENT FROM WALLET BALANCE
     async function handleWalletPayment() {
@@ -201,7 +209,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             setIsLoading(false);
         }
     }
-
 
     // FUNCTION THAT HANDLES THE SUBMITTING OF THE GIFTING PACKAGE
     async function handleFormSubmit() {
@@ -247,7 +254,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         }
     }
 
-
+    // UPLOAD NECESSARY IMAGE(S)
     async function handleUploadImg(formData, id) {
         try {
             formData.append('image', imageFile);
@@ -268,14 +275,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     }
 
 
-    // FUNCTION THAT MAKES THE DECISION BASED ON WHAT TO DO!
-    function handleForm(e) {
-        e.preventDefault();
-        if(walletPay) {
-            handleWalletPayment();
-            return;
-        }
-    }
+   
    
 
   return (

@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { GiReceiveMoney } from 'react-icons/gi';
 import Alert from '../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import OTPInput from 'react-otp-input';
+import GiftLoader from '../../Assets/images/gifta-loader.gif';
 
 
 const customStyles = {
@@ -31,6 +33,29 @@ const customStyles = {
         },
     },
 };
+
+const customStyleModal = {
+	minHeight: "auto",
+	maxWidth: "44rem",
+	width: "44rem",
+    zIndex: 30000
+};
+
+const containerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '2.4rem'
+}
+
+const inputStyle = {
+    width: '5.2rem',
+    height: '5.2rem',
+    fontSize: '2rem',
+    border: '1.6px solid #ccc',
+    borderRadius: '.4rem',
+    color: '#444',
+}
 
 
 const columns = [
@@ -51,6 +76,18 @@ const columns = [
         width: '250px'
     },
     {
+        name: "Delivery Status",
+        selector: (row) => (
+            <span className={`status status--${!row.isDelivered ? "pending" : "success"}`}>
+                <p>{row.isDelivered ? 'Delivered' : 'Pending'}</p>
+            </span>
+        ),
+    },
+    {
+        name: "Delivery Date",
+        selector: (row) => expectedDateFormatter(row.deliveryDate),
+    },
+    {
         name: "Gifter Email",
         selector: (row) => row.gifter?.email,
         width: '250px'
@@ -67,18 +104,6 @@ const columns = [
         name: "Order Date",
         selector: (row) => dateConverter(row.createdAt),
     },
-    {
-        name: "Delivery Date",
-        selector: (row) => expectedDateFormatter(row.deliveryDate),
-    },
-    {
-        name: "Delivery Status",
-        selector: (row) => (
-            <span className={`status status--${!row.isDelivered ? "pending" : "success"}`}>
-                <p>{row.isDelivered ? 'Delivered' : 'Pending'}</p>
-            </span>
-        ),
-    },
 ];
 
 const Spinner = () => <p style={{ padding: '2rem', fontSize: '1.8rem', fontWeight: '500' }}>Loading...</p>
@@ -89,18 +114,23 @@ function Message() {
 
 function Order() {
     const [isLoading, setIsLoading] = useState(false);
-    // const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState({});
     const [showOrderModal, setShowOrderModal] = useState(false);
 
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
-    // const [helpReset, setHelpReset] = useState(false);
+    const [helpReset, setHelpReset] = useState(false);
 
+    const [orderId, setOrderId] = useState(null);
+    const [showAcceptModal, setShowAcceptModal] = useState(false);
+    const [showRejectModal, setShowRejectModal] = useState(false);
     const [activeTab, setActiveTab] = useState('all');
 
-    const { user, token, orders, handleSetOrder } = useAuthContext();
+    const [deliveryCode, setDeliveryCode] = useState('');
+
+    const { user, token, handleSetOrder } = useAuthContext();
     const navigate = useNavigate();
 
     const all = orders;
@@ -124,35 +154,44 @@ function Order() {
         }, 3000);
     }
 
-    // async function handleOrders() {
-    //     try {
-    //         setIsLoading(true)
-    //         const res = await fetch('https://test.tajify.com/api/orders', {
-    //             method: 'GET',
-    //             headers: {
-    //                 "Content-Type": 'application/json',
-    //                 Authorization: `Bearer ${token}`
-    //             }
-    //         });
+    async function handleOrders() {
+        try {
+            setIsLoading(true)
+            const res = await fetch('https://test.tajify.com/api/orders', {
+                method: 'GET',
+                headers: {
+                    "Content-Type": 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
-    //         if(!res.ok) throw new Error('Something went wrong!');
+            if(!res.ok) throw new Error('Something went wrong!');
 
-    //         const data = await res.json();
-    //         if(data?.status !== "success") {
-    //             throw new Error(data.message);
-    //         }
-    //         setOrders(data?.data?.orders);
-    //     } catch(err) {     
-    //         console.log(err);
-    //     } finally {
-    //         setIsLoading(false)
-    //     }
-    // }
+            const data = await res.json();
+            if(data?.status !== "success") {
+                throw new Error(data.message);
+            }
+            setOrders(data?.data?.orders);
+        } catch(err) {     
+            console.log(err);
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
-    // useEffect(function() {
-    //     handleOrders()
-    // }, [helpReset]);
+    useEffect(function() {
+        handleOrders()
+    }, [helpReset]);
 
+    function handleOrderActions(id, type) {
+        setOrderId(id);
+        if(type === 'accept') {
+            setShowAcceptModal(true);
+            console.log(true)
+        }else {
+            setShowRejectModal(true)
+        }
+    }
 
     function handleOrderRow(order) {
         setShowOrderModal(true);
@@ -174,9 +213,10 @@ function Order() {
         try {
             handleReset();
             setIsLoading(true);
-            // setHelpReset(false);
+            setHelpReset(false);
 
-            const res = await fetch(`https://test.tajify.com/api/orders/accept-order/${selectedOrder._id}`, {
+            // const res = await fetch(`http://localhost:3010/api/orders/accept-order/${selectedOrder?._id}`, {
+            const res = await fetch(`https://test.tajify.com/api/orders/accept-order/${selectedOrder?._id}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -193,10 +233,11 @@ function Order() {
             setMessage(data.message);
             setShowOrderModal(false);
             setTimeout(() => {
+                setSelectedOrder(data?.data?.order);
                 setIsSuccess(false);
                 setMessage("");
                 setShowOrderModal(true);
-                // setHelpReset(true);
+                setHelpReset(true);
                 handleSetOrder(data.data.orders, count.length);
             }, 2000);
 
@@ -223,6 +264,12 @@ function Order() {
 
     return (
         <>
+
+            {isLoading && (
+                <div className='gifting--loader'>
+                    <img src={GiftLoader} alt='loader' />
+                </div>
+            )}
 
             <Header />
 
@@ -282,10 +329,8 @@ function Order() {
                         <div className="gift--preview-bottom">
                             <span className="gift--preview-title"> Purchased For <TfiGift style={{ color: '#bb0505' }} /></span>
                             <div className="gift--preview-flex">
-                                {/* <img src={`https://test.tajify.com/asset/users/${selectedOrder?.gifter?.image}` } /> */}
                                 <img src={`https://test.tajify.com/asset/others/${selectedOrder?.celebrantImage}`} />
                                 <div>
-                                    {/* <p>{selectedOrder?.gifter?.fullName || selectedOrder?.gifter?.username}</p> */}
                                     <p>For {selectedOrder?.celebrant}</p>
                                     <span className="gift--preview-amount"><IoPricetagOutline /><p>Amount: <span>{`₦${numberConverter(selectedOrder?.amount)}`}</span></p></span>
                                     <span className="gift--preview-amount"><GiReceiveMoney /><p>Quantity: <span>{selectedOrder?.quantity}</span></p></span>
@@ -295,13 +340,59 @@ function Order() {
                             <p style={{ fontSize: '1.4rem' }}>{selectedOrder?.address}</p>
 
 
-                            <div className="gift--preview-actions">
-                                <button type='button' onClick={handleAcceptOrder}>Accept Order </button>
-                                <button type='button' onClick={handleRejectOrder}>Reject Order</button>
-                            </div>
+                            {(selectedOrder.isAcceptedOrder || selectedOrder.isRejectedOrder) && (
+                                <div className="gift--preview-actions">
+                                    <button type='button' onClick={() => handleOrderActions(selectedOrder._id, 'accept')}>Accept Order </button>
+                                    <button type='button' onClick={() => handleOrderActions(selectedOrder._id, 'reject')}>Reject Order</button>
+                                </div>
+                            )}
+
+                            {selectedOrder.isAcceptedOrder && (
+                                <div className='order--code-box'>
+                                    <span className='order-stat accepted-stat'>
+                                        <AiFillCheckCircle className='order--icon' />
+                                        You Approved This Order!
+                                    </span>
+                                    <OTPInput
+                                        value={deliveryCode}
+                                        onChange={setDeliveryCode}
+                                        numInputs={4}
+                                        inputStyle={inputStyle}
+                                        containerStyle={containerStyle}
+                                        renderInput={(props) => <input {...props} />}
+                                    />
+                                    <button type='button' className='order--code-btn'>Confirm</button>
+                                </div>
+                            )}
+
+                            {selectedOrder.isRejectedOrder && (
+                                <div>
+                                    <AiFillExclamationCircle className='order--icon' />
+                                    You Rejected This Order!
+                                </div>
+                            )}
+
+                            {selectedOrder.isDelivered && (
+                                <div>
+                                    <AiFillCheckCircle className='order--icon' />
+                                    Order Delivered!
+                                </div>
+                            )}
                         </div>
                     </div>
                 </MobileFullScreenModal>
+            )}
+
+
+            {(showAcceptModal || showRejectModal) && (
+                <DashboardModal customStyle={customStyleModal} overLayZIndex={true} title={`${showAcceptModal ? 'Accept' : 'Reject'} this order!`} setShowDashboardModal={showAcceptModal ? setShowAcceptModal : setShowRejectModal}>
+                    <p className='modal--text-2'>Are you sure you want to {showAcceptModal ? 'accept' : 'reject'} this Order?</p>
+                    <span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
+                    <div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
+                        <button type='button' className='cancel--btn' onClick={() => showAcceptModal ? setShowAcceptModal(false) : setShowRejectModal(false)}>Cancel</button>
+                        <button type='submit' className='set--btn' onClick={showAcceptModal ? handleAcceptOrder : handleRejectOrder}>{showAcceptModal ? 'Accept' : 'Reject'} Order</button>
+                    </div>
+                </DashboardModal>
             )}
 
 
