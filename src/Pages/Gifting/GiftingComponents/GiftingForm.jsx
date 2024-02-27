@@ -573,17 +573,19 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             </div>
         </form>
 
-        {isSuccess || isError && (
-            <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
-                {isSuccess ? (
-                    <AiFillCheckCircle className="alert--icon" />
-                ) : isError ? (
-                    <AiFillExclamationCircle className="alert--icon" />
-                ) : (
-                    ""
-                )}
-                <p>{message}</p>
-            </Alert>
+        {createPortal(
+            isSuccess || isError && (
+                <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                    {isSuccess ? (
+                        <AiFillCheckCircle className="alert--icon" />
+                    ) : isError ? (
+                        <AiFillExclamationCircle className="alert--icon" />
+                    ) : (
+                        ""
+                    )}
+                    <p>{message}</p>
+                </Alert>
+            ), document.body
         )}
         
     </>

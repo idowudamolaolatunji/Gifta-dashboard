@@ -85,7 +85,7 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                     <p>Terms of Use</p>
                 </li>
                 
-                <li onClick={handleLogout}>
+                <li onClick={() => logout()}>
                     <CiLogout />
                     <p>Logout</p>
                 </li>

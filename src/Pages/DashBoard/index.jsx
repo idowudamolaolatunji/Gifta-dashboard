@@ -8,7 +8,7 @@ import GiftImg from '../../Assets/images/casual-life-3d-pink-gift-box.png';
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../Auth/context/AuthContext";
 import SkeletonLoader from '../../Components/SkeletonLoader';
-import { dateConverter, expectedDateFormatter, numberConverter } from "../../utils/helper";
+import { dateConverter, expectedDateFormatter, numberConverter, truncate } from "../../utils/helper";
 import SkelentonFour from "../../Components/SkelentonFour";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
@@ -180,25 +180,27 @@ const DashBoard = () => {
 
 						<div className="gift--preview-bottom">
 							<span className="gift--preview-title"> Purchased Gift <TfiGift style={{ color: '#bb0505' }} /></span>
-							<div className="gift--preview-flex">
-								<img src={`https://test.tajify.com/asset/products/${selectedGift?.gift?.image}`} />
-								<div>
-								<p>{selectedGift?.gift?.name}</p>
-								<span className="gift--preview-price"><IoPricetagOutline /><p>₦{numberConverter(selectedGift?.amount)}</p></span>
+							<Link to={`dashboard/marketplace/${selectedGift?.gift?.category}`}>
+								<div className="gift--preview-flex">
+									<img src={`https://test.tajify.com/asset/products/${selectedGift?.gift?.image}`} />
+									<div>
+									<p>{truncate(selectedGift?.gift?.name, 30)}</p>
+									<span className="gift--preview-price"><IoPricetagOutline /><p>₦{numberConverter(selectedGift?.amount)}</p></span>
+									</div>
 								</div>
-							</div>
+							</Link>
 							<span className="gift--preview-title"> Delivery Location <IoLocationSharp style={{ color: '#bb0505' }} /></span>
 							<p style={{ fontSize: '1.4rem' }}>{selectedGift?.address}</p>
 
 
-							{selectedGift?.isAccepted && (
+							{(selectedGift?.isAccepted && !selectedGift?.isDelivered) && (
 								<div className='order--code-box'>
 									<span className='order-stat accepted-stat'>
 										<AiFillCheckCircle className='order--icon' />
 										Your Gifting Order Was Approved!
 									</span>
 
-									<p className="modal--info" style={{ fontSize: '1.3rem', padding: 0, }}>Note: Please do not share this code with anyone as it determines you order completion.</p>
+									<p className="modal--info" style={{ fontSize: '1.3rem', padding: 0, }}><strong>Note</strong>: <span style={{ color: '#333' }}>Please do not share this code with anyone as it determines you order completion. When gifting order is recieved only should you give vendor access to this code</span></p>
 
 									<span className="order--code">{selectedGift?.deliveryCode}</span>
 								</div>
@@ -208,7 +210,7 @@ const DashBoard = () => {
 								<div className='order--code-box'>
 									<span className='order-stat delivered-stat'>
 										<AiFillCheckCircle className='order--icon' />
-										Your Gifting Order Complete.
+										Your Gifting Order is Completed.
 									</span>
 								</div>
 							)}
@@ -222,7 +224,7 @@ const DashBoard = () => {
 								</div>
 							)}
 
-							{!selectedGift?.isAccepted && expectedDateFormatter(selectedGift?.date) === "Date Passed" && (
+							{selectedGift?.isAccepted && expectedDateFormatter(selectedGift?.date) === "Date Passed" && (
 								<div className='order--code-box'>
 									<p className="modal--info" style={{ fontSize: '1.2rem', padding: 0, }}>We understand that your delivery date you request this gifting for has passed, Feel free to request a refund whenever you want.</p>
 

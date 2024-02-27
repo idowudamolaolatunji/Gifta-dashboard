@@ -252,10 +252,10 @@ function Wishlists() {
 						<>
 							<span className='section--flex'>
 								<h3 className="section__heading heading--flex" style={{ fontSize: '2.2rem', lineHeight: '1' }}>My wishlists <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><CiViewList /></span></h3>
-								<select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
-									{/* loop categories here */}
+								{/* <select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
+									// loop categories here 
                                     <option value="subscription">Subscription</option>
-                                </select>
+                                </select> */}
 							</span>
 							<div className='wishlist--grid'>
 								{/* <button className="w-figure--btn" onClick={handleModal}>Create Wishlist</button> */}

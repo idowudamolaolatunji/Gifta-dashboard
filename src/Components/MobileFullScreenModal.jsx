@@ -1,9 +1,9 @@
 import React from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 
-function MobileFullScreenModal({ title, setCloseModal, children }) {
+function MobileFullScreenModal({ title, setCloseModal, isDifferent, children }) {
     return (
-        <figure className='mobile-modal--figure'>
+        <figure className='mobile-modal--figure' >
 
             {(title || setCloseModal) && (
                 <div className="resuable-modal--head">

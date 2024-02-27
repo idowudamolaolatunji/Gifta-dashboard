@@ -107,8 +107,8 @@ const columns = [
 ];
 
 const Spinner = () => <p style={{ padding: '2rem', fontSize: '1.8rem', fontWeight: '500' }}>Loading...</p>
-function Message() {
-    return (<p className="modal--info" style={{ margin: '2rem auto' }}>You have No Order (0)</p>)
+function Message({ type }) {
+    return (<p className="modal--info" style={{ margin: '2rem auto' }}>You have no {type === 'all' ? '' : type} order (0)</p>)
 }
 
 
@@ -123,19 +123,21 @@ function Order() {
     const [isSuccess, setIsSuccess] = useState(false);
     const [helpReset, setHelpReset] = useState(false);
 
-    const [orderId, setOrderId] = useState(null);
+    // const [orderId, setOrderId] = useState(null);
     const [showAcceptModal, setShowAcceptModal] = useState(false);
     const [showRejectModal, setShowRejectModal] = useState(false);
     const [activeTab, setActiveTab] = useState('all');
 
     const [deliveryCode, setDeliveryCode] = useState('');
 
-    const { user, token, handleSetOrder } = useAuthContext();
+    const { token, handleSetOrder } = useAuthContext();
     const navigate = useNavigate();
 
     const all = orders;
-    const pendingOrders = all?.filter(order => order?.status === 'pending' || !order?.isDelivered);
-    const deliveredOrders = all?.filter(order => order?.status === 'delivered' || order?.isDelivered);
+    const pendingOrders = all?.filter(order => !order?.isAcceptedOrder && !order?.isRejectedOrder && !order?.isDelivered);
+    const rejectedOrders = all?.filter(order => order?.isAcceptedOrder && !order?.isDelivered);
+    const approvedOrders = all?.filter(order => order?.isRejectedOrder && !order?.isDelivered);
+    const deliveredOrders = all?.filter(order => order?.isAcceptedOrder && order?.isDelivered);
 
     // HANDLE FETCH STATE RESET
     function handleReset() {
@@ -184,11 +186,11 @@ function Order() {
     }, [helpReset]);
 
     function handleOrderActions(id, type) {
-        setOrderId(id);
+        // setOrderId(id);
         if(type === 'accept') {
             setShowAcceptModal(true);
             console.log(true)
-        }else {
+        } else {
             setShowRejectModal(true)
         }
     }
@@ -205,8 +207,6 @@ function Order() {
         window.scrollTo(0, 0)
     }, []);
 
-    // console.log(orders)
-
 
 
     async function handleAcceptOrder() {
@@ -215,7 +215,6 @@ function Order() {
             setIsLoading(true);
             setHelpReset(false);
 
-            // const res = await fetch(`http://localhost:3010/api/orders/accept-order/${selectedOrder?._id}`, {
             const res = await fetch(`https://test.tajify.com/api/orders/accept-order/${selectedOrder?._id}`, {
                 method: 'PATCH',
                 headers: {
@@ -231,12 +230,11 @@ function Order() {
 
             setIsSuccess(true);
             setMessage(data.message);
-            setShowOrderModal(false);
             setTimeout(() => {
                 setSelectedOrder(data?.data?.order);
                 setIsSuccess(false);
                 setMessage("");
-                setShowOrderModal(true);
+                setShowAcceptModal(false);
                 setHelpReset(true);
                 handleSetOrder(data.data.orders, count.length);
             }, 2000);
@@ -268,13 +266,53 @@ function Order() {
 
             setIsSuccess(true);
             setMessage(data.message);
-            setShowOrderModal(false);
             setTimeout(() => {
                 setSelectedOrder(data?.data?.order);
                 setIsSuccess(false);
                 setMessage("");
-                setShowOrderModal(true);
                 setHelpReset(true);
+                setShowRejectModal(false);
+                handleSetOrder(data.data.orders, count.length);
+            }, 2000);
+
+        } catch (err) {
+            handleFailure(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    // COMPLETE ORDER WITH THE DELIVERY CODE
+    async function handleCompleteOrder() {
+        try {
+            handleReset();
+            setIsLoading(true);
+
+            {console.log(deliveryCode.length)}
+            if(deliveryCode.length < 4) throw new Error('Delivery code must be exactly 4 numbers')
+
+            const res = await fetch(`https://test.tajify.com/api/orders/complete-order/${selectedOrder?._id}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ deliveryCode })
+            });
+
+            if (!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            if (data.status !== "success") throw new Error(data.message);
+            const count = data?.data?.orders?.filter(order => !order.isDelivered && !order.isRejectedOrder);
+
+            setIsSuccess(true);
+            setMessage(data.message);
+            setTimeout(() => {
+                setSelectedOrder(data?.data?.order);
+                setIsSuccess(false);
+                setMessage("");
+                setHelpReset(true);
+                setShowRejectModal(false);
                 handleSetOrder(data.data.orders, count.length);
             }, 2000);
 
@@ -306,14 +344,20 @@ function Order() {
                             <p className='section__heading' style={{ margin: '0', fontSize: '2.8rem', fontWeight: '500' }}>My Orders</p>
                             <div className="wallet--tabs">
                                 <span className={`wallet--tab ${activeTab === "all" && "tab--active"}`} onClick={() => { setActiveTab("all") }}>All Orders({all.length})</span>
-                                <span className={`wallet--tab ${activeTab === "pending" && "tab--active"}`} onClick={() => { setActiveTab("pending") }}>Pending({pendingOrders.length})</span>
-                                <span className={`wallet--tab ${activeTab === "delivered" && "tab--active"}`} onClick={() => { setActiveTab("delivered") }}>Delivered({deliveredOrders.length})</span>
+                                <span className={`wallet--tab ${activeTab === "pending" && "tab--active"}`} onClick={() => { setActiveTab("pending") }}>Pending ({pendingOrders.length})</span>
+
+                                <span className={`wallet--tab ${activeTab === "approved" && "tab--active"}`} onClick={() => { setActiveTab("approved") }}>Approved ({approvedOrders.length})</span>
+                                <span className={`wallet--tab ${activeTab === "rejected" && "tab--active"}`} onClick={() => { setActiveTab("rejected") }}>Rejected ({rejectedOrders.length})</span>
+
+                                <span className={`wallet--tab ${activeTab === "delivered" && "tab--active"}`} onClick={() => { setActiveTab("delivered") }}>Delivered ({deliveredOrders.length})</span>
                             </div>
 
                             <select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
-                                <option value="all">All Orders({all.length})</option>
-                                <option value="pending">Pending({pendingOrders.length})</option>
-                                <option value="delivered">Delivered({deliveredOrders.length})</option>
+                                <option value="all">All ({all.length})</option>
+                                <option value="pending">Pending ({pendingOrders.length})</option>
+                                <option value="approved">Approved ({approvedOrders.length})</option>
+                                <option value="rejected">Rejected ({rejectedOrders.length})</option>
+                                <option value="delivered">Delivered ({deliveredOrders.length})</option>
                             </select>
                         </span>
                     </div>
@@ -321,7 +365,7 @@ function Order() {
 
                     <DataTable
                         columns={columns}
-                        data={(activeTab === 'all') ? all : (activeTab === 'pending') ? pendingOrders : (activeTab === 'delivered') ? deliveredOrders : ''}
+                        data={ (activeTab === 'all') ? all : (activeTab === 'pending') ? pendingOrders : (activeTab === 'delivered') ? deliveredOrders : (activeTab === 'approved') ? approvedOrders : (activeTab === 'rejected') ? rejectedOrders : '' }
                         pagination
                         persistTableHead
                         highlightOnHover
@@ -329,13 +373,13 @@ function Order() {
                         progressComponent={<Spinner />}
                         customStyles={customStyles}
                         onRowMouseEnter={handleOrderRow}
-                        noDataComponent={<Message />}
+                        noDataComponent={<Message type={activeTab} />}
                     />
                 </div>
             </section>
 
             {showOrderModal && (
-                <MobileFullScreenModal>
+                <MobileFullScreenModal isDifferent={selectedOrder?.isRejectedOrder}>
                     <div className="gift--preview-figure">
 
                         <div className="gift--preview-top">
@@ -364,19 +408,23 @@ function Order() {
                             <p style={{ fontSize: '1.4rem' }}>{selectedOrder?.address}</p>
 
 
-                            {(!selectedOrder?.isAcceptedOrder || !selectedOrder?.isRejectedOrder) && (
-                                <div className="gift--preview-actions">
-                                    <button type='button ' onClick={() => handleOrderActions(selectedOrder._id, 'accept')}>Accept Order </button>
-                                    <button type='button btn--submit' onClick={() => handleOrderActions(selectedOrder._id, 'reject')}>Reject Order</button>
-                                </div>
+                            {(!selectedOrder?.isAcceptedOrder && !selectedOrder?.isRejectedOrder) && (
+                                <>
+                                    <p className="modal--info" style={{ fontSize: '1.2rem' }}><strong>Note</strong>: That you have access to either approving or rejecting this order as you wish.</p>
+                                    <div className="gift--preview-actions">
+                                        <button type='button ' onClick={() => handleOrderActions(selectedOrder._id, 'accept')}>Accept Order </button>
+                                        <button type='button btn--submit' onClick={() => handleOrderActions(selectedOrder._id, 'reject')}>Reject Order</button>
+                                    </div>
+                                </>
                             )}
 
-                            {selectedOrder?.isAcceptedOrder && (
+                            {(selectedOrder?.isAcceptedOrder && !selectedOrder?.isDelivered) && (
                                 <div className='order--code-box' style={{ gap: '2.4rem' }}>
                                     <span className='order-stat accepted-stat'>
                                         <AiFillCheckCircle className='order--icon' />
                                         You Approved This Order!
                                     </span>
+                                    <p className="modal--info" style={{ fontSize: '1.2rem', padding: 0, }}><strong>Note</strong>: When Package is being delivered, Collect code from Buyer and paste here for comfirmation of delivery.</p>
                                     <OTPInput
                                         value={deliveryCode}
                                         onChange={setDeliveryCode}
@@ -384,8 +432,10 @@ function Order() {
                                         inputStyle={inputStyle}
                                         containerStyle={containerStyle}
                                         renderInput={(props) => <input {...props} />}
+                                        inputType='number'
+                                        
                                     />
-                                    <button type='button' className='order--code-btn'>Confirm</button>
+                                    <button type='button' className='order--code-btn' onClick={handleCompleteOrder}>Confirm</button>
                                 </div>
                             )}
 

@@ -281,7 +281,7 @@ function Reminders() {
 						</>
 					)}
 
-					{(reminders && remainingReminder.length > 0) ? (
+					{(reminders) ? (
 						<>
 							<span className='section--flex' style={{ marginBottom: '2.6rem', }}>
 								<h3 className="section__heading" style={{ marginTop: '-1rem',  fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
@@ -309,8 +309,14 @@ function Reminders() {
 												<RiDeleteBin5Line className="reminder--delete" onClick={() => handleDeleteModal(reminder._id)} />
 											</span>
 											<span className="reminder--tasks">
-												<span onClick={() => handleCompleteModal(reminder._id)}>Mark As Completed</span>
-												<span onClick={() => handlePostponeModal(reminder)}>Postpone</span>
+												{!reminder.isCompleted ? (
+													<>
+														<span onClick={() => handleCompleteModal(reminder._id)}>Mark As Completed</span>
+														<span onClick={() => handlePostponeModal(reminder)}>Postpone</span>
+													</>
+												) : (
+													<span>Reminder Completed!!</span>
+												)}
 											</span>
 										</span>
 									</figure>
