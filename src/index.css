@@ -702,7 +702,7 @@ div.stepper--content {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 2.4rem;
+	gap: 1.8rem;
 }
 .order--icon {
 	font-size: 2.8rem;
@@ -715,14 +715,27 @@ div.stepper--content {
 	align-items: center;
 	justify-content: center;
 	gap: 1.2rem;
+
+	font-size: 1.3rem;
+	font-weight: 500;
 }
 .accepted-stat {
 	background-color: #d5d4f9e2;
-	font-size: 1.4rem;
-	font-weight: 500;
 }
 .accepted-stat .order--icon {
 	color: #4e48f0;
+}
+.delivered-stat {
+	background-color: #d7ecd1b7;
+}
+.delivered-stat .order--icon {
+	color: #008001;
+}
+.rejected-stat {
+	background-color: #ffb09cb7;
+}
+.rejected-stat .order--icon {
+	color: #ee2400;
 }
 .order--code-btn {
 	display: inline-block;
@@ -733,4 +746,13 @@ div.stepper--content {
 	background-color: #4e48f0;
 	border: none;
 	border-radius: .8rem;
+}
+
+.order--code {
+	font-size: 3.2rem;
+	color: #4e48f0;
+	padding: 1rem;
+	border-radius: 1rem;
+	background-color: #ddd;
+	letter-spacing: 1.35px;
 }

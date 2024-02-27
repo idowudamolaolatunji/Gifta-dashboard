@@ -253,6 +253,30 @@ function Order() {
             handleReset();
             setIsLoading(true);
 
+            const res = await fetch(`https://test.tajify.com/api/orders/reject-order/${selectedOrder?._id}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) throw new Error('Something went wrong!');
+            const data = await res.json();
+            if (data.status !== "success") throw new Error(data.message);
+            const count = data?.data?.orders?.filter(order => !order.isDelivered && !order.isRejectedOrder);
+
+            setIsSuccess(true);
+            setMessage(data.message);
+            setShowOrderModal(false);
+            setTimeout(() => {
+                setSelectedOrder(data?.data?.order);
+                setIsSuccess(false);
+                setMessage("");
+                setShowOrderModal(true);
+                setHelpReset(true);
+                handleSetOrder(data.data.orders, count.length);
+            }, 2000);
 
         } catch (err) {
             handleFailure(err.message);
@@ -340,15 +364,15 @@ function Order() {
                             <p style={{ fontSize: '1.4rem' }}>{selectedOrder?.address}</p>
 
 
-                            {(selectedOrder.isAcceptedOrder || selectedOrder.isRejectedOrder) && (
+                            {(!selectedOrder?.isAcceptedOrder || !selectedOrder?.isRejectedOrder) && (
                                 <div className="gift--preview-actions">
-                                    <button type='button' onClick={() => handleOrderActions(selectedOrder._id, 'accept')}>Accept Order </button>
-                                    <button type='button' onClick={() => handleOrderActions(selectedOrder._id, 'reject')}>Reject Order</button>
+                                    <button type='button ' onClick={() => handleOrderActions(selectedOrder._id, 'accept')}>Accept Order </button>
+                                    <button type='button btn--submit' onClick={() => handleOrderActions(selectedOrder._id, 'reject')}>Reject Order</button>
                                 </div>
                             )}
 
-                            {selectedOrder.isAcceptedOrder && (
-                                <div className='order--code-box'>
+                            {selectedOrder?.isAcceptedOrder && (
+                                <div className='order--code-box' style={{ gap: '2.4rem' }}>
                                     <span className='order-stat accepted-stat'>
                                         <AiFillCheckCircle className='order--icon' />
                                         You Approved This Order!
@@ -365,17 +389,21 @@ function Order() {
                                 </div>
                             )}
 
-                            {selectedOrder.isRejectedOrder && (
-                                <div>
-                                    <AiFillExclamationCircle className='order--icon' />
-                                    You Rejected This Order!
+                            {selectedOrder?.isRejectedOrder && (
+                                <div className='order--code-box'>
+                                    <span className='order-stat rejected-stat'>
+                                        <AiFillExclamationCircle className='order--icon' />
+                                        You Rejected This Order!
+                                    </span>
                                 </div>
                             )}
 
-                            {selectedOrder.isDelivered && (
-                                <div>
-                                    <AiFillCheckCircle className='order--icon' />
-                                    Order Delivered!
+                            {selectedOrder?.isDelivered && (
+                                <div className='order--code-box'>
+                                    <span className='order-stat delivered-stat'>
+                                        <AiFillCheckCircle className='order--icon' />
+                                        Order Delivered!
+                                    </span>
                                 </div>
                             )}
                         </div>

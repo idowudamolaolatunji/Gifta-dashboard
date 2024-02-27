@@ -125,6 +125,9 @@ function Settings() {
             setIsSuccess(true);
             setMessage("Password Updated Successful!");
             setTimeout(function() {
+                setPasswordCurrent('')
+                setNewPassword('')
+                setConfirmNewPassword('')
                 setIsSuccess(false);
                 setMessage("");
                 handleUser(data?.data?.user);
@@ -343,7 +346,7 @@ function Settings() {
                                         className="form--input"
                                         id="password-confirm"
                                         name="password-confirm"
-                                        type="password"
+                                        type={showConfirmNewPassword ? "text" : "password"}
                                         placeholder="••••••••••••"
                                         required="required"
                                         // minLength={8}

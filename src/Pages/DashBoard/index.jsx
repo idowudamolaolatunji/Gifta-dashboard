@@ -27,6 +27,7 @@ import { MdArrowBackIos } from "react-icons/md";
 import { IoLocationSharp, IoPricetagOutline } from "react-icons/io5";
 import { CiCalendar } from "react-icons/ci";
 import TawkToSupport from "../../Components/TawkToSupport";
+import { AiFillCheckCircle, AiFillExclamationCircle } from "react-icons/ai";
 
 
 
@@ -41,9 +42,10 @@ const DashBoard = () => {
 	const [activeTab, setActiveTab] = useState('active');
 	const { user, token } = useAuthContext();
 
-	const activeGiftings = giftings?.filter(gifts => !gifts?.isDelivered);
+	const activeGiftings = giftings?.filter(gifts => !gifts?.isDelivered && !gifts?.isRejected);
 	const compltedGiftings = giftings?.filter(gifts => gifts?.isDelivered);
-	const mapGiftings = activeTab === 'active' ? activeGiftings : compltedGiftings;
+	const RejectedGiftings = giftings?.filter(gifts => !gifts?.isDelivered && gifts?.isRejected);
+	const mapGiftings = activeTab === 'active' ? activeGiftings : activeTab === 'completed' ? compltedGiftings : RejectedGiftings;
 
 
 	function handleGiftPackage(gift) {
@@ -109,8 +111,9 @@ const DashBoard = () => {
 							<span className='section--flex' style={{ marginBottom: '3.2rem', justifyContent: 'space-between' }}>
 								<h3 className="section__heading" style={{ color: '#bb0505', margin: '0' }}>Gifts bought by you!</h3>
 								<div className="wallet--tabs">
-									<span className={`wallet--tab ${activeTab === "active" && "tab--active"}`} onClick={() => { setActiveTab("active") }}>Active Gifting</span>
-									<span className={`wallet--tab ${activeTab === "completed" && "tab--active"}`} onClick={() => { setActiveTab("completed") }}>Completed Gifting</span>
+									<span className={`wallet--tab ${activeTab === "active" && "tab--active"}`} onClick={() => { setActiveTab("active") }}>Active</span>
+									<span className={`wallet--tab ${activeTab === "completed" && "tab--active"}`} onClick={() => { setActiveTab("completed") }}>Completed</span>
+									<span className={`wallet--tab ${activeTab === "rejected" && "tab--active"}`} onClick={() => { setActiveTab("rejected") }}>Rejected</span>
 								</div>
 							</span>
 								
@@ -186,7 +189,49 @@ const DashBoard = () => {
 							</div>
 							<span className="gift--preview-title"> Delivery Location <IoLocationSharp style={{ color: '#bb0505' }} /></span>
 							<p style={{ fontSize: '1.4rem' }}>{selectedGift?.address}</p>
+
+
+							{selectedGift?.isAccepted && (
+								<div className='order--code-box'>
+									<span className='order-stat accepted-stat'>
+										<AiFillCheckCircle className='order--icon' />
+										Your Gifting Order Was Approved!
+									</span>
+
+									<p className="modal--info" style={{ fontSize: '1.3rem', padding: 0, }}>Note: Please do not share this code with anyone as it determines you order completion.</p>
+
+									<span className="order--code">{selectedGift?.deliveryCode}</span>
+								</div>
+							)}
+
+							{selectedGift?.isDelivered && (
+								<div className='order--code-box'>
+									<span className='order-stat delivered-stat'>
+										<AiFillCheckCircle className='order--icon' />
+										Your Gifting Order Complete.
+									</span>
+								</div>
+							)}
+
+							{selectedGift?.isRejected && (
+								<div className='order--code-box'>
+									<span className='order-stat rejected-stat'>
+										<AiFillExclamationCircle className='order--icon' />
+										Your Gifting Order Was Rejected!
+									</span>
+								</div>
+							)}
+
+							{!selectedGift?.isAccepted && expectedDateFormatter(selectedGift?.date) === "Date Passed" && (
+								<div className='order--code-box'>
+									<p className="modal--info" style={{ fontSize: '1.2rem', padding: 0, }}>We understand that your delivery date you request this gifting for has passed, Feel free to request a refund whenever you want.</p>
+
+									<button type='button' className='order--code-btn' style={{ backgroundColor: '#bb0505' }}>Request Refund</button>
+								</div>
+							)}
 						</div>
+
+						
 					</div>
 				</MobileFullScreenModal>
 			)}

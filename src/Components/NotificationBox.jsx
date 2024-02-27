@@ -13,16 +13,6 @@ function NotificationBox({ showNotificationBox, setShowNotificationBox }) {
     const readNotification = notifications?.filter(notification => notification.status === 'read');
     const notificationArr = tab === 'unread' ? unreadNotification : readNotification;
 
-
-    // useEffect(function () {
-        
-
-    //     if(showNotificationBox) {
-    //         handleSetReadNotifications();
-    //     }
-
-    // }, [showNotificationBox])
-
     async function handleSetReadNotifications() {
         try {
             if (notificationCount === 0) return;
@@ -37,6 +27,9 @@ function NotificationBox({ showNotificationBox, setShowNotificationBox }) {
             if (!res.ok) throw new Error('Something went wrong');
             const data = await res.json();
             if (data.status !== "success") throw new Error(data.message);
+            
+            const count = data?.data?.notifications?.filter(notification => notification.status === 'unread' );
+			handleSetNotification(data.data.notifications, count.length);
         } catch (err) {
             console.log(err.message);
         }
