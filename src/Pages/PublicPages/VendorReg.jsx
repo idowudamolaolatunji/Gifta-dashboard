@@ -51,7 +51,7 @@ function VendorReg() {
 
             if(password.length < 8) throw new Error('Password must not be less 8 characters');
             
-            const res = await fetch('https://test.tajify.com/api/users/role/become-vendor', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/role/become-vendor`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",

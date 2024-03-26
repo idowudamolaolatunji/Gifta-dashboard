@@ -64,7 +64,7 @@ const columns = [
         selector: (row) => {
             return (
                 <div className="table-flex table-product">
-                    <img src={`https://test.tajify.com/asset/products/${row?.gift?.image}`} alt={row?.gift?.name} />
+                    <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${row?.gift?.image}`} alt={row?.gift?.name} />
                     <span>
                         <p>{row?.gift?.name}</p>
                         <p>Quantity: {row?.quantity}</p>
@@ -159,7 +159,7 @@ function Order() {
     async function handleOrders() {
         try {
             setIsLoading(true)
-            const res = await fetch('https://test.tajify.com/api/orders', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders`, {
                 method: 'GET',
                 headers: {
                     "Content-Type": 'application/json',
@@ -215,7 +215,7 @@ function Order() {
             setIsLoading(true);
             setHelpReset(false);
 
-            const res = await fetch(`https://test.tajify.com/api/orders/accept-order/${selectedOrder?._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/accept-order/${selectedOrder?._id}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -251,7 +251,7 @@ function Order() {
             handleReset();
             setIsLoading(true);
 
-            const res = await fetch(`https://test.tajify.com/api/orders/reject-order/${selectedOrder?._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/reject-order/${selectedOrder?._id}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -291,7 +291,7 @@ function Order() {
             {console.log(deliveryCode.length)}
             if(deliveryCode.length < 4) throw new Error('Delivery code must be exactly 4 numbers')
 
-            const res = await fetch(`https://test.tajify.com/api/orders/complete-order/${selectedOrder?._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/complete-order/${selectedOrder?._id}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -383,7 +383,7 @@ function Order() {
                     <div className="gift--preview-figure">
 
                         <div className="gift--preview-top">
-                            <img src={`https://test.tajify.com/asset/products/${selectedOrder?.gift.image}`} alt={selectedOrder?.celebrant} />
+                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedOrder?.gift.image}`} alt={selectedOrder?.celebrant} />
                             <div className="gift--preview-details">
                                 <span onClick={() => setShowOrderModal(false)}><MdArrowBackIos /></span>
                                 <p className="gift--preview-name">For {selectedOrder?.gift.name}</p>
@@ -397,7 +397,7 @@ function Order() {
                         <div className="gift--preview-bottom">
                             <span className="gift--preview-title"> Purchased For <TfiGift style={{ color: '#bb0505' }} /></span>
                             <div className="gift--preview-flex">
-                                <img src={`https://test.tajify.com/asset/others/${selectedOrder?.celebrantImage}`} />
+                                <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${selectedOrder?.celebrantImage}`} />
                                 <div>
                                     <p>For {selectedOrder?.celebrant}</p>
                                     <span className="gift--preview-amount"><IoPricetagOutline /><p>Amount: <span>{`₦${numberConverter(selectedOrder?.amount)}`}</span></p></span>
@@ -433,7 +433,6 @@ function Order() {
                                         containerStyle={containerStyle}
                                         renderInput={(props) => <input {...props} />}
                                         inputType='number'
-                                        
                                     />
                                     <button type='button' className='order--code-btn' onClick={handleCompleteOrder}>Confirm</button>
                                 </div>

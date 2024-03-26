@@ -66,7 +66,7 @@ function Settings() {
             handleReset();
             setIsLoading(true)
 
-            const res = await fetch('https://test.tajify.com/api/users/me/update-profile', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/me/update-profile`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": 'application/json',
@@ -108,7 +108,7 @@ function Settings() {
             if(passwordCurrent.length < 8) throw new Error('Current Password must not be less 8 characters');
             if(newPassword.length < 8) throw new Error('New Password must not be less 8 characters');
 
-            const res = await fetch('https://test.tajify.com/api/users/me/update-password', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/me/update-password`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": 'application/json',
@@ -147,7 +147,7 @@ function Settings() {
 
             if(passwordDel.length < 8) throw new Error('Password must not be less 8 characters');
 
-            const res = await fetch('https://test.tajify.com/api/users/me/delete-account', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/me/delete-account`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": 'application/json',

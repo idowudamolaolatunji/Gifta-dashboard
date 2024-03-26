@@ -64,10 +64,10 @@ function WishInputUi({ wishListId, wishDetails, setShowModal, type, setHelpReset
             handleReset();
             if(type === 'new') {
                 method = 'POST';
-                url = `https://test.tajify.com/api/wishlists/create-wish/${wishListId}`;
+                url = `${import.meta.env.VITE_SERVER_URL}/wishlists/create-wish/${wishListId}`;
             } else if(type === 'edit') {
                 method = "PATCH";
-                url = `https://test.tajify.com/api/wishlists/update-wish/${wishListId}/${wishDetails._id}`;
+                url = `${import.meta.env.VITE_SERVER_URL}/wishlists/update-wish/${wishListId}/${wishDetails._id}`;
             }
 
             const res = await fetch(`${url}`, {

@@ -89,7 +89,7 @@ function SubscriptionPlan() {
         return amount + charges;
     }
 
-    const publicKey = "pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7"
+    const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
     const amountInKobo = calcTotalAmount(Number(checkedMonthly ? 15000 : 50000)) * 100;
     const componentProps = {
         email: user?.email,
@@ -115,7 +115,7 @@ function SubscriptionPlan() {
             handleReset();
             setIsLoading(true);
 
-            const res = await fetch(`https://test.tajify.com/api/subscriptions/subscribe-from-card/${reference}/${charges}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/subscriptions/subscribe-from-card/${reference}/${charges}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -151,7 +151,7 @@ function SubscriptionPlan() {
             setIsLoading(true);
             handleReset();
 
-            const res = await fetch('https://test.tajify.com/api/subscriptions/subscribe-from-wallet', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/subscriptions/subscribe-from-wallet`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",

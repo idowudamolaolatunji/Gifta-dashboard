@@ -18,8 +18,10 @@ function Dropdown({ addHomeLink, setShowLoader }) {
         logout();
 
         setTimeout(() => {
+            window.location.reload();
+            // navigate('/login')
             // window.location.href = '/login'
-            window.location.assign('/login')
+            // window.location.assign('/login')
         }, 350)
     }
 
@@ -85,7 +87,7 @@ function Dropdown({ addHomeLink, setShowLoader }) {
                     <p>Terms of Use</p>
                 </li>
                 
-                <li onClick={() => logout()}>
+                <li onClick={() => handleLogout()}>
                     <CiLogout />
                     <p>Logout</p>
                 </li>

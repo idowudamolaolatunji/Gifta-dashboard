@@ -36,7 +36,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     ////////////////////////////////////////////////////////////
     const { user, token } = useAuthContext();
     const productInfo = Cookies.get('productInfo') ? JSON.parse(Cookies.get('productInfo')) : null;
-    const publicKey = 'pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7';
+    const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
     const totalAmount = calcTotalAmount(Number(productInfo.totalPrice));
     const charges = totalAmount - productInfo.totalPrice;
     const amountInKobo = totalAmount * 100;
@@ -119,7 +119,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     useEffect(function() {
         async function getWallet() {
             try {
-                const res = await fetch('https://test.tajify.com/api/wallet', {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wallet`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -141,8 +141,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         try {
             handleReset();
             setIsLoading()
-            const res = await fetch(`https://test.tajify.com/api/giftings/payment-verification/${reference}/${charges}`, {
-            // const res = await fetch(`http://localhost:3010/api/giftings/payment-verification/${reference}/${charges}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/giftings/payment-verification/${reference}/${charges}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -179,8 +178,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             setIsLoading(true);
             if(wallet.walletBalance < productInfo.totalPrice) throw new Error('InSufficient funds, Why with card Instead');
 
-            const res = await fetch('https://test.tajify.com/api/giftings/payment-wallet/', {
-            // const res = await fetch('http://localhost:3010/api/giftings/payment-wallet/', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/giftings/payment-wallet/`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -216,8 +214,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             handleReset();
             setIsLoading(true);
 
-            const res = await fetch('https://test.tajify.com/api/giftings/create-gifting/', {
-            // const res = await fetch('http://localhost:3010/api/giftings/create-gifting/', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/giftings/create-gifting/`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -258,7 +255,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     async function handleUploadImg(formData, id) {
         try {
             formData.append('image', imageFile);
-            await fetch(`https://test.tajify.com/api/giftings/gifting-img/${id}`, {
+            await fetch(`${import.meta.env.VITE_SERVER_URL}/giftings/gifting-img/${id}`, {
             // const res = await fetch(`http://localhost:3010/api/giftings/gifting-img/${id}`, {
                 method: 'POST',
                 headers: {

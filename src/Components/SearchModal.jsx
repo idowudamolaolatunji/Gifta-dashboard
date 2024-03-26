@@ -90,9 +90,9 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
                     (<div className='search--flex'>
                         {products?.map(product =>
                             (
-                            <Link to={`/dashboard/marketplace/${product.category}`}>
+                            <Link to={`/dashboard/gifting/${product.category}`}>
                                 <figure className='search--figure'>
-                                    <img src={`https://test.tajify.com/asset/products/${product.image}`} />
+                                    <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} />
                                     <figcaption className='search--details'>
                                         <p className='search--name'>{product.name}</p>
                                     </figcaption>
@@ -115,7 +115,7 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
                         {giftings?.map(gifting =>
                             (
                             <figure className='search--figure'>
-                                <img src={`https://test.tajify.com/asset/others/${gifting.image}`} />
+                                <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${gifting.image}`} />
                                 <figcaption className='search--details'>
                                     <p className='search--name'>{gifting.name}</p>
                                 </figcaption>
@@ -140,7 +140,7 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
                                 <FaRegSquareMinus />
                                 <p className='search--name'>{reminder.title}</p>
                                 {/* <figure className='search--figure'> */}
-                                    {/* <img src={`https://test.tajify.com/asset/others/${reminder?.image}`} /> */}
+                                    {/* <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${reminder?.image}`} /> */}
                                     {/* <figcaption className='search--details'></figcaption> */}
                                 {/* </figure> */}
                             </Link>
@@ -162,7 +162,7 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
                             (
                             <Link to={`/dashboard/wishlists/${wishlist?.slug}`}>
                                 <figure className='search--figure'>
-                                    <img src={`https://test.tajify.com/asset/others/${wishlist?.image}`} alt={wishlist._id} />
+                                    <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${wishlist?.image}`} alt={wishlist._id} />
                                     <figcaption className='search--details'>
                                         <p className='search--name'>{wishlist.name}</p>
                                         <div className="">

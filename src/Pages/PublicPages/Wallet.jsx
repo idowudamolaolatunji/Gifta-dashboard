@@ -118,7 +118,7 @@ function Wallet() {
         return amount + charges;
     }
 
-    const publicKey = "pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7"
+    const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
     const amountInKobo = calcTotalAmount(Number(amount)) * 100;
     const componentProps = {
         email,
@@ -163,7 +163,7 @@ function Wallet() {
             handleReset();
             setIsLoading(true);
             setHelpReset(false);
-            const res = await fetch(`https://test.tajify.com/api/transactions/payment-verification/${reference}/${charges}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/transactions/payment-verification/${reference}/${charges}`, {
                 method: 'POST',
                 headers,
             });
@@ -201,7 +201,7 @@ function Wallet() {
             setIsLoading(true);
             setHelpReset(false);
 
-            const res = await fetch(`https://test.tajify.com/api/transactions/withdrawal-request`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/transactions/withdrawal-request`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify({ amount: withdrawalAmount, password })
@@ -232,8 +232,8 @@ function Wallet() {
                 setIsLoading(true);
                 setShowDepositModal(false)
                 const [walletRes, transactionsRes] = await Promise.all([
-                    fetch(`https://test.tajify.com/api/wallet/`, { headers }),
-                    fetch(`https://test.tajify.com/api/transactions/my-transactions`, { headers }),
+                    fetch(`${import.meta.env.VITE_SERVER_URL}/wallet/`, { headers }),
+                    fetch(`${import.meta.env.VITE_SERVER_URL}/transactions/my-transactions`, { headers }),
                 ]);
 
                 if (!walletRes.ok || !transactionsRes.ok) {
@@ -283,7 +283,7 @@ function Wallet() {
                                 {(user?.image !== "") ? (
                                     <img
                                         alt={user?.fullName + " 's image"}
-                                        src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                        src={`${import.meta.env.VITE_SERVER_ASSET_URL}/users/${user?.image}`}
                                     />
                                 ) : (
                                     <span className="user__img-initials">

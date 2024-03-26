@@ -58,7 +58,7 @@ const DashBoard = () => {
 		async function fetchGiftings() {
 			try {
 				setIsLoading(true);
-				const res = await fetch('https://test.tajify.com/api/giftings/my-giftings/bought', {
+				const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/giftings/my-giftings/bought`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ const DashBoard = () => {
 									{mapGiftings.map(gifting => {
 										return (
 											<div className='giftPackage--figure' key={gifting._id} onClick={() => handleGiftPackage(gifting)}>
-												<img src={`https://test.tajify.com/asset/others/${gifting?.celebrantImage}`} alt={gifting?.celebrant} />
+												<img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${gifting?.celebrantImage}`} alt={gifting?.celebrant} />
 												<span className="package--category">{gifting.purpose}</span>
 												<figcaption className="giftPackage--details">
 													<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
@@ -167,7 +167,7 @@ const DashBoard = () => {
 					<div className="gift--preview-figure">
 						
 						<div className="gift--preview-top">
-							<img src={`https://test.tajify.com/asset/others/${selectedGift?.celebrantImage}` || GiftImg} alt={selectedGift?.celebrant} />
+							<img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${selectedGift?.celebrantImage}` || GiftImg} alt={selectedGift?.celebrant} />
 							<div className="gift--preview-details">
 								<span onClick={() => setShowGiftingModal(false)}><MdArrowBackIos /></span>
 								<p className="gift--preview-name">For {selectedGift?.celebrant}</p>
@@ -180,9 +180,9 @@ const DashBoard = () => {
 
 						<div className="gift--preview-bottom">
 							<span className="gift--preview-title"> Purchased Gift <TfiGift style={{ color: '#bb0505' }} /></span>
-							<Link to={`dashboard/marketplace/${selectedGift?.gift?.category}`}>
+							<Link to={`dashboard/gifting/${selectedGift?.gift?.category}`}>
 								<div className="gift--preview-flex">
-									<img src={`https://test.tajify.com/asset/products/${selectedGift?.gift?.image}`} />
+									<img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedGift?.gift?.image}`} />
 									<div>
 									<p>{truncate(selectedGift?.gift?.name, 30)}</p>
 									<span className="gift--preview-price"><IoPricetagOutline /><p>₦{numberConverter(selectedGift?.amount)}</p></span>

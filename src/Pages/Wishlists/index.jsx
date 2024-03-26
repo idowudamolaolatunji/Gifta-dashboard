@@ -122,32 +122,18 @@ function Wishlists() {
 			setIsLoadingDel(true);
             handleReset();
             setHelpReset(false);
-            const res = await fetch(`https://test.tajify.com/api/wishlists/delete-my-wishlist/${selectedId}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/delete-my-wishlist/${selectedId}`, {
                 method: "DELETE",
                 headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`,
 				},
             });
-			console.log(res);
             if(!res.ok) {
 				throw new Error('Something went wrong!');
 			}
 
-			if(res.status === 204) {
-                setIsSuccess(true);
-                setMessage('Wishlist deleted successfully!');
-                setTimeout(() => {
-                    setShowDeleteModal(false);
-                    setIsSuccess(false);
-                    setMessage("");
-                    setHelpReset(true);
-                    window.location.reload();
-                }, 1500);
-                return;
-            }
             const data = await res.json();
-			
 			if(data?.message === "You cannot perfom this task, Upgrade Account!") {
 				setTimeout(() => {
 					navigate('/plans');
@@ -158,19 +144,15 @@ function Wishlists() {
 				throw new Error(data.message);
             }
 
-            // setMessage(data.message);
-			// THERE IS AN ERROR HERE I DONT UNDERSTAND JUST YET, TILL THEN I AM FORCING THE DOM TO RELOAD
+            setIsSuccess(true);
+			setMessage('Wishlist deleted successfully!');
+			setTimeout(() => {
+				setShowDeleteModal(false);
+				setIsSuccess(false);
+				setMessage("");
+				setHelpReset(true);
+			}, 1500);
 
-
-            // setMessage('Wishlist deleted successfully!');
-			// setIsSuccess(true);
-			// setTimeout(() => {
-			// 	// window.location.reload();
-            //     setShowDeleteModal(false);
-            //     setHelpReset(true);
-			// 	setIsSuccess(false);
-			// 	setMessage("");
-			// }, 1500);
         } catch (err) {
             handleFailure(err.message);
 			console.error(err)
@@ -185,7 +167,7 @@ function Wishlists() {
 		async function fetchWishlists() {
 			try {
 				setIsLoading(true);
-				const res = await fetch('https://test.tajify.com/api/wishlists/user-wishlists/wishlists', {
+				const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/user-wishlists/wishlists`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -263,8 +245,8 @@ function Wishlists() {
 									<>
 										<figure key={wishList._id} className="wishlist--figure w-figure-action" onMouseLeave={() => handleActionInfoLeave()} >
 											<span className="w-figure-category">{wishList.category}</span>
-											<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
-												<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
+											<a target='_blank' href={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${wishList.image}`}>
+												<img className="w-figure--image" src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${wishList.image}`} alt={wishList.image} />
 											</a>
 											<figcaption className="w-figure--details">
 												<div className="w-figure--head">
@@ -309,8 +291,8 @@ function Wishlists() {
 										{/*  */}
 										<Link className="wishlist--figure-m" to={`/dashboard/wishlists/${wishList?.slug}`}>
 											<figure key={wishList._id} className="wishlist--figure w-figure-action w-figure--mobile">
-												<a target='_blank' href={`https://test.tajify.com/asset/others/${wishList.image}`}>
-													<img className="w-figure--image" src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
+												<a target='_blank' href={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${wishList.image}`}>
+													<img className="w-figure--image" src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${wishList.image}`} alt={wishList.image} />
 												</a>
 												<figcaption className="w-figure--details">
 													<div className="w-figure--head">

@@ -555,10 +555,50 @@ a.form--acct-btn div {
 	background-color: #ffffff9d;
 	cursor: auto;
 }
+.form--item-add {
+	align-self: center;
 
-
-
-
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: .4rem .8rem;
+	border-radius: .6rem;
+	transition: all .35s;
+}
+.form--item-add:hover {
+	background-color: #eee;
+}
+.form--item-add, .form--item-add label {
+	cursor: pointer;
+}
+.form--icon-box {
+	width: 3.8rem;
+	height: 3.8rem;
+	border: 2px solid #bb0505;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.form--icon-box .icon {
+	font-size: 2.8rem;
+	color: #bb0505;
+}
+.reminder--actions .btn-incomplete {
+	position: relative;
+}
+.reminder--actions .btn-incomplete::after {
+	content: '';
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #ffffff6d;
+	cursor: auto;
+	z-index: 1000;
+}
 
 
 

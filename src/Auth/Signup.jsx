@@ -1,6 +1,6 @@
 import GiftBox from "../Assets/giftbox.jpg";
-import GiftaLogo from "../Assets/gifta-logo.png";
-import GiftaWhiteLogo from "../Assets/gifta-white-logo.png";
+import giftaLogo from "../Assets/images/gifta-g-white-logo.png";
+// import GiftaWhiteLogo from "../Assets/gifta-white-logo.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import "./auth.css";
@@ -84,7 +84,7 @@ function Signup() {
 			if(password !== passwordConfirm) throw new Error('Passwords are not the same!');
 			if(password.length < 8 || passwordConfirm.length < 8) throw new Error('Passwords must not be less 8 characters');
 
-			const res = await fetch(inviteCode ? `https://test.tajify.com/api/users/signup/${inviteCode}` : "https://test.tajify.com/api/users/signup", {
+			const res = await fetch(inviteCode ? `${import.meta.env.VITE_SERVER_URL}/users/signup/${inviteCode}` : "https://test.tajify.com/api/users/signup", {
 				method: 'POST',
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ fullName, username, email, password, passwordConfirm }),
@@ -132,7 +132,7 @@ function Signup() {
 				<div className="auth__image--box">
 					<span>
 						<a className="auth__logo" href={`/`}>
-							<img src={GiftaWhiteLogo} alt="logo" />
+							<img src={giftaLogo} alt="logo" />
 						</a>
 
 						<h2>Welcome back to Gifta</h2>
@@ -158,7 +158,7 @@ function Signup() {
 						)}
 					/> */}
 
-					<GoogleLogin
+					{/* <GoogleLogin
 						onSuccess={credentialResponse => {
 							console.log(credentialResponse);
 						}}
@@ -171,9 +171,9 @@ function Signup() {
 						<span></span>
 						<span>OR</span>
 						<span></span>
-					</div>
+					</div> */}
 
-					{signWithEmail && (<form onSubmit={handleSignup} className="auth--form">
+					<form onSubmit={handleSignup} className="auth--form">
 						<div className="form--flex">
 							<div className="form--item">
 								<label htmlFor="FirstName" className="form--label">
@@ -321,14 +321,14 @@ function Signup() {
 								.
 							</p>
 						</div>
-					</form>)}
+					</form>
 
-					{!signWithEmail && (
+					{/* {!signWithEmail && (
 						<div className="email--login" onClick={() => setSignWithEmail(!signWithEmail)}>
 							<img src={EmailIcons} style={{ cursor: 'pointer' }} />
 							<p>Sign up with Email</p>
 						</div>
-					)}
+					)} */}
 
 					
 				</div>

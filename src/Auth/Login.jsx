@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import giftbox from "../Assets/giftbox.jpg";
-import giftaLogo from "../Assets/gifta-logo.png";
+import giftaLogo from "../Assets/images/gifta-g-white-logo.png";
 import giftaWhiteLogo from "../Assets/gifta-white-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "./context/AuthContext";
@@ -68,6 +68,7 @@ function Login() {
 
 			if(password.length < 8) throw new Error('Password must not be less 8 characters');
 
+			// const res = await fetch("http://localhost:3010/api/users/login", {
 			const res = await fetch("https://test.tajify.com/api/users/login", {
 				method: "POST",
 				headers: {
@@ -126,7 +127,7 @@ function Login() {
 				<div className="auth__image--box">
 					<span>
 						<a className="auth__logo" href={'https://getgifta.com/'}>
-							<img src={giftaWhiteLogo} alt="logo" />
+							<img src={giftaLogo} alt="logo" />
 						</a>
 						<h2>Welcome back to Gifta</h2>
 						<p>Where Every Moment Deserves the Perfect Gift!</p>
@@ -157,7 +158,7 @@ function Login() {
 					*/}
 
 
-					<GoogleLogin
+					{/* <GoogleLogin
 						onSuccess={credentialResponse => {
 							console.log(credentialResponse);
 						}}
@@ -171,7 +172,7 @@ function Login() {
 						<span></span>
 						<span>OR</span>
 						<span></span>
-					</div>
+					</div> */}
 
 					<form onSubmit={handleLoginUser} className="auth--form">
 						<div className="form--item">
@@ -248,6 +249,13 @@ function Login() {
 								</Link>
 							</p>
 						</div>
+
+						<p className="form--content">
+							Forgotten your passward?{' '}
+							<Link to={`/forgot-password`}>
+								Forgot Password
+							</Link>
+						</p>
 					</form>
 				</div>
 			</div>

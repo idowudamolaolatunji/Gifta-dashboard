@@ -31,6 +31,7 @@ import VendorReg from './Pages/PublicPages/VendorReg';
 import ProductCatalogue from './Pages/PublicPages/ProductCatalogue';
 import KycVer from './Pages/PublicPages/KycVer';
 import ProductStats from './Pages/PublicPages/ProductStats';
+import PublicMarketPlace from './Pages/PublicPages/PublicMarketPlace';
 
 
 
@@ -43,8 +44,7 @@ function App() {
                     <Route path="/" element={<DashBoard />}></Route>
 
                     <Route path="/dashboard/gifting" element={<Gifting />}></Route>
-                    <Route path="/dashboard/marketplace/:category" element={<Marketplace />}></Route>
-                    <Route path="/dashboard/marketplace/:category/:productSlug" element={<Marketplace />}></Route>
+                    <Route path="/dashboard/gifting/:category" element={<Marketplace />}></Route>
                     <Route path="/dashboard/digital-products" element={<DigitalProduct />}></Route>
 
                     <Route path="/dashboard/wishlists" element={<Wishlists />}></Route>
@@ -74,6 +74,8 @@ function App() {
                 <Route path="/shared/:shareableUrl" element={<SharedWishlist />}></Route>
                 <Route path="/terms-of-use" element={<TermsOfUse />}></Route>
                 <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
+                {/* <Route path="/marketplace/:category/:productSlug" element={<PublicMarketPlace />}></Route> */}
+                <Route path="/marketplace/:category" element={<PublicMarketPlace />}></Route>
                 
             </Routes>
         </BrowserRouter>

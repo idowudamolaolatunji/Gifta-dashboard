@@ -82,7 +82,7 @@ function SharedWishlist() {
         return amount + charges;
     }
 
-    const publicKey = "pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7"
+    const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
     const amountInKobo = calcTotalAmount(Number(amount)) * 100;
     const componentProps = {
         email: payerEmail,
@@ -120,7 +120,7 @@ function SharedWishlist() {
         try {
             handleReset();
             setIsLoadingPay(true);
-            const res = await fetch(`https://test.tajify.com/api/wishlists/payment-verification/${reference}/${charges}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/payment-verification/${reference}/${charges}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -154,7 +154,7 @@ function SharedWishlist() {
             try {
                 setIsLoadingPay(true);
 
-                const res = await fetch(`https://test.tajify.com/api/wishlists/shared-wishlist/${shareableUrl}`, {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/shared-wishlist/${shareableUrl}`, {
                 // const res = await fetch(`http://localhost:3010/api/wishlists/shared-wishlist/${shareableUrl}`, {
                     method: 'GET',
                     headers: {
@@ -180,7 +180,7 @@ function SharedWishlist() {
         async function handleFetchWishes() {
             try {
                 // const wishesRes = await fetch(`http://localhost:3010/api/wishlists/all-wishes/${wishList?._id}`, {
-                const wishesRes = await fetch(`https://test.tajify.com/api/wishlists/all-wishes/${wishList?._id}`, {
+                const wishesRes = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/all-wishes/${wishList?._id}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type" : "application/json"
@@ -241,7 +241,7 @@ function SharedWishlist() {
                     {isLoading && (<SkelentonCard />)}
                     {(wishList && !isLoading) && (
                         <div className="share--top">
-                            <img src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList.image} />
+                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${wishList.image}`} alt={wishList.image} />
                             <div className="top--details">
                                 <p className="wishlist--title">{wishList.name}.</p>
                                 <span className='top--info'>

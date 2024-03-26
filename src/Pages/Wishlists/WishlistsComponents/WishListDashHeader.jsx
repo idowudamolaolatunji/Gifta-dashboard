@@ -67,7 +67,7 @@ function WishListDashHeader() {
 								{(user?.image !== "") ? (
 									<img
 										alt={user?.fullName + " 's image"}
-										src={`https://test.tajify.com/asset/users/${user?.image}`}
+										src={`${import.meta.env.VITE_SERVER_ASSET_URL}/users/${user?.image}`}
 										className='profile__img'
 									/>
 								) : (
@@ -120,7 +120,7 @@ function WishListDashHeader() {
 						
 						<Link className="tab" to="/dashboard/digital-products">
 							<LiaDigitalTachographSolid className="tab-icon" />
-							<p>DigitalProducts</p>
+							<p>Digital Gifts</p>
 						</Link>
 
 						<Link className="tab" to="/dashboard/reminders">
@@ -135,7 +135,7 @@ function WishListDashHeader() {
 
 						<Link className="tab" to="/dashboard/marketplace/anniversary">
 							<BsShop className="tab-icon" />
-							<p>MarketPlace</p>
+							<p>Idea Box</p>
 						</Link>
 					</div>
 				</div>

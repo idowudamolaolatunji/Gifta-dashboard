@@ -50,7 +50,7 @@ const DashTabs = () => {
 
 					<Link to="/dashboard/digital-products" className={`tab ${location.pathname.includes('/dashboard/digital-products') ? 'active-tab' : ''}`}>
 						<LiaDigitalTachographSolid className="tab-icon" />
-						<p>DigitalProducts</p>
+						<p>DigiGifts</p>
 					</Link>
 
 					<Link to="/dashboard/reminders" className={`tab ${location.pathname.includes('/dashboard/reminders') ? 'active-tab' : ''}`}>
@@ -66,7 +66,7 @@ const DashTabs = () => {
 					{/* {user.role === 'user' && ( */}
 						<Link className={`tab ${location.pathname.includes('/dashboard/marketplace') ? 'active-tab' : ''}`} to="/dashboard/marketplace/anniversary">
 							<BsShop className="tab-icon" />
-							<p>MarketPlace</p>
+							<p>IdeaBox</p>
 						</Link>
 					{/* )} */}
 					

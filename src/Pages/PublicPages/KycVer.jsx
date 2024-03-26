@@ -77,7 +77,7 @@ function KycVer() {
 
             if(!checked) throw new Error('Agree to the terms!')
 
-            const res = await fetch('https://test.tajify.com/api/kycs/upload-kyc-docs', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/kycs/upload-kyc-docs`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -120,7 +120,7 @@ function KycVer() {
             formData.append('frontimage', frontImage);
             formData.append('backimage', backImage);
 
-            const res = await fetch(`https://test.tajify.com/api/kycs/upload-kyc-img/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/kycs/upload-kyc-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -143,7 +143,7 @@ function KycVer() {
             try {
                 setIsLoading(true)
 
-                const res = await fetch(`https://test.tajify.com/api/kycs/my-kyc`, {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/kycs/my-kyc`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",

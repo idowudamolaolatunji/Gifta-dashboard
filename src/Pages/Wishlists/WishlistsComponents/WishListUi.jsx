@@ -181,7 +181,7 @@ function WishListUi() {
             setIsLoading(true);
             handleReset();
             setHelpReset(false);
-            const res = await fetch(`https://test.tajify.com/api/wishlists/delete-wish/${wishList._id}/${selectedWishId}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/delete-wish/${wishList._id}/${selectedWishId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -226,7 +226,7 @@ function WishListUi() {
         async function handleFetchList() {
             try {
                 setIsLoading(true)
-                const res = await fetch(`https://test.tajify.com/api/wishlists/user-wishlists/wishlists/${wishListSlug}`, {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/user-wishlists/wishlists/${wishListSlug}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -253,7 +253,7 @@ function WishListUi() {
             try {
                 console.log()
                 setIsLoading(true)
-                const res = await fetch(`https://test.tajify.com/api/wishlists/all-wishes/${wishList?._id}`, {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/all-wishes/${wishList?._id}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json"
@@ -281,7 +281,7 @@ function WishListUi() {
 			setIsLoading(true);
             handleReset();
             setHelpReset(false);
-            const res = await fetch(`https://test.tajify.com/api/wishlists/delete-my-wishlist/${wishList._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/delete-my-wishlist/${wishList._id}`, {
                 method: "DELETE",
                 headers: {
 					'Content-Type': 'application/json',
@@ -332,7 +332,7 @@ function WishListUi() {
             try {
                 console.log(wishList._id)
                 setIsLoading(true)
-                const res = await fetch(`https://test.tajify.com/api/wishlists/wishlist-log/logs/${wishList?._id}`, {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/wishlist-log/logs/${wishList?._id}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -393,7 +393,7 @@ function WishListUi() {
                         <span className='lists--title destop-title'>{wishList?.name}</span>
 
                         <div className="lists--head-box-mobile" onMouseLeave={() => setShowActionInfo(false)}>
-                            <img src={`https://test.tajify.com/asset/others/${wishList.image}`} alt={wishList?.name} />
+                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${wishList.image}`} alt={wishList?.name} />
                             <div>
                                 <span onClick={() => navigate(-1)} className='wishlist--back-btn-mobile'><IoChevronBackOutline /></span>
                                 <span className='lists--title'>{wishList?.name}</span>
@@ -562,7 +562,7 @@ function WishListUi() {
                                 {(user?.image !== "") ? (
                                     <img
                                         alt={user?.fullName + "'s image"}
-                                        src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                        src={`${import.meta.env.VITE_SERVER_ASSET_URL}/users/${user?.image}`}
                                     /> 
                                 ) : (
                                     <span className="contibutor__img-initials">

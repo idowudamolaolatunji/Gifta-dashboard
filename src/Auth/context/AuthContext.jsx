@@ -57,14 +57,10 @@ export const AuthProvider = ({ children }) => {
 			if(data.status !== 'success') throw new Error(data.message);
 			Cookies.remove("giftaUser");
 			Cookies.remove("userToken");
-			// Cookies.remove("giftaUser", { domain: '.getgifta.com' });
-			// Cookies.remove("userToken", { domain: '.getgifta.com' });
 		} catch (err) {
 			console.log(err.message)
 			Cookies.remove("giftaUser");
 			Cookies.remove("userToken");
-			// Cookies.remove("giftaUser", { domain: '.getgifta.com' });
-			// Cookies.remove("userToken", { domain: '.getgifta.com' });
 		}
 	};
 
@@ -79,7 +75,7 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(function() {
 		async function handleFetchNotifications() {
-			const res = await fetch('https://test.tajify.com/api/notifications/my-notifications', {
+			const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/notifications/my-notifications`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -101,7 +97,7 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(function() {
 		async function handleFetchOrder() {
-			const res = await fetch('https://test.tajify.com/api/orders', {
+			const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders`, {
                 method: 'GET',
                 headers: {
                     "Content-Type": 'application/json',

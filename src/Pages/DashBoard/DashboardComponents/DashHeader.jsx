@@ -65,7 +65,7 @@ const DashHeader = ({ isDasboard }) => {
 				setIsLoading(true);
 				setShowSearchModal(true);
 
-				const res = await fetch(`https://test.tajify.com/api/search?query=${searchQuery}`
+				const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/search?query=${searchQuery}`
 					, {
 						method: 'GET',
 						headers: {
@@ -145,7 +145,7 @@ const DashHeader = ({ isDasboard }) => {
 							{(user?.image !== "") ? (
 								<img
 									alt={user?.fullName + " 's image"}
-									src={`https://test.tajify.com/asset/users/${user?.image}`}
+									src={`${import.meta.env.VITE_SERVER_ASSET_URL}/users/${user?.image}`}
 									className='profile__img'
 								/>
 							) : (

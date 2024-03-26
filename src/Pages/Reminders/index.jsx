@@ -5,7 +5,7 @@ import DashTabs from "../DashBoard/DashboardComponents/DashTabs";
 import ReminderImg from '../../Assets/images/props-loud-speaker.png';
 import DashboardModal from "../../Components/Modal";
 import ReminderModal from "./ReminderComponents/ReminderModal";
-import { expectedDateFormatter } from "../../utils/helper";
+import { expectedDateFormatter, formatDate } from "../../utils/helper";
 import { useAuthContext } from "../../Auth/context/AuthContext";
 import SkelentonFour from "../../Components/SkelentonFour";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -15,6 +15,8 @@ import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import SkelentonOne from "../../Components/SkelentonOne";
 import { FiPlus } from "react-icons/fi";
 import { IoHeart } from "react-icons/io5";
+import { TiSpanner } from "react-icons/ti";
+
 
 const customStyle = {
 	minHeight: "auto",
@@ -32,12 +34,14 @@ function Reminders() {
 	const [showDashboardModal, setShowDashboardModal] = useState(false);
 	const [showCompleteModal, setShowCompleteModal] = useState(false);
 	const [showPostponeModal, setShowPostponeModal] = useState(false);
+	const [showEditModal, setShowEditModal] = useState(false)
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoadingImg, setIsLoadingImg] = useState(false);
 	const [reminders, setReminders] = useState([]);
 	const [helpReset, setHelpReset] = useState(false);
 	const [reminderId, setReminderId] = useState(null);
+	const [selectedReminder, setSelectedReminder] = useState({})
 	// const [selectedReminder, setSelectedReminder] = useState({});
 
 	const [isError, setIsError] = useState(false);
@@ -85,6 +89,16 @@ function Reminders() {
 		setShowPostponeModal(true);
 		setReminderId(item._id);
 	}
+	function handleEditModal(item) {
+		handleResetId();
+		setShowEditModal(true);
+		setReminderId(item._id);
+		setSelectedReminder(item);
+		// console.log(item, 'line 97')
+	}
+	// console.log(selectedReminder, 'line 99');
+
+
 	function handleCompleteModal(id) {
 		handleResetId();
 		setShowCompleteModal(true);
@@ -113,7 +127,7 @@ function Reminders() {
 			handleReset();
 			setHelpReset(false)
 
-			const res = await fetch(`https://test.tajify.com/api/reminders/mark-as-completed/${reminderId}`, {
+			const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/mark-as-completed/${reminderId}`, {
 				method: 'PATCH',
 				headers: {
 					"Comtent-Type": "application/json",
@@ -145,8 +159,9 @@ function Reminders() {
 		try {
 			setIsLoadingImg(true);
 			handleReset();
+			setHelpReset(false)
 
-			const res = await fetch(`https://test.tajify.com/api/reminders/delete-my-reminder/${reminderId}`, {
+			const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/delete-my-reminder/${reminderId}`, {
 				method: 'DELETE',
 				headers: {
 					"Comtent-Type": "application/json",
@@ -156,22 +171,19 @@ function Reminders() {
 			console.log(res);
 			if (!res.ok) throw new Error('Something went wrong!');
 
-			if(res.status === 204) {
-                setIsSuccess(true);
-                setMessage('Reminder deleted!');
-                setTimeout(() => {
-                    setIsSuccess(false);
-					setMessage('');
-					setHelpReset(true);
-					handleCloseModal('delete')
-                    window.location.reload();
-                }, 1500);
-                return;
-            }
 			const data = await res.json();
 			if (data.status !== "success") {
 				throw new Error(data.message)
 			}
+
+			setIsSuccess(true);
+			setMessage('Reminder deleted!');
+			setTimeout(() => {
+				setIsSuccess(false);
+				setMessage('');
+				handleCloseModal('delete');
+				setHelpReset(true);
+			}, 1500);
 
 		} catch (err) {
 			handleFailure(err.message);
@@ -188,8 +200,8 @@ function Reminders() {
 			handleReset();
 			console.log(date, time)
 
-			// const res = await fetch(`https://test.tajify.com/api/reminders/postpone-reminder/${reminderId}`, {
-			const res = await fetch(`https://test.tajify.com/api/reminders/postpone-reminder/${date}/${time}/${reminderId}`, {
+			// const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/postpone-reminder/${reminderId}`, {
+			const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/postpone-reminder/${date}/${time}/${reminderId}`, {
 				method: 'PATCH',
 				headers: {
 					"Comtent-Type": "application/json",
@@ -221,12 +233,21 @@ function Reminders() {
 		}
 	}
 
+	async function handleEditReminder() {
+		try {
+
+		} catch(err) {
+
+		} finally {
+
+		}
+	}
 
 	useEffect(function () {
 		async function handleFetchReminders() {
 			try {
 				setIsLoading(true);
-				const res = await fetch(`https://test.tajify.com/api/reminders/my-reminders`, {
+				const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/my-reminders`, {
 					method: 'GET',
 					headers: {
 						"Content-Type": 'application/json',
@@ -281,7 +302,7 @@ function Reminders() {
 						</>
 					)}
 
-					{(reminders) ? (
+					{(reminders.length > 0 && !isLoading) ? (
 						<>
 							<span className='section--flex' style={{ marginBottom: '2.6rem', }}>
 								<h3 className="section__heading" style={{ marginTop: '-1rem',  fontSize: '2.2rem' }}>Set reminders for <span style={{ color: '#bb0505' }}>love ones</span> and special occations! <span style={{ color: '#bb0505', fontSize: '2.4rem' }}><IoHeart /></span></h3>
@@ -298,24 +319,25 @@ function Reminders() {
 							<div className="reminder__grid">
 								{/* <button className="w-figure--btn" onClick={handleShowModal}>Set Reminder</button> */}
 								{mapReminder?.map(reminder => (
-									<figure key={reminder._id} className="reminder--figure" style={{ backgroundImage: `linear-gradient(rgba(225, 225, 225, .8), rgba(225, 225, 225, 0.8)), url(https://test.tajify.com/asset/others/${reminder?.image})`}} >
+									<figure key={reminder._id} className="reminder--figure" style={{ backgroundImage: `linear-gradient(rgba(225, 225, 225, .8), rgba(225, 225, 225, 0.8)), url(${import.meta.env.VITE_SERVER_ASSET_URL}/others/${reminder?.image})`}} >
 										<p className="reminder--text">{reminder.title}.</p>
 										<span className="figure--bottom">
 											<span className="reminder--others">
 												<span className="reminder--date">
 													<p>Date</p>
-													{expectedDateFormatter(`${reminder.reminderDate}`)}
+													{formatDate(reminder?.reminderDate)}{" "}
+													({expectedDateFormatter(`${reminder.reminderDate}`)})
 												</span>
-												<RiDeleteBin5Line className="reminder--delete" onClick={() => handleDeleteModal(reminder._id)} />
+												<RiDeleteBin5Line className="reminder--icon" onClick={() => handleDeleteModal(reminder._id)} />
 											</span>
 											<span className="reminder--tasks">
 												{!reminder.isCompleted ? (
 													<>
-														<span onClick={() => handleCompleteModal(reminder._id)}>Mark As Completed</span>
-														<span onClick={() => handlePostponeModal(reminder)}>Postpone</span>
+														<span onClick={() => handleCompleteModal(reminder._id)}>Mark Complete</span>
+														<TiSpanner style={{ fontSize: '2.6rem' }} className="reminder--icon" onClick={() => handleEditModal(reminder)} />
 													</>
 												) : (
-													<span>Reminder Completed!!</span>
+													<span style={{ cursor: 'auto'}}>Reminder Completed!!</span>
 												)}
 											</span>
 										</span>
@@ -324,21 +346,20 @@ function Reminders() {
 							</div>
 							<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
 						</>
-						) : (!isLoading) && (
-							<div className="reminder--banner banner">
-								<h3 className="section__heading">Lift us remind you of your <span style={{ color: '#bb0505' }}>special dates!</span></h3>
+					) : (!isLoading) && (
+						<div className="reminder--banner banner">
+							<h3 className="section__heading">Lift us remind you of your <span style={{ color: '#bb0505' }}>special dates!</span></h3>
 
-								<img src={ReminderImg} alt={ReminderImg} />
-								<button type="button" onClick={handleShowModal}>Set a Reminder</button>
-							</div>
-						)
-					}
+							<img src={ReminderImg} alt={ReminderImg} />
+							<button type="button" onClick={handleShowModal}>Set a Reminder</button>
+						</div>
+					)}
 				</div>
 			</section>
 
-			{showDashboardModal && (
-				<DashboardModal title={'Set Reminder'} customStyle={customStyle} setShowDashboardModal={setShowDashboardModal}>
-					<ReminderModal setShowDashboardModal={setShowDashboardModal} setHelpReset={setHelpReset} />
+			{(showDashboardModal || showEditModal) && (
+				<DashboardModal title={'Set Reminder'} customStyle={customStyle} setShowDashboardModal={showDashboardModal ? setShowDashboardModal : setShowEditModal}>
+					<ReminderModal setShowDashboardModal={showDashboardModal ? setShowDashboardModal : setShowEditModal} setHelpReset={setHelpReset} reminderItem={selectedReminder} />
 				</DashboardModal>
 			)}
 

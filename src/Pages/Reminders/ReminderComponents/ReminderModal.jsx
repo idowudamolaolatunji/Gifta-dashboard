@@ -2,19 +2,22 @@ import React, { useEffect, useState } from 'react';
 
 import Switch from "react-switch";
 import { IoIosCloudUpload } from "react-icons/io";
-import { IoCheckmarkDone } from "react-icons/io5";
+import { IoAdd, IoCheckmarkDone } from "react-icons/io5";
 
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
 import Alert from '../../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import { MdAdd } from "react-icons/md";
 import { useAuthContext } from '../../../Auth/context/AuthContext';
+import { TfiGift } from 'react-icons/tfi';
 
 
-function ReminderModal({ setShowDashboardModal, setHelpReset }) {
+function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
     const [toggle, setToggle] = useState('just-remind');
     const [checkedEmail, setCheckedEmail] = useState(false);
     const [checkedSms, setCheckedSms] = useState(false);
     const [checkRepeat, setCheckRepeat] = useState(false);
+    const [addedGift, setAddedGift] = useState()
     const [title, setTitle] = useState('');
     const [purpose, setPurpose] = useState('')
     const [imageFile, setImageFile] = useState(null);
@@ -27,14 +30,43 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
 
+    ////////////////////////////////////////
+    const [isCompleted, setIsComplete] = useState(false);
+    ////////////////////////////////////////
+
 	const { user, token } = useAuthContext();
 
+    useEffect(function() {
+        if(reminderItem) {
+            setTitle(reminderItem?.title);
+            setPurpose(reminderItem?.purpose);
+            setDate(reminderItem?.reminderDate?.split('T')[0]);
+            setTime(reminderItem?.reminderTime);
+            setCheckedSms(reminderItem?.sendMessage && reminderItem?.sendThrough === 'sms');
+            setCheckedEmail(reminderItem?.sendMessage && reminderItem?.sendThrough === 'email');
+            setAddedGift(reminderItem?.addedGift)
+            setCheckRepeat(reminderItem?.RepeatAllDay);
+            setContactInfo(reminderItem?.contactInfo);
+            setReminderMessage(reminderItem?.reminderMessage);
+        } else {
+            setTitle('');
+            setPurpose('');
+            setDate('');
+            setTime('');
+            setCheckedSms(false);
+            setCheckedEmail(false);
+            setCheckRepeat(false);
+            setAddedGift(false)
+            setContactInfo('');
+            setReminderMessage('');
+        }
+    }, [reminderItem]);
 
-    const reminderDetails = {
-        title, purpose, imageFile, date, time, checkedSms, checkedEmail, checkRepeat, contactInfo, reminderMessage
-    }
-    console.log(reminderDetails)
-
+    // useEffect(function() {
+    //     if(!title || !purpose || !date || !time) {
+    //         setIsComplete(true);
+    //     }
+    // }, [setTitle, setPurpose, setDate, setTime]);
 
     function handleToggle(tab) {
         setToggle(tab);
@@ -92,8 +124,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             handleReset();
             setHelpReset(false);
 
-            // const res = await fetch(`http://localhost:3010/api/reminders/create-reminder`, {
-            const res = await fetch(`https://test.tajify.com/api/reminders/create-reminder`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/create-reminder`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -120,11 +151,11 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             }
 
             // UPLOAD IMAGE
-            const formData = new FormData();
-            const id = data.data.reminder._id;
-            if(imageFile) {
-                handleUploadImg(formData, id);
-            }
+            // const formData = new FormData();
+            // const id = data.data.reminder._id;
+            // if(imageFile) {
+            //     handleUploadImg(formData, id);
+            // }
 
             setIsSuccess(true);
             setMessage(data.message);
@@ -142,26 +173,25 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
         }
     }
 
-    async function handleUploadImg(formData, id) {
-        try {
-            setIsLoading(true)
-            formData.append('image', imageFile);
-            await fetch(`https://test.tajify.com/api/reminders/reminder-img/${id}`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": 'application/json',
-                    Authorization: `Bearer ${token}`
-                },
-                body: formData,
-                mode: "no-cors"
-            });
-            // if(!res.ok) throw new Error('Something went wrong!');            
-        } catch(err) {
-            console(err.message);
-        } finally {
-            setIsLoading(false)
-        }
-    }
+    // async function handleUploadImg(formData, id) {
+    //     try {
+    //         setIsLoading(true)
+    //         formData.append('image', imageFile);
+    //         await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/reminder-img/${id}`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 "Content-Type": 'application/json',
+    //                 Authorization: `Bearer ${token}`
+    //             },
+    //             body: formData,
+    //             mode: "no-cors"
+    //         });
+    //     } catch(err) {
+    //         console(err.message);
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
 
   return (
     <>
@@ -251,8 +281,13 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
                     <span className={`${toggle === 'send-message' ? 'active' : ''}`} onClick={() => handleToggle('send-message')}>Send Message</span>
                 </span>
                 <div className="form--item">
-                    <label htmlFor="image" className='form--label-img form--label'><IoIosCloudUpload className='form--label-icon' style={ imageFile ? { color: '#bb0505' } : {}} /> Upload Reminder Image {imageFile ? (<IoCheckmarkDone className="form--label-icon" style={{ color: '#bb0505' }} />) : ''}</label>
-                    <input type="file" id='image' className='form--input-img' name='image' accept='image/*' onChange={e => handleUploadImage(e)} />
+                    {/* <label htmlFor="image" className='form--label-img form--label'><IoIosCloudUpload className='form--label-icon' style={ imageFile ? { color: '#bb0505' } : {}} /> Upload Reminder Image {imageFile ? (<IoCheckmarkDone className="form--label-icon" style={{ color: '#bb0505' }} />) : ''}</label>
+                    <input type="file" id='image' className='form--input-img' name='image' accept='image/*' onChange={e => handleUploadImage(e)} /> */}
+
+                    <span className='form--item-add'>
+                        <span className='form--icon-box'><IoAdd className='icon' /></span>
+                        <label className='form--label' style={{ display: 'flex', alignItems: 'center', gap: '.6rem' }}>Add Gift <TfiGift style={{ color: '#bb0505', fontSize: '1.4rem' }} /></label>
+                    </span>
                 </div>
             </div>
             {(toggle === 'send-message' && (checkedEmail || checkedSms)) && (
@@ -270,6 +305,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset }) {
             )}
             <div className="reminder--actions">
                 <button type='button' className='cancel--btn' onClick={handleModalClose}>Cancel</button>
+                {/* <button type={isCompleted ? 'submit' : ''} className={`set--btn ${!isCompleted ? 'btn-incomplete' : ''}`}>Set Reminder</button> */}
                 <button type='submit' className='set--btn'>Set Reminder</button>
             </div>
         </form> 

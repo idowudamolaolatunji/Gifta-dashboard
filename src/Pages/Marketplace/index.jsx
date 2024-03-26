@@ -17,7 +17,7 @@ function MarketPlace() {
             
 		    <section className="marketplace__section">
 				<div className="section__container">
-					<MarketProducts />
+					<MarketProducts type={'gifting'} />
 				</div>
             </section>
 

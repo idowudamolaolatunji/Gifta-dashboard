@@ -107,7 +107,7 @@ function OTPMODAL({ setShowOtpModal }) {
         try {
             handleReset();
             setIsLoading(true)
-            const res = await fetch('https://test.tajify.com/api/users/request-otp', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/request-otp`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -143,7 +143,7 @@ function OTPMODAL({ setShowOtpModal }) {
             setIsLoading(true);
             if(!otp) throw new Error('OTP field required!');
 
-            const res = await fetch('https://test.tajify.com/api/users/verify-otp', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/verify-otp`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

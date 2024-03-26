@@ -8,7 +8,7 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
 function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
-    const [imagePreview, setImagePreview] = useState(itemData?.image ? `https://test.tajify.com/asset/others/${itemData?.image}` : null);
+    const [imagePreview, setImagePreview] = useState(itemData?.image ? `${import.meta.env.VITE_SERVER_ASSET_URL}/others/${itemData?.image}` : null);
     const [imageFile, setImageFile] = useState(null);
     const [title, setTitle] = useState(itemData?.name || '');
     const [category, setCategory] = useState(itemData?.category || '');
@@ -76,7 +76,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
 
             setIsLoading(true);
 
-            const res = await fetch(`https://test.tajify.com/api/wishlists/${url}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/${url}`, {
                 method,
                 headers: {
                     "Content-Type": 'application/json',
@@ -129,7 +129,7 @@ function WishlistForm({ setShowDashboardModal, setHelpReset, itemData }) {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            await fetch(`https://test.tajify.com/api/wishlists/wishlist-img/${id}`, {
+            await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/wishlist-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',

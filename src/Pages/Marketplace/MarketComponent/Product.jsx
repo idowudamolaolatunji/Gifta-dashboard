@@ -8,12 +8,17 @@ import GiftingForm from '../../Gifting/GiftingComponents/GiftingForm';
 
 import giftaLogo from "../../../Assets/gifta-logo.png";
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 
-function Product({ product, handleCloseModal }) {
+function Product({ product, handleCloseModal, type }) {
     const [showGiftingForm, setShowGiftingForm] = useState('');
-    const [currImage, setCurrImage] = useState(`https://test.tajify.com/asset/products/${product.image}`);
+    const [currImage, setCurrImage] = useState(`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`);
     const [quantity, setQuantity] = useState(1);
+    
+    const navigate = useNavigate();
+
+
     console.log(quantity, product.price);
     const amount = Number(quantity * product.price);
     console.log(amount);
@@ -48,7 +53,7 @@ function Product({ product, handleCloseModal }) {
     
   return (
     <>
-    <div className="product__modal--overlay" />
+    <div className="product__modal--overlay" onClick={type === 'marketplace' ? handleCloseModal : ''} />
         <aside className='product__modal' key={product._id}>
             <span className="product--close-icon" onClick={handleCloseModal}><AiOutlineClose className='close--icon' /></span>
             { showGiftingForm ? <GiftingForm handleHideForm={handleHideForm} handleCloseModal={handleCloseModal} /> : (
@@ -64,7 +69,7 @@ function Product({ product, handleCloseModal }) {
 
                         <div className="product--vendor">
                             <div className="vendor--main">
-                                <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `https://test.tajify.com/asset/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
+                                <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `${import.meta.env.VITE_SERVER_ASSET_URL}/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
                                 {/* <img src={product.vendor.image} alt={product.vendor.fullName} /> */}
                                 <div>
                                     <p>{product.vendor.fullName}</p>
@@ -89,7 +94,13 @@ function Product({ product, handleCloseModal }) {
                                 </span>
                             </span>
 
-                            <button className="product--btn" onClick={handleShowForm}>Gift now</button>
+                            <button className="product--btn" onClick={type === 'marketplace' ? () => navigate('/dashboard/gifting/anniversary') : () => handleShowForm()}>Gift now</button>
+                            {/* {type !== 'marketplace' && (
+                                <button className="product--btn" onClick={handleShowForm}>Gift now</button>
+                            )}
+                            {type === 'marketplace' && (
+                                <button className="product--btn" onClick={() => navigate('/dashboard/gifting/anniversary')}>Gift now</button> 
+                            )} */}
                         </span>
                     </div>
                 </div>

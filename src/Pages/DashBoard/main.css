@@ -313,7 +313,7 @@
 }
 .dashboard__tabs .tab {
 	display: flex;
-	align-content: center;
+	align-items: center;
 	gap: 0.6rem;
 	color: #777;
 	font-size: 1.5rem;
@@ -2459,7 +2459,7 @@ span.validity::after {
 	flex-direction: column;
 	gap: .6rem;
 
-	font-size: 1.4rem;
+	font-size: 1.3rem;
 	color: #555;
 	font-weight: 600;
 }
@@ -2469,11 +2469,12 @@ span.validity::after {
 	color: #888;
 	font-weight: 500;
 }
-.reminder--delete {
+.reminder--icon {
 	transition: all .35s;
 	cursor: pointer;
+	font-size: 2.4rem;
 }
-.reminder--delete:hover {
+.reminder--icon:hover {
 	color: #bb0505;
 }
 .reminder--tasks {

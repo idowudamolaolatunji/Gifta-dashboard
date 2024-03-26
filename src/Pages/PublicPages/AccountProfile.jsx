@@ -70,7 +70,7 @@ function AccountProfile() {
             handleReset();
             setIsLoading(true)
 
-            const res = await fetch(`https://test.tajify.com/api/users/me/update-profile`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/me/update-profile`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": 'application/json',
@@ -109,7 +109,7 @@ function AccountProfile() {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            const res = await fetch(`https://test.tajify.com/api/users/me/update-profile-photo`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/me/update-profile-photo`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -133,7 +133,7 @@ function AccountProfile() {
     //         try {
     //             // setIsLoading(true)
     //             formData.append('image', imageFile);
-    //             const res = await fetch(`https://test.tajify.com/api/users/me/update-profile-photo`, {
+    //             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/me/update-profile-photo`, {
     //                 method: 'PATCH',
     //                 headers: {
     //                     // "Content-Type": 'application/json',
@@ -194,7 +194,7 @@ function AccountProfile() {
                                     {(user?.image) ? (
                                         <img
                                             alt={user?.fullName + " 's image"}
-                                            src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                            src={`${import.meta.env.VITE_SERVER_ASSET_URL}/users/${user?.image}`}
                                             style={imagePreview ? { display: 'none' } : {}}
                                         />
                                     ) : (!imagePreview || !user?.image) && (

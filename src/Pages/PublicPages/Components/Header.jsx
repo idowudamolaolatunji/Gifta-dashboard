@@ -65,7 +65,7 @@ function Header() {
                                     {(user?.image !== "") ? (
                                         <img
                                             alt={user?.fullName + " 's image"}
-                                            src={`https://test.tajify.com/asset/users/${user?.image}`}
+                                            src={`${import.meta.env.VITE_SERVER_ASSET_URL}/users/${user?.image}`}
                                             className='profile__img'
                                         />
                                     ) : (

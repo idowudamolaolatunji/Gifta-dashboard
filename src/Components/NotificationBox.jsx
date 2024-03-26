@@ -17,7 +17,7 @@ function NotificationBox({ showNotificationBox, setShowNotificationBox }) {
         try {
             if (notificationCount === 0) return;
 
-            const res = await fetch('https://test.tajify.com/api/notifications/mark-as-read/my-notifications', {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/notifications/mark-as-read/my-notifications`, {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",

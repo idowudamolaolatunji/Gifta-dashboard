@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { RiArrowRightDoubleLine } from "react-icons/ri";
-import { numberConverter, dateConverter } from '../../../utils/helper'
+import { numberConverter, dateConverter, truncate } from '../../../utils/helper'
 import SkeletonLoader from '../../../Components/SkeletonLoader';
 import SkeletonLoaderMini from '../../../Components/SkelentonLoaderMini';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import Product from './Product';
 import SkelentonOne from '../../../Components/SkelentonOne';
 import { useAuthContext } from '../../../Auth/context/AuthContext';
 
-function CategoryPage() {
+function CategoryPage({ type }) {
     const [isLoading, setIsLoading] = useState(false)
     const [isLoadingCat, setIsLoadingCat] = useState(false)
     const [categories, setCategories] = useState([]);
@@ -48,7 +48,7 @@ function CategoryPage() {
                 setIsLoading(true);
                 setMess('')
 
-                const res = await fetch('https://test.tajify.com/api/gift-products/all-category', {
+                const res = await fetch('http://localhost:3010/api/gift-products/all-category', {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -77,17 +77,28 @@ function CategoryPage() {
     // GET ALL THE PRODUCT IN THAT CATEGORY
     useEffect(function () {
         async function handleFetch() {
+            let url, headers;
+            if(type === 'marketplace') {
+                // url = `${import.meta.env.VITE_SERVER_URL}/gift-products/all/products/category`
+                url = `http://localhost:3010/api/gift-products/all/products/category`
+                headers = {
+                    "Content-Type": "application/json",
+                }
+            } else {
+                url = `${import.meta.env.VITE_SERVER_URL}/gift-products/products/category`
+                headers = {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
             try {
                 setIsLoadingCat(true);
                 setMess('')
 
-                // const res = await fetch(`http://localhost:3010/api/gift-products/products/category/${currentCategory}`, {
-                const res = await fetch(`https://test.tajify.com/api/gift-products/products/category/${currentCategory}`, {
+                const res = await fetch(`${url}/${currentCategory}`, {
                     method: 'GET',
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    },
+                    headers
                 });
 
                 if (!res.ok) {
@@ -137,7 +148,7 @@ function CategoryPage() {
                     <div className='page--sidebar' style={stay ? { borderRight: 'none' } : {}}>
                         <ul className={`${stay ? 'sidebar--stay' : ''}`}>
                             {categories.map((category) =>
-                                <Link to={`/dashboard/marketplace/${category.categoryName}`}>
+                                <Link to={`${type === 'marketplace' ? '/marketplace/' : '/dashboard/gifting/'}${category.categoryName}`}>
                                     <li className={`sidebar-items ${currentCategory === category.categoryName ? 'active-sidebar' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
                                         {category.categoryName} {currentCategory === category.categoryName ? <RiArrowRightDoubleLine className='sidebar-icon' /> : ''}
                                     </li>
@@ -148,7 +159,7 @@ function CategoryPage() {
 
                     <div className="page--tab-mobile">
                         {categories.map((category) =>
-                            <Link to={`/dashboard/marketplace/${category.categoryName}`}>
+                            <Link to={`${type === 'marketplace' ? '/marketplace/' : '/dashboard/gifting/'}${category.categoryName}`}>
                                 <p className={`tab-item ${currentCategory === category.categoryName ? 'active-tab-item' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
                                     {category.categoryName}
                                 </p>
@@ -171,13 +182,13 @@ function CategoryPage() {
                         <div className={`page--main ${categoryProducts.length > 0 ? 'page--grid' : ''}`}>
                             {console.log(categoryProducts)}
                             {categoryProducts.length > 0 ? categoryProducts.map((product) =>
-                                // <Link to={`/dashboard/marketplace/${currentCategory}/${product.slug}`}>
+                                // <Link to={`/dashboard/gifting/${currentCategory}/${product.slug}`}>
                                 <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
-                                    <img className='product--img' src={`https://test.tajify.com/asset/products//${product.image}`} alt={product.name} />
+                                    <img className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} alt={product.name} />
                                     <figcaption className='product--details'>
-                                        <h4 className='product--heading'>{product.name}</h4>
+                                        <h4 className='product--heading'>{truncate(product.name, 20)}</h4>
                                         <div className='product--vendor'>
-                                            <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `https://test.tajify.com/asset/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
+                                            <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `${import.meta.env.VITE_SERVER_ASSET_URL}/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
                                             <span className='product--vendor-info'>
                                                 <p>{product.vendor.fullName}</p>
                                                 <span>{product.vendor.location || 'Lagos, Nigeria'}</span>
@@ -202,7 +213,8 @@ function CategoryPage() {
                         </div>}
                 </div>}
 
-            {(selectedProduct && showModal) && <Product product={selectedProduct} handleCloseModal={handleCloseModal} />}
+            {(selectedProduct && showModal && type === 'marketplace') && <Product product={selectedProduct} type={'marketplace'} handleCloseModal={handleCloseModal} />}
+            {(selectedProduct && showModal && type === 'gifting') && <Product product={selectedProduct} type={'gifting'} handleCloseModal={handleCloseModal} />}
         </section>
     )
 }

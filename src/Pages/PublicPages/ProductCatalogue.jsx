@@ -119,7 +119,7 @@ function ProductCatalogue() {
         async function handleFetchCategories() {
             try {
 
-                const res = await fetch('https://test.tajify.com/api/gift-products/all-category', {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/all-category`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -148,7 +148,7 @@ function ProductCatalogue() {
             try {
                 setIsFetching(true);
 
-                const res = await fetch(`https://test.tajify.com/api/gift-products/my-products`, {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/my-products`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -181,7 +181,7 @@ function ProductCatalogue() {
             setIsLoading(true);
 
             // const res = await fetch(`http://localhost:3010/api/gift-products/delete-my-product/${selectedProduct?._id}`, {
-            const res = await fetch(`https://test.tajify.com/api/gift-products/delete-my-product/${selectedProduct?._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/delete-my-product/${selectedProduct?._id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
@@ -214,13 +214,12 @@ function ProductCatalogue() {
         let method, url;
         if (type === 'new') {
             method = 'POST';
-            url = 'https://test.tajify.com/api/gift-products/create-product';
+            url = `${import.meta.env.VITE_SERVER_URL}/gift-products/create-product`;
             console.log(type)
         } 
         if(type === 'edit') {
             method = 'PATCH';
-            // url = `http://localhost:3010/api/gift-products/update-my-product/${selectedProduct?._id}`;
-            url = `https://test.tajify.com/api/gift-products/update-my-product/${selectedProduct?._id}`;
+            url = `${import.meta.env.VITE_SERVER_URL}/gift-products/update-my-product/${selectedProduct?._id}`;
             console.log(type)
         }
         try {
@@ -275,7 +274,7 @@ function ProductCatalogue() {
         try {
             setIsLoading(true)
             formData.append('image', imageFile);
-            await fetch(`https://test.tajify.com/api/gift-products/product-img/${id}`, {
+            await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/product-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": 'application/json',
@@ -305,7 +304,7 @@ function ProductCatalogue() {
             setDescription(selectedProduct?.description);
             setAvail(selectedProduct?.stockAvail);
             setCategory(selectedProduct?.category);
-            setImagePreview(`https://test.tajify.com/asset/products/${selectedProduct?.image}`);
+            setImagePreview(`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct?.image}`);
             setName(selectedProduct?.name)
         } else {
             setPrice('');
@@ -374,7 +373,7 @@ function ProductCatalogue() {
                         <div className='page--grid'>
                             {filteredCatalogueCategory.map((product) =>
                                 <figure className='product--figure' style={{ position: 'relative' }} key={product._id} onClick={() => handleProduct(product)}>
-                                    <img className='product--img' src={product.image.startsWith('https') ? product.image : `https://test.tajify.com/asset/products/${product.image}`} alt={product.name} />
+                                    <img className='product--img' src={product.image.startsWith('https') ? product.image : `${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} alt={product.name} />
                                     <span className="package--category">{product.category}</span>
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{truncate(product.name, 30)}</h4>
@@ -472,7 +471,7 @@ function ProductCatalogue() {
             {showProductInfoModal && (
                 <MobileFullScreenModal title={truncate(selectedProduct?.name, 28)} setCloseModal={setShowProductInfoModal}>
                     <div className="gift--preview-top">
-                        <img src={selectedProduct?.image.startsWith('https') ? selectedProduct.image : `https://test.tajify.com/asset/products/${selectedProduct.image}`} />
+                        <img src={selectedProduct?.image.startsWith('https') ? selectedProduct.image : `${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct.image}`} />
                         <div className="gift--preview-details">
                             <p className="gift--preview-name" style={{ textTransform: 'capitalize' }}>{selectedProduct?.category} product</p>
                             <p className="gift--preview-date">

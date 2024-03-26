@@ -14,7 +14,7 @@ function Categories() {
             try {
                 setIsLoading(true);
 
-                const res = await fetch('https://test.tajify.com/api/gift-products/all-category', {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/all-category`, {
                     method: 'GET',
                     headers: { 
                         "Content-Type": "application/json",
@@ -59,14 +59,14 @@ function Categories() {
             categories.map(category => {
                 return (
                     <>
-                        <Link to={`/dashboard/marketplace/${category.categoryName}`}>
+                        <Link to={`/dashboard/gifting/${category.categoryName}`}>
                             <figure className='category--figure' key={category._id}>
                                 <img className='category--image' src={category.categoryImage} alt={category.categoryName} />
                                 <div className="category--title">{category.categoryName}</div>
                             </figure>
                         </Link>
 
-                        <Link className='category--figure-m' to={`/dashboard/marketplace/${category.categoryName}`}>
+                        <Link className='category--figure-m' to={`/dashboard/gifting/${category.categoryName}`}>
                             <figure className='category--figure category--figure-mobile' key={category._id}>
                                 <img className='category--image' src={category.categoryImage} alt={category.categoryName} />
                                 <figcaption>
