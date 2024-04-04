@@ -1,17 +1,15 @@
 import React from 'react'
-import Header from './Components/Header'
 import CategoryPage from '../Marketplace/MarketComponent/MarketProducts'
+import Header from '../Marketplace/MarketComponent/Header'
 
 function PublicMarketPlace() {
   return (
     <>
 
-    <Header />
+      <Header />
 
-    <div style={{ padding: '2.4rem' }}>
-        <CategoryPage type={'marketplace'} />
-    </div>
-      
+      <CategoryPage type={'marketplace'} />
+
     </>
   )
 }

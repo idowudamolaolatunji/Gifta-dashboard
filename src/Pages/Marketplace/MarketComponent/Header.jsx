@@ -25,7 +25,7 @@ function Header() {
 
     return (
         <>
-            <header className="dashboard__header" style={ (user?.role === 'vendor' && !user?.isKycVerified && !location.pathname.includes('/kyc-verification')) ? { marginBottom: '10rem' } : { marginBottom: '7.2rem' }}>
+            <header className="dashboard__header" style={{ marginBottom: '6rem' }}>
                 <div className='main-header sticky'>
                     <Link to='/'>
                         <img src={GiftLogo} alt="logo" className="dashboard__logo" />

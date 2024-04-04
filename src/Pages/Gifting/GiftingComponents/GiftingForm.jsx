@@ -256,7 +256,6 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         try {
             formData.append('image', imageFile);
             await fetch(`${import.meta.env.VITE_SERVER_URL}/giftings/gifting-img/${id}`, {
-            // const res = await fetch(`http://localhost:3010/api/giftings/gifting-img/${id}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",

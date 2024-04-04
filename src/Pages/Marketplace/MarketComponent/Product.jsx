@@ -60,6 +60,12 @@ function Product({ product, handleCloseModal, type }) {
                 <div className="product--container">
                     <span className='product--image-box'>
                         <img src={currImage} alt={currImage} className="product--img" />
+                        <span className='sub-images'>
+                            <img src={currImage} alt={currImage} />
+                            <img src={currImage} alt={currImage} />
+                            <img src={currImage} alt={currImage} />
+                            <img src={currImage} alt={currImage} />
+                        </span>
                     </span>
 
                     <div className="product--info">

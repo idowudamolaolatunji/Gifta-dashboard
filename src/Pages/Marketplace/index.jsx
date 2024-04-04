@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import DashHeader from "../DashBoard/DashboardComponents/DashHeader";
 import DashTabs from "../DashBoard/DashboardComponents/DashTabs";
 import MarketProducts from "./MarketComponent/MarketProducts";
+import Header from "./MarketComponent/Header";
 
 function MarketPlace() {
 
@@ -11,14 +12,16 @@ function MarketPlace() {
 
 	return (
 		<>
-			<DashHeader />
-			<DashTabs />
+			{/* <DashHeader />
+			<DashTabs /> */}
+
+			<Header />
             
             
 		    <section className="marketplace__section">
-				<div className="section__container">
+				{/* <div className="section__container" style={{ border: '1px solid red'}}> */}
 					<MarketProducts type={'gifting'} />
-				</div>
+				{/* </div> */}
             </section>
 
 		</>

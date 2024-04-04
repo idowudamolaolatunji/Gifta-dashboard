@@ -6,11 +6,14 @@
 	.section__container {
 		padding: 0 2rem;
 	}
+	.hero__section {
+		padding: 9.2rem 0 3.2rem;
+	}
 	.dashboard__tabs {
 		max-width: 100%;
 		overflow-x: auto;
-		height: 7rem;
-		padding: 1rem;
+		height: 5.6rem;
+		/* padding: 1rem; */
 	}
 	::-webkit-scrollbar {
 		display: none;
@@ -121,8 +124,8 @@
 		color: #fff;
 		margin-top: 1.8rem;
 	}
-	.lists--item-top
-	, .wishlish--share .lists--item-bottom {
+	.lists--item-top,
+	.wishlish--share .lists--item-bottom {
 		gap: 2rem;
 		display: grid;
 	}
@@ -212,6 +215,14 @@
 	.category--page {
 		grid-template-columns: 1fr;
 		gap: 0;
+		height: auto;
+		overflow: scroll;
+	}
+	.category--pg-head, .heading--desktop {
+		display: none;
+	}
+	.heading--mobile {
+		display: block;
 	}
 	.page--sidebar {
 		display: none;
@@ -261,8 +272,10 @@
 		text-align: center;
 	}
 	.page--main {
-		padding: 0;
-		margin-right: 0;
+		padding: 1.4rem 2.4rem 4rem;
+	}
+	.category--page {
+		display: block;
 	}
 
 	/* ======================================= */
@@ -282,7 +295,7 @@
 	.form--collapsible {
 		display: flex !important;
 	}
-	
+
 	.wish--form.wish--modal {
 		width: 90%;
 		padding: 1.2rem;
@@ -291,17 +304,18 @@
 
 		/* bottom: 2.5%; */
 	}
-	.form--grid, .form--grid-kyc {
+	.form--grid,
+	.form--grid-kyc {
 		flex-direction: column;
 		gap: 2rem;
 	}
 	.wallet--point-modal {
 		top: 100%;
 		right: 50%;
-	
+
 		/* transform: translateX(50%); */
 	}
-	
+
 	.form--grid span:nth-child(1) {
 		align-self: flex-start;
 	}
@@ -326,7 +340,7 @@
 		gap: 2.8rem;
 	}
 
-	.dashnoard--add-btn {
+	.dashboard--add-btn {
 		right: 3.5%;
 	}
 }
@@ -334,18 +348,23 @@
 /*  */
 @media screen and (max-width: 28.125em) {
 	html {
-		font-size: 60%;
+		font-size: 62%;
 	}
 	.alert {
 		width: 100% !important;
 	}
 
 	/* TEMPS */
-	.header__box h1 {
-		font-size: 2.6rem;
-	}
 	.hero__section {
-		padding: 8.6rem 0 2.8rem;
+		background-image: linear-gradient(to top, rgba(182, 5, 5, 0.128), rgba(182, 5, 5, 0.128)), url("./Assets/images/heading-gift-image.jpg");
+		background-position: top;
+		background-repeat: no-repeat;
+		background-size: 200%;
+		background-attachment: fixed;
+		object-fit: cover;
+	}
+	.header__box h1 {
+		font-size: 2.8rem;
 	}
 	.page--tab-mobile {
 		display: flex;
@@ -721,20 +740,24 @@
 		row-gap: 1.8rem;
 	}
 
+	.product--title {
+		text-align: center;
+		line-height: 1.4;
+	}
 
 	.lists--completed::before {
 		content: "Completed";
 		display: inline-block !important;
 
 		width: 50%;
-		padding: .4rem 0;
+		padding: 0.4rem 0;
 		background-color: #bb0505bf;
 		color: #fff;
 		font-size: 1rem;
 		font-weight: 600;
-	
+
 		text-align: center;
-	
+
 		top: 15%;
 		right: -15%;
 		transform: rotate(35deg);
@@ -750,13 +773,12 @@
 		transform: translate(-50%, -50%);
 	}
 
-
-
 	.mobile-modal--figure {
 		display: block;
 		width: 100%;
 		height: 105vh !important;
-		overflow: hidden;
+		overflow-x: hidden;
+		overflow-y: auto;
 		background-color: #fff;
 		position: fixed;
 		top: 0;
@@ -764,8 +786,9 @@
 		right: 0;
 		z-index: 3000;
 		transform: none !important;
+		padding-bottom: 4.8rem;
 	}
-	
+
 	.form--grid-prod {
 		grid-template-columns: 1fr;
 		gap: 1rem;
@@ -774,9 +797,7 @@
 		width: 100%;
 	}
 
-
-
-	.dashnoard--add-btn {
+	.dashboard--add-btn {
 		right: 7%;
 	}
 
@@ -786,7 +807,8 @@
 		gap: 1.4rem;
 		margin-bottom: 1rem;
 	}
-	.form--flex, .doc--grid {
+	.form--flex,
+	.doc--grid {
 		display: flex;
 		flex-direction: column;
 		gap: 1.2rem;
@@ -801,21 +823,31 @@
 		line-height: 1.3;
 	}
 	/* input[type="date"]:before { */
-	input[type="date"]:before, input[type="time"]:before {
+	input[type="date"]:before,
+	input[type="time"]:before {
 		content: attr(placeholder) !important;
 		color: #777;
 	}
 	/* input[type="date"]:focus:before { */
-	input[type="date"]:focus:before, input[type="time"]:focus:before {
-		content: '' !important;
+	input[type="date"]:focus:before,
+	input[type="time"]:focus:before {
+		content: "" !important;
 	}
 
 	.section--flex {
 		flex-direction: column;
 		align-items: flex-start;
-		gap: .8rem;
+		gap: 0.8rem;
 	}
 	.section--flex div.wallet--tabs .wallet--tab {
-		padding: .8rem 1rem;
+		padding: 0.8rem 1rem;
+	}
+
+	.full-scr-modal {
+		width: 100%;
+		height: 100vh;
+		top: 0%;
+		left: 0%;
+		right: 0%;
 	}
 }

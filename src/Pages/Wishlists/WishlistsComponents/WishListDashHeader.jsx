@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import GiftLogo from "../../../Assets/gifta-logo.png";
+// import GiftLogo from "../../../Assets/gifta-logo.png";
+import GiftLogo from "../../../Assets/logo.png";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 import { IoNotifications, IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
@@ -120,7 +121,7 @@ function WishListDashHeader() {
 						
 						<Link className="tab" to="/dashboard/digital-products">
 							<LiaDigitalTachographSolid className="tab-icon" />
-							<p>Digital Gifts</p>
+							<p>DigiGifts</p>
 						</Link>
 
 						<Link className="tab" to="/dashboard/reminders">
@@ -135,7 +136,7 @@ function WishListDashHeader() {
 
 						<Link className="tab" to="/dashboard/marketplace/anniversary">
 							<BsShop className="tab-icon" />
-							<p>Idea Box</p>
+							<p>IdeaBox</p>
 						</Link>
 					</div>
 				</div>

@@ -306,7 +306,7 @@ function Wishlists() {
 								))}
 							</div>
 
-							<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
+							<div className="dashboard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
 
 						</>
 					) : (wishLists && wishLists.length === 0 && !isLoading) && (

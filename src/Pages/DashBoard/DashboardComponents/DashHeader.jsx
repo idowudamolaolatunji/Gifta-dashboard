@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import GiftLogo from "../../../Assets/gifta-logo.png";
+// import GiftLogo from "../../../Assets/gifta-logo.png";
+import GiftLogo from "../../../Assets/logo.png";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 

@@ -10,6 +10,9 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import { MdAdd } from "react-icons/md";
 import { useAuthContext } from '../../../Auth/context/AuthContext';
 import { TfiGift } from 'react-icons/tfi';
+import FullScreenDesktopModal from './FullScreenDesktopModal';
+import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
@@ -29,12 +32,19 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
+    const [shouldAddProduct, setShouldAddProduct] = useState(false);
 
     ////////////////////////////////////////
     const [isCompleted, setIsComplete] = useState(false);
     ////////////////////////////////////////
 
 	const { user, token } = useAuthContext();
+    const navigate = useNavigate();
+
+    function handleAddGift() {
+        navigate(`/dashboard/reminders/add-gift/${'anniversary'}`);
+        setShouldAddProduct(true) 
+    }
 
     useEffect(function() {
         if(reminderItem) {
@@ -284,7 +294,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
                     {/* <label htmlFor="image" className='form--label-img form--label'><IoIosCloudUpload className='form--label-icon' style={ imageFile ? { color: '#bb0505' } : {}} /> Upload Reminder Image {imageFile ? (<IoCheckmarkDone className="form--label-icon" style={{ color: '#bb0505' }} />) : ''}</label>
                     <input type="file" id='image' className='form--input-img' name='image' accept='image/*' onChange={e => handleUploadImage(e)} /> */}
 
-                    <span className='form--item-add'>
+                    <span className='form--item-add' onClick={handleAddGift}>
                         <span className='form--icon-box'><IoAdd className='icon' /></span>
                         <label className='form--label' style={{ display: 'flex', alignItems: 'center', gap: '.6rem' }}>Add Gift <TfiGift style={{ color: '#bb0505', fontSize: '1.4rem' }} /></label>
                     </span>
@@ -309,6 +319,12 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
                 <button type='submit' className='set--btn'>Set Reminder</button>
             </div>
         </form> 
+        
+        {createPortal(
+            shouldAddProduct && (
+                <FullScreenDesktopModal setShouldAddProduct={setShouldAddProduct} />
+            ), document.body
+        )}
 
         {(isSuccess || isError) && (
             <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`} others={true}>

@@ -4,12 +4,14 @@ import { RiArrowRightDoubleLine } from "react-icons/ri";
 import { numberConverter, dateConverter, truncate } from '../../../utils/helper'
 import SkeletonLoader from '../../../Components/SkeletonLoader';
 import SkeletonLoaderMini from '../../../Components/SkelentonLoaderMini';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Product from './Product';
 import SkelentonOne from '../../../Components/SkelentonOne';
 import { useAuthContext } from '../../../Auth/context/AuthContext';
+import { IoClose } from 'react-icons/io5';
+import { IoIosArrowBack } from 'react-icons/io';
 
-function CategoryPage({ type }) {
+function CategoryPage({ type, setShouldAddProduct }) {
     const [isLoading, setIsLoading] = useState(false)
     const [isLoadingCat, setIsLoadingCat] = useState(false)
     const [categories, setCategories] = useState([]);
@@ -27,6 +29,12 @@ function CategoryPage({ type }) {
 
 
     const { user, token } = useAuthContext();
+    const navigate = useNavigate();
+
+    function handleCloseAddGift() {
+        navigate('/dashboard/reminders')
+        setShouldAddProduct(false)
+    }
 
 
     // THIS IS TO SHOW THE MODAL
@@ -48,7 +56,7 @@ function CategoryPage({ type }) {
                 setIsLoading(true);
                 setMess('')
 
-                const res = await fetch('http://localhost:3010/api/gift-products/all-category', {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/all-category`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -79,8 +87,7 @@ function CategoryPage({ type }) {
         async function handleFetch() {
             let url, headers;
             if(type === 'marketplace') {
-                // url = `${import.meta.env.VITE_SERVER_URL}/gift-products/all/products/category`
-                url = `http://localhost:3010/api/gift-products/all/products/category`
+                url = `${import.meta.env.VITE_SERVER_URL}/gift-products/all/products/category`
                 headers = {
                     "Content-Type": "application/json",
                 }
@@ -122,33 +129,42 @@ function CategoryPage({ type }) {
     }, [currentCategory]);
 
 
-    useEffect(function () {
-        function controlNavbar() {
-            if (window.scrollY > 200) {
-                setStay(true)
-            } else {
-                setStay(false)
-            }
-        }
-        window.addEventListener('scroll', controlNavbar)
-        controlNavbar()
-        return () => {
-            window.removeEventListener('scroll', controlNavbar)
-        }
-    }, [])
+    // useEffect(function () {
+    //     function controlNavbar() {
+    //         if (window.scrollY > 200) {
+    //             setStay(true)
+    //         } else {
+    //             setStay(false)
+    //         }
+    //     }
+    //     window.addEventListener('scroll', controlNavbar)
+    //     controlNavbar()
+    //     return () => {
+    //         window.removeEventListener('scroll', controlNavbar)
+    //     }
+    // }, [])
 
 
     return (
         <section className='category-page__section'>
+
+            {/* {type === 'reminder' && (
+                <IoClose className='close--icon' onClick={handleCloseAddGift} />
+            )} */}
+
             {isLoading ? 
-                <div className="category--spinner-destop">
-                    <SkeletonLoader /> 
+                <div className="page--main">
+                    <div className="category--spinner-destop">
+                        <SkeletonLoader /> 
+                    </div>
                 </div> :
                 <div className='category--page'>
-                    <div className='page--sidebar' style={stay ? { borderRight: 'none' } : {}}>
-                        <ul className={`${stay ? 'sidebar--stay' : ''}`}>
+                    {/* <div className='page--sidebar' style={stay ? { borderRight: 'none' } : {}}> */}
+                    <div className='page--sidebar'>
+                        <span className='tab--back' onClick={() => type === 'marketplace' ? navigate('/') : type === 'reminder' ? navigate('/dashboard/reminders') : navigate('/dashboard/gifting')}><IoIosArrowBack /> Back</span>
+                        <ul>
                             {categories.map((category) =>
-                                <Link to={`${type === 'marketplace' ? '/marketplace/' : '/dashboard/gifting/'}${category.categoryName}`}>
+                                <Link to={`${type === 'marketplace' ? '/marketplace/' : type === 'reminder' ? '/dashboard/reminders/add-gift/' : '/dashboard/gifting/'}${category.categoryName}`}>
                                     <li className={`sidebar-items ${currentCategory === category.categoryName ? 'active-sidebar' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
                                         {category.categoryName} {currentCategory === category.categoryName ? <RiArrowRightDoubleLine className='sidebar-icon' /> : ''}
                                     </li>
@@ -158,8 +174,9 @@ function CategoryPage({ type }) {
                     </div>
 
                     <div className="page--tab-mobile">
+                        <span className='tab-item tab--back' onClick={() => type === 'marketplace' ? navigate('/') : type === 'reminder' ? navigate('/dashboard/reminders') : navigate('/dashboard/gifting')}><IoIosArrowBack /> Back</span>
                         {categories.map((category) =>
-                            <Link to={`${type === 'marketplace' ? '/marketplace/' : '/dashboard/gifting/'}${category.categoryName}`}>
+                            <Link to={`${type === 'marketplace' ? '/marketplace/' : type === 'reminder' ? '/dashboard/reminders/add-gift/' : '/dashboard/gifting/'}${category.categoryName}`}>
                                 <p className={`tab-item ${currentCategory === category.categoryName ? 'active-tab-item' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
                                     {category.categoryName}
                                 </p>
@@ -168,39 +185,49 @@ function CategoryPage({ type }) {
                     </div>
 
                     {isLoadingCat ? 
-                        <>
+                        <div className="page--main" style={{ paddingTop: '0rem'}}>
                             <div className='category--spinner-destop'>
-                                <SkeletonLoader  />
+                                <SkeletonLoader />
                             </div>
 
                             <div className='category--spinner-mobile'>
                                 <SkelentonOne height={'18rem'} />
                                 <SkelentonOne height={'18rem'} />
                             </div>
-                        </> :
+                        </div> :
                     // {isLoadingCat ? <SkeletonLoaderMini /> :
+                    <div style={{ overflow: 'auto' }}>
+
+                        <span className='category--pg-head'>
+                            <img src={categories?.find(cat => currentCategory === cat?.categoryName)?.categoryImage} alt={currentCategory} />
+                            <span>{currentCategory} Category</span>
+                        </span>
+                    
+                        <p className='category--pg-heading heading--desktop'>Recent Product</p>
+                        <p className='category--pg-heading heading--mobile'>{currentCategory} Category</p>
                         <div className={`page--main ${categoryProducts.length > 0 ? 'page--grid' : ''}`}>
-                            {console.log(categoryProducts)}
                             {categoryProducts.length > 0 ? categoryProducts.map((product) =>
-                                // <Link to={`/dashboard/gifting/${currentCategory}/${product.slug}`}>
+                                // < to={`/dashboard/gifting/${currentCategory}/${product.slug}`}>
+
                                 <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
                                     <img className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} alt={product.name} />
                                     <figcaption className='product--details'>
-                                        <h4 className='product--heading'>{truncate(product.name, 20)}</h4>
-                                        <div className='product--vendor'>
-                                            <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `${import.meta.env.VITE_SERVER_ASSET_URL}/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
-                                            <span className='product--vendor-info'>
-                                                <p>{product.vendor.fullName}</p>
-                                                <span>{product.vendor.location || 'Lagos, Nigeria'}</span>
-                                            </span>
-                                        </div>
+                                        <h4 className='product--heading'>{truncate(product.name, 40)}</h4>
+                                        {/* 
+                                            <div className='product--vendor'>
+                                                <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `${import.meta.env.VITE_SERVER_ASSET_URL}/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
+                                                <span className='product--vendor-info'>
+                                                    <p>{product.vendor.fullName}</p>
+                                                    <span>{product.vendor.location || 'Lagos, Nigeria'}</span>
+                                                </span>
+                                            </div> 
+                                        */}
                                         <div className='product--infos'>
                                             <span className='product--price'>₦{numberConverter(product.price)}</span>
-                                            <span className='product--date'>{dateConverter(product.createdAt)}</span>
+                                            <span className='product--date'>{product.vendor.location || 'Lagos, Nigeria'}</span>
                                         </div>
                                     </figcaption>
                                 </figure>
-                                // </Link>
                             ) : (
                                 <div className='note--box'>
                                     <p>{mess || 'No product in this category'}</p>
@@ -210,11 +237,13 @@ function CategoryPage({ type }) {
                                     </picture>
                                 </div>
                             )}
-                        </div>}
+                        </div>
+                    </div>}
                 </div>}
 
             {(selectedProduct && showModal && type === 'marketplace') && <Product product={selectedProduct} type={'marketplace'} handleCloseModal={handleCloseModal} />}
             {(selectedProduct && showModal && type === 'gifting') && <Product product={selectedProduct} type={'gifting'} handleCloseModal={handleCloseModal} />}
+            {(selectedProduct && showModal && type === 'reminder') && <Product product={selectedProduct} type={'reminder'} handleCloseModal={handleCloseModal} />}
         </section>
     )
 }

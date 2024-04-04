@@ -498,7 +498,7 @@ function WishListUi() {
                     </div>
                 </div>
 
-                {selectedTab === 'all' && <div className="dashnoard--add-btn" onClick={() => setShowNewModal(true)}><FiPlus /></div>}
+                {selectedTab === 'all' && <div className="dashboard--add-btn" onClick={() => setShowNewModal(true)}><FiPlus /></div>}
             </section>
 
 

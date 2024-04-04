@@ -145,7 +145,7 @@ const DashBoard = () => {
 							</>
 
 							<Link to={'/dashboard/gifting'}>
-								<div className="dashnoard--add-btn" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><FiPlus /></div>
+								<div className="dashboard--add-btn" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><FiPlus /></div>
 							</Link>
 						</div>
 					) : (!isLoading && giftings.length === 0) && (

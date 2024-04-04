@@ -84,7 +84,7 @@ function Signup() {
 			if(password !== passwordConfirm) throw new Error('Passwords are not the same!');
 			if(password.length < 8 || passwordConfirm.length < 8) throw new Error('Passwords must not be less 8 characters');
 
-			const res = await fetch(inviteCode ? `${import.meta.env.VITE_SERVER_URL}/users/signup/${inviteCode}` : "https://test.tajify.com/api/users/signup", {
+			const res = await fetch(inviteCode ? `${import.meta.env.VITE_SERVER_URL}/users/signup/${inviteCode}` : `${import.meta.env.VITE_SERVER_URL}/users/signup`, {
 				method: 'POST',
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ fullName, username, email, password, passwordConfirm }),
@@ -342,10 +342,8 @@ function Signup() {
 			<Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
 				{isSuccess ? (
 					<AiFillCheckCircle className="alert--icon" />
-				) : isError ? (
+				) : isError && (
 					<AiFillExclamationCircle className="alert--icon" />
-				) : (
-					""
 				)}
 				<p>{message}</p>
 			</Alert>

@@ -53,6 +53,7 @@ function App() {
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/edit" element={<WishListUi />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
                     <Route path="/dashboard/reminders" element={<Reminders />}></Route>
+                    <Route path="/dashboard/reminders/add-gift/:category" element={<Reminders />}></Route>
 
                     <Route path="/wallet" element={<Wallet />}></Route>
                     <Route path="/settings" element={<Settings />}></Route>

@@ -8,11 +8,9 @@ import { Link } from 'react-router-dom';
 import { FaRegSquareMinus } from "react-icons/fa6";
 
 
-function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, results, closeIcon }) {
+function SearchModal({ setShowSearchModal, message, isLoading, results, closeIcon }) {
     const [activeTab, setActiveTab] = useState('');
     
-    console.log(message, isLoading, results)
-
     function handleCloseModal() {
         setShowSearchModal(false)
     }
@@ -21,7 +19,6 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
         setActiveTab(tab)
     }
 
-    // const {giftings, reminders, wishLists, wishes, products} = results;
     const {giftings, reminders, wishLists, products} = results;
 
     const tabsData = [
@@ -29,7 +26,6 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
         { tab: "reminder", count: results?.reminders?.length || 0 },
         { tab: "wishlist", count: results?.wishLists?.length || 0 },
         { tab: "product", count: results?.products?.length || 0 },
-        // { tab: "wishes", count: results?.wishes?.length || 0 },
     ];
     tabsData.sort((a, b) => b.count - a.count);
 
@@ -177,28 +173,6 @@ function SearchModal({ showSearchModal, setShowSearchModal, message, isLoading, 
                 }
                 </>
             )}
-
-
-            {/* {(activeTab === 'wishes' && !isLoading) && (
-                <>
-                {results && wishes?.length === 0 ?
-                    (<div>No search result for ({activeTab})</div>)
-                    :
-                    (<div className='search--flex'>
-                        {wishes?.map(wishItem =>
-                            (
-                            <figure className='search--figure'>
-                                <img src={wishItem.image} />
-                                <figcaption className='search--details'>
-                                    <p className='search--name'>{wishItem.name}</p>
-                                </figcaption>
-                            </figure>
-                            )
-                        )}
-                    </div>) 
-                }
-                </>
-            )} */}
            
         </div>
     </div>

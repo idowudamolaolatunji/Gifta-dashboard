@@ -68,8 +68,7 @@ function Login() {
 
 			if(password.length < 8) throw new Error('Password must not be less 8 characters');
 
-			// const res = await fetch("http://localhost:3010/api/users/login", {
-			const res = await fetch("https://test.tajify.com/api/users/login", {
+			const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

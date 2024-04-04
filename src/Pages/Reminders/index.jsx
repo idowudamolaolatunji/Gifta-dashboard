@@ -16,6 +16,7 @@ import SkelentonOne from "../../Components/SkelentonOne";
 import { FiPlus } from "react-icons/fi";
 import { IoHeart } from "react-icons/io5";
 import { TiSpanner } from "react-icons/ti";
+import { useParams } from "react-router-dom";
 
 
 const customStyle = {
@@ -54,6 +55,8 @@ function Reminders() {
 	const [activeTab, setActiveTab] = useState('pending')
 
 	const { token } = useAuthContext();
+
+	// const { category } = useParams();
 
 	const remainingReminder = reminders.filter(reminder => !reminder.isCompleted);
 	const completedReminder = reminders.filter(reminder => reminder.isCompleted);
@@ -344,7 +347,7 @@ function Reminders() {
 									</figure>
 								))}
 							</div>
-							<div className="dashnoard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
+							<div className="dashboard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
 						</>
 					) : (!isLoading) && (
 						<div className="reminder--banner banner">
@@ -358,7 +361,7 @@ function Reminders() {
 			</section>
 
 			{(showDashboardModal || showEditModal) && (
-				<DashboardModal title={'Set Reminder'} customStyle={customStyle} setShowDashboardModal={showDashboardModal ? setShowDashboardModal : setShowEditModal}>
+				<DashboardModal title={`${showEditModal ? 'Edit' : 'New'} Reminder`} customStyle={customStyle} setShowDashboardModal={showDashboardModal ? setShowDashboardModal : setShowEditModal}>
 					<ReminderModal setShowDashboardModal={showDashboardModal ? setShowDashboardModal : setShowEditModal} setHelpReset={setHelpReset} reminderItem={selectedReminder} />
 				</DashboardModal>
 			)}

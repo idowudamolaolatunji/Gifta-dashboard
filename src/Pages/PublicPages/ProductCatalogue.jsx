@@ -61,6 +61,7 @@ function ProductCatalogue() {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [notVerified, setNotVerified] = useState(false);
 
     const { user, token } = useAuthContext();
     const navigate = useNavigate();
@@ -180,7 +181,6 @@ function ProductCatalogue() {
             setHelpReset(false)
             setIsLoading(true);
 
-            // const res = await fetch(`http://localhost:3010/api/gift-products/delete-my-product/${selectedProduct?._id}`, {
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/delete-my-product/${selectedProduct?._id}`, {
                 method: 'DELETE',
                 headers: {
@@ -317,6 +317,21 @@ function ProductCatalogue() {
         }
     }, [selectedProduct, showEditModal]);
 
+    
+    function handleShowProductModal() {
+        if(!user?.isKycVerified) {
+            setNotVerified(true)
+
+            setTimeout(() => {
+                setNotVerified(false)
+    
+                navigate('/kyc-verification')
+            }, 2000);
+        } else {
+            setShowProductModal(true)
+        }
+    }
+
 
     return (
 
@@ -400,7 +415,7 @@ function ProductCatalogue() {
                 </div>
 
 
-                <div className="dashnoard--add-btn" onClick={() => setShowProductModal(true)}><FiPlus /></div>
+                <div className="dashboard--add-btn" onClick={handleShowProductModal}><FiPlus /></div>
             </section>
 
 
@@ -511,14 +526,14 @@ function ProductCatalogue() {
 
 
             {createPortal(
-                (isError || isSuccess) && (
-                    <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
+                (isError || isSuccess || notVerified) && (
+                    <Alert alertType={`${isSuccess ? "success" : (isError || notVerified) ? "error" : ""}`}>
                         {isSuccess ? (
                             <AiFillCheckCircle className="alert--icon" />
-                        ) : isError && (
+                        ) : isError || notVerified && (
                             <AiFillExclamationCircle className="alert--icon" />
                         )}
-                        <p>{message}</p>
+                        <p>{message || 'Verify your account as a vendor'}</p>
                     </Alert>
             ), document.body )}
         </>

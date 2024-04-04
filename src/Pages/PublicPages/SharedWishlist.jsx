@@ -155,7 +155,6 @@ function SharedWishlist() {
                 setIsLoadingPay(true);
 
                 const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/shared-wishlist/${shareableUrl}`, {
-                // const res = await fetch(`http://localhost:3010/api/wishlists/shared-wishlist/${shareableUrl}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type" : "application/json"
@@ -179,7 +178,6 @@ function SharedWishlist() {
     useEffect(function() {
         async function handleFetchWishes() {
             try {
-                // const wishesRes = await fetch(`http://localhost:3010/api/wishlists/all-wishes/${wishList?._id}`, {
                 const wishesRes = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/all-wishes/${wishList?._id}`, {
                     method: 'GET',
                     headers: {
