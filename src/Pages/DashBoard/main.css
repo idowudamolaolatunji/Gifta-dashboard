@@ -115,7 +115,7 @@
 .dashboard__others {
 	display: flex;
 	align-items: center;
-	gap: 2.4rem;
+	gap: 2.2rem;
 }
 .dashboard__user-profile {
 	display: flex;
@@ -165,6 +165,35 @@
 .dashboard__icon-box .dashboard__icon {
 	color: #fff;
 	font-size: 2.4rem;
+}
+.dashboard-vendor .dashboard__icon {
+	display: flex;
+	align-items: center;
+}
+.dashboard-vendor {
+	position: relative;
+}
+.dashboard-vendor:hover::after {
+	content: 'Become a Vendor';
+	display: inline-block;
+	width: 14rem;
+	height: 2rem;
+
+	position: absolute;
+	background-color: #ddd;
+	border-radius: .4rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	font-size: 1.4rem;
+	font-weight: 500;
+	top: 3.5rem;
+	left: 50%;
+
+	transform: translateX(-50%);
+	box-shadow: .1rem .6rem 1.2rem rgba(0, 0, 0, 0.1);
 }
 .dashboard__icon-box {
 	position: relative;
@@ -606,21 +635,30 @@
 	border-radius: 1rem;
 	object-fit: cover;
 }
-.category--pg-head span {
+.category--pg-head div {
 	width: 100%;
 	height: 100%;
 	position: absolute;
 	top: 0%;
 	left: 0%;
+	
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+	justify-content: center;
+}
+.category--pg-head div h3 {
+	color: #222;
+	font-size: 1.8rem;
+	font-weight: 500;
+}
+.category--pg-head div span {
 	text-transform: capitalize;
 
 	font-size: 4rem;
 	font-weight: 600;
 	color: #bb0505;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 .category--pg-heading {
 	padding-top: 2rem;
@@ -962,44 +1000,29 @@ div.banner button:hover {
 	backdrop-filter: blur(4px);
 }
 .product__modal {
-	width: 100%;
-	height: 100vh;
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
 
-	/* max-width: 75rem;
-	width: 75rem;
-	height: 75rem;
+	max-width: 85rem;
+	width: 85rem;
+	height: 50rem;
 	
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -32%);
-	box-shadow: 0.2rem 0.2rem 2rem rgba(0, 0, 0, 0.5); */
+	transform: translate(-50%, -50%);
+	box-shadow: 0.2rem 0.2rem 2rem rgba(0, 0, 0, 0.5);
 
 	background-color: #fff;
 	border-radius: 1rem;
-	padding: 3.2rem 2.8rem;
+	padding: 3rem;
 	transition: all 0.35s;
 	backface-visibility: hidden;
-	/* animation: slide-up 1s ease-in; */
 	z-index: 1600;
 }
-@keyframes slide-up {
-	0% {
-		transform: translate(-50%, 100rem);
-		opacity: 0;
-	}
-	20% {
-		transform: translate(-50%, -32%);
-		opacity: 1;
-	}
-}
+
 .product--close-icon {
 	position: absolute;
-	top: 1.5%;
-	right: 1%;
+	top: 5%;
+	right: 3.5%;
 	transform: translate(-50%, 50%);
 	z-index: 100;
 }
@@ -1013,9 +1036,10 @@ div.banner button:hover {
 }
 .product--container {
 	display: grid;
-	grid-template-columns: 2fr 4fr;
+	grid-template-columns: 2.5fr 4fr;
 	gap: 3.6rem;
-	margin-top: 1rem;
+	margin-top: 1.4rem;
+	align-items: center;
 }
 .product--image-box {
 	width: 100%;
@@ -1046,12 +1070,13 @@ div.banner button:hover {
 	overflow: hidden;
 	object-fit: cover;
 	transition: all 0.35s;
+	cursor: pointer;
 }
 .sub-images img:hover {
 	transform: scale(1.05);
 }
 .product--container .product--img:hover {
-	transform: scale(1.25) rotate(14deg);
+	transform: scale(1.15);
 }
 .product--info {
 	display: flex;
@@ -1098,7 +1123,7 @@ div.banner button:hover {
 	align-items: center;
 	width: 100%;
 	justify-content: space-between;
-	margin-top: 1.2rem;
+	margin-top: 2rem;
 }
 .product--price {
 	display: flex;
@@ -1254,6 +1279,7 @@ div.banner button:hover {
 	gap: 2.4rem;
 	margin-top: 0.6rem;
 	justify-content: flex-end;
+	margin-bottom: 4rem;
 }
 .form__inline .form__item {
 	flex-direction: row;
@@ -1717,6 +1743,7 @@ span.validity::after {
 	gap: 1.2rem;
 	overflow-x: auto;
 	width: 100%;
+	width: 130%;
 	overflow-y: hidden;
 	padding: 1.6rem 1.2rem 1rem;
 	display: none;
@@ -2063,6 +2090,7 @@ span.validity::after {
 .tab--back {
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 }
 
 
@@ -2413,7 +2441,7 @@ span.validity::after {
 }
 .reminder--form .reminder--flex-3 {
 	grid-template-columns: 1fr 1fr 1fr;
-	gap: 1.2rem;
+	column-gap: 1.2rem;
 }
 .reminder--form .reminder--flex-3, .reminder--form .reminder--flex-2, .reminder--flex-2-1  {
 	width: 100%;
@@ -2946,7 +2974,8 @@ span */
 	width: 50rem;
 	height: 90vh;
 	position: absolute;
-	top: 7.6rem;
+	/* top: 7.6rem; */
+	top: 6.7rem;
 	right: 0;
 	background-color:#fff;
 	z-index: 99;
@@ -3534,4 +3563,41 @@ span */
 	.dashboard__tabs {
 		gap: 3.6rem;
 	} 
+}
+
+
+.sub-reminder-alert {
+	width: 38rem;
+	padding: .4rem 1rem;
+	display: flex;
+	align-items: center;
+	gap: 1.2rem;
+	color: #008001;
+	background-color: #79cc79;
+	border-radius: .4rem;
+
+	font-size: 1.4rem;
+
+	position: fixed;
+	top: 7rem;
+	left: 55%;
+	transform: translateX(-50%);
+	z-index: 100000000000000;
+	box-shadow: .5rem 1rem 3rem rgba(0, 0, 0, 0.1);
+	font-weight: 600;
+}
+.sub-reminder-icon {
+	font-size: 2.4rem;
+}
+.sub-reminder-icon:last-child {
+	margin-left: auto;
+	width: 2.4rem;
+	height: 2.4rem;
+	border-radius: 50%;
+	background-color: transparent;
+	transition: all .35s;
+	cursor: pointer;
+}
+.sub-reminder-icon:last-child:hover {
+	background-color: #eee;
 }

@@ -5,12 +5,11 @@ import { BsJournalBookmark } from "react-icons/bs";
 import { TfiGift } from "react-icons/tfi";
 import { BsShop } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { PiHandbagSimple } from "react-icons/pi";
-// import { LiaDigitalTachographSolid } from "react-icons/lia";
+import { HiOutlineLightBulb } from "react-icons/hi2";
 
 
 import { useAuthContext } from "../../../Auth/context/AuthContext";
-import { LiaDigitalTachographSolid } from "react-icons/lia";
+import { TbGiftCard } from "react-icons/tb";
 
 const DashTabs = () => {
 	const [stay, setStay] = useState(function () {
@@ -48,9 +47,9 @@ const DashTabs = () => {
 						<p>Gifting</p>
 					</Link>
 
-					<Link to="/dashboard/digital-products" className={`tab ${location.pathname.includes('/dashboard/digital-products') ? 'active-tab' : ''}`}>
-						<LiaDigitalTachographSolid className="tab-icon" />
-						<p>DigiGifts</p>
+					<Link to="/dashboard/digital-gift/me" className={`tab ${location.pathname.includes('/dashboard/digital-gift') ? 'active-tab' : ''}`}>
+						<TbGiftCard className="tab-icon" />
+						<p className="tab-morre">Digial Giftings</p>
 					</Link>
 
 					<Link to="/dashboard/reminders" className={`tab ${location.pathname.includes('/dashboard/reminders') ? 'active-tab' : ''}`}>
@@ -63,26 +62,10 @@ const DashTabs = () => {
 						<p>Wishlists</p>
 					</Link>
 
-					{/* {user.role === 'user' && ( */}
-						<Link className={`tab ${location.pathname.includes('/dashboard/marketplace') ? 'active-tab' : ''}`} to="/dashboard/marketplace/anniversary">
-							<BsShop className="tab-icon" />
-							<p>IdeaBox</p>
-						</Link>
-					{/* )} */}
-					
-					{/* {user.role === 'vendor' && (
-						<Link className={`tab ${location.pathname.includes('/dashboard/product-catalogue') ? 'active-tab' : ''}`} to="/dashboard/product-catalogue">
-							<BsShop className="tab-icon" />
-							<p>Shop</p>
-						</Link>
-					)}
-
-					{user.role === 'vendor' && (
-						<Link to="/dashboard/orders" className={`tab ${location.pathname.includes('/dashboard/orders') ? 'active-tab' : ''}`}>
-							<PiHandbagSimple className="tab-icon" />
-							<p>Orders</p>
-						</Link>
-					)} */}
+					<Link className={`tab ${location.pathname.includes('/dashboard/idea-box') ? 'active-tab' : ''}`} to="/dashboard/idea-box/her">
+						<HiOutlineLightBulb className="tab-icon" />
+						<p className="tab-morre">Idea Box</p>
+					</Link>
 				</div>
 			</div>
 		</section>

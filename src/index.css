@@ -552,8 +552,9 @@ a.form--acct-btn div {
 	background-color: #ffffff9d;
 	cursor: auto;
 }
-.form--item-add {
+.form--item button.form--item-add, .form--item-add {
 	align-self: center;
+	border: none;
 
 	display: flex;
 	align-items: center;
@@ -561,8 +562,10 @@ a.form--acct-btn div {
 	padding: .4rem .8rem;
 	border-radius: .6rem;
 	transition: all .35s;
+	background-color: transparent;
+	color: #bb0505;
 }
-.form--item-add:hover {
+.form--item button.form--item-add:hover, .form--item-add:hover {
 	background-color: #eee;
 }
 .form--item-add, .form--item-add label {
@@ -596,7 +599,56 @@ a.form--acct-btn div {
 	cursor: auto;
 	z-index: 1000;
 }
-
+.form-added-item {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: .4rem;
+}
+.form-added-item img {
+	width: 100%;
+	border-radius: .6rem;
+}
+.form-added-item span {
+	display: flex;
+	flex-direction: column;
+	gap: .4rem;
+}
+.form-added-item p:first-child {
+	font-size: 1.35rem;
+}
+.form-added-item p:last-child {
+	font-size: 1rem;
+}
+.image-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	row-gap: 2rem;
+}
+.image-grid img {
+	width: 100px;
+	height: 80px;
+}
+.image-grid .mobile-item {
+	display: none;
+}
+.image-grid .mobile-item button {
+	padding: .1rem .4rem;
+	font-size: 1.8rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.multiple-image-container button {
+	font-size: 1.3rem;
+	font-weight: 500;
+}
+.multiple-image-container button.main-btn {
+	font-size: 1.4rem;
+	margin-bottom: .4rem;
+	display: flex;
+	align-items: center;
+	gap: .4rem;
+}
 
 
 

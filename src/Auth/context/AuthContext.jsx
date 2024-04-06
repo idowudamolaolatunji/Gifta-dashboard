@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
 	const [token, setToken] = useState(Cookies.get("userToken") || null);
 	const [refetchHelp, setRefetchHelp] = useState(false);
 	///////////////////////////////////////////////////////////
+	const [activeReminder, setActiveReminder] = useState(null);
+	///////////////////////////////////////////////////////////
 	const [notifications, setNotifications] = useState([]);
 	const [notificationCount, setNoticationCount] = useState(0);
 	const [orders, setOrders] = useState([]);
@@ -26,6 +28,10 @@ export const AuthProvider = ({ children }) => {
 	function handleSetOrder(orders, ordersCount) {
 		setOrders(orders);
 		setOrdersCount(ordersCount);
+	}
+
+	function handleActiveReminder(reminder) {
+		setActiveReminder(reminder)
 	}
 
 	// FUNCTION TO REFETCH
@@ -142,6 +148,9 @@ export const AuthProvider = ({ children }) => {
 		handleSetNotification,
 		notifications,
 		notificationCount,
+		////////////////////
+		handleActiveReminder,
+		activeReminder,
 		////////////////////
 		handleSetOrder,
 		orders,

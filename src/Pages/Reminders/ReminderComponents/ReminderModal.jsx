@@ -5,22 +5,22 @@ import { IoIosCloudUpload } from "react-icons/io";
 import { IoAdd, IoCheckmarkDone } from "react-icons/io5";
 
 import GiftLoader from '../../../Assets/images/gifta-loader.gif';
+import AnimatedLoader from '../../../Assets/images/animated-loader.gif';
 import Alert from '../../../Components/Alert';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
-import { MdAdd } from "react-icons/md";
 import { useAuthContext } from '../../../Auth/context/AuthContext';
 import { TfiGift } from 'react-icons/tfi';
-import FullScreenDesktopModal from './FullScreenDesktopModal';
-import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
 
 function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
+    const [isLoadGift, setIsloadGift] = useState(false);
+    const [giftItem, setGiftItem] = useState({});
     const [toggle, setToggle] = useState('just-remind');
     const [checkedEmail, setCheckedEmail] = useState(false);
     const [checkedSms, setCheckedSms] = useState(false);
     const [checkRepeat, setCheckRepeat] = useState(false);
-    const [addedGift, setAddedGift] = useState()
+    const [addedGift, setAddedGift] = useState(null);
     const [title, setTitle] = useState('');
     const [purpose, setPurpose] = useState('')
     const [imageFile, setImageFile] = useState(null);
@@ -34,16 +34,12 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
     const [message, setMessage] = useState('');
     const [shouldAddProduct, setShouldAddProduct] = useState(false);
 
-    ////////////////////////////////////////
-    const [isCompleted, setIsComplete] = useState(false);
-    ////////////////////////////////////////
-
-	const { user, token } = useAuthContext();
+	const { token, handleActiveReminder } = useAuthContext();
     const navigate = useNavigate();
 
-    function handleAddGift() {
-        navigate(`/dashboard/reminders/add-gift/${'anniversary'}`);
-        setShouldAddProduct(true) 
+    const Loading = () => {
+        // return <p style={{ fontSize: '1.4rem', color: '#333' }}>Loading...</p>
+        return <img style={{ width: '10rem' }} src={AnimatedLoader} />
     }
 
     useEffect(function() {
@@ -72,6 +68,34 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
         }
     }, [reminderItem]);
 
+
+    useEffect(function() {
+        async function fetchGiftingById() {
+            try {
+                setIsloadGift(true)
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/giftings/${reminderItem?.addedGift?._id}`, {
+                    method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if(!res.ok) throw new Error('SOmething went wrong!');
+				const data = await res.json();
+				if(data.status !== 'success') {
+					throw new Error(data.message);
+				}
+                setGiftItem(data?.data?.gifting);
+            } catch(err) {
+                console.error(err);
+            } finally {
+                setIsloadGift(false);
+            }
+        }
+        fetchGiftingById(); 
+    }, [reminderItem])
+
+
     // useEffect(function() {
     //     if(!title || !purpose || !date || !time) {
     //         setIsComplete(true);
@@ -96,15 +120,15 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
         }
     }
 
-    function handleUploadImage(e) {
-        const file = e.target.files[0];
-        setImageFile(null);
-        setTimeout(function() {
-            if(file) {
-                setImageFile(file);
-            }
-        }, 2000);
-    }
+    // function handleUploadImage(e) {
+    //     const file = e.target.files[0];
+    //     setImageFile(null);
+    //     setTimeout(function() {
+    //         if(file) {
+    //             setImageFile(file);
+    //         }
+    //     }, 2000);
+    // }
 
     function handleModalClose() {
 		setShowDashboardModal(false);
@@ -128,14 +152,22 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
     }
 
     async function handleSetReminder(e) {
+        let url, method;
+        if(reminderItem) {
+            url = `${import.meta.env.VITE_SERVER_URL}/reminders/update-my-reminder/${reminderItem?._id}`
+            method = 'PATCH';
+        } else {
+            url = `${import.meta.env.VITE_SERVER_URL}/reminders/create-reminder`
+            method = 'POST';
+        }
         try {
             e.preventDefault();
             setIsLoading(true);
             handleReset();
             setHelpReset(false);
 
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/create-reminder`, {
-                method: 'POST',
+            const res = await fetch(url, {
+                method,
                 headers: {
                     "Content-Type": 'application/json',
                     Authorization: `Bearer ${token}`
@@ -174,6 +206,11 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
                 setMessage('');
                 setHelpReset(true);
                 handleModalClose();
+
+                if(shouldAddProduct) {
+                    handleActiveReminder(data?.data?.reminder);
+                    navigate('/dashboard/reminders/add-gift/anniversary');
+                }
             }, 2000);
 
         } catch(err) {
@@ -182,26 +219,6 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
             setIsLoading(false)
         }
     }
-
-    // async function handleUploadImg(formData, id) {
-    //     try {
-    //         setIsLoading(true)
-    //         formData.append('image', imageFile);
-    //         await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/reminder-img/${id}`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 "Content-Type": 'application/json',
-    //                 Authorization: `Bearer ${token}`
-    //             },
-    //             body: formData,
-    //             mode: "no-cors"
-    //         });
-    //     } catch(err) {
-    //         console(err.message);
-    //     } finally {
-    //         setIsLoading(false)
-    //     }
-    // }
 
   return (
     <>
@@ -242,50 +259,38 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
                     <label htmlFor="form--clock" className="form--label">Time</label>
                     <input type="time" id="form--clock" className='form--input' placeholder={time ? '' : '00:00'} value={time} onChange={e => setTime(e.target.value)} required />
                 </div>
-                <div className="form--item form--switches">
-                    {toggle === 'just-remind' && (
-                        <div className="form--flexy" style={{ flexDirection: 'column', alignItems: 'flex-start'}}>
-                            <label htmlFor="form--mail" className="form--label">Repeat All Day!</label>
+
+
+                {toggle === 'send-message' && (
+                    <div className="form--item form--switches" style={{ marginTop: '1rem' }}>
+                   
+                        <div className="form--flexy">
                             <Switch
-                                onChange={next => setCheckRepeat(next)}
-                                checked={checkRepeat}
+                                onChange={next => handleChangeType(next, 'email')}
+                                checked={checkedEmail}
                                 className="form--switch"
                                 onColor="#bb0505"
                                 handleDiameter={18}
                                 height={25}
                             />
+                            <label htmlFor="form--mail" className="form--label">Email</label>
                         </div>
-                    )}
-
-                    {toggle === 'send-message' && (
-                        <>
-                            <div className="form--flexy">
-                                <Switch
-                                    onChange={next => handleChangeType(next, 'email')}
-                                    checked={checkedEmail}
-                                    className="form--switch"
-                                    onColor="#bb0505"
-                                    handleDiameter={18}
-                                    height={25}
-                                />
-                                <label htmlFor="form--mail" className="form--label">Email</label>
-                            </div>
-                            <div className="form--flexy">
-                                <Switch
-                                    onChange={next => handleChangeType(next, 'sms')}
-                                    checked={checkedSms}
-                                    className="form--switch"
-                                    onColor="#bb0505"
-                                    handleDiameter={18}
-                                    height={25}
-                                />
-                                <label htmlFor="form--sms" className="form--label">sms</label>
-                            </div>
-                        </>
-                    )}
-                </div>
+                        <div className="form--flexy">
+                            <Switch
+                                onChange={next => handleChangeType(next, 'sms')}
+                                checked={checkedSms}
+                                className="form--switch"
+                                onColor="#bb0505"
+                                handleDiameter={18}
+                                height={25}
+                            />
+                            <label htmlFor="form--sms" className="form--label">sms</label>
+                        </div>
+                    </div>
+                    
+                )}
             </div>
-            <div className="form--item reminder--flex-2" style={{ marginBottom: '.4rem' }}>
+            <div className="form--item reminder--flex-2" style={{ marginBottom: '1rem' }}>
                 <span className='form--toggle'>
                     <span className={`${toggle === 'just-remind' ? 'active' : ''}`} onClick={() => handleToggle('just-remind')}>Just Remind</span>
                     <span className={`${toggle === 'send-message' ? 'active' : ''}`} onClick={() => handleToggle('send-message')}>Send Message</span>
@@ -294,10 +299,23 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
                     {/* <label htmlFor="image" className='form--label-img form--label'><IoIosCloudUpload className='form--label-icon' style={ imageFile ? { color: '#bb0505' } : {}} /> Upload Reminder Image {imageFile ? (<IoCheckmarkDone className="form--label-icon" style={{ color: '#bb0505' }} />) : ''}</label>
                     <input type="file" id='image' className='form--input-img' name='image' accept='image/*' onChange={e => handleUploadImage(e)} /> */}
 
-                    <span className='form--item-add' onClick={handleAddGift}>
-                        <span className='form--icon-box'><IoAdd className='icon' /></span>
-                        <label className='form--label' style={{ display: 'flex', alignItems: 'center', gap: '.6rem' }}>Add Gift <TfiGift style={{ color: '#bb0505', fontSize: '1.4rem' }} /></label>
-                    </span>
+                    {(!reminderItem?.addedGift) && (
+                        <button type='submit' className='form--item-add' onClick={() => setShouldAddProduct(true)}>
+                            <span className='form--icon-box'><IoAdd className='icon' /></span>
+                            <label className='form--label' style={{ display: 'flex', alignItems: 'center', gap: '.6rem' }}>Add Gift <TfiGift style={{ color: '#bb0505', fontSize: '1.4rem' }} /></label>
+                        </button>
+                    )}
+                    {(isLoadGift) ? (
+                        <Loading />
+                    ) : (!isLoadGift && reminderItem?.addedGift) && (
+                        <span className="form-added-item">
+                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${giftItem?.gift?.image}`} alt={giftItem?._id} />
+                            <span>
+                                <p>For {giftItem?.celebrant}</p>
+                                <p>{giftItem?.address}</p>
+                            </span>
+                        </span>
+                    )}
                 </div>
             </div>
             {(toggle === 'send-message' && (checkedEmail || checkedSms)) && (
@@ -315,16 +333,11 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
             )}
             <div className="reminder--actions">
                 <button type='button' className='cancel--btn' onClick={handleModalClose}>Cancel</button>
+                {console.log(!reminderItem)}
                 {/* <button type={isCompleted ? 'submit' : ''} className={`set--btn ${!isCompleted ? 'btn-incomplete' : ''}`}>Set Reminder</button> */}
-                <button type='submit' className='set--btn'>Set Reminder</button>
+                <button type='submit' className='set--btn'>{reminderItem ? 'Edit' : 'Create'} Reminder</button>
             </div>
         </form> 
-        
-        {createPortal(
-            shouldAddProduct && (
-                <FullScreenDesktopModal setShouldAddProduct={setShouldAddProduct} />
-            ), document.body
-        )}
 
         {(isSuccess || isError) && (
             <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`} others={true}>

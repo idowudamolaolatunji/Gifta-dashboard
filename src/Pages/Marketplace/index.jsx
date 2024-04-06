@@ -12,18 +12,9 @@ function MarketPlace() {
 
 	return (
 		<>
-			{/* <DashHeader />
-			<DashTabs /> */}
-
 			<Header />
             
-            
-		    <section className="marketplace__section">
-				{/* <div className="section__container" style={{ border: '1px solid red'}}> */}
-					<MarketProducts type={'gifting'} />
-				{/* </div> */}
-            </section>
-
+			<MarketProducts type={'gifting'} />
 		</>
 	);
 }

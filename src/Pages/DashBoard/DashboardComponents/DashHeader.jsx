@@ -7,12 +7,13 @@ import { useAuthContext } from "../../../Auth/context/AuthContext";
 import { IoSettingsOutline, IoSearchOutline, IoWalletOutline, IoNotifications } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineWorkspacePremium } from "react-icons/md";
 import Dropdown from "../../../Components/Dropdown";
-import { LuSun, LuMoon } from "react-icons/lu";
+import { LuSun, LuMoon, LuUserPlus } from "react-icons/lu";
 import { getInitials } from "../../../utils/helper";
 import SearchModal from "../../../Components/SearchModal";
 import { AiOutlineClose } from "react-icons/ai";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import NotificationBox from "../../../Components/NotificationBox";
+
 
 
 const DashHeader = ({ isDasboard }) => {
@@ -110,13 +111,6 @@ const DashHeader = ({ isDasboard }) => {
 
 				<div className="dashboard__details">
 					<div className="dashboard__others">
-						{/* <span className="dashboard--mode">
-							{mode === 'light' ? 
-								(<LuMoon onClick={() => setMode('dark')} />)
-							: 
-								(<LuSun onClick={() => setMode('light')} />)
-							}
-						</span> */}
 
 						<span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
 							<IoNotifications className="dashboard__icon" style={{ fontSize: '2.8rem' }} />
@@ -124,6 +118,14 @@ const DashHeader = ({ isDasboard }) => {
 						</span>
 						{showNotificationBox && (
 							<NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />
+						)}
+
+						{user.role !== 'vendor' && (
+							<Link to="/vendor">
+								<span className="dashboard__icon-box dashboard-vendor">
+									<LuUserPlus className="dashboard__icon" />
+								</span>
+							</Link>
 						)}
 
 						<Link to="/settings">

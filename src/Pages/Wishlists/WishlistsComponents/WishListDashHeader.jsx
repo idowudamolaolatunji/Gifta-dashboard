@@ -7,13 +7,14 @@ import { useAuthContext } from "../../../Auth/context/AuthContext";
 import { IoNotifications, IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdKeyboardDoubleArrowRight, MdOutlineWorkspacePremium } from "react-icons/md";
 import Dropdown from "../../../Components/Dropdown";
-import { LuSun, LuMoon, LuLayoutDashboard } from "react-icons/lu";
+import { LuSun, LuMoon, LuLayoutDashboard, LuUserPlus } from "react-icons/lu";
 import { TfiGift } from "react-icons/tfi";
 import { BsBell, BsJournalBookmark, BsShop } from "react-icons/bs";
 import { getInitials } from "../../../utils/helper";
 import NotificationBox from "../../../Components/NotificationBox";
 import { PiHandbagSimple } from "react-icons/pi";
-import { LiaDigitalTachographSolid } from "react-icons/lia";
+import { TbGiftCard } from "react-icons/tb";
+import { HiOutlineLightBulb } from "react-icons/hi2";
 
 
 function WishListDashHeader() {
@@ -32,13 +33,6 @@ function WishListDashHeader() {
 
 					<div className="dashboard__details">
 						<div className="dashboard__others">
-							{/* <span className="dashboard--mode">
-							{mode === 'light' ? 
-								(<LuMoon onClick={() => setMode('dark')} />)
-							: 
-								(<LuSun onClick={() => setMode('light')} />)
-							}
-						</span> */}
 
 							<span className="dashboard__icon-box" style={{ cursor: 'pointer' }} onClick={() => setShowNotificationBox(!showNotificationBox)}>
 								<IoNotifications className="dashboard__icon" style={{ fontSize: '2.8rem' }} />
@@ -46,6 +40,15 @@ function WishListDashHeader() {
 							</span>
 							{showNotificationBox && (
 								<NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />
+							)}
+
+
+							{user.role !== 'vendor' && (
+								<Link to="/vendor">
+									<span className="dashboard__icon-box dashboard-vendor">
+										<LuUserPlus className="dashboard__icon" />
+									</span>
+								</Link>
 							)}
 
 							<Link to="/settings">
@@ -119,9 +122,9 @@ function WishListDashHeader() {
 							<p>Gifting</p>
 						</Link>
 						
-						<Link className="tab" to="/dashboard/digital-products">
-							<LiaDigitalTachographSolid className="tab-icon" />
-							<p>DigiGifts</p>
+						<Link className="tab" to="/dashboard/digital-gift/me">
+							<TbGiftCard className="tab-icon" />
+							<p className="tab-morre">Digital Giftingss</p>
 						</Link>
 
 						<Link className="tab" to="/dashboard/reminders">
@@ -134,9 +137,9 @@ function WishListDashHeader() {
 							<p>Wishlists</p>
 						</Link>
 
-						<Link className="tab" to="/dashboard/marketplace/anniversary">
-							<BsShop className="tab-icon" />
-							<p>IdeaBox</p>
+						<Link className="tab" to="/dashboard/idea-box/her">
+							<HiOutlineLightBulb className="tab-icon" />
+							<p className="tab-morre">Idea Box</p>
 						</Link>
 					</div>
 				</div>

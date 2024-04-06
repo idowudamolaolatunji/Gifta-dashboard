@@ -12,6 +12,7 @@ import { TbArrowBackUp } from 'react-icons/tb';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { FaLongArrowAltLeft } from 'react-icons/fa';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function GiftingForm({ handleHideForm, handleCloseModal }) {
@@ -34,7 +35,8 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     const [imageFile, setImageFile] = useState(null);
     const [formTab, setFormTab] = useState(1)
     ////////////////////////////////////////////////////////////
-    const { user, token } = useAuthContext();
+    const { user, token, activeReminder, handleActiveReminder } = useAuthContext();
+    const navigate = useNavigate();
     const productInfo = Cookies.get('productInfo') ? JSON.parse(Cookies.get('productInfo')) : null;
     const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
     const totalAmount = calcTotalAmount(Number(productInfo.totalPrice));
@@ -42,7 +44,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     const amountInKobo = totalAmount * 100;
     const timeout = 3000;
     /////////////////////////////////////////////////////////////
-
+    
 
     const componentProps = {
         email: user?.email,
@@ -237,6 +239,10 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             // console.log(id);
             handleUploadImg(formData, id);
 
+            if(activeReminder) {
+                handleAddGifting(id);
+            }
+
             setIsSuccess(true);
             setMessage(data.message)
             setTimeout(() => {
@@ -269,11 +275,44 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             handleFailure(err.message);
         }
     }
+    
+    
+    
+    async function handleAddGifting(id) {
+        try {
+            setIsLoading(true);
 
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/reminders/add-gift/${activeReminder?._id}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    giftId: id
+                }),
+            });
+
+            if(!res) throw new Error('Something went wrong!');
+            const data = await res.json();
+            if(data.status !== 'success') throw new Error(data.message);
+
+            setIsSuccess(true);
+            setMessage('Added gift to reminder')
+            setTimeout(() => {
+                setIsSuccess(false);
+                setMessage('');
+                setIsLoading(false);
+                handleActiveReminder(null);
+                navigate('dashboard/reminders');
+            }, 2000);
+
+        } catch(err) {
+            handleFailure(err.message);
+        }
+    }
 
    
-   
-
   return (
       <>
 
@@ -373,16 +412,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                         <option value="Zamfara">Zamfara</option>
                     </select>
                 </div>
-                <div className='form__item'>
-                    <label htmlFor="region" className="form__label">City / Region</label>
-                    <select type="text" id='region' value={cityRegion} className="form__select" onChange={(e) => setCityRegion(e.target.value)}>
-                    
-                        <option hidden selected>- Select a Region -</option>
-                    </select>
-                </div>
-            </div>
 
-            <div className="form__inline">
                 <div className='form__item form__item-date'>
                     <label htmlFor="date" className="form__label">Date of Delivery</label>
                     <span style={{ display: 'flex', alignItems: 'center' }}>
@@ -390,6 +420,9 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                         {/* <span class="validity"></span> */}
                     </span>
                 </div>
+            </div>
+
+            <div className="form__inline">
                 <div id='form--balance'>
                     <div className="form__item">
                         <label htmlFor="checkbox-1" className="form__label">Pay With Wallet</label>

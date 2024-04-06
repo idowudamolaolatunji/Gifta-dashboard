@@ -5,7 +5,8 @@ import Signup from './Auth/Signup';
 import DashBoard from './Pages/DashBoard';
 
 import Gifting from './Pages/Gifting';
-import DigitalProduct from './Pages/DigitalProduct';
+import DigitalGift from './Pages/DigitalGift';
+import IdeaBox from './Pages/IdeaBox';
 import Marketplace from './Pages/Marketplace';
 import Wishlists from './Pages/Wishlists';
 import Reminders from './Pages/Reminders';
@@ -32,6 +33,7 @@ import ProductCatalogue from './Pages/PublicPages/ProductCatalogue';
 import KycVer from './Pages/PublicPages/KycVer';
 import ProductStats from './Pages/PublicPages/ProductStats';
 import PublicMarketPlace from './Pages/PublicPages/PublicMarketPlace';
+import AddGiftToReminder from './Pages/Reminders/ReminderComponents/AddGiftToReminder';
 
 
 
@@ -45,15 +47,21 @@ function App() {
 
                     <Route path="/dashboard/gifting" element={<Gifting />}></Route>
                     <Route path="/dashboard/gifting/:category" element={<Marketplace />}></Route>
-                    <Route path="/dashboard/digital-products" element={<DigitalProduct />}></Route>
+
+
+                    <Route path="/dashboard/digital-gift/:category" element={<DigitalGift />}></Route>
+                    <Route path="/dashboard/idea-box/:category" element={<IdeaBox />}></Route>
 
                     <Route path="/dashboard/wishlists" element={<Wishlists />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug" element={<WishListUi />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug/wish" element={<WishListUi />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/edit" element={<WishListUi />}></Route>
                     <Route path="/dashboard/wishlists/:wishListSlug/wish/delete" element={<WishListUi />}></Route>
+
+
                     <Route path="/dashboard/reminders" element={<Reminders />}></Route>
-                    <Route path="/dashboard/reminders/add-gift/:category" element={<Reminders />}></Route>
+                    <Route path="/dashboard/reminders/add-gift/:category" element={<AddGiftToReminder />}></Route>
+
 
                     <Route path="/wallet" element={<Wallet />}></Route>
                     <Route path="/settings" element={<Settings />}></Route>

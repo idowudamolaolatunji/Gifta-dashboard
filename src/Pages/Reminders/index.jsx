@@ -62,6 +62,11 @@ function Reminders() {
 	const completedReminder = reminders.filter(reminder => reminder.isCompleted);
 	const mapReminder = activeTab === 'pending' ? remainingReminder : completedReminder
 
+
+	function handleCreateReminder() {
+		setShowDashboardModal(true)
+		setSelectedReminder(null);
+	}
 	function handleResetId() {
 		setReminderId(null)
 	}
@@ -97,7 +102,6 @@ function Reminders() {
 		setShowEditModal(true);
 		setReminderId(item._id);
 		setSelectedReminder(item);
-		// console.log(item, 'line 97')
 	}
 	// console.log(selectedReminder, 'line 99');
 
@@ -236,15 +240,6 @@ function Reminders() {
 		}
 	}
 
-	async function handleEditReminder() {
-		try {
-
-		} catch(err) {
-
-		} finally {
-
-		}
-	}
 
 	useEffect(function () {
 		async function handleFetchReminders() {
@@ -331,7 +326,7 @@ function Reminders() {
 													{formatDate(reminder?.reminderDate)}{" "}
 													({expectedDateFormatter(`${reminder.reminderDate}`)})
 												</span>
-												<RiDeleteBin5Line className="reminder--icon" onClick={() => handleDeleteModal(reminder._id)} />
+												{(!reminder?.addedGift) && <RiDeleteBin5Line className="reminder--icon" onClick={() => handleDeleteModal(reminder._id)} />}
 											</span>
 											<span className="reminder--tasks">
 												{!reminder.isCompleted ? (
@@ -347,7 +342,7 @@ function Reminders() {
 									</figure>
 								))}
 							</div>
-							<div className="dashboard--add-btn" onClick={() => setShowDashboardModal(true)}><FiPlus /></div>
+							<div className="dashboard--add-btn" onClick={() => handleCreateReminder()}><FiPlus /></div>
 						</>
 					) : (!isLoading) && (
 						<div className="reminder--banner banner">

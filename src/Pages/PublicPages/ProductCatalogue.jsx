@@ -8,8 +8,8 @@ import Header from './Components/Header';
 import CurrencyInput from 'react-currency-input-field';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import MobileFullScreenModal from '../../Components/MobileFullScreenModal';
-import { CiCalendar } from 'react-icons/ci';
-import { IoInformationCircle, IoLocationSharp, IoPricetagOutline } from 'react-icons/io5';
+import { CiCalendar, CiEdit } from 'react-icons/ci';
+import { IoCloseCircleOutline, IoCloseOutline, IoInformationCircle, IoLocationSharp, IoPricetagOutline, IoTrashBinOutline } from 'react-icons/io5';
 
 import { useNavigate } from 'react-router-dom';
 import SkelentonOne from '../../Components/SkelentonOne';
@@ -20,9 +20,12 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 import GiftLoader from '../../Assets/images/gifta-loader.gif';
 import { createPortal } from 'react-dom';
 
+import ImageUploading from "react-images-uploading";
+
 
 const customStyle = {
     maxWidth: '55rem',
+    minHeight: 'auto',
     height: 'auto',
     zIndex: 3500
 }
@@ -51,7 +54,7 @@ function ProductCatalogue() {
     const [avail, setAvail] = useState(null);
     const [category, setCategory] = useState('')
     const [imagePreview, setImagePreview] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
+    // const [imageFile, setImageFile] = useState(null);
 
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
@@ -72,18 +75,23 @@ function ProductCatalogue() {
     : products?.filter(product => {
         return categories.some(cat => cat.categoryName === activeTab && product.category === cat.categoryName);
     });
-
-    console.log(filteredCatalogueCategory)
-
-
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setImageFile(file);
-            const imageUrl = URL.createObjectURL(file);
-            setImagePreview(imageUrl);
-        }
+    const [images, setImages] = useState([]);
+    const maxNumber = 6;
+    const onChange = (imageList, addUpdateIndex) => {
+        // data for submit
+        console.log(imageList, addUpdateIndex);
+        setImages(imageList);
     };
+
+
+    // const handleImageChange = (event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         setImageFile(file);
+    //         const imageUrl = URL.createObjectURL(file);
+    //         setImagePreview(imageUrl);
+    //     }
+    // };
 
 
     function handleProduct(product) {
@@ -228,7 +236,8 @@ function ProductCatalogue() {
             setHelpReset(false);
             setIsLoading(true);
 
-            if(type === 'new' && !imageFile) throw new Error('Image field cannot be left empty');
+            // if(type === 'new' && !imageFile) throw new Error('Image field cannot be left empty');
+            if(type === 'new' && (images?.length === 0)) throw new Error('Images cannot be left empty');
 
             const res = await fetch(url, {
                 method,
@@ -249,8 +258,9 @@ function ProductCatalogue() {
             // UPLOAD IMAGE
             const formData = new FormData();
             const id = data.data.product._id
-            if (imageFile) {
-                handleUploadImg(formData, id);
+            // if (imageFile) {
+            if (images && images.length !== 0) {
+                handleUploadImgs(formData, id);
             }
 
             setIsSuccess(true);
@@ -270,10 +280,14 @@ function ProductCatalogue() {
         }
     }
 
-    async function handleUploadImg(formData, id) {
+    async function handleUploadImgs(formData, id) {
         try {
             setIsLoading(true)
-            formData.append('image', imageFile);
+            // formData.append('image', imageFile);
+            for (let i = 0; i < images.length; i++) {
+                formData.append('images', images[i].file);
+            }
+            // formData.append('images', images);
             await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/product-img/${id}`, {
                 method: 'POST',
                 headers: {
@@ -283,9 +297,8 @@ function ProductCatalogue() {
                 body: formData,
                 mode: "no-cors"
             });
-            // if (!res.ok) throw new Error('Something went wrong!');
         } catch (err) {
-            console(err.message);
+            console.log(err.message);
         } finally {
             setIsLoading(false)
         }
@@ -388,7 +401,7 @@ function ProductCatalogue() {
                         <div className='page--grid'>
                             {filteredCatalogueCategory.map((product) =>
                                 <figure className='product--figure' style={{ position: 'relative' }} key={product._id} onClick={() => handleProduct(product)}>
-                                    <img className='product--img' src={product.image.startsWith('https') ? product.image : `${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} alt={product.name} />
+                                    <img className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} alt={product.name} />
                                     <span className="package--category">{product.category}</span>
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{truncate(product.name, 30)}</h4>
@@ -428,9 +441,9 @@ function ProductCatalogue() {
                             <label htmlFor="" className="form--label">Product Name</label>
                             <input type="text" required className="form--input" placeholder='Enter your product name' value={name} onChange={e => setName(e.target.value)} />
                         </div>
-                        <div className='form--item form-image-card'>
-                            {!imagePreview && <p className='image-text'>Upload Product Image</p>}
-                            <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
+                        {/* <div className='form--item form-image-card'>
+                            {!imagePreview && <p className='image-text'>Upload Product Images (Max of 6)</p>}
+                            <input type='file' id='form-image-input' multiple max="6" name='images' onChange={handleImageChange} accept="image/*" />
                             <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} style={{ height: '15rem' }} id='form-image-label'>
                                 <span>
                                     <MdOutlineAddAPhoto />
@@ -438,7 +451,47 @@ function ProductCatalogue() {
                                 </span>
                                 {imagePreview && <img id='form-image' src={imagePreview} alt='Wishlist Preview' />}
                             </label>
+                        </div> */}
+
+<ImageUploading
+        multiple
+        value={images}
+        onChange={onChange}
+        maxNumber={maxNumber}
+        dataURLKey="data_url"
+        acceptType={["jpg", "png"]}
+      >
+        {({
+          imageList,
+          onImageUpload,
+          onImageRemoveAll,
+          onImageUpdate,
+          onImageRemove,
+        }) => (
+            <div className='multiple-image-container'>
+                {imageList?.length > 0 ? (
+                    <button type='button' className='main-btn' onClick={onImageRemoveAll}>Remove All Images <IoCloseOutline /></button> 
+                ) : (
+                    <button type='button' className='main-btn' onClick={onImageUpload}><MdOutlineAddAPhoto /> Add Multiple Images</button> 
+                )}
+                <div className='image-grid'>
+                    {imageList?.map((image, index) => (
+                        <div key={index} className="image-item">
+                            <img src={image.data_url} />
+                            <div className="image-item__btn-wrapper desktop-item">
+                                <button onClick={() => onImageUpdate(index)}>Update</button>
+                                <button onClick={() => onImageRemove(index)}>Remove</button>
+                            </div>
+                            <div className="image-item__btn-wrapper mobile-item">
+                                <button onClick={() => onImageUpdate(index)}><CiEdit /></button>
+                                <button onClick={() => onImageRemove(index)}><IoTrashBinOutline /></button>
+                            </div>
                         </div>
+                    ))}
+                </div>
+            </div>
+            )}
+      </ImageUploading>
 
                         <div className="form--item">
                             <label htmlFor="description" className="form--label">Product Description (Up to 400 Characters)</label>

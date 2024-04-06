@@ -5,7 +5,7 @@ import GiftLogo from "../../../Assets/logo.png";
 import { useAuthContext } from "../../../Auth/context/AuthContext";
 
 // import '../../DashBoard/main.css';
-import { LuMoon, LuSun } from "react-icons/lu";
+import { LuMoon, LuSun, LuUserPlus } from "react-icons/lu";
 import { IoNotifications, IoSettingsOutline, IoWalletOutline } from "react-icons/io5";
 import Dropdown from "../../../Components/Dropdown";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdKeyboardDoubleArrowRight, MdOutlineWorkspacePremium } from "react-icons/md";
@@ -42,6 +42,14 @@ function Header() {
                                     </span>
                                     {showNotificationBox && (
                                         <NotificationBox showNotificationBox={showNotificationBox} setShowNotificationBox={setShowNotificationBox} />
+                                    )}
+
+                                    {user.role !== 'vendor' && (
+                                        <Link to="/vendor">
+                                            <span className="dashboard__icon-box dashboard-vendor">
+                                                <LuUserPlus className="dashboard__icon" />
+                                            </span>
+                                        </Link>
                                     )}
 
                                     <Link to="/settings">
