@@ -210,7 +210,7 @@ function CategoryPage({ type }) {
                                 // < to={`/dashboard/gifting/${currentCategory}/${product.slug}`}>
 
                                 <figure className='product--figure' key={product._id} onClick={() => handleShowModal(product)}>
-                                    <img className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} alt={product.name} />
+                                    <img className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.images[0]}`} alt={product.name} />
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{truncate(product.name, 40)}</h4>
                                        
@@ -233,7 +233,7 @@ function CategoryPage({ type }) {
                     </div>}
                 </div>}
 
-            {(selectedProduct && showModal && type === 'marketplace') && <Product product={selectedProduct} type={'marketplace'} handleCloseModal={handleCloseModal} />}
+            {(selectedProduct && showModal && type === 'marketplace') && <Product product={selectedProduct} type={'marketplace'} handleCloseModal={handleCloseModal} currCategory={currentCategory} />}
             {(selectedProduct && showModal && type === 'gifting') && <Product product={selectedProduct} type={'gifting'} handleCloseModal={handleCloseModal} />}
             {(selectedProduct && showModal && type === 'reminder') && <Product product={selectedProduct} type={'reminder'} handleCloseModal={handleCloseModal} />}
         </section>

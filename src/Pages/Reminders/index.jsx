@@ -349,7 +349,7 @@ function Reminders() {
 							<h3 className="section__heading">Lift us remind you of your <span style={{ color: '#bb0505' }}>special dates!</span></h3>
 
 							<img src={ReminderImg} alt={ReminderImg} />
-							<button type="button" onClick={handleShowModal}>Set a Reminder</button>
+							<button type="button" onClick={handleCreateReminder}>Set a Reminder</button>
 						</div>
 					)}
 				</div>

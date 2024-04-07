@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { SlCalender } from 'react-icons/sl';
 import { IoPricetagOutline } from 'react-icons/io5';
 import ProgressBar from '../../Components/ProgressBar';
-import { GiMoneyStack, GiTakeMyMoney } from 'react-icons/gi';
+import { GiMoneyStack, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi';
 import { TbUsersGroup } from 'react-icons/tb'
 import SkelentonCard from '../../Components/SkelentonCard';
 import DashboardModal from '../../Components/Modal';
@@ -21,6 +21,7 @@ import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 // import Spinner from '../../Components/Spinner';
 import Switch from "react-switch";
 import { LiaUserSecretSolid } from "react-icons/lia";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 
 const customStyle = {
@@ -245,13 +246,14 @@ function SharedWishlist() {
                                 <span className='top--info'>
                                     <span>Contributors <TbUsersGroup />: <p>{contributors}</p></span>
                                     <span>Wishes subtotal<GiMoneyStack />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amount, 0))}</p></span>
-                                    <span>Accoumulated <GiTakeMyMoney />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + wish.amountPaid, 0))}</p></span>
+                                    <span>Accoumulated <GiTakeMyMoney />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + (wish?.amountPaid > wish?.amount ? wish.amount : wish.amountPaid), 0))}</p></span>
+                                    {/* <span>Etras <GiReceiveMoney />: <p>₦{numberConverter(wishes.reduce((acc, wish) => acc + (wish?.amountPaid > wish?.amount ? wish.amountPaid - wish.amount : 0), 0))}</p></span> */}
                                 </span>
                                 {/* <span className="top--insight">
                                     <span>date</span>
                                 </span> */}
                                 <span className='top--progress'>
-                                    <ProgressBar progress={`${calculatePercentage(wishes.reduce((acc, wish) => acc + wish.amount, 0), wishes.reduce((acc, wish) => acc + wish.amountPaid, 0))}%`} />
+                                    <ProgressBar progress={`${calculatePercentage(wishes.reduce((acc, wish) => acc + wish.amount, 0), wishes.reduce((acc, wish) => acc + (wish?.amountPaid > wish?.amount ? wish.amount : wish.amountPaid), 0))}%`} />
                                 </span>
                             </div>
                         </div>
@@ -262,7 +264,8 @@ function SharedWishlist() {
                         {isLoading && (<SkelentonOne />)}
                         <ul className='lists--figure'>
                             {(wishes && !isLoading) && wishes?.map(( wishItem, i ) => (
-                                <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
+                                // <li className={`lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id}>
+                                <li className={`lists--item`} key={wishItem._id}>
                                     <span className='lists--item-top'>
                                         <span className='lists--content'>
                                             <p>{wishItem.wish}</p>

@@ -106,7 +106,7 @@ const DashBoard = () => {
 						</>
 					)}
 					{/* {isLoading && (<SkelentonFour />)} */}
-					{giftings.length > 0 ? (
+					{giftings?.length > 0 ? (
 						<div className="dashboard--gifting">
 							<span className='section--flex' style={{ marginBottom: '3.2rem', justifyContent: 'space-between' }}>
 								<h3 className="section__heading" style={{ color: '#bb0505', margin: '0' }}>Gifts bought by you!</h3>
@@ -118,7 +118,7 @@ const DashBoard = () => {
 							</span>
 								
 							<>
-								{mapGiftings.length === 0 && (
+								{mapGiftings?.length === 0 && (
 									<div className='note--box' style={{ backgroundColor: 'transparent', padding: '0', height: 'auto' }}>
 										<p>No {activeTab} Gifting!</p>
 									</div>
@@ -148,7 +148,7 @@ const DashBoard = () => {
 								<div className="dashboard--add-btn" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><FiPlus /></div>
 							</Link>
 						</div>
-					) : (!isLoading && giftings.length === 0) && (
+					) : (!isLoading && giftings?.length === 0) && (
 						<div className="gifting--banner banner">
 							<h3 className="section__heading">Lift Someone's Spirit With a <span style={{ color: '#bb0505' }}>Gift <TfiGift /></span></h3>
 							<img src={GiftImg} alt={GiftImg}  />

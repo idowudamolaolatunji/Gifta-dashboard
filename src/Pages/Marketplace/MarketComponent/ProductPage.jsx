@@ -45,7 +45,7 @@ function ProductPage() {
                         </span>
                     </span>
 
-                    <button className="product--btn" onClick={type === 'marketplace' ? () => navigate('/dashboard/gifting/anniversary') : () => handleShowForm()}>Gift now</button>
+                    <button className="product--btn" onClick={type === 'marketplace' ? () => navigate('/dashboard/gifting/birthday') : () => handleShowForm()}>Gift now</button>
                 </span>
             </div>
         </div>

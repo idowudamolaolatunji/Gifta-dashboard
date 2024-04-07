@@ -600,9 +600,11 @@ a.form--acct-btn div {
 	z-index: 1000;
 }
 .form-added-item {
+	margin-left: 1.4rem;
 	display: grid;
-	grid-template-columns: 1fr 2fr;
-	gap: .4rem;
+	grid-template-columns: 5.2rem 2fr;
+	gap: .8rem;
+	align-items: center;
 }
 .form-added-item img {
 	width: 100%;

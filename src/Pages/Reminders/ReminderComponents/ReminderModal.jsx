@@ -92,7 +92,10 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
                 setIsloadGift(false);
             }
         }
-        fetchGiftingById(); 
+
+        if(reminderItem?.addedGift) {
+            fetchGiftingById(); 
+        }
     }, [reminderItem])
 
 
@@ -153,6 +156,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
 
     async function handleSetReminder(e) {
         let url, method;
+        console.log(reminderItem)
         if(reminderItem) {
             url = `${import.meta.env.VITE_SERVER_URL}/reminders/update-my-reminder/${reminderItem?._id}`
             method = 'PATCH';
@@ -209,7 +213,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
 
                 if(shouldAddProduct) {
                     handleActiveReminder(data?.data?.reminder);
-                    navigate('/dashboard/reminders/add-gift/anniversary');
+                    navigate('/dashboard/reminders/add-gift/birthday');
                 }
             }, 2000);
 
@@ -309,7 +313,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
                         <Loading />
                     ) : (!isLoadGift && reminderItem?.addedGift) && (
                         <span className="form-added-item">
-                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${giftItem?.gift?.image}`} alt={giftItem?._id} />
+                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${giftItem?.gift?.images[0]}`} alt={giftItem?._id} />
                             <span>
                                 <p>For {giftItem?.celebrant}</p>
                                 <p>{giftItem?.address}</p>

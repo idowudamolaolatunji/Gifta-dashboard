@@ -53,7 +53,7 @@ function ProductCatalogue() {
     const [name, setName] = useState('');
     const [avail, setAvail] = useState(null);
     const [category, setCategory] = useState('')
-    const [imagePreview, setImagePreview] = useState(null);
+    // const [imagePreview, setImagePreview] = useState(null);
     // const [imageFile, setImageFile] = useState(null);
 
     const [isError, setIsError] = useState(false);
@@ -82,7 +82,8 @@ function ProductCatalogue() {
         console.log(imageList, addUpdateIndex);
         setImages(imageList);
     };
-
+    const imageArray = images.map(img => img.file);
+    console.log(imageArray)
 
     // const handleImageChange = (event) => {
     //     const file = event.target.files[0];
@@ -258,7 +259,6 @@ function ProductCatalogue() {
             // UPLOAD IMAGE
             const formData = new FormData();
             const id = data.data.product._id
-            // if (imageFile) {
             if (images && images.length !== 0) {
                 handleUploadImgs(formData, id);
             }
@@ -282,12 +282,12 @@ function ProductCatalogue() {
 
     async function handleUploadImgs(formData, id) {
         try {
-            setIsLoading(true)
-            // formData.append('image', imageFile);
+            setIsLoading(true);
+
             for (let i = 0; i < images.length; i++) {
                 formData.append('images', images[i].file);
             }
-            // formData.append('images', images);
+            
             await fetch(`${import.meta.env.VITE_SERVER_URL}/gift-products/product-img/${id}`, {
                 method: 'POST',
                 headers: {
@@ -317,14 +317,14 @@ function ProductCatalogue() {
             setDescription(selectedProduct?.description);
             setAvail(selectedProduct?.stockAvail);
             setCategory(selectedProduct?.category);
-            setImagePreview(`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct?.image}`);
+            // setImagePreview(`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct?.image}`);
             setName(selectedProduct?.name)
         } else {
             setPrice('');
             setDescription('');
             setAvail('');
             setCategory('');
-            setImagePreview('');
+            // setImagePreview('');
             setName('')
 
         }
@@ -401,7 +401,8 @@ function ProductCatalogue() {
                         <div className='page--grid'>
                             {filteredCatalogueCategory.map((product) =>
                                 <figure className='product--figure' style={{ position: 'relative' }} key={product._id} onClick={() => handleProduct(product)}>
-                                    <img className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} alt={product.name} />
+                                    {console.log(product.images[0])}
+                                    <img className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.images[0]}`} alt={product.name} />
                                     <span className="package--category">{product.category}</span>
                                     <figcaption className='product--details'>
                                         <h4 className='product--heading'>{truncate(product.name, 30)}</h4>
@@ -415,16 +416,16 @@ function ProductCatalogue() {
                         </div>
                     ) : (
                         <div className='note--box' style={{ fontSize: '1.4rem', textAlign: 'center' }}>
-                            <p>You don't have any {activeTab} products!</p>
+                            <p>You don't have any {activeTab === 'all' ? '' : activeTab} product!</p>
                         </div>
                     )}
 
 
-                    {(!isFetching && products.length === 0) && (
+                    {/* {(!isFetching && products.length === 0) && (
                         <div className='note--box' style={{ maxWidth: '70rem' }}>
                             <p>{'You have no product'}</p>
                         </div>
-                    )}
+                    )} */}
                 </div>
 
 
@@ -539,7 +540,7 @@ function ProductCatalogue() {
             {showProductInfoModal && (
                 <MobileFullScreenModal title={truncate(selectedProduct?.name, 28)} setCloseModal={setShowProductInfoModal}>
                     <div className="gift--preview-top">
-                        <img src={selectedProduct?.image.startsWith('https') ? selectedProduct.image : `${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct.image}`} />
+                        <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct.image}`} />
                         <div className="gift--preview-details">
                             <p className="gift--preview-name" style={{ textTransform: 'capitalize' }}>{selectedProduct?.category} product</p>
                             <p className="gift--preview-date">

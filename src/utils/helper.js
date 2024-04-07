@@ -135,19 +135,19 @@ export function formatDate(dateString) {
 
 export function getInitials(fullName) {
     const nameArray = fullName.split(' ');
-    if (nameArray.length > 1) {
+    if (nameArray?.length > 1) {
 		const firstInitial = nameArray[0].charAt(0);
         const secondInitial = nameArray[1].charAt(0);
         return `${firstInitial}${secondInitial}`;
     }
-	if (nameArray.length === 1) {
+	if (nameArray?.length === 1) {
         return nameArray[0].charAt(0);
     }
 }
 
 
 export function truncate(input, num=30) {
-    if (input.length > num) {
+    if (input?.length > num) {
         return input.substring(0, num) + "...";
     } else {
         return input;

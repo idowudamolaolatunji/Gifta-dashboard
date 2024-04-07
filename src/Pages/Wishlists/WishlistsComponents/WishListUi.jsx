@@ -75,17 +75,6 @@ function WishListUi() {
     const [showLogsReplyModal, setShowLogsReplyModal] = useState(false);
     const [selectedLog, setSeletedLog] = useState({});
     const [replyMessage, setReplyMessage] = useState('');
-    const [append, setAppend] = useState(false);
-    const [isSent, setIsSent] = useState(false);
-
-    
-
-    useEffect(function() {
-        if(isSent) {
-            setAppend(true);
-        }
-    }, [isSent])
-    
     
     
     // WISHLIST ACTIONS ON MOBILE
@@ -355,16 +344,51 @@ function WishListUi() {
         if(wishList._id) {
             handleFetchWishLogs();
         }
-    }, [wishList]);
+    }, [wishList, helpReset]);
 
 
     async function handleSendMessge(e) {
         try {
             e.preventDefault();
-            setIsSent(true);
+            setIsLoading(true);
+            setHelpReset(false);
+
+            if(!replyMessage) throw new Error('Cannot leave reply message empty');
+            console.log(document.querySelector('.form__textarea'))
+
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlists/wish-log/response`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    email: selectedLog?.email,
+                    id: selectedLog?._id,
+                    responseMessage: replyMessage,
+                    replyDate: Date.now(),
+                })
+            });
+
+            if(!res) throw new Error('Something went wrong!');
+            const data = await res.json();
+            console.log(res);
+            if(data.status !== 'success') throw new Error(data.message);
+
+            setShowLogsReplyModal(false)
+            setIsSuccess(true);
+            setMessage('Appreciation sent!');
+            setTimeout(() => {
+                setShowDeleteModal(false);
+                setIsSuccess(false);
+                setMessage("");
+                setHelpReset(true);
+            }, 1500);
 
         } catch(err) {
-            console.log(err);
+            setErrMessage(err.message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -447,7 +471,8 @@ function WishListUi() {
                                     </li>
 
 
-                                    <li className={`mobile--list-item lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id} onClick={() => (calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? '' : handleWish(wishItem)} style={{ cursor: 'pointer' }}>
+                                    {/* <li className={`mobile--list-item lists--item ${(calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? 'lists--completed' : ''}`} key={wishItem._id} onClick={() => (calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? '' : handleWish(wishItem)} style={{ cursor: 'pointer' }}> */}
+                                    <li className={`mobile--list-item lists--item`} key={wishItem._id} onClick={() => (calculatePercentage(wishItem.amount, wishItem.amountPaid) === 100) ? '' : handleWish(wishItem)} style={{ cursor: 'pointer' }}>
                                         <span className='lists--item-top'>
                                             <span className='lists--content'>
                                                 <p>{truncate(wishItem.wish, 24)}</p>
@@ -551,12 +576,12 @@ function WishListUi() {
                                 <li className='contributor--wish'>{truncate(selectedLog.wish.wish)}</li>
                             </div>
                         </div>
-                        {append && (
+                        {selectedLog?.responseMessage && (
                             <div className='form--chat form--chat-right'>
                                 <div className="reply--box reply--right">
                                     <p className='reply--name'>You</p>
-                                    <p className='reply--message'>{replyMessage}</p>
-                                    <span className='reply--date'>{dateConverter(Date.now())}</span>
+                                    <p className='reply--message'>{selectedLog?.responseMessage}</p>
+                                    <span className='reply--date'>{dateConverter(selectedLog?.replyDate)}</span>
                                 </div>
 
                                 {(user?.image !== "") ? (
@@ -571,10 +596,13 @@ function WishListUi() {
                                 )}
                             </div>
                         )}
-                        <div className='form--send'>
-                            <ReactTextareaAutosize className='form__textarea' defaultValue="Message..." value={replyMessage} onChange={e => setReplyMessage(e.target.value)} />
-                            <button type="submit" className='reply--btn' onClick={(e) => handleSendMessge(e)}><IoMdSend /></button>
-                        </div>
+
+                        {!selectedLog?.responseMessage && (
+                            <div className='form--send'>
+                                <ReactTextareaAutosize className='form__textarea' defaultValue="Message..." value={replyMessage} onChange={e => setReplyMessage(e.target.value)} />
+                                <button type="submit" className='reply--btn' onClick={(e) => handleSendMessge(e)}><IoMdSend /></button>
+                            </div>
+                        )}
                     </form>
                 </>
             )}

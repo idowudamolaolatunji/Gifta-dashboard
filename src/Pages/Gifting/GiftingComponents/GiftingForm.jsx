@@ -244,7 +244,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             }
 
             setIsSuccess(true);
-            setMessage(data.message)
+            setMessage('Purchased Product Successfully');
             setTimeout(() => {
                 setIsSuccess(false);
                 setMessage('');
@@ -304,7 +304,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 setMessage('');
                 setIsLoading(false);
                 handleActiveReminder(null);
-                navigate('dashboard/reminders');
+                navigate('/dashboard/reminders');
             }, 2000);
 
         } catch(err) {

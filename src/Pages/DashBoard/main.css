@@ -40,7 +40,8 @@
 }
 .section--tab {
 	position: fixed;
-	top: 7.6rem;
+	/* top: 7.6rem; */
+	top: 6.7rem;
 	left: 0;
 	right: 0;
 	background-color: #fff;
@@ -187,10 +188,11 @@
 	align-items: center;
 	justify-content: center;
 
-	font-size: 1.4rem;
+	font-size: 1.3rem;
 	font-weight: 500;
 	top: 3.5rem;
 	left: 50%;
+	color: #bb0505;
 
 	transform: translateX(-50%);
 	box-shadow: .1rem .6rem 1.2rem rgba(0, 0, 0, 0.1);
@@ -1075,6 +1077,11 @@ div.banner button:hover {
 .sub-images img:hover {
 	transform: scale(1.05);
 }
+.sub-images img.active-sub {
+	transition: all 0.35s;
+	border: 2.4px solid #bb0505;
+	transform: scale(1.02);
+}
 .product--container .product--img:hover {
 	transform: scale(1.15);
 }
@@ -1610,7 +1617,7 @@ span.validity::after {
 	cursor: pointer;
 }
 .contributor--reply.reply--anno {
-	opacity: .6;
+	opacity: .45;
 }
 
 /* =================================== */

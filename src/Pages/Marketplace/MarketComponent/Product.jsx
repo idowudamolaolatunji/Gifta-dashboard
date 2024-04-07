@@ -11,10 +11,11 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 
-function Product({ product, handleCloseModal, type }) {
+function Product({ product, handleCloseModal, type, currCategory }) {
     const [showGiftingForm, setShowGiftingForm] = useState('');
-    const [currImage, setCurrImage] = useState(`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`);
+    // const [currImage, setCurrImage] = useState(``);
     const [quantity, setQuantity] = useState(1);
+    const [currIndex, setCurrIndex] = useState(0);
     
     const navigate = useNavigate();
 
@@ -61,13 +62,14 @@ function Product({ product, handleCloseModal, type }) {
             <>
                 <div className="product--container">
                     <span className='product--image-box'>
-                        <img src={currImage} alt={currImage} className="product--img" />
+                        <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.images[currIndex]}`} alt={product.name} className="product--img" />
                         <span className='sub-images'>
-                            <img src={currImage} alt={currImage} />
-                            <img src={currImage} alt={currImage} />
-                            <img src={currImage} alt={currImage} />
-                            <img src={currImage} alt={currImage} />
-                            <img src={currImage} alt={currImage} />
+                            {console.log(product?.images.length)}
+                            {product?.images.length > 0 &&
+                                product.images.map((img, index) => {
+                                    return <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${img}`} className={currIndex === index ? 'active-sub' : ''} onClick={() => setCurrIndex(index)} alt={img} />
+                                })
+                            }
                         </span>
                     </span>
 
@@ -100,7 +102,7 @@ function Product({ product, handleCloseModal, type }) {
                                 </span>
                             </span>
 
-                            <button className="product--btn" onClick={type === 'marketplace' ? () => navigate('/dashboard/gifting/anniversary') : () => handleShowForm()}>Gift now</button>
+                            <button className="product--btn" onClick={type === 'marketplace' ? () => navigate(`/dashboard/gifting/${currCategory}`) : () => handleShowForm()}>Gift now</button>
                         </span>
                     </div>
                 </div>
