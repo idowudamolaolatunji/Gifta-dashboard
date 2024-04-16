@@ -4,12 +4,14 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { CiUser } from "react-icons/ci";
 import { MdAlternateEmail } from "react-icons/md";
 import { TbListSearch } from 'react-icons/tb';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaRegSquareMinus } from "react-icons/fa6";
+import GiftImg from '../Assets/images/casual-life-3d-pink-gift-box.png';
 
 
 function SearchModal({ setShowSearchModal, message, isLoading, results, closeIcon }) {
     const [activeTab, setActiveTab] = useState('');
+    const navigate = useNavigate();
     
     function handleCloseModal() {
         setShowSearchModal(false)
@@ -17,6 +19,11 @@ function SearchModal({ setShowSearchModal, message, isLoading, results, closeIco
 
     function handleActiveTab(tab) {
         setActiveTab(tab)
+    }
+
+    function handleGift(id) {
+        navigate(`/${id}`);
+        setShowSearchModal(false);
     }
 
     const {giftings, reminders, wishLists, products} = results;
@@ -36,7 +43,7 @@ function SearchModal({ setShowSearchModal, message, isLoading, results, closeIco
     }, [results]);
 
   return (
-    <div className="search--modal" style={{ zIndex: 2000000 }}>
+    <div className="search--modal" style={{ zIndex: 200000 }}>
 
         {!isLoading && <span className="search--head">
             <div className="search--head-top">
@@ -88,7 +95,7 @@ function SearchModal({ setShowSearchModal, message, isLoading, results, closeIco
                             (
                             <Link to={`/dashboard/gifting/${product.category}`}>
                                 <figure className='search--figure'>
-                                    <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.image}`} />
+                                    <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.images[0]}`} />
                                     <figcaption className='search--details'>
                                         <p className='search--name'>{product.name}</p>
                                     </figcaption>
@@ -110,10 +117,10 @@ function SearchModal({ setShowSearchModal, message, isLoading, results, closeIco
                     (<div className='search--flex'>
                         {giftings?.map(gifting =>
                             (
-                            <figure className='search--figure'>
-                                <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${gifting.image}`} />
+                            <figure className='search--figure' onClick={() => handleGift(gifting._id)}>
+                                <img src={gifting?.image ? `${import.meta.env.VITE_SERVER_ASSET_URL}/others/${gifting?.image}` : GiftImg} />
                                 <figcaption className='search--details'>
-                                    <p className='search--name'>{gifting.name}</p>
+                                    <p className='search--name'>For {gifting?.celebrant}</p>
                                 </figcaption>
                             </figure>
                             )

@@ -27,7 +27,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     const [address, setAddress] = useState('')
     const [country, setCountry] = useState('Nigeria')
     const [state, setState] = useState('')
-    const [cityRegion, setCityRegion] = useState('LGA')
+    const [contact, setContact] = useState(null)
     const [date, setDate] = useState('')
     const [cardPay, setCardPay] = useState(false);
     const [walletPay, setWalletPay] = useState(false);
@@ -68,7 +68,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
           address !== "" &&
           country !== "" &&
           state !== "" &&
-          cityRegion !== "" &&
+          contact !== null &&
           date !== "" && 
           new Date(date) >= tomorrow;
       
@@ -222,7 +222,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ productId: productInfo.id, celebrant, purpose: productInfo.purpose, description, amount: productInfo.totalPrice, country, state, cityRegion, address, date, quantity: productInfo.quantity }),
+                body: JSON.stringify({ productId: productInfo.id, celebrant, purpose: productInfo.purpose, description, amount: productInfo.totalPrice, country, state, contact, address, date, quantity: productInfo.quantity }),
             });
             console.log(res)
             if(!res.ok) throw new Error('Something went wrong!');
@@ -331,12 +331,12 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
 
                 <div className="form__flex-col">
                     <div className='form--item form-image-card'>
-                        {!imagePreview && <p className='image-text'>Celebrant Image (Required)</p>}
+                        {!imagePreview && <p className='image-text'>Event | Celebrant Image (Optional)</p>}
                         <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
                         <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='form-image-label'>
                             <span>
                                 <MdOutlineAddAPhoto />
-                                <p>Add Celebrant Image</p>
+                                <p>Add Image</p>
                             </span>
                             {imagePreview && <img id='form-image' src={imagePreview} alt='Wishlist Preview' />}
                         </label>
@@ -350,13 +350,20 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
 
 
                 <div className="form__flex-col">
-                    <div className='form__item'>
-                        <label htmlFor="" className="form__label">Celebrant Fullname</label>
-                        <input type="text" value={celebrant} placeholder='Name of Celebrant' className="form__input" onChange={(e) => setCelebrant(e.target.value)} />
+                    <div className="form__flex-small">
+                        <div className='form__item'>
+                            <label htmlFor="" className="form__label">Event Name / Celebrant Fullname</label>
+                            <input type="text" value={celebrant} placeholder='Event / Celebrant Name' className="form__input" onChange={(e) => setCelebrant(e.target.value)} />
+                        </div>
+                        <div className='form__item'>
+                            <label htmlFor="" className="form__label">Contact Number</label>
+                            <input type="number" value={contact} placeholder='080230267911' required className="form__input" onChange={(e) => setContact(e.target.value)} />
+                        </div>
+
                     </div>
                     <div className='form__item'>
                         <label htmlFor="description" className="form__label">Description (for gifting)</label>
-                        <textarea type="text" id='description' value={description} placeholder='Description for Celebrant' className="form__textarea" onChange={(e) => setDescription(e.target.value)}></textarea>
+                        <textarea type="text" id='description' value={description} placeholder='Description for gifting' className="form__textarea" onChange={(e) => setDescription(e.target.value)}></textarea>
                     </div>
                 </div>
             </div>
@@ -467,7 +474,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 {(formTab === 1) && (
                     <>
                         <div className='form--item form-image-card'>
-                            {!imagePreview && <p className='image-text'>Celebrant Image (Required)</p>}
+                            {!imagePreview && <p className='image-text'>Event / Celebrant Image (Required for arts purchases only)</p>}
                             <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" />
                             <label style={{ height: '24rem' }} htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='form-image-label'>
                                 <span>
@@ -479,13 +486,17 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                         </div>
 
                         <div className='form__item'>
-                            <label htmlFor="" className="form__label">Celebrant Fullname</label>
-                            <input type="text" value={celebrant} placeholder='Name of Celebrant' className="form__input" onChange={(e) => setCelebrant(e.target.value)} />
+                            <label htmlFor="" className="form__label">Event Name | Celebrant Fullname</label>
+                            <input type="text" value={celebrant} placeholder='Event / Celebrant Name' className="form__input" onChange={(e) => setCelebrant(e.target.value)} />
+                        </div>
+                        <div className='form__item'>
+                            <label htmlFor="" className="form__label">Contact Number</label>
+                            <input type="number" value={contact} placeholder='080230267911' required className="form__input" onChange={(e) => setContact(e.target.value)} />
                         </div>
 
                         <div className='form__item'>
                             <label htmlFor="description" className="form__label">Description (for gifting)</label>
-                            <textarea type="text" id='description' value={description} placeholder='Description for Celebrant' className="form__textarea" onChange={(e) => setDescription(e.target.value)}></textarea>
+                            <textarea type="text" id='description' value={description} placeholder='Description for gifting' className="form__textarea" onChange={(e) => setDescription(e.target.value)}></textarea>
                         </div>
                     </>
                 )}
@@ -546,12 +557,12 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                                 <option value="Zamfara">Zamfara</option>
                             </select>
                         </div>
-                        <div className='form__item'>
+                        {/* <div className='form__item'>
                             <label htmlFor="region" className="form__label">City / Region</label>
                             <select type="text" id='region' value={cityRegion} className="form__select" onChange={(e) => setCityRegion(e.target.value)}>
                                 <option hidden selected="selected">- Select a Region -</option>
                             </select>
-                        </div>
+                        </div> */}
                         <div className='form__item form__item-date'>
                             <label htmlFor="date" className="form__label">Date of Delivery</label>
                             <span style={{ display: 'flex', alignItems: 'center' }}>

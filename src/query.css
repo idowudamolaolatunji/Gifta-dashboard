@@ -30,6 +30,9 @@
 		height: 100%;
 		position: fixed;
 	}
+	.item__modal {
+		width: 35rem;
+	}
 	.product--close-icon {
 		top: 2.5%;
 		right: 2.5%;
@@ -247,7 +250,10 @@
 	.product--figure .product--heading {
 		color: #bb0505;
 	}
-	/* .product--figure .product--infos {} */
+	.product--info {
+		width: 100%;
+		align-self: flex-start;
+	}
 
 	/* ===================================== */
 	/* REMINDER PAGE */
@@ -803,14 +809,19 @@
 		height: 105vh !important;
 		overflow-x: hidden;
 		overflow-y: auto;
-		background-color: #fff;
-		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;
 		z-index: 3000;
 		transform: none !important;
 		padding-bottom: 4.8rem;
+	}
+
+	.mobile-data-table {
+		display: block;
+	}
+	.destop-data-table {
+		display: none;
 	}
 
 	.form--grid-prod {
@@ -873,5 +884,9 @@
 		top: 0%;
 		left: 0%;
 		right: 0%;
+	}
+
+	.form__inline {
+		margin-bottom: .6rem;
 	}
 }

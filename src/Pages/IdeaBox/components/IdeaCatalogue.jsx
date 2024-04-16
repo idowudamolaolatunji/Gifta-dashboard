@@ -121,7 +121,7 @@ function IdeaCatalogue() {
                         {categories.map((category) =>
                             <Link to={`/dashboard/idea-box/${category.categoryName}`}>
                                 <p className={`tab-item ${currentCategory === category.categoryName ? 'active-tab-item' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
-                                    For {category.categoryName}
+                                    {category.categoryName}
                                 </p>
                             </Link>
                         )}

@@ -78,7 +78,7 @@ function Product({ product, handleCloseModal, type, currCategory }) {
 
                         <div className="product--vendor">
                             <div className="vendor--main">
-                                <img className='' src={product.vendor?.image === "" ? 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png' : `${import.meta.env.VITE_SERVER_ASSET_URL}/users/${product.vendor?.image}`} alt={product.vendor.fullName} />
+                                <img className='' src={'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png'} alt={product.vendor.fullName} />
                                 <div>
                                     <p>{product.vendor.fullName}</p>
                                     <p className='product-vendor--email'>{product.vendor.email}</p>

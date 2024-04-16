@@ -34,7 +34,7 @@ const customStyleModal = {
 	minHeight: "auto",
 	maxWidth: "44rem",
 	width: "44rem",
-    zIndex: 30000
+    zIndex: 300000
 };
 
 function ProductCatalogue() {
@@ -540,7 +540,7 @@ function ProductCatalogue() {
             {showProductInfoModal && (
                 <MobileFullScreenModal title={truncate(selectedProduct?.name, 28)} setCloseModal={setShowProductInfoModal}>
                     <div className="gift--preview-top">
-                        <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct.image}`} />
+                        <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedProduct?.images[0]}`} />
                         <div className="gift--preview-details">
                             <p className="gift--preview-name" style={{ textTransform: 'capitalize' }}>{selectedProduct?.category} product</p>
                             <p className="gift--preview-date">

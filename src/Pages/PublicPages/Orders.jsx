@@ -8,7 +8,7 @@ import MobileFullScreenModal from '../../Components/MobileFullScreenModal';
 import { IoLocationSharp, IoPricetagOutline } from 'react-icons/io5';
 import { TfiGift } from 'react-icons/tfi';
 import { CiCalendar } from 'react-icons/ci';
-import { MdArrowBackIos } from 'react-icons/md';
+import { MdArrowBackIos, MdOutlinePhoneEnabled } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { GiReceiveMoney } from 'react-icons/gi';
 import Alert from '../../Components/Alert';
@@ -38,7 +38,7 @@ const customStyleModal = {
 	minHeight: "auto",
 	maxWidth: "44rem",
 	width: "44rem",
-    zIndex: 30000
+    zIndex: 300000
 };
 
 const containerStyle = {
@@ -64,7 +64,7 @@ const columns = [
         selector: (row) => {
             return (
                 <div className="table-flex table-product">
-                    <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${row?.gift?.image}`} alt={row?.gift?.name} />
+                    <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${row?.gift?.images?.at(0)}`} alt={row?.gift?.name} />
                     <span>
                         <p>{row?.gift?.name}</p>
                         <p>Quantity: {row?.quantity}</p>
@@ -78,8 +78,8 @@ const columns = [
     {
         name: "Delivery Status",
         selector: (row) => (
-            <span className={`status status--${!row.isDelivered ? "pending" : "success"}`}>
-                <p>{row.isDelivered ? 'Delivered' : 'Pending'}</p>
+            <span className={`status status--${(!row.isDelivered && !row.isAcceptedOrder && !row.isRejectedOrder) ? "pending" : (!row.isDelivered && row.isAcceptedOrder) ? 'approved' : (!row.isDelivered && row.isRejectedOrder) ? 'rejected' : 'success' }`}>
+                <p>{(!row.isDelivered && !row.isAcceptedOrder && !row.isRejectedOrder) ? "Pending" : (!row.isDelivered && row.isAcceptedOrder) ? 'Approved' : (!row.isDelivered && row.isRejectedOrder) ? 'Rejected' : 'Success' }</p>
             </span>
         ),
     },
@@ -135,8 +135,8 @@ function Order() {
 
     const all = orders;
     const pendingOrders = all?.filter(order => !order?.isAcceptedOrder && !order?.isRejectedOrder && !order?.isDelivered);
-    const rejectedOrders = all?.filter(order => order?.isAcceptedOrder && !order?.isDelivered);
-    const approvedOrders = all?.filter(order => order?.isRejectedOrder && !order?.isDelivered);
+    const approvedOrders = all?.filter(order => order?.isAcceptedOrder && !order?.isDelivered);
+    const rejectedOrders = all?.filter(order => order?.isRejectedOrder && !order?.isDelivered);
     const deliveredOrders = all?.filter(order => order?.isAcceptedOrder && order?.isDelivered);
 
     // HANDLE FETCH STATE RESET
@@ -363,30 +363,46 @@ function Order() {
                     </div>
 
 
-                    <DataTable
-                        columns={columns}
-                        data={ (activeTab === 'all') ? all : (activeTab === 'pending') ? pendingOrders : (activeTab === 'delivered') ? deliveredOrders : (activeTab === 'approved') ? approvedOrders : (activeTab === 'rejected') ? rejectedOrders : '' }
-                        pagination
-                        persistTableHead
-                        highlightOnHover
-                        progressPending={isLoading}
-                        progressComponent={<Spinner />}
-                        customStyles={customStyles}
-                        onRowMouseEnter={handleOrderRow}
-                        noDataComponent={<Message type={activeTab} />}
-                    />
+                    <div className="destop-data-table">
+                        <DataTable
+                            columns={columns}
+                            data={ (activeTab === 'all') ? all : (activeTab === 'pending') ? pendingOrders : (activeTab === 'delivered') ? deliveredOrders : (activeTab === 'approved') ? approvedOrders : (activeTab === 'rejected') ? rejectedOrders : '' }
+                            pagination
+                            persistTableHead
+                            highlightOnHover
+                            progressPending={isLoading}
+                            progressComponent={<Spinner />}
+                            customStyles={customStyles}
+                            onRowClicked={handleOrderRow}
+                            noDataComponent={<Message type={activeTab} />}
+                        />
+                    </div>
+                    <div className="mobile-data-table">
+                        <DataTable
+                            columns={columns}
+                            data={ (activeTab === 'all') ? all : (activeTab === 'pending') ? pendingOrders : (activeTab === 'delivered') ? deliveredOrders : (activeTab === 'approved') ? approvedOrders : (activeTab === 'rejected') ? rejectedOrders : '' }
+                            pagination
+                            persistTableHead
+                            highlightOnHover
+                            progressPending={isLoading}
+                            progressComponent={<Spinner />}
+                            customStyles={customStyles}
+                            onRowMouseEnter={handleOrderRow}
+                            noDataComponent={<Message type={activeTab} />}
+                        />
+                    </div>
                 </div>
             </section>
 
             {showOrderModal && (
-                <MobileFullScreenModal isDifferent={selectedOrder?.isRejectedOrder}>
+                <MobileFullScreenModal isDifferent={selectedOrder?.isRejectedOrder} setSelected={setSelectedOrder}>
                     <div className="gift--preview-figure">
 
                         <div className="gift--preview-top">
-                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedOrder?.gift.image}`} alt={selectedOrder?.celebrant} />
+                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedOrder?.gift?.images?.at(0)}`} alt={selectedOrder?.celebrant} />
                             <div className="gift--preview-details">
                                 <span onClick={() => setShowOrderModal(false)}><MdArrowBackIos /></span>
-                                <p className="gift--preview-name">For {selectedOrder?.gift.name}</p>
+                                <p className="gift--preview-name">For {selectedOrder?.gift?.name}</p>
                                 <p className="gift--preview-date">
                                     <CiCalendar />
                                     {expectedDateFormatter(selectedOrder?.deliveryDate)}
@@ -397,11 +413,12 @@ function Order() {
                         <div className="gift--preview-bottom">
                             <span className="gift--preview-title"> Purchased For <TfiGift style={{ color: '#bb0505' }} /></span>
                             <div className="gift--preview-flex">
-                                <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${selectedOrder?.celebrantImage}`} />
+                                <img src={selectedOrder?.celebrantImage ? `${import.meta.env.VITE_SERVER_ASSET_URL}/others/${selectedOrder?.celebrantImage}` : 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png'} />
                                 <div>
                                     <p>For {selectedOrder?.celebrant}</p>
                                     <span className="gift--preview-amount"><IoPricetagOutline /><p>Amount: <span>{`₦${numberConverter(selectedOrder?.amount)}`}</span></p></span>
                                     <span className="gift--preview-amount"><GiReceiveMoney /><p>Quantity: <span>{selectedOrder?.quantity}</span></p></span>
+                                    <span className="gift--preview-amount"><MdOutlinePhoneEnabled /><p>Phone No: <span>{selectedOrder?.contact || '-'}</span></p></span>
                                 </div>
                             </div>
                             <span className="gift--preview-title"> Delivery Location <IoLocationSharp style={{ color: '#bb0505' }} /></span>

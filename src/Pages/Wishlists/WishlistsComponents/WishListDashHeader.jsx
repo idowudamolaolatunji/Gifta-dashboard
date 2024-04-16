@@ -122,7 +122,7 @@ function WishListDashHeader() {
 							<p>Gifting</p>
 						</Link>
 						
-						<Link className="tab" to="/dashboard/digital-gift/me">
+						<Link className="tab" to="/dashboard/digital-gift/coupon">
 							<TbGiftCard className="tab-icon" />
 							<p className="tab-morre">Digital Giftingss</p>
 						</Link>

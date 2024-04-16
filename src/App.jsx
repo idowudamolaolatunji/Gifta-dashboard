@@ -34,6 +34,7 @@ import KycVer from './Pages/PublicPages/KycVer';
 import ProductStats from './Pages/PublicPages/ProductStats';
 import PublicMarketPlace from './Pages/PublicPages/PublicMarketPlace';
 import AddGiftToReminder from './Pages/Reminders/ReminderComponents/AddGiftToReminder';
+import PurchasedCatalogue from './Pages/DigitalGift/components/PurchasedCatalogue';
 
 
 
@@ -44,12 +45,13 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard" element={<DashBoard />}></Route>
                     <Route path="/" element={<DashBoard />}></Route>
+                    <Route path="/:id" element={<DashBoard />}></Route>
 
                     <Route path="/dashboard/gifting" element={<Gifting />}></Route>
                     <Route path="/dashboard/gifting/:category" element={<Marketplace />}></Route>
 
-
                     <Route path="/dashboard/digital-gift/:category" element={<DigitalGift />}></Route>
+                    <Route path="/dashboard/purchased-gift/:category" element={<PurchasedCatalogue />}></Route>
                     <Route path="/dashboard/idea-box/:category" element={<IdeaBox />}></Route>
 
                     <Route path="/dashboard/wishlists" element={<Wishlists />}></Route>

@@ -13,6 +13,12 @@ export function numberConverter(amount) {
 		.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export function numberConverterSticker(amount) {
+	return Number(amount)
+		.toFixed(2)
+		.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export function calcTotalAmount(amount) {
 	let charges;
 	const calcChargesAmount = (3 / 100) * amount;
@@ -130,6 +136,10 @@ export function formatDate(dateString) {
 	const day = String(date.getDate()).padStart(2, "0");
 
 	return `${year}-${month}-${day}`;
+}
+
+export function capitalizeFirstLetter(string) {
+    return string?.slice(0, 1)?.toUpperCase() + string?.slice(1);
 }
 
 

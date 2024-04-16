@@ -5,7 +5,7 @@ import DashTabs from "./DashboardComponents/DashTabs";
 // import "./main.css";
 import { TfiGift } from "react-icons/tfi";
 import GiftImg from '../../Assets/images/casual-life-3d-pink-gift-box.png';
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../Auth/context/AuthContext";
 import SkeletonLoader from '../../Components/SkeletonLoader';
 import { dateConverter, expectedDateFormatter, numberConverter, truncate } from "../../utils/helper";
@@ -47,11 +47,21 @@ const DashBoard = () => {
 	const RejectedGiftings = giftings?.filter(gifts => !gifts?.isDelivered && gifts?.isRejected);
 	const mapGiftings = activeTab === 'active' ? activeGiftings : activeTab === 'completed' ? compltedGiftings : RejectedGiftings;
 
+	const navigate = useNavigate();
+	const paramsId = useParams().id
 
 	function handleGiftPackage(gift) {
 		setShowGiftingModal(true);
 		setSelectedGift(gift);
 	}
+
+	useEffect(function() {
+		if(paramsId) {
+			const selectedGifting = giftings?.find(gifting => gifting?._id === paramsId)
+			handleGiftPackage(selectedGifting);
+			navigate('/')
+		}
+	}, [paramsId])
 
 	
 	useEffect(() => {
@@ -128,7 +138,7 @@ const DashBoard = () => {
 									{mapGiftings.map(gifting => {
 										return (
 											<div className='giftPackage--figure' key={gifting._id} onClick={() => handleGiftPackage(gifting)}>
-												<img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${gifting?.celebrantImage}`} alt={gifting?.celebrant} />
+												<img src={gifting ? `${import.meta.env.VITE_SERVER_ASSET_URL}/others/${gifting?.celebrantImage}` : ''} />
 												<span className="package--category">{gifting.purpose}</span>
 												<figcaption className="giftPackage--details">
 													<p className="package--celebrant">For{' '}{gifting.celebrant}</p>
@@ -163,11 +173,11 @@ const DashBoard = () => {
 
 
 			{showGiftingModal && (
-				<MobileFullScreenModal key={selectedGift._id}>
+				<MobileFullScreenModal key={selectedGift?._id}>
 					<div className="gift--preview-figure">
 						
 						<div className="gift--preview-top">
-							<img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/others/${selectedGift?.celebrantImage}` || GiftImg} alt={selectedGift?.celebrant} />
+							<img src={selectedGift?.celebrantImage ? `${import.meta.env.VITE_SERVER_ASSET_URL}/others/${selectedGift?.celebrantImage}` : GiftImg} alt={selectedGift?.celebrant} />
 							<div className="gift--preview-details">
 								<span onClick={() => setShowGiftingModal(false)}><MdArrowBackIos /></span>
 								<p className="gift--preview-name">For {selectedGift?.celebrant}</p>
@@ -182,7 +192,7 @@ const DashBoard = () => {
 							<span className="gift--preview-title"> Purchased Gift <TfiGift style={{ color: '#bb0505' }} /></span>
 							<Link to={`dashboard/gifting/${selectedGift?.gift?.category}`}>
 								<div className="gift--preview-flex">
-									<img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedGift?.gift?.image}`} />
+									<img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${selectedGift?.gift?.images[0]}`} />
 									<div>
 									<p>{truncate(selectedGift?.gift?.name, 30)}</p>
 									<span className="gift--preview-price"><IoPricetagOutline /><p>₦{numberConverter(selectedGift?.amount)}</p></span>

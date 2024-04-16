@@ -1,14 +1,23 @@
 import React from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
+import { useParams } from 'react-router-dom';
 
 function MobileFullScreenModal({ title, setCloseModal, isDifferent, children }) {
+
+    function handleCloseModal() {
+        setCloseModal(false);
+        setSelected(null);
+    }
+    
     return (
-        <figure className='mobile-modal--figure' >
+        <>
+        <div className='overlay' onClick={handleCloseModal} />
+        <figure className='mobile-modal--figure'>
 
             {(title || setCloseModal) && (
                 <div className="resuable-modal--head">
                     {title && (<p className='notification--title'>{title}</p>)}
-                    {setCloseModal && (<AiOutlineClose className='notification-close-icon' onClick={() => setCloseModal(false)} />)}
+                    {setCloseModal && (<AiOutlineClose className='notification-close-icon' onClick={handleCloseModal}  />)}
                 </div>
             )}
 
@@ -16,6 +25,8 @@ function MobileFullScreenModal({ title, setCloseModal, isDifferent, children }) 
                 {children}
             </div>
         </figure>
+
+        </>
     )
 }
 
