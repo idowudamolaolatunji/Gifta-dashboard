@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react'
 import TawkToSupport from '../../../Components/TawkToSupport'
 import Header from '../../Marketplace/MarketComponent/Header'
 import SkelentonOne from '../../../Components/SkelentonOne';
-import SkeletonLoaderMarket from '../../../Components/SkeletonLoader1';
+import SkeletonLoaderMarket from '../../../Components/SkeletonLoaderMini2';
 import { BiSolidCategory } from 'react-icons/bi';
 import { RiArrowRightDoubleLine } from 'react-icons/ri';
 import { IoIosArrowBack } from 'react-icons/io';
 import { TbGiftCard } from 'react-icons/tb';
 import { numberConverter, numberConverterSticker, truncate } from '../../../utils/helper';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import SkeletonLoader from '../../../Components/SkeletonLoader';
 import { useAuthContext } from '../../../Auth/context/AuthContext';
 import BoughtItemModal from './BoughtItemModal';
 import { BsViewStacked } from 'react-icons/bs';
 import { HiOutlineRectangleStack } from 'react-icons/hi2';
+import { HiTemplate } from "react-icons/hi";
+
 
 function PurchasedCatalogue() {
     const [isLoading, setIsLoading] = useState(false)
@@ -27,6 +29,10 @@ function PurchasedCatalogue() {
 
     const { token } = useAuthContext();
     const { category } = useParams();
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+
+    const [tab, setTab] = useState('purchased')
     const [currentCategory, setCurrentCategory] = useState(category);
 
 
@@ -41,6 +47,28 @@ function PurchasedCatalogue() {
         setShowModal(false)
         setSelectedItem(null);
     }
+
+    function handleSwitch(tab) {
+        if(tab === 'purchased') {
+            navigate(`/dashboard/purchased-gift/${currentCategory}`);
+            setTab(tab)
+        }
+        if (tab === 'gifted') {
+            // navigate(`/dashboard/gifted-gift/${currentCategory}`);
+            setCurrentCategory('stickers')
+            navigate(`/dashboard/gifted-gift/stickers`);
+            setTab(tab)
+        }
+    }
+
+    useEffect(function() {
+        if(pathname.includes('/purchased-')) {
+            setTab('purchased');
+        } 
+        if(pathname.includes('/gifted-')) {
+            setTab('gifted');
+        }
+    }, [tab]);
 
     // GET ALL CATEGORY FROM THE DB
     useEffect(function () {
@@ -79,12 +107,19 @@ function PurchasedCatalogue() {
     useEffect(function () {
         async function handleFetch() {
             let url;
-            if(category === 'stickers') {
-                url = `${import.meta.env.VITE_SERVER_URL}/digital-stickers/my-bought-stickers`
+            if(tab === 'purchased') {
+                if(category === 'stickers') {
+                    url = `${import.meta.env.VITE_SERVER_URL}/digital-stickers/my-bought-stickers`
+                } else {
+                    url = `${import.meta.env.VITE_SERVER_URL}/digital-giftings/my-purchased-items-by-category/${currentCategory}`
+                }
             } else {
-                url = `${import.meta.env.VITE_SERVER_URL}/digital-giftings/my-purchased-items-by-category/${currentCategory}`
+                if(category === 'stickers') {
+                    url = `${import.meta.env.VITE_SERVER_URL}/digital-stickers/my-gifted-stickers`
+                }
             }
             try {
+                setCategoryItems([])
                 setIsLoadingCat(true);
                 setMess('')
 
@@ -114,7 +149,7 @@ function PurchasedCatalogue() {
             }
         }
         handleFetch()
-    }, [currentCategory]);
+    }, [currentCategory, tab]);
 
     console.log(categoryItems, category, currentCategory)
 
@@ -130,12 +165,17 @@ function PurchasedCatalogue() {
                             <SkeletonLoader />
                         </div>
                     </div> :
-                    <div className='category--page'>
+                    <div className='category--page item--page'>
                         <div className='page--sidebar'>
-                            {/* <span className='tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span> */}
-                            <p className='category--pg-heading heading--desktop'><HiOutlineRectangleStack /> My Digital Items</p>
+                            <div className="side-bar-top-item">
+                                <span className="side-bar-top-tabs">
+                                    <span className={`side-bar-tab ${tab === 'purchased' ? 'side-bar-active' : ''}`} onClick={() => handleSwitch('purchased')}>Purchased</span>
+
+                                    <span className={`side-bar-tab ${tab === 'gifted' ? 'side-bar-active' : ''}`} onClick={() => handleSwitch('gifted')}>Gifted</span>
+                                </span>
+                            </div>
                             <ul>
-                                {categories.map((category) =>
+                                {tab === 'purchased' && categories.map((category) =>
                                     <Link to={`/dashboard/purchased-gift/${category.categoryName}`}>
                                         <li className={`sidebar-items ${currentCategory === category.categoryName ? 'active-sidebar' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
                                             {category.categoryName} {currentCategory === category.categoryName ? <RiArrowRightDoubleLine className='sidebar-icon' /> : ''}
@@ -143,22 +183,22 @@ function PurchasedCatalogue() {
                                     </Link>
                                 )}
 
-                                <Link to={`/dashboard/purchased-gift/stickers`}>
+                                <Link to={`/dashboard/${tab === 'purchased' ? 'purchased' : 'gifted'}-gift/stickers`}>
                                     <li className={`sidebar-items ${currentCategory === 'stickers' ? 'active-sidebar' : ''}`} key={category._id} onClick={() => setCurrentCategory(`stickers`)}>
                                         Stickers {currentCategory === 'stickers' ? <RiArrowRightDoubleLine className='sidebar-icon' /> : ''}
                                     </li>
                                 </Link>
 
                                 {/* SWITCH BACK TO CATALOG PAGE */}
-                                <Link to={`/dashboard/digital-gift/coupon`}>
-                                    <li className={`sidebar-items sidebar--end`} key={category._id} onClick={() => setCurrentCategory(`stickers`)}>
-                                        <BiSolidCategory className='sidebar-icon' /> Item Catalog
+                                <Link to={`/dashboard/digital-gift/${currentCategory}`}>
+                                    <li className={`tab--back item--back`} key={category._id} onClick={() => setCurrentCategory(`stickers`)}>
+                                        <HiTemplate className='sidebar-icon' /> Digital Item
                                     </li>
                                 </Link>
                             </ul>
                         </div>
 
-                        <div className="page--tab-mobile">
+                        <div className="page--tab-mobile item--tab">
                             <span className='tab-item tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span>
                             {categories.map((category) =>
                                 <Link to={`/dashboard/purchased-gift/${category.categoryName}`}>
@@ -169,7 +209,7 @@ function PurchasedCatalogue() {
                             )}
 
                             <Link to={`/dashboard/purchased-gift/stickers`}>
-                                <p className={`tab-item ${currentCategory === 'stickers' ? 'active-tab-item' : ''}`} onClick={() => setCurrentCategory('stickers')} style={{ width: '150px' }}>
+                                <p className={`tab-item ${currentCategory === 'stickers' ? 'active-tab-item' : ''}`} onClick={() => setCurrentCategory('stickers')}>
                                     Stickers
                                 </p>
                             </Link>
@@ -188,31 +228,31 @@ function PurchasedCatalogue() {
                             </div> :
                             <div style={{ overflow: 'auto' }}>
 
-                                <span className='category--pg-head'>
+                                {/* <span className='category--pg-head'>
                                     <img src={currentCategory !== 'stickers' ? categories?.find(cat => currentCategory === cat?.categoryName)?.categoryImage : 'https://giftdev.ru/upload/iblock/6d2/4.jpg'} alt={currentCategory} />
 
                                     <div>
                                         <h3 style={{ color: '#fff' }}><TbGiftCard style={{ fontSize: '2rem' }} /> Digial Items</h3>
                                         <span>{currentCategory === 'stickers' ? 'My Bought Sticker Items' : `My Bought ${currentCategory} Items`}</span>
                                     </div>
-                                </span>
+                                </span> */}
 
-                                <p className='category--pg-heading heading--desktop'>Purchased Items</p>
+                                <p className='category--pg-heading item--d-heading heading--desktop'>{tab === 'purchased' ? 'Purchased' : 'Gifted'} Items</p>
                                 <p className='category--pg-heading heading--mobile'>{currentCategory === 'stickers' ? 'Sticker Items' : `${currentCategory} Items`}</p>
 
                                 <div className={`page--main ${categoryItems?.length > 0 ? 'page--grid' : ''}`}>
                                     {categoryItems?.length > 0 ? categoryItems.map((item) =>
-                                        <figure className='product--figure' key={item._id} onClick={() => handleShowModal(item)}>
+                                        <figure className='product--figure item--figure' key={item._id}>
                                             <img style={currentCategory === 'stickers' ? { objectFit: 'contain' } : {}} className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/${currentCategory === 'stickers' ? `stickers/${item?.sticker?.image}` : `others/${item?.digitalGift?.image}`}`} alt={currentCategory === 'stickers' ? item?.type : item?.name} />
 
                                             <figcaption className='product--details'>
-                                                <h4 className='product--heading'>{truncate(currentCategory === 'stickers' ? item?.stickerType : item?.digitalGift?.name, 40)}</h4>
+                                                <h4 className='product--heading'>{truncate(currentCategory === 'stickers' ? `Owned ${item?.stickerType}${item?.balance > 1 ? 's' : ''}` : item?.digitalGift?.name, 40)}</h4>
 
                                                 <div className='item--infos'>
                                                     {currentCategory === 'stickers' ? (
                                                         <>
-                                                            <span className='item--quantity'>x {item?.balance}</span>
                                                             <span className='product--price'>₦{numberConverterSticker(item?.sticker?.price)}</span>
+                                                            <span className='item--quantity'>x {item?.balance}</span>
                                                         </>
                                                     ) : (
                                                         <>
@@ -221,10 +261,12 @@ function PurchasedCatalogue() {
                                                         </>
                                                     )}
                                                 </div>
+
                                             </figcaption>
+                                            <button onClick={() => handleShowModal(item)} className='item-gift-btn'>{(currentCategory === 'stickers') ? `${tab === 'gifted' ? 'Redeem' : 'Gift'} Sticker` : 'Open Item'}</button>
                                         </figure>
                                     ) : (
-                                        <div className='note--box'>
+                                        <div className='note--box' style={{ margin: '0 auto' }}>
                                             <p>{mess || `You have no purchased ${currentCategory} item`}</p>
                                             <picture>
                                                 <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.webp" type="image/webp" />

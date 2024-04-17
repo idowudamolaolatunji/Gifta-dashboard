@@ -52,6 +52,7 @@ function App() {
 
                     <Route path="/dashboard/digital-gift/:category" element={<DigitalGift />}></Route>
                     <Route path="/dashboard/purchased-gift/:category" element={<PurchasedCatalogue />}></Route>
+                    <Route path="/dashboard/gifted-gift/:category" element={<PurchasedCatalogue />}></Route>
                     <Route path="/dashboard/idea-box/:category" element={<IdeaBox />}></Route>
 
                     <Route path="/dashboard/wishlists" element={<Wishlists />}></Route>

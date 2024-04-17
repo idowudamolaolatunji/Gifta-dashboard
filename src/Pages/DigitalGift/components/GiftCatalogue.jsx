@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { RiArrowRightDoubleLine } from "react-icons/ri";
-import { numberConverter, dateConverter, truncate, numberConverterSticker } from '../../../utils/helper'
+import { numberConverter, dateConverter, truncate, numberConverterSticker, capitalizeFirstLetter } from '../../../utils/helper'
 import SkeletonLoader from '../../../Components/SkeletonLoader';
 import SkeletonLoaderMarket from '../../../Components/SkeletonLoader1';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -269,7 +269,7 @@ function GiftCatalogue() {
                             <SkeletonLoader /> 
                         </div>
                     </div> :
-                    <div className='category--page'>
+                    <div className='category--page item--page'>
                         <div className='page--sidebar'>
                             <span className='tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span>
                             <ul>
@@ -288,15 +288,15 @@ function GiftCatalogue() {
                                 </Link>
 
                                 {/* SWITCH TO OWNED GIFT ITEMS PAGE */}
-                                <Link to={`/dashboard/purchased-gift/coupon`}>
-                                    <li className={`sidebar-items sidebar--end`} key={category._id} onClick={() => setCurrentCategory(`stickers`)}>
-                                        <BiSolidCategoryAlt className='sidebar-icon' /> My Digital Item
+                                <Link to={`/dashboard/purchased-gift/${currentCategory}`}>
+                                    <li className={`tab--back item--back`} style={{ margin: '0'}} key={category._id} onClick={() => setCurrentCategory(`stickers`)}>
+                                        <BiSolidCategoryAlt className='sidebar-icon' /> Owned Item
                                     </li>
                                 </Link>
                             </ul>
                         </div>
 
-                        <div className="page--tab-mobile">
+                        <div className="page--tab-mobile item--tab">
                             <span className='tab-item tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span>
                             {categories.map((category) =>
                                 <Link to={`/dashboard/digital-gift/${category.categoryName}`}>
@@ -307,7 +307,7 @@ function GiftCatalogue() {
                             )}
 
                             <Link to={`/dashboard/digital-gift/stickers`}>
-                                <p className={`tab-item ${currentCategory === 'stickers' ? 'active-tab-item' : ''}`} onClick={() => setCurrentCategory('stickers')} style={{ width: '150px'}}>
+                                <p className={`tab-item ${currentCategory === 'stickers' ? 'active-tab-item' : ''}`} onClick={() => setCurrentCategory('stickers')}s>
                                     Stickers
                                 </p>
                             </Link>
@@ -344,7 +344,7 @@ function GiftCatalogue() {
                                         <img style={currentCategory === 'stickers' ? { objectFit: 'contain'} : {}} className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/${currentCategory === 'stickers' ? 'stickers' : 'others'}/${item?.image}`} alt={currentCategory === 'stickers' ? item?.type : item?.name} />
 
                                         <figcaption className='product--details'>
-                                            <h4 className='product--heading'>{truncate(currentCategory === 'stickers' ? item?.type : item.name, 40)}</h4>
+                                            <h4 className='product--heading'>{capitalizeFirstLetter(truncate(currentCategory === 'stickers' ? item?.type : item.name, 40))}</h4>
                                         
                                             <div className='product--infos'>
                                                 <span className='product--price'>₦{currentCategory === 'stickers' ? numberConverterSticker(item.price) : numberConverter(item?.price)}</span>

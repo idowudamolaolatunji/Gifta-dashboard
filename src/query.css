@@ -31,8 +31,17 @@
 		position: fixed;
 	}
 	.item__modal {
-		width: 35rem;
+		max-width: 32rem;
 	}
+	.item--image-box {
+		height: 12rem;
+	}
+	.item--img {
+		height: 100%;
+	}
+	.product--title {
+		margin-top: 0 !important;
+	 }
 	.product--close-icon {
 		top: 2.5%;
 		right: 2.5%;

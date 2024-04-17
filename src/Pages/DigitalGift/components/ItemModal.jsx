@@ -23,7 +23,7 @@ function ItemModal({ item, handleCloseModal, category }) {
 
     const [isAtMax, setIsAtMax] = useState(false);
 
-    const [maxQuantity, setMaxQuantity] = useState(100)
+    const [maxQuantity, setMaxQuantity] = useState(1000)
     const [quantity, setQuantity] = useState(1);
     const amount = Number(quantity * item?.price);
     const timeout = 3000;
@@ -64,8 +64,10 @@ function ItemModal({ item, handleCloseModal, category }) {
     }
 
     useEffect(function() {
-        setMaxQuantity(item?.quantity)
-    }, [])
+        if(category !== "stickers") {
+            setMaxQuantity(item?.quantity)
+        }
+    }, [category])
     useEffect(function() {
         if(quantity === maxQuantity) {
             setIsAtMax(true)
@@ -140,7 +142,7 @@ function ItemModal({ item, handleCloseModal, category }) {
                         {category !== "stickers" && (
                             <div className="product--vendor item--vendor">
                                 <div className="vendor--main">
-                                    <img className='' src={'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1701957741/avatar_unr3vb-removebg-preview_rhocki.png'} alt={item?.vendor?.fullName} />
+                                    <img className='' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/users/${item?.vendor?.image}`} alt={item?.vendor?.fullName} />
                                     <div>
                                         <p className='product-item-username'>{item?.vendor?.fullName}</p>
                                         <p className='product-vendor--email'>{item?.vendor?.email}</p>
@@ -148,9 +150,9 @@ function ItemModal({ item, handleCloseModal, category }) {
                                 </div>
 
                                 <span className='expiry-date'>Expires Date:<p>{new Date(item?.expiryDate).toLocaleString("en-US", {
-											year: "numeric",
-											month: "long",
-											day: "numeric",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
                                 })}</p></span>
                                 <span style={isAtMax ? { color: 'red', transform: 'scale(1.05)', transition: 'all 0.35s'} : {}} className='expiry-date'>Avail Quantity:<p>{item?.quantity}</p></span>
                             </div>
