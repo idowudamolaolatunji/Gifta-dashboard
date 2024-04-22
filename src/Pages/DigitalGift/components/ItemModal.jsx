@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../../Auth/context/AuthContext';
 import { createPortal } from 'react-dom';
 import Alert from '../../../Components/Alert';
+import CurrencyInput from 'react-currency-input-field';
 
 
 function ItemModal({ item, handleCloseModal, category }) {
@@ -23,7 +24,7 @@ function ItemModal({ item, handleCloseModal, category }) {
 
     const [isAtMax, setIsAtMax] = useState(false);
 
-    const [maxQuantity, setMaxQuantity] = useState(1000)
+    const [maxQuantity, setMaxQuantity] = useState(10000);
     const [quantity, setQuantity] = useState(1);
     const amount = Number(quantity * item?.price);
     const timeout = 3000;
@@ -168,7 +169,10 @@ function ItemModal({ item, handleCloseModal, category }) {
                                 <span className="product--quantity">
                                     <span onClick={decQuantity}><FaMinus /></span>
                                     {/* <p>{quantity}</p> */}
-                                    <input type="text" value={quantity} onChange={(e) => handleInputQuality(e.target.value)} placeholder='1' />
+                                    {/* <input type="text" value={quantity} onChange={(e) => handleInputQuality(e.target.value)} placeholder='1' /> */}
+
+                                    <CurrencyInput value={quantity} onValueChange={(value, _) => handleInputQuality(value)} defaultValue={quantity} placeholder='1' />
+
                                     <span onClick={incQuantity}><FaPlus /></span>
                                 </span>
                             </span>

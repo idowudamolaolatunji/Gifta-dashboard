@@ -39,6 +39,12 @@
 	.item--img {
 		height: 100%;
 	}
+	.item--info {
+		grid-template-columns: 1fr;
+	}
+	.product--actions {
+		align-items: flex-end;
+	}
 	.product--title {
 		margin-top: 0 !important;
 	 }

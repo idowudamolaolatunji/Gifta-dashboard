@@ -15,17 +15,19 @@ import BoughtItemModal from './BoughtItemModal';
 import { BsViewStacked } from 'react-icons/bs';
 import { HiOutlineRectangleStack } from 'react-icons/hi2';
 import { HiTemplate } from "react-icons/hi";
+import RedeemItemModal from './RedeemItemModal';
 
 
 function PurchasedCatalogue() {
-    const [isLoading, setIsLoading] = useState(false)
-    const [isLoadingCat, setIsLoadingCat] = useState(false);
+    const [isLoading, setIsLoading] = useState(true)
+    const [isLoadingCat, setIsLoadingCat] = useState(true);
     const [categories, setCategories] = useState([]);
     const [categoryItems, setCategoryItems] = useState([]);
 
     const [selectedItem, setSelectedItem] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [mess, setMess] = useState('');
+    const [helpReset, setHelpReset] = useState(false)
 
     const { token } = useAuthContext();
     const { category } = useParams();
@@ -115,7 +117,7 @@ function PurchasedCatalogue() {
                 }
             } else {
                 if(category === 'stickers') {
-                    url = `${import.meta.env.VITE_SERVER_URL}/digital-stickers/my-gifted-stickers`
+                    url = `${import.meta.env.VITE_SERVER_URL}/digital-stickers/my-gift-stickers`
                 }
             }
             try {
@@ -139,8 +141,16 @@ function PurchasedCatalogue() {
                 if (data.status !== 'success') {
                     throw new Error(data.message);
                 }
-                setCategoryItems(category === 'stickers' ? data.data.stickers : data.data.items)
-                // setProducts(data.data.giftProducts)
+
+
+                if(tab === 'purchased' && category === 'stickers') {
+                    setCategoryItems(data.data.stickers)
+                } else {
+                    setCategoryItems(data.data.items);
+                }
+                if(tab === 'gifted' && category === 'stickers') {
+                    setCategoryItems(data.data.gifts)
+                }
 
             } catch (err) {
                 setMess(err.message)
@@ -149,7 +159,7 @@ function PurchasedCatalogue() {
             }
         }
         handleFetch()
-    }, [currentCategory, tab]);
+    }, [currentCategory, tab, helpReset]);
 
     console.log(categoryItems, category, currentCategory)
 
@@ -246,12 +256,18 @@ function PurchasedCatalogue() {
                                             <img style={currentCategory === 'stickers' ? { objectFit: 'contain' } : {}} className='product--img' src={`${import.meta.env.VITE_SERVER_ASSET_URL}/${currentCategory === 'stickers' ? `stickers/${item?.sticker?.image}` : `others/${item?.digitalGift?.image}`}`} alt={currentCategory === 'stickers' ? item?.type : item?.name} />
 
                                             <figcaption className='product--details'>
-                                                <h4 className='product--heading'>{truncate(currentCategory === 'stickers' ? `Owned ${item?.stickerType}${item?.balance > 1 ? 's' : ''}` : item?.digitalGift?.name, 40)}</h4>
+                                                <h4 className='product--heading'>{truncate(currentCategory === 'stickers' ? `${tab === 'purchased' ? 'Owned' : 'Gifted'} ${item?.stickerType}${item?.balance > 1 ? 's' : ''}` : item?.digitalGift?.name, 40)}</h4>
 
                                                 <div className='item--infos'>
                                                     {currentCategory === 'stickers' ? (
                                                         <>
-                                                            <span className='product--price'>₦{numberConverterSticker(item?.sticker?.price)}</span>
+                                                            {tab === 'purchased' && (
+                                                                <span className='product--price'>₦{numberConverterSticker(item?.sticker?.price)}</span>
+                                                            )}
+
+                                                            {tab === 'gifted' && (
+                                                                <span className='expiry-date'>Quantity Given:</span>
+                                                            )}
                                                             <span className='item--quantity'>x {item?.balance}</span>
                                                         </>
                                                     ) : (
@@ -267,7 +283,7 @@ function PurchasedCatalogue() {
                                         </figure>
                                     ) : (
                                         <div className='note--box' style={{ margin: '0 auto' }}>
-                                            <p>{mess || `You have no purchased ${currentCategory} item`}</p>
+                                            <p>{mess || `You have no ${tab === 'gifted' ? 'gifted' : 'purchased'} ${currentCategory} item`}</p>
                                             <picture>
                                                 <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.webp" type="image/webp" />
                                                 <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.gif" alt="🍃" width="32" height="32" />
@@ -285,7 +301,8 @@ function PurchasedCatalogue() {
             <TawkToSupport />
 
 
-            {(selectedItem && showModal) && <BoughtItemModal item={selectedItem} handleCloseModal={handleCloseModal} category={currentCategory} />}
+            {(selectedItem && showModal && tab === 'purchased') && <BoughtItemModal item={selectedItem} handleCloseModal={handleCloseModal} category={currentCategory} setHelpReset={setHelpReset} />}
+            {(selectedItem && showModal && tab === 'gifted') && <RedeemItemModal item={selectedItem} handleCloseModal={handleCloseModal} category={currentCategory} setHelpReset={setHelpReset} />}
         </>
     )
 }

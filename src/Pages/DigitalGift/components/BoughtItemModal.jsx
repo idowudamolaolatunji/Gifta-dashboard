@@ -12,13 +12,14 @@ import { useAuthContext } from '../../../Auth/context/AuthContext';
 import { createPortal } from 'react-dom';
 import Alert from '../../../Components/Alert';
 import SearchModal from './SearchModal';
+import CurrencyInput from 'react-currency-input-field';
 
 
 function Loading() {
     return <p style={{ fontSize: '1.2rem' }}>Loading...</p>
 }
 
-function BoughtItemModal({ item, handleCloseModal, category }) {
+function BoughtItemModal({ item, handleCloseModal, category, setHelpReset }) {
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -42,6 +43,7 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
     const [selectedUser, setSelectedUser] = useState({});
     
 
+    const timeout = 3000;
     const { token } = useAuthContext()
 
     function incQuantity() {
@@ -94,6 +96,11 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
         setQuerySomeOne('');
     }
 
+    function handleSearchInput(value) {
+        setQuerySomeOne(value);
+        setShowSearchModal(false)
+    }
+
     useEffect(function() {
         async function fetchCodes() {
             try {
@@ -121,8 +128,18 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
     }, [])
 
     async function handleSearchUser() {
+        setErrMess('')
+        if(!querySomeOne || querySomeOne === '') {
+            setErrMess('Search a valid username');
+            setIsLoadingResult(false)
+            setShowSearchModal(true);
+            return;
+        };
         if(selectedUser?.username === querySomeOne) return;
         setShowSearchModal(true);
+        setIsLoadingResult(true);
+
+
         try {
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/search/find-username?query=${querySomeOne}`, {
                 method: 'GET',
@@ -147,6 +164,7 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
         try {
             setIsLoading(true);
             handleReset();
+            setHelpReset(false)
 
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/digital-stickers/gift-sticker/${item?._id}`, {
                 method: 'POST',
@@ -159,13 +177,15 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
 
             if(!res.ok) throw new Error('Something went wrong!');
             const data = res.json()
-            if(data.status !== "success") throw new Error(data.message);
+            if(data?.status === "fail") throw new Error(data?.message);
+
             setIsSuccess(true);
-            setMessage(data.message)
+            setMessage(data?.message);
+            handleCloseModal();
+            setHelpReset(true)
             setTimeout(function() {
-                setIsSuccess(false);
                 setMessage('');
-                // handleCloseModal();
+                setIsSuccess(false);
             }, 2000);
         } catch(err) {
             handleFailure(err.message);
@@ -173,48 +193,6 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
             setIsLoading(false);
         }
     }
-
-    // async function handlePurchaseDigitalGift(type) {
-    //     const baseUrl = import.meta.env.VITE_SERVER_URL
-    //     let url, body;
-    //     if(type === 'stickers') {
-    //         url = `${baseUrl}/digital-stickers/purchase-sticker`;
-    //         body = { stickerType: item?.type, quantity }
-    //     }else {
-    //         url = `${baseUrl}/digital-giftings/purchase-digital-gift/${item?._id}`;
-    //         body = { quantity }
-    //     }
-    //     try {
-    //         setIsLoading(true);
-    //         handleReset();
-
-    //         const res = await fetch(url, {
-    //             method: 'POST',
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 Authorization: `Bearer ${token}`
-    //             },
-    //             body: JSON.stringify(body)
-    //         });
-
-    //         if(!res.ok) throw new Error('Something went wrong');
-    //         const data = await res.json();
-    //         if(data.status !== 'success') throw new Error(data.message);
-
-    //         setIsSuccess(true);
-    //         setMessage(data.message)
-    //         setTimeout(function() {
-    //             setIsSuccess(false);
-    //             setMessage();
-    //             handleCloseModal();
-    //         }, 2000);
-
-    //     } catch(err) {
-    //         handleFailure(err.message)
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
 
     return (
         <>
@@ -277,7 +255,9 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
 
                                     <span className="product--quantity">
                                         <span onClick={decQuantity}><FaMinus /></span>
-                                        <input type="text" value={quantity} onChange={(e) => handleInputQuality(e.target.value)} placeholder='1' />
+
+                                        <CurrencyInput value={quantity} onValueChange={(value, _) => handleInputQuality(value)} defaultValue={quantity} placeholder='1' />
+                                        
                                         <span onClick={incQuantity}><FaPlus /></span>
                                     </span>
                                 </div>
@@ -286,12 +266,12 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
 
                                 {isToGiftSomeone && (
                                     <div className="item--search-box">
-                                        <input type="text" className='item--input' value={querySomeOne} onChange={(e) => setQuerySomeOne(e.target.value)} placeholder='Search by username' />
+                                        <input type="text" className='item--input' value={querySomeOne} onChange={(e) => handleSearchInput(e.target.value)} placeholder='Search by username' />
 
                                         <button className={selectedUser?.username === querySomeOne ? 'btn-no-req' : ''} onClick={handleSearchUser}><GoSearch /></button>
 
                                         {showSearchModal && (
-                                            <SearchModal results={result} errMessage={errMess} isLoading={isLoadingResult} setSelectedUser={setSelectedUser} setShowSearchModal={setShowSearchModal} setQuerySomeOne={setQuerySomeOne} />
+                                            <SearchModal results={result} setResult={setResult} errMessage={errMess} setErrMessage={setErrMess} isLoading={isLoadingResult} setSelectedUser={setSelectedUser} setShowSearchModal={setShowSearchModal} setQuerySomeOne={setQuerySomeOne} />
                                         )}
                                     </div>
                                 )}
@@ -311,7 +291,7 @@ function BoughtItemModal({ item, handleCloseModal, category }) {
 
             {
             createPortal(
-                (message) && (
+                (isError || isSuccess || message) && (
                     <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
                         {isSuccess ? (
                             <AiFillCheckCircle className="alert--icon" />

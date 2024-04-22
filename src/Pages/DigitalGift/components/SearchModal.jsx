@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { getInitials } from '../../../utils/helper'
+import { useAuthContext } from '../../../Auth/context/AuthContext';
 
 
 function Loading() {
@@ -7,17 +8,23 @@ function Loading() {
 }
 
 
-function SearchModal({ results, errMessage, isLoading, setSelectedUser, setShowSearchModal, setQuerySomeOne }) {
+function SearchModal({ results, setResult, errMessage, setErrMessage, isLoading, setSelectedUser, setShowSearchModal, setQuerySomeOne }) {
+    const { user } = useAuthContext();
 
-    function handleSelectUser(user) {
-        setSelectedUser(user);
+    function handleSelectUser(userData) {
+        if(userData?.username === user?.username) {
+            setResult([]);
+            setErrMessage('You cannot gift yourself');
+            return;
+        }
+        setSelectedUser(userData);
         setShowSearchModal(false);
-        setQuerySomeOne(user?.username)
+        setQuerySomeOne(userData?.username)
     }
   return (
     <div className='item-user-search-modal'>
         {errMessage && (
-            <p className='error--text'>{errMessage}</p>
+            <p style={{ fontSize: '1.3rem', fontWeight: '500', color: '#bb0505' }}>{errMessage}</p>
         )}
 
         {isLoading && (
