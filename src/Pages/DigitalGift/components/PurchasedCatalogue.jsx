@@ -52,14 +52,21 @@ function PurchasedCatalogue() {
 
     function handleSwitch(tab) {
         if(tab === 'purchased') {
+            setTab(tab);
+            setCategoryItems([]);
             navigate(`/dashboard/purchased-gift/${currentCategory}`);
-            setTab(tab)
         }
         if (tab === 'gifted') {
             // navigate(`/dashboard/gifted-gift/${currentCategory}`);
             setCurrentCategory('stickers')
+            setTab(tab);
+            setCategoryItems([]);
             navigate(`/dashboard/gifted-gift/stickers`);
-            setTab(tab)
+        }
+        if(tab === 'items') {
+            setTab(tab);
+            setCategoryItems([]);
+            navigate(`/dashboard/digital-gift/${currentCategory}`);
         }
     }
 
@@ -133,15 +140,9 @@ function PurchasedCatalogue() {
                     }
                 });
 
-                if (!res.ok) {
-                    throw new Error('Something went wrong!');
-                }
+                if (!res.ok) throw new Error('Something went wrong!');
                 const data = await res.json();
-
-                if (data.status !== 'success') {
-                    throw new Error(data.message);
-                }
-
+                if (data.status !== 'success') throw new Error(data.message);
 
                 if(tab === 'purchased' && category === 'stickers') {
                     setCategoryItems(data.data.stickers)
@@ -208,7 +209,16 @@ function PurchasedCatalogue() {
                             </ul>
                         </div>
 
-                        <div className="page--tab-mobile item--tab">
+
+
+                        <>
+                            <select className="wallet--tabs-mobile mobile--tabs" style={{ margin: '2rem 0 0 2rem', fontFamily: 'inherit', fontWeight: '600', color: '#555'}} value={tab} onChange={(e) => handleSwitch(e.target.value)}>
+                                <option value="items">📇 Item Catalogue </option>
+                                <option value="purchased">🛍️ Purchased Items </option>
+                                <option value="gifted">🎁 Gifted Items</option>
+                            </select>
+
+                            <div className="page--tab-mobile item--tab">
                             <span className='tab-item tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span>
                             {categories.map((category) =>
                                 <Link to={`/dashboard/purchased-gift/${category.categoryName}`}>
@@ -223,7 +233,8 @@ function PurchasedCatalogue() {
                                     Stickers
                                 </p>
                             </Link>
-                        </div>
+                            </div>
+                        </>
 
                         {isLoadingCat ?
                             <div className="page--main" style={{ paddingTop: '0rem' }}>
@@ -247,8 +258,13 @@ function PurchasedCatalogue() {
                                     </div>
                                 </span> */}
 
-                                <p className='category--pg-heading item--d-heading heading--desktop'>{tab === 'purchased' ? 'Purchased' : 'Gifted'} Items</p>
-                                <p className='category--pg-heading heading--mobile'>{currentCategory === 'stickers' ? 'Sticker Items' : `${currentCategory} Items`}</p>
+
+                                {/*  */}
+                                    <p className='category--pg-heading item--d-heading heading--desktop'>{tab === 'purchased' ? 'Purchased' : 'Gifted'} {currentCategory === 'stickers' ? 'Sticker Items' : `${currentCategory} Items`}</p>
+
+                                    <p className='category--pg-heading heading--mobile'>{tab === 'purchased' ? 'Purchased' : 'Gifted'}{" "}{currentCategory === 'stickers' ? 'Sticker Items' : `${currentCategory} Items`}</p>
+                                {/*  */}
+
 
                                 <div className={`page--main ${categoryItems?.length > 0 ? 'page--grid' : ''}`}>
                                     {categoryItems?.length > 0 ? categoryItems.map((item) =>

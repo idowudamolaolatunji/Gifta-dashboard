@@ -40,6 +40,7 @@ function GiftCatalogue() {
     const [showModal, setShowModal] = useState(false);
 
     const [helpReset, setHelpReset] = useState(false);
+    const [tab, setTab] = useState('items')
 
     const { category } = useParams();
     const [currentCategory, setCurrentCategory] = useState(category);
@@ -57,6 +58,26 @@ function GiftCatalogue() {
             setImagePreview(imageUrl);
         }
     };
+
+    function handleSwitch(tab) {
+        if(tab === 'purchased') {
+            setTab(tab);
+            setCategoryDigitalGifts([]);
+            navigate(`/dashboard/purchased-gift/${currentCategory}`);
+        }
+        if (tab === 'gifted') {
+            // navigate(`/dashboard/gifted-gift/${currentCategory}`);
+            setCurrentCategory('stickers')
+            setTab(tab);
+            setCategoryDigitalGifts([]);
+            navigate(`/dashboard/gifted-gift/stickers`);
+        }
+        if(tab === 'items') {
+            setTab(tab);
+            setCategoryDigitalGifts([]);
+            navigate(`/dashboard/digital-gift/${currentCategory}`);
+        }
+    }
 
     // THIS IS TO SHOW THE MODAL
     function handleShowModal(item) {
@@ -296,22 +317,31 @@ function GiftCatalogue() {
                             </ul>
                         </div>
 
-                        <div className="page--tab-mobile item--tab">
-                            <span className='tab-item tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span>
-                            {categories.map((category) =>
-                                <Link to={`/dashboard/digital-gift/${category.categoryName}`}>
-                                    <p className={`tab-item ${currentCategory === category.categoryName ? 'active-tab-item' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
-                                        {category.categoryName}
+
+                        <>
+                            <select className="wallet--tabs-mobile mobile--tabs" style={{ margin: '2rem 0 0 2rem', fontFamily: 'inherit', fontWeight: '600', color: '#555'}} value={tab} onChange={(e) => handleSwitch(e.target.value)}>
+                                <option value="items">📇 Item Catalogue </option>
+                                <option value="purchased">🛍️ Purchased Items </option>
+                                <option value="gifted">🎁 Gifted Items</option>
+                            </select>
+
+                            <div className="page--tab-mobile item--tab">
+                                <span className='tab-item tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span>
+                                {categories.map((category) =>
+                                    <Link to={`/dashboard/digital-gift/${category.categoryName}`}>
+                                        <p className={`tab-item ${currentCategory === category.categoryName ? 'active-tab-item' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
+                                            {category.categoryName}
+                                        </p>
+                                    </Link>
+                                )}
+
+                                <Link to={`/dashboard/digital-gift/stickers`}>
+                                    <p className={`tab-item ${currentCategory === 'stickers' ? 'active-tab-item' : ''}`} onClick={() => setCurrentCategory('stickers')}s>
+                                        Stickers
                                     </p>
                                 </Link>
-                            )}
-
-                            <Link to={`/dashboard/digital-gift/stickers`}>
-                                <p className={`tab-item ${currentCategory === 'stickers' ? 'active-tab-item' : ''}`} onClick={() => setCurrentCategory('stickers')}s>
-                                    Stickers
-                                </p>
-                            </Link>
-                        </div>
+                            </div>
+                        </>
 
                         {isLoadingCat ? 
                             <div className="page--main" style={{ paddingTop: '0rem'}}>

@@ -94,10 +94,10 @@ function RedeemItemModal({ item, handleCloseModal, category, setHelpReset }) {
 
             if(!res.ok) throw new Error('Something went wrong!');
             const data = res.json()
-            if(data.status === "fail") throw new Error(data.message);
+            if(data.status === "fail") throw new Error(data?.message);
 
             setIsSuccess(true);
-            setMessage(data.message)
+            setMessage(data?.message || `Redeemed ${quantity} ${item?.stickerType} stickers successfully!`)
             setTimeout(function() {
                 setHelpReset(true);
                 handleCloseModal();
@@ -139,13 +139,18 @@ function RedeemItemModal({ item, handleCloseModal, category, setHelpReset }) {
                                     <span style={isAtMax ? { color: 'red', transform: 'scale(1.05)', transition: 'all 0.35s'} : {}} className="expiry-date">Quantity Given:<span className='item--quantity'>x {item?.balance}</span></span>
 
                                     <span className="product--quantity">
-                                        <span onClick={decQuantity}><FaMinus /></span>
+                                        <button onClick={decQuantity}><FaMinus /></button>
                                         {/* <input type="text" value={quantity} onChange={(e) => handleInputQuality(e.target.value)} placeholder='1' /> */}
 
                                         <CurrencyInput value={quantity} onValueChange={(value, _) => handleInputQuality(value)} defaultValue={quantity} placeholder='1' />
 
-                                        <span onClick={incQuantity}><FaPlus /></span>
+                                        <button onClick={incQuantity}><FaPlus /></button>
                                     </span>
+                                </div>
+
+                                <div style={{ width: '100%', margin: '-.4rem 0 1.6rem', display: 'flex', alignItems: 'center', gap: '.6rem' }}>
+                                    <span className='expiry-date'>Redeem amount:</span>
+                                    <span className='product--price'>₦{numberConverterSticker(item?.sticker?.price * quantity)}</span>
                                 </div>
 
                                 <button className="item--btn" onClick={handleRedeemStickers}>Redeem</button>
@@ -157,16 +162,13 @@ function RedeemItemModal({ item, handleCloseModal, category, setHelpReset }) {
                 </div>
             </aside>
 
-            {
-            createPortal(
-                (message) && (
+            {createPortal(
+                (isError || isSuccess || message) && (
                     <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
                         {isSuccess ? (
                             <AiFillCheckCircle className="alert--icon" />
-                        ) : isError ? (
+                        ) : isError && (
                             <AiFillExclamationCircle className="alert--icon" />
-                        ) : (
-                            ""
                         )}
                         <p>{message}</p>
                     </Alert>

@@ -249,7 +249,7 @@
 	.category--pg-head, .heading--desktop {
 		display: none;
 	}
-	.heading--mobile {
+	.heading--mobile, .mobile--tabs {
 		display: block;
 	}
 	.page--sidebar {

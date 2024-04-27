@@ -100,6 +100,8 @@ function Wallet() {
     const reminder = transactions.filter(transaction => transaction.purpose === 'reminder');
     const subscription = transactions.filter(transaction => transaction.purpose === 'subscription');
     const wishes = transactions.filter(transaction => transaction.purpose === 'wishes');
+    const orders = transactions.filter(transaction => transaction.purpose === 'orders');
+    const redeemed = transactions.filter(transaction => transaction.purpose === 'redeemed');
 
     const navigate = useNavigate();
 
@@ -333,29 +335,33 @@ function Wallet() {
                                 <h3 className="wallet--heading">Transactions History</h3>
                                 <select className="wallet--tabs-mobile" value={activeTab} onChange={(e) => { setActiveTab(e.target.value) }}>
                                     <option value="deposit">Deposit</option>
-                                    <option value="reminder">Reminder</option>
+                                    {/* <option value="reminder">Reminder</option> */}
                                     <option value="giftings">Giftings</option>
                                     <option value="wishes">Wishes</option>
                                     <option value="withdrawal">Withdrawal</option>
                                     <option value="subscription">Subscription</option>
+                                    <option value="orders">Orders</option>
+                                    <option value="redeemed">Redeemed</option>
                                 </select>
                             </div>
 
 
                             <div className="wallet--tabs">
                                 <span className={`wallet--tab ${activeTab === "deposit" && "tab--active"}`} onClick={() => { setActiveTab("deposit") }}>Deposit</span>
-                                <span className={`wallet--tab ${activeTab === "reminder" && "tab--active"}`} onClick={() => { setActiveTab("reminder") }}>Reminder</span>
+                                {/* <span className={`wallet--tab ${activeTab === "reminder" && "tab--active"}`} onClick={() => { setActiveTab("reminder") }}>Reminder</span> */}
                                 <span className={`wallet--tab ${activeTab === "giftings" && "tab--active"}`} onClick={() => { setActiveTab("giftings") }}>Giftings</span>
                                 <span className={`wallet--tab ${activeTab === "wishes" && "tab--active"}`} onClick={() => { setActiveTab("wishes") }}>Wishes</span>
                                 <span className={`wallet--tab ${activeTab === "withdrawal" && "tab--active"}`} onClick={() => { setActiveTab("withdrawal") }}>Withdrawal</span>
                                 <span className={`wallet--tab ${activeTab === "subscription" && "tab--active"}`} onClick={() => { setActiveTab("subscription") }}>Subscription</span>
+                                <span className={`wallet--tab ${activeTab === "orders" && "tab--active"}`} onClick={() => { setActiveTab("orders") }}>Orders</span>
+                                <span className={`wallet--tab ${activeTab === "redeemed" && "tab--active"}`} onClick={() => { setActiveTab("redeemed") }}>Redeemed</span>
                             </div>
                         </span>
 
 
                         <DataTable
                             columns={columns}
-                            data={activeTab === 'deposit' ? deposit : activeTab === 'withdrawal' ? withdrawal : activeTab === 'reminder' ? reminder : activeTab === 'giftings' ? gifting : activeTab === 'wishes' ? wishes : activeTab === 'subscription' ? subscription : ''}
+                            data={activeTab === 'deposit' ? deposit : activeTab === 'withdrawal' ? withdrawal : activeTab === 'reminder' ? reminder : activeTab === 'giftings' ? gifting : activeTab === 'wishes' ? wishes : activeTab === 'subscription' ? subscription : activeTab === "orders" ? orders : activeTab === "redeemed" && redeemed}
                             pagination
                             noDataComponent={<Message type={activeTab} />}
                             customStyles={customStyles}

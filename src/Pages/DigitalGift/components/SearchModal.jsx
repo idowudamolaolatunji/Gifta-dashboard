@@ -31,7 +31,7 @@ function SearchModal({ results, setResult, errMessage, setErrMessage, isLoading,
             <Loading />
         )}
 
-        {results && (
+        {(results && !isLoading) && (
             results.map(result => {
                 return (
                     <div className='item-user-result' onClick={() => handleSelectUser(result)}>

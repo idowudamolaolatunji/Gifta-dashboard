@@ -699,7 +699,7 @@
 .heading--desktop {
 	display: block;
 }
-.heading--mobile {
+.heading--mobile, .side-bar-top-tabs.mobile--tabs {
 	display: none;
 }
 .page--main {
@@ -1421,18 +1421,19 @@ div.banner button:hover {
 	align-items: center;
 	margin-top: 1.6rem;
 }
-.product--quantity span {
+.product--quantity button {
 	font-size: 1.2rem;
 	width: 2.4rem;
 	height: 2.4rem;
 	border: 1px solid #eee;
+	background-color: transparent;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
 	border-radius: 0.2rem;
 }
-.product--quantity span:hover {
+.product--quantity button:hover {
 	border-color: #bb0505;
 }
 .product--quantity input {
@@ -2058,7 +2059,7 @@ span.validity::after {
 	gap: 1.2rem;
 	overflow-x: auto;
 	width: 100%;
-	width: 130%;
+	/* width: 130%; */
 	overflow-y: hidden;
 	padding: 1.6rem 1.2rem 1rem;
 	display: none;
@@ -3037,8 +3038,8 @@ span.validity::after {
 }
 .wallet--point-modal {
 	position: absolute;
-	top: 0%;
-	right: -105%;
+	top: -50%;
+	right: -120%;
 	max-width: 30rem !important;
 	width: 30rem !important;
 	padding: 1.4rem 2rem;

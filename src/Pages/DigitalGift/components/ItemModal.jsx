@@ -24,7 +24,7 @@ function ItemModal({ item, handleCloseModal, category }) {
 
     const [isAtMax, setIsAtMax] = useState(false);
 
-    const [maxQuantity, setMaxQuantity] = useState(10000);
+    const [maxQuantity, setMaxQuantity] = useState(100000);
     const [quantity, setQuantity] = useState(1);
     const amount = Number(quantity * item?.price);
     const timeout = 3000;

@@ -41,7 +41,7 @@ function BoughtItemModal({ item, handleCloseModal, category, setHelpReset }) {
     const [result, setResult] = useState([]);
     const [errMess, setErrMess] = useState('');
     const [selectedUser, setSelectedUser] = useState({});
-    
+
 
     const timeout = 3000;
     const { token } = useAuthContext()
@@ -124,8 +124,10 @@ function BoughtItemModal({ item, handleCloseModal, category, setHelpReset }) {
             }
         }
 
-        fetchCodes();
-    }, [])
+        if(category !== 'stickers') {
+            fetchCodes();
+        }
+    }, [category])
 
     async function handleSearchUser() {
         setErrMess('')
@@ -151,6 +153,7 @@ function BoughtItemModal({ item, handleCloseModal, category, setHelpReset }) {
         
             if (!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
+            if(data.status !== "success") throw new Error(data?.message + ' 😢')
             setResult(data.data.results);
         } catch(err) {
             setErrMess(err.message)
@@ -289,8 +292,7 @@ function BoughtItemModal({ item, handleCloseModal, category, setHelpReset }) {
                 </div>
             </aside>
 
-            {
-            createPortal(
+            {createPortal(
                 (isError || isSuccess || message) && (
                     <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
                         {isSuccess ? (
