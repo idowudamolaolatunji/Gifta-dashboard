@@ -360,7 +360,7 @@ function GiftCatalogue() {
                                 <img src={currentCategory !== 'stickers' ? categories?.find(cat => currentCategory === cat?.categoryName)?.categoryImage : 'https://giftdev.ru/upload/iblock/6d2/4.jpg'} alt={currentCategory} />
                                 
                                 <div>
-                                    <h3 style={{ color: '#fff' }}><TbGiftCard style={{ fontSize: '2rem' }} /> Digial Giftings</h3>
+                                    <h3 style={{ color: '#fff' }}><TbGiftCard style={{ fontSize: '2rem' }} /> Digital Giftings</h3>
                                     <span>{currentCategory === 'stickers' ? 'Sticker Items' : `${currentCategory} Items`}</span>
                                 </div>
                             </span>

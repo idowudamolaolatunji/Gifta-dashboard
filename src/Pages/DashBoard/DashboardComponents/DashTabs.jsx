@@ -49,7 +49,7 @@ const DashTabs = () => {
 
 					<Link to="/dashboard/digital-gift/coupon" className={`tab ${location.pathname.includes('/dashboard/digital-gift') ? 'active-tab' : ''}`}>
 						<TbGiftCard className="tab-icon" />
-						<p className="tab-morre">Digial Giftings</p>
+						<p className="tab-morre">Digital Giftings</p>
 					</Link>
 
 					<Link to="/dashboard/reminders" className={`tab ${location.pathname.includes('/dashboard/reminders') ? 'active-tab' : ''}`}>
