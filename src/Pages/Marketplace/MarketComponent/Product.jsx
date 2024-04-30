@@ -4,7 +4,7 @@ import { numberConverter } from '../../../utils/helper';
 import { AiOutlineClose } from 'react-icons/ai';
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { useState } from 'react';
-import GiftingForm from '../../Gifting/GiftingComponents/GiftingForm';
+import GiftingForm from './GiftingForm';
 
 import giftaLogo from "../../../Assets/gifta-logo.png";
 import Cookies from 'js-cookie';

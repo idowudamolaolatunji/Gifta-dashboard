@@ -40,7 +40,7 @@ const DashBoard = () => {
 	const [showGiftingModal, setShowGiftingModal] = useState(false);
 
 	const [activeTab, setActiveTab] = useState('active');
-	const { user, token } = useAuthContext();
+	const { user, token, notificationCount } = useAuthContext();
 
 	const activeGiftings = giftings?.filter(gifts => !gifts?.isDelivered && !gifts?.isRejected);
 	const compltedGiftings = giftings?.filter(gifts => gifts?.isDelivered);
@@ -48,7 +48,7 @@ const DashBoard = () => {
 	const mapGiftings = activeTab === 'active' ? activeGiftings : activeTab === 'completed' ? compltedGiftings : RejectedGiftings;
 
 	const navigate = useNavigate();
-	const paramsId = useParams().id
+	const paramsId = useParams().id;
 
 	function handleGiftPackage(gift) {
 		setShowGiftingModal(true);
@@ -88,7 +88,7 @@ const DashBoard = () => {
 			}
 		}
 		fetchGiftings();
-	}, []);
+	}, [notificationCount]);
 
 	useEffect(function() {
 		document.title = 'Gifta | User Dashboard'

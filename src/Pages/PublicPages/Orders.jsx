@@ -328,7 +328,7 @@ function Order() {
         <>
 
             {isLoading && (
-                <div className='gifting--loader'>
+                <div className='gifting--loader' style={{ zIndex: '350000'}}>
                     <img src={GiftLoader} alt='loader' />
                 </div>
             )}

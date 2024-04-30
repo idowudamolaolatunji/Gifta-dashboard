@@ -220,7 +220,7 @@ function PurchasedCatalogue() {
 
                             <div className="page--tab-mobile item--tab">
                             <span className='tab-item tab--back' onClick={() => navigate('/')}><IoIosArrowBack /> Back</span>
-                            {categories.map((category) =>
+                            {tab !== "gifted" && categories.map((category) =>
                                 <Link to={`/dashboard/purchased-gift/${category.categoryName}`}>
                                     <p className={`tab-item ${currentCategory === category.categoryName ? 'active-tab-item' : ''}`} key={category._id} onClick={() => setCurrentCategory(`${category.categoryName}`)}>
                                         {category.categoryName}
@@ -300,10 +300,6 @@ function PurchasedCatalogue() {
                                     ) : (
                                         <div className='note--box' style={{ margin: '0 auto' }}>
                                             <p>{mess || `You have no ${tab === 'gifted' ? 'gifted' : 'purchased'} ${currentCategory} item`}</p>
-                                            <picture>
-                                                <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.webp" type="image/webp" />
-                                                <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f343/512.gif" alt="🍃" width="32" height="32" />
-                                            </picture>
                                         </div>
                                     )}
                                 </div>

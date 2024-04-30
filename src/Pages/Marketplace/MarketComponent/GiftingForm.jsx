@@ -160,7 +160,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             }
             setIsSuccess(true);
             setMessage(data.message)
-            setTimeout(async function() {
+            setTimeout(function() {
                 setIsSuccess(false);
                 setMessage();
                 handleFormSubmit();
@@ -198,9 +198,9 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
             }
             setIsSuccess(true);
             setMessage(data.message)
-            setTimeout(async function() {
+            setTimeout(function() {
                 setIsSuccess(false);
-                setMessage();
+                setMessage('');
                 handleFormSubmit();
             }, 1500);
         } catch(err) {
@@ -245,10 +245,9 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
 
             setIsSuccess(true);
             setMessage('Purchased Product Successfully');
-            setTimeout(() => {
+            setTimeout(function() {
                 setIsSuccess(false);
                 setMessage('');
-                setIsLoading(false);
                 handleCloseModal();
             }, 2000);
         } catch(err) {
@@ -270,6 +269,10 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                 body: formData,
                 mode: "no-cors"
             });
+
+
+            setIsSuccess(true);
+            setMessage('Purchased Product Successfully');
             
         } catch(err) {
             handleFailure(err.message);
@@ -614,7 +617,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
         </form>
 
         {createPortal(
-            isSuccess || isError && (
+            (isSuccess || isError || message) && (
                 <Alert alertType={`${isSuccess ? "success" : isError ? "error" : ""}`}>
                     {isSuccess ? (
                         <AiFillCheckCircle className="alert--icon" />
