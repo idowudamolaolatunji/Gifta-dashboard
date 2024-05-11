@@ -247,12 +247,12 @@ function KycVer() {
                                         <select className='form__select' required value={docType} onChange={e => setDocType(e.target.value)} id="doc-type">
                                             <option hidden selected>--Select a Document Type--</option>
                                             <option value='id-card'>National ID Card</option>
-                                            <option value='driver-license'>Drivers Lisence</option>
+                                            <option value='driver-license'>Driver's License</option>
                                         </select>
                                     </div>
                                     <div className="form--item">
-                                        <label htmlFor="doc-number" className="form--label">{docType === 'id-card' ? 'National Id Card Number' : docType === 'driver-license' ? 'Driver\s License Number' : 'Document Number'}</label>
-                                        <input type="number" id="doc-number" className='form--input' placeholder='7382990134468' required value={docNumber} onChange={e => setDocNumber(e.target.value)} />
+                                        <label htmlFor="doc-number" className="form--label">{docType === 'id-card' ? 'National Id Card Number' : docType === 'driver-license' ? 'Driver\'s License Number' : 'Document Number'}</label>
+                                        <input type={docType === 'driver-license' ? 'text' : 'number'} id="doc-number" className='form--input' placeholder='7382990134468' required value={docNumber} onChange={e => setDocNumber(e.target.value)} />
                                     </div>
                                 </div>
 
