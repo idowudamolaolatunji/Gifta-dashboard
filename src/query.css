@@ -904,4 +904,7 @@
 	.form__inline {
 		margin-bottom: .6rem;
 	}
+	#dob {
+		width: 100%;
+	}
 }
