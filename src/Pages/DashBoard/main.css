@@ -3747,6 +3747,7 @@ span */
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	cursor: pointer;
 }
 .gift--preview-name {
 	font-size: 2rem;

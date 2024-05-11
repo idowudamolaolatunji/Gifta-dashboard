@@ -123,7 +123,7 @@ function Order() {
     const [isSuccess, setIsSuccess] = useState(false);
     const [helpReset, setHelpReset] = useState(false);
 
-    // const [orderId, setOrderId] = useState(null);
+    const [seletedId, setSelectedId] = useState(null);
     const [showAcceptModal, setShowAcceptModal] = useState(false);
     const [showRejectModal, setShowRejectModal] = useState(false);
     const [activeTab, setActiveTab] = useState('all');
@@ -186,10 +186,10 @@ function Order() {
     }, [helpReset]);
 
     function handleOrderActions(id, type) {
-        // setOrderId(id);
+        setSelectedId(id);
+        console.log(id, selectedOrder?._id)
         if(type === 'accept') {
             setShowAcceptModal(true);
-            console.log(true)
         } else {
             setShowRejectModal(true)
         }
@@ -215,7 +215,7 @@ function Order() {
             setIsLoading(true);
             setHelpReset(false);
 
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/accept-order/${selectedOrder?._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/accept-order/${seletedId}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -234,6 +234,8 @@ function Order() {
                 setSelectedOrder(data?.data?.order);
                 setIsSuccess(false);
                 setMessage("");
+                setSelectedOrder({})
+                setSelectedId(null)
                 setShowAcceptModal(false);
                 setHelpReset(true);
                 handleSetOrder(data.data.orders, count.length);
@@ -251,7 +253,7 @@ function Order() {
             handleReset();
             setIsLoading(true);
 
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/reject-order/${selectedOrder?._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/reject-order/${seletedId}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -271,6 +273,8 @@ function Order() {
                 setIsSuccess(false);
                 setMessage("");
                 setHelpReset(true);
+                setSelectedOrder({})
+                setSelectedId(null)
                 setShowRejectModal(false);
                 handleSetOrder(data.data.orders, count.length);
             }, 2000);

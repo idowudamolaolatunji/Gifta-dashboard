@@ -75,7 +75,8 @@ function KycVer() {
             setIsLoading(true);
             setHelpReset(false)
 
-            if(!checked) throw new Error('Agree to the terms!')
+            if(!imageFile) throw new Error('A image of yourself is required');
+            if(!checked) throw new Error('Agree to the condition below!');
 
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/kycs/upload-kyc-docs`, {
                 method: 'POST',
@@ -184,7 +185,7 @@ function KycVer() {
                         <h3 className="terms--heading">KYC Verification</h3>
 
 
-                        <div className="modal--info">Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga nam suscipit reprehenderit ab quos ipsum sequi iusto expedita iste inventore illo, fugiat, hic voluptatum aut eum ipsam nisi quis, porro qui possimus saepe.</div>
+                        <div className="modal--info">To ensure the security and integrity of our platform, we require all users to undergo a Know Your Customer (KYC) verification process. KYC verification is a crucial step in preventing fraudulent activities and maintaining a safe environment for all participants.</div>
 
 
                         {isLoading && (
@@ -205,7 +206,7 @@ function KycVer() {
                             <form className='form kyc--form' onSubmit={handleSubmitKyc}>
                                 <div className="form--grid-kyc">
                                     <div className='form--item form-image-card'>
-                                        <input type='file' required id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" capture />
+                                        <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" capture />
                                         <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='form-image-label' style={{ border: '1.8px dashed #ddd' }}>
                                             <span className='text--box' style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <MdOutlineAddPhotoAlternate style={{ fontSize: '2rem', color: '#555' }} />
@@ -283,7 +284,8 @@ function KycVer() {
 
                                 <div className="form--item">
                                     <span id='form-check'>
-                                        <input type="checkbox" id="form--checkbox" required value={checked} onChange={e => setChecked(e.target.value)} />
+                                        {/* <input type="checkbox" id="form--checkbox" required value={checked} onChange={e => setChecked(e.target.value)} /> */}
+                                        <input type="checkbox" id="form--checkbox" value={checked} onChange={e => setChecked(e.target.value)} />
                                         <label htmlFor="form--checkbox" className='form--label'>I confirm that I uploaded Goverment-issued ID photo. Including Picture, Telephone, Address and DOB</label>
                                     </span>
                                 </div>

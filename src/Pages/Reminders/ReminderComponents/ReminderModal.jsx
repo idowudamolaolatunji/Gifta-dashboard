@@ -234,7 +234,7 @@ function ReminderModal({ setShowDashboardModal, setHelpReset, reminderItem }) {
         )}
 
         <form className='reminder--form' onSubmit={handleSetReminder}>
-            <span className='modal--info' style={{ marginBottom: '.6rem' }}>Note that everything relating data to this wish would also be deleted including transaction history!</span>
+            <span className='modal--info' style={{ marginBottom: '.6rem' }}>Wow, you're really on top of your game! We love how organized and thoughtful 💭 you're being. Keep it up - your loved ones 💖 are going to feel so special when you remember all their important dates.</span>
             
             <div className="reminder--flex-2-1">
                 <div className="form--item">
