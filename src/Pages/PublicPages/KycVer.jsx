@@ -76,6 +76,7 @@ function KycVer() {
             setHelpReset(false)
 
             if(!imageFile) throw new Error('A image of yourself is required');
+            if(!frontImage || !backImage) throw new Error(`Both front and back image of your ${docType} is required`);
             if(!checked) throw new Error('Agree to the condition below!');
 
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/kycs/upload-kyc-docs`, {
@@ -202,7 +203,7 @@ function KycVer() {
                             <img src={PendingImg} style={{ width: '28rem', margin: 'auto' }} />
                         )}
 
-                        {(!user?.isKycVerified && kyc?.status !== 'pending') && (
+                        {(!user?.isKycVerified || kyc?.status === 'rejected') && (
                             <form className='form kyc--form' onSubmit={handleSubmitKyc}>
                                 <div className="form--grid-kyc">
                                     <div className='form--item form-image-card'>
@@ -263,7 +264,7 @@ function KycVer() {
                                                 <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
                                                 <p className="form-title">Front side of your document</p>
                                                 <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
-                                                <input type='file' required id='form-image-input-1' name='frontimage' onChange={e => setFrontImage(e.target.files[0])} accept="image/*" />
+                                                <input type='file' id='form-image-input-1' name='frontimage' onChange={e => setFrontImage(e.target.files[0])} accept="image/*" />
                                             </span>
                                         </label>
                                     </div>
@@ -276,7 +277,7 @@ function KycVer() {
                                                 <p className="form-title">Back side of your document</p>
                                                 <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
                                                 {/* <button type="button">Choose a file</button> */}
-                                                <input type='file' required id='form-image-input-2' name='backimage' onChange={e => setBackImage(e.target.files[0])} accept="image/*" />
+                                                <input type='file' id='form-image-input-2' name='backimage' onChange={e => setBackImage(e.target.files[0])} accept="image/*" />
                                             </span>
                                         </label>
                                     </div>
