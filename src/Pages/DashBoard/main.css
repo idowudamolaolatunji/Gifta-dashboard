@@ -1132,6 +1132,10 @@ div.banner button:hover {
 	padding: 1rem 1.2rem;
 	font-size: 1.4rem;
 	font-weight: 600;
+	transition: all .35s;
+}
+.kyc--form .form--submit:hover {
+	opacity: .85;
 }
 .kyc--form #form-image-label.hoverable span {
 	display: none !important;

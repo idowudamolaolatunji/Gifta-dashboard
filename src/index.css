@@ -581,6 +581,11 @@ a.form--acct-btn div {
 .form--item-add, .form--item-add label {
 	cursor: pointer;
 }
+.form--item.form--btns-grid {
+	display: grid;
+	grid-template-columns: 20fr 80fr;
+	gap: .4rem;
+}
 .form--icon-box {
 	width: 3.8rem;
 	height: 3.8rem;
@@ -920,4 +925,32 @@ div.stepper--content {
 		transform: scale(1);
 		opacity: 1;
 	}
+}
+
+
+.tab--identifier {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	margin-bottom: -1.6rem;
+	margin-top: 1.6rem;
+}
+.tab--identifier span:first-child, .tab--identifier span:last-child {
+	border: 1.4px solid #bb0505;
+	color: #bb0505;
+	font-size: 1.4rem;
+	font-weight: 500;
+	padding: 1rem 1.8rem;
+	border-radius: .4rem;
+	transition: all .35s;
+}
+
+.tab--identifier span:nth-child(2) {
+	border: 1px solid #bb0505;
+	width: 10rem;
+}
+.tab--identifier span.active--tab-id {
+	color: #fff;
+	background-color: #bb0505;
 }

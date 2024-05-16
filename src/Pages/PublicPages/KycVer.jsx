@@ -37,6 +37,8 @@ function KycVer() {
     const [country, setCountry] = useState('');
     const [checked, setChecked] = useState(false);
 
+    const [formTab, setFormTab] = useState(1);
+
     const navigate = useNavigate();
     const { user, token, handleUser } = useAuthContext();
 
@@ -189,6 +191,13 @@ function KycVer() {
                         <div className="modal--info">To ensure the security and integrity of our platform, we require all users to undergo a Know Your Customer (KYC) verification process. KYC verification is a crucial step in preventing fraudulent activities and maintaining a safe environment for all participants.</div>
 
 
+                        <div className='tab--identifier'>
+                            <span className={`${formTab === 1 ? 'active--tab-id' : '' }`}>Step 1</span>
+                            <span></span>
+                            <span className={`${formTab === 2 ? 'active--tab-id' : '' }`}>Step 2</span>
+                        </div>
+
+
                         {isLoading && (
                             <div className='gifting--loader'>
                                 <img src={GiftLoader} alt='loader' />
@@ -205,95 +214,146 @@ function KycVer() {
 
                         {(!user?.isKycVerified || kyc?.status === 'rejected') && (
                             <form className='form kyc--form' onSubmit={handleSubmitKyc}>
-                                <div className="form--grid-kyc">
-                                    <div className='form--item form-image-card'>
-                                        <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" capture />
-                                        <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='form-image-label' style={{ border: '1.8px dashed #ddd' }}>
-                                            <span className='text--box' style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <MdOutlineAddPhotoAlternate style={{ fontSize: '2rem', color: '#555' }} />
-                                                <p>Upload A selfie</p>
-                                            </span>
-                                            {imagePreview && <img id='form-image' src={imagePreview} alt='Preview' />}
-                                        </label>
-                                    </div>
+                                {formTab === 1 && (
+                                    <>
+                                        <p className='section__heading' style={{ margin: '0', marginBottom: '2rem', fontSize: '2.6rem', fontWeight: '500' }}>Start Filling Kyc Document</p>
 
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        <div className="form--item">
-                                            <label htmlFor="address" className="form--label">Home Address</label>
-                                            <input type="text" id="address" className='form--input' placeholder='5th street, Japan road' value={address} required onChange={e => setAddress(e.target.value)} />
+                                        <div className="form--grid-kyc">
+                                            <div className='form--item form-image-card'>
+                                                <input type='file' id='form-image-input' name='image' onChange={handleImageChange} accept="image/*" capture />
+                                                <label htmlFor='form-image-input' className={`${imagePreview ? 'hoverable' : ''}`} id='form-image-label' style={{ border: '1.8px dashed #ddd' }}>
+                                                    <span className='text--box' style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <MdOutlineAddPhotoAlternate style={{ fontSize: '2rem', color: '#555' }} />
+                                                        <p>Upload A selfie</p>
+                                                    </span>
+                                                    {imagePreview && <img id='form-image' src={imagePreview} alt='Preview' />}
+                                                </label>
+                                            </div>
+
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                                <div className="form--item">
+                                                    <label htmlFor="address" className="form--label">Home Address</label>
+                                                    <input type="text" id="address" className='form--input' placeholder='5th street, Japan road' value={address} required onChange={e => setAddress(e.target.value)} />
+                                                </div>
+                                                <div className="form--item">
+                                                    <label htmlFor="phone" className="form--label">Phone Number</label>
+                                                    <input type="number" id="phone" className='form--input' placeholder='2349051623480' required value={phone} onChange={e => setPhone(e.target.value)} />
+                                                </div>
+                                                <div className="form--flex">
+                                                    <div className="form--item">
+                                                        <label htmlFor="dob" className="form--label">Date of Birth</label>
+                                                        <input type="date" id="dob" style={{ width: '100%' }} className='form--input' placeholder='D-O-B' max={'2010-01-01'} required value={dob} onChange={e => setDob(e.target.value)} />
+                                                    </div>
+                                                    <div className="form--item">
+                                                        <label htmlFor="country" className="form--label">Country</label>
+                                                        <select className='form__select' id="country" value={country} onChange={e => setCountry(e.target.value)} >
+                                                            <option hidden selected>--Select a Country--</option>
+                                                            <option value='nigeria'>Nigeria</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="form--item">
-                                            <label htmlFor="phone" className="form--label">Phone Number</label>
-                                            <input type="number" id="phone" className='form--input' placeholder='2349051623480' required value={phone} onChange={e => setPhone(e.target.value)} />
-                                        </div>
+
                                         <div className="form--flex">
                                             <div className="form--item">
-                                                <label htmlFor="dob" className="form--label">Date of Birth</label>
-                                                <input type="date" id="dob" style={{ width: '100%' }} className='form--input' placeholder='D-O-B' max={'2010-01-01'} required value={dob} onChange={e => setDob(e.target.value)} />
-                                            </div>
-                                            <div className="form--item">
-                                                <label htmlFor="country" className="form--label">Country</label>
-                                                <select className='form__select' id="country" value={country} onChange={e => setCountry(e.target.value)} >
-                                                    <option hidden selected>--Select a Country--</option>
-                                                    <option value='nigeria'>Nigeria</option>
+                                                <label htmlFor="doc-type" className="form--label">Document Type</label>
+                                                <select className='form__select' required value={docType} onChange={e => setDocType(e.target.value)} id="doc-type">
+                                                    <option hidden selected>--Select a Document Type--</option>
+                                                    <option value='id-card'>National ID Card</option>
+                                                    <option value='driver-license'>Driver's License</option>
                                                 </select>
                                             </div>
+                                            <div className="form--item">
+                                                <label htmlFor="doc-number" className="form--label">{docType === 'id-card' ? 'National Id Card Number' : docType === 'driver-license' ? 'Driver\'s License Number' : 'Document Number'}</label>
+                                                <input type={docType === 'driver-license' ? 'text' : 'number'} id="doc-number" className='form--input' placeholder='7382990134468' required value={docNumber} onChange={e => setDocNumber(e.target.value)} />
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div className="form--flex">
-                                    <div className="form--item">
-                                        <label htmlFor="doc-type" className="form--label">Document Type</label>
-                                        <select className='form__select' required value={docType} onChange={e => setDocType(e.target.value)} id="doc-type">
-                                            <option hidden selected>--Select a Document Type--</option>
-                                            <option value='id-card'>National ID Card</option>
-                                            <option value='driver-license'>Driver's License</option>
-                                        </select>
-                                    </div>
-                                    <div className="form--item">
-                                        <label htmlFor="doc-number" className="form--label">{docType === 'id-card' ? 'National Id Card Number' : docType === 'driver-license' ? 'Driver\'s License Number' : 'Document Number'}</label>
-                                        <input type={docType === 'driver-license' ? 'text' : 'number'} id="doc-number" className='form--input' placeholder='7382990134468' required value={docNumber} onChange={e => setDocNumber(e.target.value)} />
-                                    </div>
-                                </div>
+                                        <div className="form--item doc--grid">
+                                            <div className='form--item form-image-card'>
+                                                <label htmlFor='form-image-input-1' id='form-image-label'>
+                                                    <span className='text--box'>
+                                                        <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
+                                                        <p className="form-title">Front side of your document</p>
+                                                        <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
+                                                        <input type='file' id='form-image-input-1' name='frontimage' onChange={e => setFrontImage(e.target.files[0])} accept="image/*" />
+                                                    </span>
+                                                </label>
+                                            </div>
 
-                                <div className="form--item doc--grid">
-                                    <div className='form--item form-image-card'>
-                                        <label htmlFor='form-image-input-1' id='form-image-label'>
-                                            <span className='text--box'>
-                                                <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
-                                                <p className="form-title">Front side of your document</p>
-                                                <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
-                                                <input type='file' id='form-image-input-1' name='frontimage' onChange={e => setFrontImage(e.target.files[0])} accept="image/*" />
+
+                                            <div className='form--item form-image-card'>
+                                                <label htmlFor='form-image-input-2' id='form-image-label'>
+                                                    <span className='text--box'>
+                                                        <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
+                                                        <p className="form-title">Back side of your document</p>
+                                                        <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
+                                                        {/* <button type="button">Choose a file</button> */}
+                                                        <input type='file' id='form-image-input-2' name='backimage' onChange={e => setBackImage(e.target.files[0])} accept="image/*" />
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div className="form--item">
+                                            <button type='button' className='form--submit' onClick={() => setFormTab(2)}>Next</button>
+                                        </div>
+                                    </>
+                                )}
+
+
+                                {formTab === 2 && (
+                                    <>
+                                        <p className='section__heading' style={{ margin: '0', fontSize: '2.6rem', fontWeight: '500' }}>Continue Filling Kyc Document</p>
+
+                                        <div className="form--item doc--grid">
+                                            <div className='form--item form-image-card'>
+                                                <label htmlFor='form-image-input-1' id='form-image-label'>
+                                                    <span className='text--box'>
+                                                        <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
+                                                        <p className="form-title">Front side of your document</p>
+                                                        <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
+                                                        <input type='file' id='form-image-input-1' name='frontimage' onChange={e => setFrontImage(e.target.files[0])} accept="image/*" />
+                                                    </span>
+                                                </label>
+                                            </div>
+
+
+                                            <div className='form--item form-image-card'>
+                                                <label htmlFor='form-image-input-2' id='form-image-label'>
+                                                    <span className='text--box'>
+                                                        <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
+                                                        <p className="form-title">Back side of your document</p>
+                                                        <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
+                                                        {/* <button type="button">Choose a file</button> */}
+                                                        <input type='file' id='form-image-input-2' name='backimage' onChange={e => setBackImage(e.target.files[0])} accept="image/*" />
+                                                    </span>
+                                                </label>
+                                            </div>
+
+                                            <div className="form--item">
+                                                <label htmlFor="cac" className='form--label'>CAC Number (Optional)</label>
+                                                <input type="text" className='form--input' id='cac' placeholder='10002345' />
+                                            </div>
+                                        </div>
+                                
+
+                                        <div className="form--item">
+                                            <span id='form-check'>
+                                                {/* <input type="checkbox" id="form--checkbox" required value={checked} onChange={e => setChecked(e.target.value)} /> */}
+                                                <input type="checkbox" id="form--checkbox" value={checked} onChange={e => setChecked(e.target.value)} />
+                                                <label htmlFor="form--checkbox" className='form--label'>I confirm that I uploaded Goverment-issued ID photo. Including Picture, Telephone, Address and DOB</label>
                                             </span>
-                                        </label>
-                                    </div>
+                                        </div>
 
+                                        <div className="form--item form--btns-grid">
+                                            <button type='button' className='form--submit' onClick={() => setFormTab(1)}>Prev</button>
+                                            <button type="submit" className='form--submit'>Continue</button>
+                                        </div>
+                                    </>
+                                )}
 
-                                    <div className='form--item form-image-card'>
-                                        <label htmlFor='form-image-input-2' id='form-image-label'>
-                                            <span className='text--box'>
-                                                <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
-                                                <p className="form-title">Back side of your document</p>
-                                                <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
-                                                {/* <button type="button">Choose a file</button> */}
-                                                <input type='file' id='form-image-input-2' name='backimage' onChange={e => setBackImage(e.target.files[0])} accept="image/*" />
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div className="form--item">
-                                    <span id='form-check'>
-                                        {/* <input type="checkbox" id="form--checkbox" required value={checked} onChange={e => setChecked(e.target.value)} /> */}
-                                        <input type="checkbox" id="form--checkbox" value={checked} onChange={e => setChecked(e.target.value)} />
-                                        <label htmlFor="form--checkbox" className='form--label'>I confirm that I uploaded Goverment-issued ID photo. Including Picture, Telephone, Address and DOB</label>
-                                    </span>
-                                </div>
-
-                                <div className="form--item">
-                                    <button type="submit" className='form--submit'>Continue</button>
-                                </div>
                             </form>
                         )}
 
