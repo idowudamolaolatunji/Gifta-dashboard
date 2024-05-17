@@ -954,3 +954,31 @@ div.stepper--content {
 	color: #fff;
 	background-color: #bb0505;
 }
+
+
+
+.kyc-upload {}
+
+
+.btn--flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .6rem;
+}
+
+.upload--btn {
+	padding: .8rem 1.2rem;
+	font-size: 1.4rem;
+	font-weight: 500;
+	background-color: #4e48f0;
+	color: #fff;
+	cursor: pointer;
+	border-radius: .4rem;
+}
+.kyc-upload .form--image {
+	height: 6rem;
+}
+.kyc-upload #form-image-input-3, .kyc-upload #form-image-input-4 {
+	display: none;
+}
