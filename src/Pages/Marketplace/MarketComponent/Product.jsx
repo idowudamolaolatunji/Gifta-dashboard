@@ -10,6 +10,9 @@ import giftaLogo from "../../../Assets/gifta-logo.png";
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
+
 
 function Product({ product, handleCloseModal, type, currCategory }) {
     const [showGiftingForm, setShowGiftingForm] = useState('');
@@ -62,9 +65,10 @@ function Product({ product, handleCloseModal, type, currCategory }) {
             <>
                 <div className="product--container">
                     <span className='product--image-box'>
-                        <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.images[currIndex]}`} alt={product.name} className="product--img" />
+                        <Zoom>
+                            <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${product.images[currIndex]}`} alt={product.name} className="product--img" />
+                        </Zoom>
                         <span className='sub-images'>
-                            {console.log(product?.images.length)}
                             {product?.images.length > 0 &&
                                 product.images.map((img, index) => {
                                     return <img src={`${import.meta.env.VITE_SERVER_ASSET_URL}/products/${img}`} className={currIndex === index ? 'active-sub' : ''} onClick={() => setCurrIndex(index)} alt={img} />

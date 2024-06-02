@@ -569,13 +569,13 @@ function ProductCatalogue() {
 
             {showDeleteModal && (
                 <DashboardModal customStyle={customStyleModal} title='Delete this Product' setShowDashboardModal={setShowDeleteModal} overLayZIndex={true} >
-                <p className='modal--text-2'>Are you sure you want to delete this Order?</p>
-                <span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
-                <div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
-                    <button type='button' className='cancel--btn' onClick={() => setShowDeleteModal(false)}>Cancel</button>
-                    <button type='submit' className='set--btn' onClick={handleDeleteProduct}>Delete Product</button>
-                </div>
-            </DashboardModal>
+                    <p className='modal--text-2'>Are you sure you want to delete this Order?</p>
+                    <span className='modal--info'>Note that everything relating data to this wish would also be deleted including transaction history!</span>
+                    <div className="reminder--actions" style={{ marginTop: '1.4rem' }}>
+                        <button type='button' className='cancel--btn' onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                        <button type='submit' className='set--btn' onClick={handleDeleteProduct}>Delete Product</button>
+                    </div>
+                </DashboardModal>
             )}
 
 

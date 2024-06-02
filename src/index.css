@@ -675,7 +675,7 @@ a.form--acct-btn div {
 
 .terms--container {
 	max-width: 80rem;
-	margin: 2.4rem auto 0;
+	margin: 0 auto ;
 	/* border: 1px solid #000; */
 	display: flex;
 	flex-direction: column;

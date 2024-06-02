@@ -125,11 +125,11 @@ function Header() {
                 </div>
             )}
 
-            <details>
+            {/* <details>
                 <summary>
                     
                 </summary>
-            </details>
+            </details> */}
 
         </>
     )

@@ -46,7 +46,7 @@ function GiftCatalogue() {
     const [currentCategory, setCurrentCategory] = useState(category);
     console.log(category, selectedItem)
 
-    const { token } = useAuthContext();
+    const { user, token } = useAuthContext();
     const navigate = useNavigate();
 
 
@@ -276,7 +276,7 @@ function GiftCatalogue() {
 
     return (
         <>
-            <section className='category-page__section'>
+            <section className='category-page__section' style={(user?.role === 'vendor' && !user?.isKycVerified) ? { marginTop: '8rem'} : {}}>
 
                 {/* {isSpinning && (
                     <div className='gifting--loader'>

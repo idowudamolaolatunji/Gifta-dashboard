@@ -44,6 +44,8 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
     const amountInKobo = totalAmount * 100;
     const timeout = 3000;
     /////////////////////////////////////////////////////////////
+
+    console.log(productInfo, 'Line 48')
     
 
     const componentProps = {
@@ -149,7 +151,7 @@ function GiftingForm({ handleHideForm, handleCloseModal }) {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ productId: productInfo.id }),
+                body: JSON.stringify({ productId: productInfo?.id }),
             });
             if(!res.ok) throw new Error('Something Went Wrong!');
             const data = await res.json();

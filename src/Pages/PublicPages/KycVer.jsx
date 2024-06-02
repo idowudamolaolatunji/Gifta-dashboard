@@ -102,7 +102,7 @@ function KycVer() {
             console.log(res)
             if(!res.ok) throw new Error('Something went wrong!');
             const data = await res.json();
-            if (data.status !== "success") throw new Error(data.message);
+            if (data?.status !== "success") throw new Error(data?.message);
             console.log(data)
             
             // UPLOAD IMAGE
@@ -159,7 +159,7 @@ function KycVer() {
             try {
                 setIsLoading(true)
 
-                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/kycs/my-kyc`, {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/kycs/user/my-kyc`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -192,7 +192,7 @@ function KycVer() {
         <>
             <Header />
 
-            <section className="product__section section">
+            <section className="product__section section" style={{ marginTop: '10rem'}}>
                 <div className="section__container">
                     <span onClick={() => navigate(-1)} className='wishlist--back-btn'>Back</span>
 
@@ -217,7 +217,6 @@ function KycVer() {
                             <img src={PendingImg} style={{ width: '28rem', margin: 'auto' }} />
                         )}
 
-                        {console.log(user.isKycVerified, kyc.status, kyc)}
 
                         {((!user?.isKycVerified && kyc?.status !== 'pending') || kyc?.status === 'rejected') && (
                             <>
@@ -290,7 +289,7 @@ function KycVer() {
                                                         <span className='text--box'>
                                                             <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
                                                             <p className="form-title">Front side of your document</p>
-                                                            <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
+                                                            <p className='form-text'>Uplaod the front side of your document <br /> Support PNG and JPG only </p>
                                                             <input type='file' id='form-image-input-1' name='frontimage' onChange={e => setFrontImage(e.target.files[0])} accept="image/*" />
                                                         </span>
                                                     </label>
@@ -302,7 +301,7 @@ function KycVer() {
                                                         <span className='text--box'>
                                                             <SlCloudUpload style={{ fontSize: '2.4rem', color: '#444' }} />
                                                             <p className="form-title">Back side of your document</p>
-                                                            <p className='form-text'>Uplaod the front side of your document <br /> Support PNG, JPG, PDF</p>
+                                                            <p className='form-text'>Uplaod the front side of your document <br /> Support PNG and JPG only </p>
                                                             {/* <button type="button">Choose a file</button> */}
                                                             <input type='file' id='form-image-input-2' name='backimage' onChange={e => setBackImage(e.target.files[0])} accept="image/*" />
                                                         </span>
@@ -330,7 +329,7 @@ function KycVer() {
                                                                 <>
                                                                     <FaFile style={{ fontSize: '2.4rem', color: '#555' }} />
                                                                     <p className="form-title">Utility Bill</p>
-                                                                    <p className='form-text'>No file</p>
+                                                                    <p className='form-text'>No file <br /> Upload supports PNG, JPG, PDF</p>
                                                                 </>
                                                             )}
 
@@ -345,7 +344,7 @@ function KycVer() {
                                                                 <label className='upload--btn' htmlFor="form-image-input-3">Upload document</label>
                                                                 {utilityBill && <button id='form-close-btn' style={{ padding: '.4rem .8rem'}} onClick={() => setUtilityBill(null)}><IoClose style={{ fontSize: '2rem'}} /></button>}
                                                             </div>
-                                                            <input type='file' id='form-image-input-3' name='frontimage' onChange={e => setUtilityBill(e.target.files[0])} accept="image/*" />
+                                                            <input type='file' id='form-image-input-3' name='utilityBill' onChange={e => setUtilityBill(e.target.files[0])} accept="*" />
                                                         </span>
                                                     </div>
                                                 </div>
@@ -359,7 +358,7 @@ function KycVer() {
                                                                 <>
                                                                     <FaFile style={{ fontSize: '2.4rem', color: '#555' }} />
                                                                     <p className="form-title">Statement of Account</p>
-                                                                    <p className='form-text'>No file</p>
+                                                                    <p className='form-text'>No file <br /> Upload supports PNG, JPG, PDF</p>
                                                                 </>
                                                             )}
 
@@ -374,7 +373,7 @@ function KycVer() {
                                                                 <label className='upload--btn' htmlFor="form-image-input-4">Upload document</label>
                                                                 {acctStatement && <button id='form-close-btn' style={{ padding: '.4rem .8rem'}} onClick={() => setAcctStatement(null)}><IoClose style={{ fontSize: '2rem'}} /></button>}
                                                             </div>
-                                                            <input type='file' id='form-image-input-4' name='frontimage' onChange={e => setAcctStatement(e.target.files[0])} accept="image/*" />
+                                                            <input type='file' id='form-image-input-4' name='acctStatement' onChange={e => setAcctStatement(e.target.files[0])} accept="*" />
                                                         </span>
                                                     </div>
                                                 </div>

@@ -317,7 +317,7 @@ function Wallet() {
                                 <span className='wallet--user-point'><GiCrownCoin style={{ color: '#bb0505', fontSize: '2rem' }} />{numberConverter(wallet?.pointBalance || 0)} G-points <GoInfo className='wallet--user-info-icon' onMouseOver={() => setShowPointsInfo(true)} onMouseLeave={() => setShowPointsInfo(false)} onClick={() => setShowPointsInfo(true)} style={ showPointsInfo ? { color: '#bb0505' } : {} } />
                                 
                                     {showPointsInfo && (
-                                        <div className="modal--info wallet--point-modal">Your point is valid till on the 25th of February, use it now before it expires.</div>
+                                        <div className="modal--info wallet--point-modal">Your Gifta point is valid and can be redeemed, This points cannot be withdrawn but can be used to purchase gifts.</div>
                                     )}
                                 </span>
 

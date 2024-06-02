@@ -143,7 +143,7 @@ function CategoryPage({ type }) {
 
 
     return (
-        <section className='category-page__section'>
+        <section className='category-page__section' style={(user?.role === 'vendor' && !user?.isKycVerified) ? { marginTop: '8rem'} : {}}>
 
             {(type === 'reminder' && activeReminder) && (
                 <SubAlert />

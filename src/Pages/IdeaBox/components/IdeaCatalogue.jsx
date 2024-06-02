@@ -21,7 +21,7 @@ function IdeaCatalogue() {
     const [currentCategory, setCurrentCategory] = useState(category);
     console.log(category)
 
-    const { token } = useAuthContext();
+    const { user, token } = useAuthContext();
     const navigate = useNavigate();
 
 
@@ -94,7 +94,7 @@ function IdeaCatalogue() {
 
 
     return (
-        <section className='category-page__section'>
+        <section className='category-page__section' style={(user?.role === 'vendor' && !user?.isKycVerified) ? { marginTop: '8rem'} : {}}>
 
             {isLoading ? 
                 <div className="page--main">
