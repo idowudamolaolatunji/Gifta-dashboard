@@ -121,7 +121,7 @@ function Order() {
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
-    const [helpReset, setHelpReset] = useState(false);
+    const [helpRefetch, setHelpRefetch] = useState(false);
 
     const [seletedId, setSelectedId] = useState(null);
     const [showAcceptModal, setShowAcceptModal] = useState(false);
@@ -183,7 +183,15 @@ function Order() {
 
     useEffect(function() {
         handleOrders()
-    }, [helpReset]);
+    }, [helpRefetch]);
+
+    useEffect(function() {
+        if(showOrderModal === false) {
+            setSelectedOrder({});
+            setSelectedId(null);
+            setDeliveryCode('');
+        }
+    }, [showOrderModal])
 
     function handleOrderActions(id, type) {
         setSelectedId(id);
@@ -213,9 +221,8 @@ function Order() {
         try {
             handleReset();
             setIsLoading(true);
-            setHelpReset(false);
 
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/accept-order/${seletedId}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/accept-order/${seletedId}/${selectedOrder?.giftingPackageID}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -234,10 +241,8 @@ function Order() {
                 setSelectedOrder(data?.data?.order);
                 setIsSuccess(false);
                 setMessage("");
-                setSelectedOrder({})
-                setSelectedId(null)
                 setShowAcceptModal(false);
-                setHelpReset(true);
+                setHelpRefetch(true);
                 handleSetOrder(data.data.orders, count.length);
             }, 2000);
 
@@ -253,7 +258,7 @@ function Order() {
             handleReset();
             setIsLoading(true);
 
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/reject-order/${seletedId}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/reject-order/${seletedId}/${selectedOrder?.giftingPackageID}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -272,7 +277,7 @@ function Order() {
                 setSelectedOrder(data?.data?.order);
                 setIsSuccess(false);
                 setMessage("");
-                setHelpReset(true);
+                setHelpRefetch(true);
                 setSelectedOrder({})
                 setSelectedId(null)
                 setShowRejectModal(false);
@@ -295,7 +300,7 @@ function Order() {
             {console.log(deliveryCode.length)}
             if(deliveryCode.length < 4) throw new Error('Delivery code must be exactly 4 numbers')
 
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/complete-order/${selectedOrder?._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders/complete-order/${selectedOrder?._id}/${selectedOrder?.giftingPackageID}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -315,7 +320,7 @@ function Order() {
                 setSelectedOrder(data?.data?.order);
                 setIsSuccess(false);
                 setMessage("");
-                setHelpReset(true);
+                setHelpRefetch(true);
                 setShowRejectModal(false);
                 handleSetOrder(data.data.orders, count.length);
             }, 2000);
@@ -391,6 +396,7 @@ function Order() {
                             progressPending={isLoading}
                             progressComponent={<Spinner />}
                             customStyles={customStyles}
+                            onRowClicked={handleOrderRow}
                             onRowMouseEnter={handleOrderRow}
                             noDataComponent={<Message type={activeTab} />}
                         />
